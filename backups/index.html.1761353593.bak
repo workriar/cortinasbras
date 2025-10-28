@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cortinas Brás - Cortinas Sob Medida</title>
+  <meta name="description" content="Cortinas sob medida com tecidos nobres e instalação profissional em São Paulo. Solicite seu orçamento via WhatsApp.">
+  <link rel="icon" type="image/png" href="/static/logo.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17672945118"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);} 
+    gtag('js', new Date());
+
+    gtag('config', 'AW-17672945118');
+  </script>
+</head>
+<body>
+  <header class="container py-3">
+    <div class="d-flex flex-column align-items-center">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo Cortinas Brás" class="logo mb-2">
+      
+    </div>
+   
+  </header>
+
+  <main>
+
+
+
+
+    <!-- Hero/Chamada -->
+    <section class="container text-center mb-5">
+      <h1 class="display-5 fw-bold text-gold mb-3">Cortinas Prontas e Sob Medida</h1>
+      <p class="lead mb-4">Transforme seu ambiente com sofisticação, tecidos nobres e instalação profissional.<br>Solicite seu orçamento rápido e personalizado!</p>
+      <a href="#orcamento" class="btn btn-warning btn-lg px-5 py-2 shadow">Quero meu orçamento</a>
+    </section>
+
+    <!-- Mapa incorporado (abaixo do formulário) -->
+    <section id="mapa" class="container mb-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-7">
+          <div class="bg-dark p-3 rounded-4 shadow text-center">
+            <h3 class="text-gold mb-3">Localização</h3>
+            <p class="text-muted mb-3">Mapa do endereço informado (se houver). Você pode editar o endereço acima para atualizar o local manualmente.</p>
+            <!-- Substitua o src abaixo pelo link do Google Maps adequado se tiver um endereço específico -->
+            <div class="map-container">
+              <iframe id="mapFrame" class="map-iframe" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.797071598945!2d-46.613716923774575!3d-23.53980006080213!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce58df8c06a2cd%3A0xc9828fe2be527cdc!2sAv.%20Celso%20Garcia%2C%20129%20-%20Br%C3%A1s%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2003015-000!5e0!3m2!1sen!2sbr!4v1760477906319!5m2!1sen!2sbr" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Formulário -->
+    <section id="orcamento" class="container mb-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-7">
+          <div class="bg-dark p-4 p-md-5 rounded-4 shadow">
+            <h2 class="text-gold mb-4 text-center">Peça seu orçamento em minutos...</h2>
+            <form id="orcamentoForm" method="POST" action="/enviar" novalidate autocomplete="off">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="nome" class="form-label text-gold">Nome *</label>
+                  <input type="text" class="form-control" id="nome" name="nome" required placeholder="Seu nome">
+                  <div class="invalid-feedback">Informe seu nome.</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="telefone" class="form-label text-gold">Telefone / WhatsApp *</label>
+                  <input type="tel" class="form-control" id="telefone" name="telefone" required placeholder="(11) 99999-9999">
+                  <div class="invalid-feedback">Informe um número válido com DDD.</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="parede" class="form-label text-gold">Largura da parede (m) <small class="text-muted">ex: 1,5</small> *</label>
+                  <input type="text" inputmode="decimal" pattern="^[0-9]+([.,][0-9]{1,2})?$" class="form-control" id="parede" name="parede" required placeholder="ex: 2,7">
+                </div>
+                <div class="col-md-6">
+                  <label for="altura_parede" class="form-label text-gold">Altura da parede (m) <small class="text-muted">ex: 1,5</small> *</label>
+                  <input type="text" inputmode="decimal" pattern="^[0-9]+([.,][0-9]{1,2})?$" class="form-control" id="altura_parede" name="altura_parede" required placeholder="ex: 2,7">
+                </div>
+                <div class="col-md-6">
+                  <label for="janela_largura" class="form-label text-gold">Largura da janela (m) <small class="text-muted">ex: 1,5</small> *</label>
+                  <input type="text" inputmode="decimal" pattern="^[0-9]+([.,][0-9]{1,2})?$" class="form-control" id="janela_largura" name="janela_largura" required placeholder="ex: 1,5">
+                </div>
+                <div class="col-md-6">
+                  <label for="janela_altura" class="form-label text-gold">Altura da janela (m) <small class="text-muted">ex: 1,5</small> *</label>
+                  <input type="text" inputmode="decimal" pattern="^[0-9]+([.,][0-9]{1,2})?$" class="form-control" id="janela_altura" name="janela_altura" required placeholder="ex: 1,5">
+                </div>
+                <div class="col-md-6">
+                  <label for="tecido" class="form-label text-gold">Tipo de tecido *</label>
+                  <select class="form-select" id="tecido" name="tecido" required>
+                    <option value="">Selecione...</option>
+                    <option>Voil</option>
+                    <option>Linho</option>
+                    <option>Blackout</option>
+                    <option>Outro</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="instalacao" class="form-label text-gold">Tipo de instalação *</label>
+                  <select class="form-select" id="instalacao" name="instalacao" required>
+                    <option value="">Selecione...</option>
+                    <option>Trilho</option>
+                    <option>Varão</option>
+                    <option>Não sei</option>
+                  </select>
+                </div>
+                <div class="col-12">
+                  <label for="observacoes" class="form-label text-gold">Observações (opcional)</label>
+                  <textarea class="form-control" id="observacoes" name="observacoes" rows="2" maxlength="300" placeholder="Observações adicionais"></textarea>
+                </div>
+                <div class="col-12">
+                  <label for="endereco" class="form-label text-gold">Endereço para instalação (opcional)</label>
+                  <textarea class="form-control" id="endereco" name="endereco" rows="2" maxlength="300" placeholder="Endereço para instalação"></textarea>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-warning btn-lg w-100 mt-4">Enviar orçamento</button>
+            </form>
+            <div class="modal fade" id="whatsappModal" tabindex="-1" aria-labelledby="whatsappModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content bg-dark text-gold">
+                  <div class="modal-header border-0">
+                    <h5 class="modal-title w-100 text-center" id="whatsappModalLabel">Encaminhando para o WhatsApp...</h5>
+                  </div>
+                  <div class="modal-body text-center">
+                    Aguarde, você será redirecionado para o WhatsApp.<br>
+                    <div class="spinner-border text-gold mt-3" role="status">
+                      <span class="visually-hidden">Carregando...</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contato e Social -->
+    <section id="contato" class="container mb-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-7 text-center">
+          <h2 class="text-gold mb-3">Fale conosco</h2>
+          <p class="mb-1">Av. Celso Garcia, 129 - Brás, São Paulo - SP</p>
+          <p class="mb-1">WhatsApp: <a href="https://wa.me/5511992891070" class="text-gold text-decoration-none" target="_blank">(11) 99289-1070</a></p>
+          <p class="mb-3">E-mail: <a href="mailto:contato@cortinasbras.com.br" class="text-gold text-decoration-none">contato@cortinasbras.com.br</a></p>
+          <div class="social-icons justify-content-center gap-3">
+            <a href="https://www.instagram.com/cortinasbras/" target="_blank" title="Instagram">
+              <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" style="background:var(--ouro);border-radius:50%;padding:4px;">
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=100068104159883" target="_blank" title="Facebook">
+              <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook" style="background:var(--ouro);border-radius:50%;padding:4px;">
+            </a>
+            <a href="https://wa.me/5511992891070" target="_blank" title="WhatsApp">
+              <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/whatsapp.svg" alt="WhatsApp" style="background:var(--ouro);border-radius:50%;padding:4px;">
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- WhatsApp Float -->
+  <a href="https://wa.me/5511992891070" class="whatsapp-float" target="_blank" title="Fale conosco no WhatsApp"></a>
+
+  <footer class="text-center py-4 border-top bg-dark text-gold">
+    <div class="container">
+      <p class="mb-2">© 2025 Cortinas Brás <br> Todos os direitos reservados</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    (() => {
+      'use strict';
+      const form = document.getElementById('orcamentoForm');
+      form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        // Before checking validity, normalize decimal inputs (comma -> dot)
+        const decimalIds = ['parede', 'altura_parede', 'janela_largura', 'janela_altura'];
+        decimalIds.forEach(id => {
+          const el = document.getElementById(id);
+          if (el && el.value) {
+            // Trim and replace comma with dot
+            el.value = el.value.trim().replace(',', '.');
+          }
+        });
+
+        if (!form.checkValidity()) {
+          form.classList.add('was-validated');
+          return;
+        }
+
+        // Exibe modal
+        const modal = new bootstrap.Modal(document.getElementById('whatsappModal'));
+        modal.show();
+  // Monta mensagem para WhatsApp
+        const formData = new FormData(form);
+        const nome = formData.get('nome') || '';
+        const telefone = formData.get('telefone') || '';
+        const parede = formData.get('parede') || '';
+        const altura_parede = formData.get('altura_parede') || '';
+        const janela_largura = formData.get('janela_largura') || '';
+        const janela_altura = formData.get('janela_altura') || '';
+        const tecido = formData.get('tecido') || '';
+        const instalacao = formData.get('instalacao') || '';
+        const observacoes = formData.get('observacoes') || '';
+        const endereco = formData.get('endereco') || '';
+        let msg = `Olá! Gostaria de um orçamento de cortina sob medida:%0A`;
+        msg += `*Nome:* ${nome}%0A`;
+        msg += `*Telefone:* ${telefone}%0A`;
+        msg += `*Parede:* ${parede}m (L) x ${altura_parede}m (A)%0A`;
+        msg += `*Janela:* ${janela_largura}m (L) x ${janela_altura}m (A)%0A`;
+        msg += `*Tecido:* ${tecido}%0A`;
+        msg += `*Instalação:* ${instalacao}%0A`;
+        if (observacoes) msg += `*Observações:* ${observacoes}%0A`;
+        if (endereco) msg += `*Endereço:* ${endereco}%0A`;
+        // Dispara evento de conversão do Google Ads (substitua o label abaixo pelo fornecido pelo Google Ads)
+        try {
+          const p = parseFloat(parede) || 0;
+          const h = parseFloat(altura_parede) || 0;
+          const jw = parseFloat(janela_largura) || 0;
+          const jh = parseFloat(janela_altura) || 0;
+          const area = Math.max(0, (p * h) - (jw * jh));
+          const conversionValue = parseFloat(area.toFixed(2));
+          if (typeof gtag === 'function') {
+            gtag('event', 'conversion', {
+              'send_to': 'AW-17672945118/AW-17672945118',
+              'value': conversionValue,
+              'currency': 'BRL'
+            });
+          }
+        } catch (e) {
+          console.warn('gtag conversion error', e);
+        }
+
+        // Aguarda curto período para dar tempo do gtag enviar o evento antes do redirecionamento
+        setTimeout(() => {
+          window.location.href = `https://wa.me/5511992891070?text=${msg}`;
+        }, 1200);
+      });
+
+      // Atualiza mapa dinamicamente com base no campo 'endereco' (sem usar API)
+      const enderecoEl = document.getElementById('endereco');
+      const mapFrame = document.getElementById('mapFrame');
+      function updateMapFromEndereco() {
+        if (!enderecoEl || !mapFrame) return;
+        const val = enderecoEl.value && enderecoEl.value.trim();
+        if (!val) return;
+        // Monta uma URL de busca do Google Maps (não exige API)
+        const q = encodeURIComponent(val);
+        // Usa maps?q= para abrir a busca; em embed usamos /maps?q=...&output=embed
+        const embed = `https://www.google.com/maps?q=${q}&output=embed`;
+        mapFrame.src = embed;
+      }
+
+      if (enderecoEl) {
+        enderecoEl.addEventListener('blur', updateMapFromEndereco);
+        // Também atualizar ao pressionar Enter dentro do textarea
+        enderecoEl.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+            // Ctrl+Enter ou Cmd+Enter -> atualizar mapa
+            e.preventDefault();
+            updateMapFromEndereco();
+          }
+        });
+        // Se já houver texto no carregamento, inicializa o mapa
+        if (enderecoEl.value && enderecoEl.value.trim()) {
+          updateMapFromEndereco();
+        }
+      }
+    })();
+  </script>
+</body>
+</html>
