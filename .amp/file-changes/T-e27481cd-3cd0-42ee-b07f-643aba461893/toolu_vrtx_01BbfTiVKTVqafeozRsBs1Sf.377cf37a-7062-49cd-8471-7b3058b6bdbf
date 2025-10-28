@@ -1,0 +1,10 @@
+{
+  "id": "377cf37a-7062-49cd-8471-7b3058b6bdbf",
+  "uri": "file:///root/meu-projeto/frontend/src/components/Footer.js",
+  "before": "",
+  "after": "import React from 'react';\nimport './Footer.css';\n\nfunction Footer({ config }) {\n  return (\n    <footer className=\"footer\" id=\"contato\">\n      <div className=\"footer-content\">\n        <address className=\"footer-address\">\n          {config.address.street} - {config.address.neighborhood}, {config.address.city}-{config.address.state}\n          <br />\n          WhatsApp: {config.contact.phone}\n          <br />\n          E-mail:{' '}\n          <a href={`mailto:${config.contact.email}`} className=\"footer-link\">\n            {config.contact.email}\n          </a>\n        </address>\n        <p className=\"footer-copyright\">© 2025 Cortinas Brás - Todos os direitos reservados.</p>\n      </div>\n    </footer>\n  );\n}\n\nexport default Footer;\n",
+  "diff": "Index: file:///root/meu-projeto/frontend/src/components/Footer.js\n===================================================================\n--- file:///root/meu-projeto/frontend/src/components/Footer.js\toriginal\n+++ file:///root/meu-projeto/frontend/src/components/Footer.js\tmodified\n@@ -0,0 +1,24 @@\n+import React from 'react';\n+import './Footer.css';\n+\n+function Footer({ config }) {\n+  return (\n+    <footer className=\"footer\" id=\"contato\">\n+      <div className=\"footer-content\">\n+        <address className=\"footer-address\">\n+          {config.address.street} - {config.address.neighborhood}, {config.address.city}-{config.address.state}\n+          <br />\n+          WhatsApp: {config.contact.phone}\n+          <br />\n+          E-mail:{' '}\n+          <a href={`mailto:${config.contact.email}`} className=\"footer-link\">\n+            {config.contact.email}\n+          </a>\n+        </address>\n+        <p className=\"footer-copyright\">© 2025 Cortinas Brás - Todos os direitos reservados.</p>\n+      </div>\n+    </footer>\n+  );\n+}\n+\n+export default Footer;\n",
+  "isNewFile": true,
+  "reverted": false,
+  "timestamp": 1761678469027
+}

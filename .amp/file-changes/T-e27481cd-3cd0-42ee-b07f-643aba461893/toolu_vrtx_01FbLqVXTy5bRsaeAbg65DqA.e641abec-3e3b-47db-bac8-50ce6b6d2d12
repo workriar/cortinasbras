@@ -1,0 +1,10 @@
+{
+  "id": "e641abec-3e3b-47db-bac8-50ce6b6d2d12",
+  "uri": "file:///root/meu-projeto/deploy/cortinas-bras-new.service",
+  "before": "[Unit]\nDescription=Cortinas Bras Flask+React Service\nAfter=network.target\n\n[Service]\nType=notify\nUser=root\nWorkingDirectory=/root/meu-projeto/backend\nEnvironment=\"PATH=/root/meu-projeto/venv/bin\"\nExecStart=/root/meu-projeto/venv/bin/gunicorn --workers 2 --timeout 120 --bind 127.0.0.1:5000 app:app\nRestart=always\nRestartSec=10\n\n[Install]\nWantedBy=multi-user.target\n",
+  "after": "[Unit]\nDescription=Cortinas Bras Flask+React Service\nAfter=network.target\n\n[Service]\nType=notify\nUser=root\nWorkingDirectory=/root/meu-projeto/backend\nEnvironment=\"PATH=/root/meu-projeto/venv/bin\"\nExecStart=/root/meu-projeto/venv/bin/gunicorn --workers 2 --timeout 120 --bind 127.0.0.1:8000 app:app\nRestart=always\nRestartSec=10\n\n[Install]\nWantedBy=multi-user.target\n",
+  "diff": "Index: file:///root/meu-projeto/deploy/cortinas-bras-new.service\n===================================================================\n--- file:///root/meu-projeto/deploy/cortinas-bras-new.service\toriginal\n+++ file:///root/meu-projeto/deploy/cortinas-bras-new.service\tmodified\n@@ -0,0 +1,15 @@\n+[Unit]\n+Description=Cortinas Bras Flask+React Service\n+After=network.target\n+\n+[Service]\n+Type=notify\n+User=root\n+WorkingDirectory=/root/meu-projeto/backend\n+Environment=\"PATH=/root/meu-projeto/venv/bin\"\n+ExecStart=/root/meu-projeto/venv/bin/gunicorn --workers 2 --timeout 120 --bind 127.0.0.1:8000 app:app\n+Restart=always\n+RestartSec=10\n+\n+[Install]\n+WantedBy=multi-user.target\n",
+  "isNewFile": false,
+  "reverted": false,
+  "timestamp": 1761679181150
+}

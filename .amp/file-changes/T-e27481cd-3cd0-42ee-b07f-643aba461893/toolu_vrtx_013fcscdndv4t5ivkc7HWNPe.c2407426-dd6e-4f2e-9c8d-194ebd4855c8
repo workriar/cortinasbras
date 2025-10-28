@@ -1,0 +1,10 @@
+{
+  "id": "c2407426-dd6e-4f2e-9c8d-194ebd4855c8",
+  "uri": "file:///root/meu-projeto/frontend/src/components/Hero.css",
+  "before": "",
+  "after": ".hero {\n  background: linear-gradient(135deg, rgba(184, 134, 11, 0.1), rgba(0, 0, 0, 0.8));\n  padding: 4rem 2rem;\n  text-align: center;\n}\n\n.hero-content {\n  max-width: 800px;\n  margin: 0 auto;\n}\n\n.hero-title {\n  font-size: 2.5rem;\n  font-weight: 700;\n  margin-bottom: 1.5rem;\n  color: var(--text);\n  line-height: 1.2;\n}\n\n.hero-description {\n  font-size: 1.5rem;\n  color: var(--text-muted);\n  margin-bottom: 2rem;\n}\n\n@media (max-width: 768px) {\n  .hero {\n    padding: 3rem 1rem;\n  }\n\n  .hero-title {\n    font-size: 1.75rem;\n  }\n\n  .hero-description {\n    font-size: 1.125rem;\n  }\n}\n",
+  "diff": "Index: file:///root/meu-projeto/frontend/src/components/Hero.css\n===================================================================\n--- file:///root/meu-projeto/frontend/src/components/Hero.css\toriginal\n+++ file:///root/meu-projeto/frontend/src/components/Hero.css\tmodified\n@@ -0,0 +1,38 @@\n+.hero {\n+  background: linear-gradient(135deg, rgba(184, 134, 11, 0.1), rgba(0, 0, 0, 0.8));\n+  padding: 4rem 2rem;\n+  text-align: center;\n+}\n+\n+.hero-content {\n+  max-width: 800px;\n+  margin: 0 auto;\n+}\n+\n+.hero-title {\n+  font-size: 2.5rem;\n+  font-weight: 700;\n+  margin-bottom: 1.5rem;\n+  color: var(--text);\n+  line-height: 1.2;\n+}\n+\n+.hero-description {\n+  font-size: 1.5rem;\n+  color: var(--text-muted);\n+  margin-bottom: 2rem;\n+}\n+\n+@media (max-width: 768px) {\n+  .hero {\n+    padding: 3rem 1rem;\n+  }\n+\n+  .hero-title {\n+    font-size: 1.75rem;\n+  }\n+\n+  .hero-description {\n+    font-size: 1.125rem;\n+  }\n+}\n",
+  "isNewFile": true,
+  "reverted": false,
+  "timestamp": 1761678523081
+}
