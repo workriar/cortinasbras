@@ -1,0 +1,10 @@
+{
+  "id": "1831ac99-01c9-4c32-ac42-bcb2cf423052",
+  "uri": "file:///root/meu-projeto/frontend/src/index.js",
+  "before": "import React from 'react';\nimport ReactDOM from 'react-dom';\nimport App from './App';\n\nReactDOM.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>,\n  document.getElementById('root')\n);\n",
+  "after": "import React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n",
+  "diff": "Index: file:///root/meu-projeto/frontend/src/index.js\n===================================================================\n--- file:///root/meu-projeto/frontend/src/index.js\toriginal\n+++ file:///root/meu-projeto/frontend/src/index.js\tmodified\n@@ -1,10 +1,10 @@\n import React from 'react';\n-import ReactDOM from 'react-dom';\n+import ReactDOM from 'react-dom/client';\n import App from './App';\n \n-ReactDOM.render(\n+const root = ReactDOM.createRoot(document.getElementById('root'));\n+root.render(\n   <React.StrictMode>\n     <App />\n-  </React.StrictMode>,\n-  document.getElementById('root')\n+  </React.StrictMode>\n );\n",
+  "isNewFile": false,
+  "reverted": false,
+  "timestamp": 1761687696831
+}

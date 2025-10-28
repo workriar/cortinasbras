@@ -1,0 +1,10 @@
+{
+  "id": "61da6691-2f68-410a-8ac9-50523fc8f776",
+  "uri": "file:///root/meu-projeto/frontend/src/components/Map.js",
+  "before": "",
+  "after": "import React from 'react';\nimport './Map.css';\n\nfunction Map({ address }) {\n  const addressString = `${address.street}+-+${address.neighborhood},+${address.city}-${address.state}`;\n\n  return (\n    <section className=\"map-section\">\n      <h3 className=\"map-title\">Como chegar</h3>\n      <div className=\"map-container\">\n        <iframe\n          src={`https://www.google.com/maps?q=${addressString}&output=embed`}\n          width=\"100%\"\n          height=\"400\"\n          style={{ border: 0 }}\n          allowFullScreen=\"\"\n          loading=\"lazy\"\n          referrerPolicy=\"no-referrer-when-downgrade\"\n          title=\"Mapa de localização\"\n        />\n      </div>\n    </section>\n  );\n}\n\nexport default Map;\n",
+  "diff": "Index: file:///root/meu-projeto/frontend/src/components/Map.js\n===================================================================\n--- file:///root/meu-projeto/frontend/src/components/Map.js\toriginal\n+++ file:///root/meu-projeto/frontend/src/components/Map.js\tmodified\n@@ -0,0 +1,26 @@\n+import React from 'react';\n+import './Map.css';\n+\n+function Map({ address }) {\n+  const addressString = `${address.street}+-+${address.neighborhood},+${address.city}-${address.state}`;\n+\n+  return (\n+    <section className=\"map-section\">\n+      <h3 className=\"map-title\">Como chegar</h3>\n+      <div className=\"map-container\">\n+        <iframe\n+          src={`https://www.google.com/maps?q=${addressString}&output=embed`}\n+          width=\"100%\"\n+          height=\"400\"\n+          style={{ border: 0 }}\n+          allowFullScreen=\"\"\n+          loading=\"lazy\"\n+          referrerPolicy=\"no-referrer-when-downgrade\"\n+          title=\"Mapa de localização\"\n+        />\n+      </div>\n+    </section>\n+  );\n+}\n+\n+export default Map;\n",
+  "isNewFile": true,
+  "reverted": false,
+  "timestamp": 1761678461436
+}

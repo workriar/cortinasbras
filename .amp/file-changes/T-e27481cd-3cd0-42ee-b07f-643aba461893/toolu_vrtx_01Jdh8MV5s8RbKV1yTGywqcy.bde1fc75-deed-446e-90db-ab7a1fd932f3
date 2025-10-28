@@ -1,0 +1,10 @@
+{
+  "id": "bde1fc75-deed-446e-90db-ab7a1fd932f3",
+  "uri": "file:///root/meu-projeto/frontend/src/components/Hero.js",
+  "before": "",
+  "after": "import React from 'react';\nimport './Hero.css';\n\nfunction Hero() {\n  const scrollToForm = () => {\n    document.getElementById('form-orcamento')?.scrollIntoView({ behavior: 'smooth' });\n  };\n\n  return (\n    <section className=\"hero\">\n      <div className=\"hero-content\">\n        <h2 className=\"hero-title\">Decore seu ambiente com tradição, referência em SP</h2>\n        <p className=\"hero-description\">Solicite um orçamento rápido e personalizado!</p>\n        <button className=\"btn-primary\" onClick={scrollToForm}>\n          Quero meu orçamento\n        </button>\n      </div>\n    </section>\n  );\n}\n\nexport default Hero;\n",
+  "diff": "Index: file:///root/meu-projeto/frontend/src/components/Hero.js\n===================================================================\n--- file:///root/meu-projeto/frontend/src/components/Hero.js\toriginal\n+++ file:///root/meu-projeto/frontend/src/components/Hero.js\tmodified\n@@ -0,0 +1,22 @@\n+import React from 'react';\n+import './Hero.css';\n+\n+function Hero() {\n+  const scrollToForm = () => {\n+    document.getElementById('form-orcamento')?.scrollIntoView({ behavior: 'smooth' });\n+  };\n+\n+  return (\n+    <section className=\"hero\">\n+      <div className=\"hero-content\">\n+        <h2 className=\"hero-title\">Decore seu ambiente com tradição, referência em SP</h2>\n+        <p className=\"hero-description\">Solicite um orçamento rápido e personalizado!</p>\n+        <button className=\"btn-primary\" onClick={scrollToForm}>\n+          Quero meu orçamento\n+        </button>\n+      </div>\n+    </section>\n+  );\n+}\n+\n+export default Hero;\n",
+  "isNewFile": true,
+  "reverted": false,
+  "timestamp": 1761678439622
+}

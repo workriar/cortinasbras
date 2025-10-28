@@ -1,0 +1,10 @@
+{
+  "id": "1cce7be5-c2de-470e-879b-87f88699dc17",
+  "uri": "file:///root/meu-projeto/frontend/src/components/Map.css",
+  "before": "",
+  "after": ".map-section {\n  padding: 4rem 2rem;\n  background: var(--bg-dark);\n}\n\n.map-title {\n  font-size: 2rem;\n  text-align: center;\n  margin-bottom: 2rem;\n  color: var(--primary);\n}\n\n.map-container {\n  max-width: 800px;\n  margin: 0 auto;\n  border-radius: 12px;\n  overflow: hidden;\n  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);\n  border: 2px solid var(--border);\n}\n\n.map-container iframe {\n  display: block;\n  filter: grayscale(20%) contrast(1.2);\n}\n\n@media (max-width: 768px) {\n  .map-section {\n    padding: 3rem 1rem;\n  }\n\n  .map-title {\n    font-size: 1.5rem;\n  }\n\n  .map-container iframe {\n    height: 300px !important;\n  }\n}\n",
+  "diff": "Index: file:///root/meu-projeto/frontend/src/components/Map.css\n===================================================================\n--- file:///root/meu-projeto/frontend/src/components/Map.css\toriginal\n+++ file:///root/meu-projeto/frontend/src/components/Map.css\tmodified\n@@ -0,0 +1,39 @@\n+.map-section {\n+  padding: 4rem 2rem;\n+  background: var(--bg-dark);\n+}\n+\n+.map-title {\n+  font-size: 2rem;\n+  text-align: center;\n+  margin-bottom: 2rem;\n+  color: var(--primary);\n+}\n+\n+.map-container {\n+  max-width: 800px;\n+  margin: 0 auto;\n+  border-radius: 12px;\n+  overflow: hidden;\n+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);\n+  border: 2px solid var(--border);\n+}\n+\n+.map-container iframe {\n+  display: block;\n+  filter: grayscale(20%) contrast(1.2);\n+}\n+\n+@media (max-width: 768px) {\n+  .map-section {\n+    padding: 3rem 1rem;\n+  }\n+\n+  .map-title {\n+    font-size: 1.5rem;\n+  }\n+\n+  .map-container iframe {\n+    height: 300px !important;\n+  }\n+}\n",
+  "isNewFile": true,
+  "reverted": false,
+  "timestamp": 1761678543903
+}
