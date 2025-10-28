@@ -1,44 +1,127 @@
-Cortinas Brás - Deploy
+# 🏠 Cortinas Brás - Landing Page Profissional
 
-Arquivos criados para deploy:
-- `requirements.txt` - dependências Python
-- `Dockerfile` - imagem Docker para executar a aplicação
-- `Procfile` - para deploy em plataformas como Heroku
+Landing page moderna e profissional para Cortinas Brás, desenvolvida com **Flask (Backend)** e **React (Frontend)**.
 
-Como rodar localmente (recomendado para testes):
+## 🚀 Tecnologias
 
-1) Criar virtualenv e instalar dependências
+### Backend
+- **Flask 3.0** - Framework web Python
+- **Flask-CORS** - Suporte a CORS para API
+- **Gunicorn** - Servidor WSGI de produção
 
-```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+### Frontend
+- **React 18** - Biblioteca JavaScript para UI
+- **CSS3** - Estilização moderna e responsiva
+- **Componentização** - Arquitetura modular
+
+## 📁 Estrutura do Projeto
+
+```
+meu-projeto/
+├── backend/
+│   ├── app.py              # API Flask
+│   ├── build/              # Build do React
+│   └── requirements.txt
+├── frontend/
+│   ├── public/
+│   │   ├── logobras.png
+│   │   └── slide*.jpg
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Header.js/css
+│   │   │   ├── Carousel.js/css
+│   │   │   ├── Hero.js/css
+│   │   │   ├── QuoteForm.js/css
+│   │   │   ├── Map.js/css
+│   │   │   └── Footer.js/css
+│   │   ├── App.js
+│   │   └── App.css
+│   └── package.json
+├── deploy/
+│   ├── cortinas-bras-new.service
+│   └── nginx_cortinas.conf
+└── build.sh
 ```
 
-2) Rodar a aplicação localmente
+## 🛠️ Desenvolvimento
 
+### Pré-requisitos
+- Python 3.8+
+- Node.js 14+
+- npm ou yarn
+
+### Backend
 ```bash
-# cria o banco sqlite e inicia o servidor (rodará em http://127.0.0.1:5000)
+cd backend
+python3 -m venv venv
+source venv/bin/activate  # Linux/Mac
+pip install -r requirements.txt
 python app.py
 ```
 
-Como rodar com Docker
-
+### Frontend
 ```bash
-# build image
-docker build -t cortinas-bras:latest .
-
-# run container
-docker run -p 5000:5000 --name cortinas-bras cortinas-bras:latest
+cd frontend
+npm install
+npm start
 ```
 
-Deploy em Heroku / Render / outros
+O frontend rodará em `http://localhost:3000` com proxy para o backend em `http://localhost:5000`.
 
-- Heroku: faça `git push heroku main` (procfile presente). Configure variáveis de ambiente (MAIL_USERNAME, MAIL_PASSWORD, SECRET_KEY, DATABASE_URL se usar MySQL).
-- Render: crie um Web Service apontando para este repositório; configure build command `pip install -r requirements.txt` e start command `gunicorn app:app`.
+## 📦 Build para Produção
 
-Notas e recomendações
+```bash
+# Build completo
+./build.sh
 
-- Em produção, configure variáveis de ambiente (MAIL_USERNAME, MAIL_PASSWORD, SECRET_KEY, PRODUCTION=1, DATABASE_URL).
-- Para usar banco MySQL em produção, defina `DATABASE_URL` adequadamente.
-- Se quiser geocoding preciso para o mapa, forneça uma chave de API do Google e eu posso integrar.
+# Ou manualmente:
+cd frontend
+npm run build
+cd ..
+cp -r frontend/build backend/
+```
+
+## 🚀 Deploy
+
+### Systemd Service
+```bash
+sudo cp deploy/cortinas-bras-new.service /etc/systemd/system/cortinas-bras.service
+sudo systemctl daemon-reload
+sudo systemctl enable cortinas-bras
+sudo systemctl start cortinas-bras
+```
+
+### Nginx
+O projeto já está configurado para rodar em produção na porta 8000, com Nginx fazendo proxy reverso.
+
+## 🎨 Features
+
+- ✅ Design moderno e responsivo
+- ✅ Carrossel de imagens automático
+- ✅ Formulário de orçamento integrado com WhatsApp
+- ✅ Mapa de localização do Google Maps
+- ✅ Otimização para SEO
+- ✅ Performance otimizada
+- ✅ API RESTful com Flask
+- ✅ Componentização React
+
+## 📱 Integração WhatsApp
+
+O formulário de orçamento envia automaticamente uma mensagem formatada para o WhatsApp da empresa:
+- Nome do cliente
+- Telefone
+- Dimensões da parede (largura x altura)
+
+## 🌐 Endpoints da API
+
+- `GET /api/config` - Configurações do site
+- `GET /api/slides` - Imagens do carrossel
+- `GET /` - Serve o aplicativo React
+
+## 📄 Licença
+
+© 2025 Cortinas Brás - Todos os direitos reservados.
+
+## 👨‍💻 Desenvolvimento
+
+Desenvolvido com ❤️ usando Flask + React
