@@ -160,3 +160,34 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
         transform: translateY(0);
     }
 }
+
+/* Footer melhorado para visibilidade */
+footer {
+    background: #1a1a1a !important;
+    color: #e0e0e0 !important;
+    padding: 3rem 1rem !important;
+    border-top: 2px solid #b8860b !important;
+    text-align: center;
+    margin-top: 3rem;
+}
+
+footer address {
+    font-style: normal;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+footer p {
+    color: #b0b0b0 !important;
+    margin-top: 1rem !important;
+}
+
+footer a {
+    color: #ffd700 !important;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: #ffed4e !important;
+    text-decoration: underline;
+}
