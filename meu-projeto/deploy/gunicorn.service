@@ -1,0 +1,13 @@
+[Unit]
+Description=Cortinas Bras Gunicorn
+After=network.target
+
+[Service]
+User=cortinas
+Group=cortinas
+WorkingDirectory=/opt/meu-projeto
+Environment="PATH=/opt/meu-projeto/venv/bin"
+ExecStart=/opt/meu-projeto/venv/bin/gunicorn --workers 3 --bind 127.0.0.1:8000 app:app
+
+[Install]
+WantedBy=multi-user.target

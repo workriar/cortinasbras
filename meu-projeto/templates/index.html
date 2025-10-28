@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title | default('Cortinas sob medida em São Paulo') }}</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="{{ description | default('Transforme seu ambiente com sofisticação, tecidos nobres e instalação profissional. Solicite seu orçamento personalizado!') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='logobras.png') }}" alt="Logo Cortinas Brás" class="logo">
+        </div>
+        <nav aria-label="Navegação principal">
+            <a href="#form-orcamento">Orçamento</a>
+            <a href="#contato">Contato</a>
+        </nav>
+        <h1>{{ heading | default('Cortinas sob medida em São Paulo') }}</h1>
+        <p>{{ subheading | default('Transforme seu ambiente com sofisticação, tecidos nobres e instalação profissional.') }}</p>
+    </header>
+
+    <!-- Carrossel dinâmico Flask -->
+    <section class="carousel" aria-label="Galeria de cortinas">
+        <div class="carousel-slides">
+            {% for img in slides %}
+                <div class="slide{% if loop.index0 == 0 %} active{% endif %}">
+                    <img src="{{ url_for('static', filename=img.src) }}" alt="{{ img.alt }}">
+                </div>
+            {% endfor %}
+        </div>
+        <button class="carousel-btn prev" aria-label="Slide anterior">&#10094;</button>
+        <button class="carousel-btn next" aria-label="Próximo slide">&#10095;</button>
+    </section>
+
+    <main>
+        <section class="hero">
+            <h2>{{ hero_title | default('Decore seu ambiente com tradição, referência em SP') }}</h2>
+            <p>{{ hero_desc | default('Solicite um orçamento rápido e personalizado!') }}</p>
+            <button id="cta-btn" class="btn-primary">Quero meu orçamento</button>
+        </section>
+        <section class="form-section" id="form-orcamento">
+            <h3>Peça seu orçamento em poucos minutos!</h3>
+            <form id="lp-form">
+                <label for="nome">Nome</label>
+                <input type="text" name="nome" id="nome" placeholder="Seu nome" required autocomplete="name">
+                <label for="telefone">Whatsapp</label>
+                <input type="tel" name="telefone" id="telefone" placeholder="Telefone WhatsApp" required autocomplete="tel">
+                <label for="larguraparede">Largura da parede (m) <span class="input-example">Ex: 1,5</span></label>
+                <input type="text" name="larguraparede" id="larguraparede" placeholder="Ex: 1,5" required pattern="[0-9]+([\.,][0-9]+)?">
+                <label for="alturaparede">Altura da parede (m) <span class="input-example">Ex: 1,5</span></label>
+                <input type="text" name="alturaparede" id="alturaparede" placeholder="Ex: 1,5" required pattern="[0-9]+([\.,][0-9]+)?">
+                <button type="submit" class="btn-primary">Solicitar orçamento</button>
+            </form>
+            <div id="msgSuccess" style="display:none;">Orçamento enviado com sucesso!</div>
+    </section>
+
+    <section class="map-section" aria-label="Mapa do endereço">
+            <h3>Como chegar</h3>
+            <div class="map-container" style="width:100%;max-width:600px;margin:auto;">
+                <iframe src="https://www.google.com/maps?q=Av.+Celso+Garcia,+129+-+Br%C3%A1s,+S%C3%A3o+Paulo-SP&output=embed" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+    </section>
+    </main>
+
+    <footer id="contato">
+        <address>
+            Av. Celso Garcia, 129 - Brás, São Paulo-SP<br>
+            WhatsApp: (11) 99289-1070 <br>
+            E-mail: <a href="mailto:contato@cortinasbras.com.br">contato@cortinasbras.com.br</a>
+        </address>
+        <p>© 2025 Cortinas Brás - Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
