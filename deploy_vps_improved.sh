@@ -88,7 +88,7 @@ Description=Cortinas Bras Gunicorn Service
 After=network.target
 
 [Service]
-Type=notify
+Type=simple
 User=cortinas
 Group=cortinas
 WorkingDirectory=$PROJECT_DIR
@@ -132,6 +132,9 @@ server {
         proxy_set_header X-Real-IP \$remote_addr;
         proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_connect_timeout 120s;
+        proxy_read_timeout 120s;
+        send_timeout 120s;
         proxy_redirect off;
         proxy_buffering off;
     }

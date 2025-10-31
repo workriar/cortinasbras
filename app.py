@@ -8,13 +8,13 @@ from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 from reportlab.pdfgen import canvas
 
-
 db = SQLAlchemy()
 mail = Mail()
 
-
 def create_app() -> Flask:
-    app = Flask(__name__)
+    app = Flask(__name__, template_folder="frontend")
+    ...
+
 
     configure_app(app)
     db.init_app(app)
@@ -26,7 +26,6 @@ def create_app() -> Flask:
         db.create_all()
 
     return app
-
 
 def configure_app(app: Flask) -> None:
     """Configure Flask, database and mail settings based on environment."""
@@ -56,7 +55,6 @@ def configure_app(app: Flask) -> None:
 
     app.config["APP_PRODUCTION"] = production
 
-
 class Lead(db.Model):  # type: ignore[misc]
     __tablename__ = "leads"
 
@@ -72,7 +70,6 @@ class Lead(db.Model):  # type: ignore[misc]
     observacoes = db.Column(db.Text, default="")
     endereco = db.Column(db.Text, default="")
     criado_em = db.Column(db.DateTime, default=dt.datetime.utcnow, nullable=False)
-
 
 def register_routes(app: Flask) -> None:
     @app.route("/")
@@ -130,12 +127,10 @@ def register_routes(app: Flask) -> None:
         leads = Lead.query.order_by(Lead.criado_em.desc()).all()
         return render_template("admin_leads.html", leads=leads)
 
-
 def _required(value: str | None, field_name: str) -> str:
     if not value or not value.strip():
         raise ValueError(f"{field_name} é obrigatório.")
     return value.strip()
-
 
 def _parse_float(value: str | None, field_name: str) -> float:
     cleaned = _required(value, field_name)
@@ -144,7 +139,6 @@ def _parse_float(value: str | None, field_name: str) -> float:
         return float(cleaned)
     except ValueError as exc:
         raise ValueError(f"{field_name} deve ser um número válido.") from exc
-
 
 def _build_lead_pdf(lead: Lead) -> bytes:
     buffer = io.BytesIO()
@@ -164,7 +158,6 @@ def _build_lead_pdf(lead: Lead) -> bytes:
     pdf.save()
     buffer.seek(0)
     return buffer.getvalue()
-
 
 def _send_notification_email(lead: Lead, pdf_bytes: bytes) -> None:
     msg = Message(
@@ -187,15 +180,12 @@ def _send_notification_email(lead: Lead, pdf_bytes: bytes) -> None:
     msg.attach("orcamento.pdf", "application/pdf", pdf_bytes)
     mail.send(msg)
 
-
 app = create_app()
-
 
 def whatsapp_message(lead: Lead) -> str:
     return (
         f"Olá {lead.nome}, recebemos sua solicitação de orçamento de cortinas.%0A"
         "Em breve entraremos em contato."
     )
-
 
 app.jinja_env.globals.update(whatsapp_message=whatsapp_message)

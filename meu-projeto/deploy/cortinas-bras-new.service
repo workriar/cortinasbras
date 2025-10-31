@@ -3,7 +3,7 @@ Description=Cortinas Bras Flask+React Service
 After=network.target
 
 [Service]
-Type=notify
+Type=simple
 User=root
 WorkingDirectory=/root/meu-projeto/backend
 Environment="PATH=/root/meu-projeto/venv/bin"

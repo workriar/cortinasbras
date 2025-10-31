@@ -33,7 +33,12 @@ sudo nano /etc/default/cortinas-bras
 
 # 5. Reinicie o serviço
 sudo systemctl restart cortinas-bras
+
+# 6. Teste a aplicação internamente
+curl -I http://127.0.0.1:8000
 ```
+
+> **Importante:** o Nginx deve encaminhar as requisições para `http://127.0.0.1:8000`, que é a porta usada pelo Gunicorn nos scripts de deploy. Após qualquer alteração rode `sudo nginx -t && sudo systemctl reload nginx`.
 
 ### Opção 2: Deploy com Docker
 
