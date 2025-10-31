@@ -39,10 +39,114 @@
 
 
     <!-- Hero/Chamada -->
-    <section class="container text-center mb-5">
-      <h1 class="display-5 fw-bold text-gold mb-3">Cortinas Prontas e Sob Medida</h1>
-      <p class="lead mb-4">Transforme seu ambiente com sofisticação, tecidos nobres e instalação profissional.<br>Solicite seu orçamento rápido e personalizado!</p>
-      <a href="#orcamento" class="btn btn-warning btn-lg px-5 py-2 shadow">Quero meu orçamento</a>
+    <section class="hero-section position-relative mb-5">
+      <div class="hero-overlay"></div>
+      <div class="container position-relative">
+        <div class="row align-items-center g-4">
+          <div class="col-lg-6 text-center text-lg-start">
+            <span class="hero-chip">Sob medida • Instalação completa</span>
+            <h1 class="display-4 fw-bold text-gold mb-3">Cortinas exclusivas para deixar seu ambiente memorável</h1>
+            <p class="lead mb-4 text-light">Projeto completo com consultoria especializada, tecidos nobres e instalação profissional em toda a Grande São Paulo.</p>
+            <div class="d-flex flex-column flex-sm-row gap-3">
+              <a href="#orcamento" class="btn btn-warning btn-lg px-4 py-2 shadow">Quero meu orçamento</a>
+              <a href="#diferenciais" class="btn btn-ghost btn-lg px-4 py-2">Ver diferenciais</a>
+            </div>
+            <ul class="hero-list mt-4">
+              <li>Equipe própria com mais de 15 anos de experiência</li>
+              <li>Atendimento presencial ou online em horários flexíveis</li>
+              <li>Entrega rápida com instalação e garantia completa</li>
+            </ul>
+          </div>
+          <div class="col-lg-6">
+            <div class="hero-gallery card-refined">
+              <div class="hero-gallery__image hero-gallery__image--primary" role="presentation" aria-hidden="true"></div>
+              <div class="hero-gallery__thumbs">
+                <div class="hero-thumb hero-thumb--one" role="presentation" aria-hidden="true"></div>
+                <div class="hero-thumb hero-thumb--two" role="presentation" aria-hidden="true"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Diferenciais -->
+    <section class="container mb-5 benefits-section" id="diferenciais">
+      <div class="row justify-content-center text-center mb-4">
+        <div class="col-lg-8">
+          <span class="section-chip">Nossos diferenciais</span>
+          <h2 class="text-gold mb-3">Por que escolher a Cortinas Brás?</h2>
+          <p class="text-muted mb-0">Do atendimento ao pós-instalação, cada detalhe é pensado para proporcionar uma experiência premium e sem surpresas.</p>
+        </div>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="benefit-card card-refined h-100">
+            <div class="benefit-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 5.6a1 1 0 0 1 .2 1.4l-9 12a1 1 0 0 1-1.6 0l-6-8a1 1 0 0 1 1.6-1.2L11 16.4l8.2-11a1 1 0 0 1 1.6.2Z"/></svg>
+            </div>
+            <h3>Consultoria dedicada</h3>
+            <p class="text-muted">Visita técnica, amostras exclusivas e recomendações sob medida para cada ambiente residencial ou corporativo.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="benefit-card card-refined h-100">
+            <div class="benefit-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a8 8 0 0 1 6.32 12.9l3.39 3.4a1 1 0 0 1-1.42 1.4l-3.39-3.38A8 8 0 1 1 12 2Zm0 2a6 6 0 1 0 .01 12.01A6 6 0 0 0 12 4Z"/></svg>
+            </div>
+            <h3>Precisão milimétrica</h3>
+            <p class="text-muted">Medidas, costura e acabamento realizados por especialistas. Garantimos o caimento perfeito e instalação limpa.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="benefit-card card-refined h-100">
+            <div class="benefit-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 2a3 3 0 0 1 3 3c0 7-4 11-8 13-4-2-8-6-8-13a3 3 0 0 1 3-3 3 3 0 0 1 3 3h2a3 3 0 0 1 3-3Z"/></svg>
+            </div>
+            <h3>Acabamento premium</h3>
+            <p class="text-muted">Tecidos importados, blackouts, linho e soluções com automação. Tudo com garantia de fábrica e suporte pós-venda.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Depoimentos -->
+    <section class="container testimonials-section mb-5">
+      <div class="row justify-content-center text-center mb-4">
+        <div class="col-lg-8">
+          <span class="section-chip">Clientes satisfeitos</span>
+          <h2 class="text-gold mb-3">Experiências reais de quem confiou na gente</h2>
+        </div>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <figure class="testimonial-card card-refined h-100">
+            <blockquote>"O atendimento foi impecável do início ao fim. Recebi amostras, simulações e a instalação ficou perfeita. Recomendo sem medo!"</blockquote>
+            <figcaption>
+              <span class="testimonial-name">Marina Costa</span>
+              <span class="testimonial-detail">Apartamento em Moema</span>
+            </figcaption>
+          </figure>
+        </div>
+        <div class="col-md-4">
+          <figure class="testimonial-card card-refined h-100">
+            <blockquote>"Precisávamos de um blackout completo para o estúdio. Cumpriram o prazo e o acabamento ficou, literalmente, cinematográfico."</blockquote>
+            <figcaption>
+              <span class="testimonial-name">Estúdio Luz &amp; Cena</span>
+              <span class="testimonial-detail">Projeto corporativo</span>
+            </figcaption>
+          </figure>
+        </div>
+        <div class="col-md-4">
+          <figure class="testimonial-card card-refined h-100">
+            <blockquote>"Agendaram visita, tiraram medidas e entregaram tudo montado em 12 dias. A cortina transformou a sala e o pós-venda foi excelente."</blockquote>
+            <figcaption>
+              <span class="testimonial-name">Renato Albuquerque</span>
+              <span class="testimonial-detail">Casa em Alphaville</span>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
     </section>
 
     <!-- mapa foi movido para abaixo do formulário para melhorar o fluxo do usuário -->

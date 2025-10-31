@@ -64,3 +64,9 @@ package-lock.json
 # Windows
 Thumbs.db
 ehthumbs.db
+
+# Ferramentas locais
+.codegpt/
+.codex/
+.ollama/
+novo-repo/
