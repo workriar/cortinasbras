@@ -19,6 +19,12 @@ if [ ! -d "$PROJECT_DIR" ]; then
   exit 1
 fi
 
+# Update sources.list to use a different mirror
+echo "deb http://archive.ubuntu.com/ubuntu noble main restricted universe multiverse" > /etc/apt/sources.list
+echo "deb http://archive.ubuntu.com/ubuntu noble-updates main restricted universe multiverse" >> /etc/apt/sources.list
+echo "deb http://archive.ubuntu.com/ubuntu noble-backports main restricted universe multiverse" >> /etc/apt/sources.list
+echo "deb http://security.ubuntu.com/ubuntu noble-security main restricted universe multiverse" >> /etc/apt/sources.list
+
 echo "Atualizando pacotes e instalando dependências do sistema..."
 apt update
 apt install -y python3 python3-venv python3-pip nginx git build-essential

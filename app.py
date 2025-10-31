@@ -53,13 +53,19 @@ def index():
 def enviar():
     data = request.form
     try:
+                # Converter vírgulas para pontos e tratar valores decimais
+        def parse_float(value):
+            if isinstance(value, str):
+                value = value.replace(',', '.').strip()
+            return float(value)
+        
         lead = Lead(
             nome=data['nome'],
             telefone=data['telefone'],
-            largura_parede=float(data['largura_parede']),
-            altura_parede=float(data['altura_parede']),
-            largura_janela=float(data['largura_janela']),
-            altura_janela=float(data['altura_janela']),
+            largura_parede=parse_float(data['parede']),
+            altura_parede=parse_float(data['altura_parede']),
+            largura_janela=parse_float(data['janela_largura']),
+            altura_janela=parse_float(data['janela_altura']),
             tecido=data['tecido'],
             instalacao=data['instalacao'],
             observacoes=data.get('observacoes', ''),
@@ -111,15 +117,20 @@ def enviar():
                 msg.attach("orcamento.pdf", "application/pdf", buffer.read())
                 mail.send(msg)
                 print("✅ Email enviado com sucesso!")
-            except Exception as email_error:
+                        except Exception as email_error:
                 app.logger.error(f"Falha ao enviar email: {email_error}")
-                # Consider logging to a file or external service for better tracking
+                print(f"⚠️ Aviso: Email não enviado - {email_error}")
 
         return "success"
     
+        except ValueError as err:
+        print(f"❌ Erro de validação: {err}")
+        return f"Erro: Valores numéricos inválidos. {str(err)}", 400
     except Exception as err:
         print(f"❌ Erro: {err}")
-        return "Erro ao enviar!", 500
+        import traceback
+        traceback.print_exc()
+        return "Erro ao processar solicitação!", 500
 
 @app.route('/orcamento/<int:lead_id>/pdf')
 def baixar_pdf(lead_id):

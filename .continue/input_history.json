@@ -1,0 +1,18 @@
+[
+  {
+    "text": "clear",
+    "timestamp": 1761882258302
+  },
+  {
+    "text": "ollama pull llama3.1:8b",
+    "timestamp": 1761882251295
+  },
+  {
+    "text": "34741a6a25994729aa3c4b6cbd98197e",
+    "timestamp": 1761882178100
+  },
+  {
+    "text": "Oi",
+    "timestamp": 1761882033749
+  }
+]

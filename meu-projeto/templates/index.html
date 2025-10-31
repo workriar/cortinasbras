@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>{{ title | default('Cortinas sob medida em São Paulo') }}</title>
+    <title>Cortinas Brás</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="description" content="{{ description | default('Transforme seu ambiente com sofisticação, tecidos nobres e instalação profissional. Solicite seu orçamento personalizado!') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -48,9 +48,14 @@
                 <label for="telefone">Whatsapp</label>
                 <input type="tel" name="telefone" id="telefone" placeholder="Telefone WhatsApp" required autocomplete="tel">
                 <label for="larguraparede">Largura da parede (m) <span class="input-example">Ex: 1,5</span></label>
-                <input type="text" name="larguraparede" id="larguraparede" placeholder="Ex: 1,5" required pattern="[0-9]+([\.,][0-9]+)?">
+
+                <input type="text" name="larguraparede" id="larguraparede" placeholder="Ex: 1,5" required pattern="[0-9]+([.,][0-9]+)?">
                 <label for="alturaparede">Altura da parede (m) <span class="input-example">Ex: 1,5</span></label>
-                <input type="text" name="alturaparede" id="alturaparede" placeholder="Ex: 1,5" required pattern="[0-9]+([\.,][0-9]+)?">
+                <input type="text" name="alturaparede" id="alturaparede" placeholder="Ex: 1,5" required pattern="[0-9]+([.,][0-9]+)?">
+                <label for="largura_janela">Largura da janela (m) <span class="input-example">Ex: 1,5</span></label>
+                <input type="text" name="largura_janela" id="largura_janela" placeholder="Ex: 1,5" required pattern="[0-9]+([.,][0-9]+)?">
+                <label for="altura_janela">Altura da janela (m) <span class="input-example">Ex: 1,5</span></label>
+                <input type="text" name="altura_janela" id="altura_janela" placeholder="Ex: 1,5" required pattern="[0-9]+([.,][0-9]+)?">
                 <button type="submit" class="btn-primary">Solicitar orçamento</button>
             </form>
             <div id="msgSuccess" style="display:none;">Orçamento enviado com sucesso!</div>
@@ -70,9 +75,16 @@
             WhatsApp: (11) 99289-1070 <br>
             E-mail: <a href="mailto:contato@cortinasbras.com.br">contato@cortinasbras.com.br</a>
         </address>
+        <div class="social-icons">
+            <a href="https://facebook.com/cortinasbras" target="_blank" aria-label="Facebook"><img src="{{ url_for('static', filename='facebook-icon.png') }}" alt="Facebook" width="32" height="32"></a>
+            <a href="https://instagram.com/cortinasbras" target="_blank" aria-label="Instagram"><img src="{{ url_for('static', filename='instagram-icon.png') }}" alt="Instagram" width="32" height="32"></a>
+        </div>
         <p>© 2025 Cortinas Brás - Todos os direitos reservados.</p>
     </footer>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <a href="https://wa.me/5511992891070" class="floating-whatsapp" target="_blank" aria-label="WhatsApp">
+  <img src="{{ url_for('static', filename='whatsapp-icon.png') }}" alt="WhatsApp" width="60" height="60">
+</a>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

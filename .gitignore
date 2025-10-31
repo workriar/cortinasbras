@@ -1,4 +1,12 @@
+# IDE e Editor
 .vscode-server/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Sistema
 .cache/
 .npm/
 .config/
@@ -6,11 +14,15 @@
 .local/
 .pm2/
 .ssh/
-.vscode/
-instance/
+.bash_history
+.wget-hsts
+snap/
+
+# Python
 venv/
 nome_do_venv/
-snap/
+.venv/
+env/
 __pycache__/
 *.pyc
 *.pyo
@@ -18,12 +30,37 @@ __pycache__/
 .Python
 *.so
 *.egg
-*.egg-info
-dist
-build
+*.egg-info/
+dist/
+build/
 *.log
-.bash_history
-.wget-hsts
-*.swp
-*.swo
-*~
+instance/
+
+# Banco de dados
+*.db
+*.sqlite
+*.sqlite3
+leads.db
+
+# Variáveis de ambiente e credenciais
+.env
+.env.local
+.env.production
+*.pem
+*.key
+*.crt
+
+# Backups
+backups/
+*.bak
+
+# Node modules (se houver)
+node_modules/
+package-lock.json
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db

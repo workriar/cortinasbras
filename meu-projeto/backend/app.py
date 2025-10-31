@@ -2,7 +2,7 @@ from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
 import os
 
-app = Flask(__name__, static_folder='build', static_url_path='')
+app = Flask(__name__, static_folder=None)
 CORS(app)
 
 # Configuração
@@ -38,13 +38,24 @@ def get_slides():
     ])
 
 # Serve React App
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def serve(path):
-    if path != "" and os.path.exists(app.static_folder + '/' + path):
-        return send_from_directory(app.static_folder, path)
-    else:
-        return send_from_directory(app.static_folder, 'index.html')
+@app.route('/')
+def index():
+    return send_from_directory('build', 'index.html')
+
+# Serve arquivos estáticos do React build  
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    return send_from_directory('build/static', filename)
+
+# Serve outros arquivos do build (favicon, logo, etc)
+@app.route('/<path:filename>')
+def serve_file(filename):
+    # Servir arquivos do build se existirem
+    file_path = os.path.join('build', filename)
+    if os.path.exists(file_path) and os.path.isfile(file_path):
+        return send_from_directory('build', filename)
+    # Caso contrário, serve o index.html (SPA routing)
+    return send_from_directory('build', 'index.html')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
