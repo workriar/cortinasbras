@@ -3,7 +3,9 @@ from __future__ import annotations
 import datetime as dt
 import io
 import os
-from flask import Flask, current_app, render_template, request, send_file
+
+from flask import Flask, current_app, render_template, request, send_file, send_from_directory
+from pathlib import Path
 from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 from reportlab.pdfgen import canvas
@@ -11,10 +13,9 @@ from reportlab.pdfgen import canvas
 db = SQLAlchemy()
 mail = Mail()
 
-def create_app() -> Flask:
-    app = Flask(__name__, template_folder="frontend")
-    ...
 
+def create_app() -> Flask:
+    app = Flask(__name__, template_folder="templates", static_folder="static")
 
     configure_app(app)
     db.init_app(app)
@@ -26,6 +27,8 @@ def create_app() -> Flask:
         db.create_all()
 
     return app
+
+
 
 def configure_app(app: Flask) -> None:
     """Configure Flask, database and mail settings based on environment."""
@@ -74,7 +77,15 @@ class Lead(db.Model):  # type: ignore[misc]
 def register_routes(app: Flask) -> None:
     @app.route("/")
     def index():
-        return render_template("index.html")
+        html_path = PUBLIC_DIR / "index.html"
+        if not html_path.exists():
+            current_app.logger.error("Arquivo index.html não encontrado em %s", html_path)
+            return "Erro interno: arquivo index.html ausente.", 500
+
+        html = html_path.read_text(encoding="utf-8").replace("%PUBLIC_URL%", "/public")
+        return current_app.response_class(html, mimetype="text/html")
+
+    
 
     @app.route("/enviar", methods=["POST"])
     def enviar():
@@ -126,6 +137,13 @@ def register_routes(app: Flask) -> None:
     def admin_leads():
         leads = Lead.query.order_by(Lead.criado_em.desc()).all()
         return render_template("admin_leads.html", leads=leads)
+
+    @app.route("/public/<path:filename>")
+    def public_assets(filename: str):
+        return send_from_directory(PUBLIC_DIR, filename)
+
+    
+
 
 def _required(value: str | None, field_name: str) -> str:
     if not value or not value.strip():
@@ -181,6 +199,10 @@ def _send_notification_email(lead: Lead, pdf_bytes: bytes) -> None:
     mail.send(msg)
 
 app = create_app()
+
+# Public assets directory (used by register_routes)
+# Points to the React "public" folder at project root
+PUBLIC_DIR = Path(__file__).resolve().parent / "frontend-react" / "public"
 
 def whatsapp_message(lead: Lead) -> str:
     return (

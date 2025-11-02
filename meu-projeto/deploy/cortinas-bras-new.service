@@ -7,7 +7,7 @@ Type=simple
 User=root
 WorkingDirectory=/root/meu-projeto/backend
 Environment="PATH=/root/meu-projeto/venv/bin"
-ExecStart=/root/meu-projeto/venv/bin/gunicorn --workers 2 --timeout 120 --bind 127.0.0.1:8000 app:app
+ExecStart=/root/meu-projeto/venv/bin/gunicorn --workers 2 --timeout 300 --bind 127.0.0.1:8000 app:app
 Restart=always
 RestartSec=10
 

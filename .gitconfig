@@ -1,2 +1,6 @@
 [safe]
 	directory = /root/meu-projeto/cortinasbras
+	directory = /opt/meu-projeto
+	directory = /opt/cortinas-bras
+[init]
+	defaultBranch = main

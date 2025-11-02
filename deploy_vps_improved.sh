@@ -95,7 +95,7 @@ WorkingDirectory=$PROJECT_DIR
 Environment="PATH=$VENV_DIR/bin"
 Environment="PYTHONUNBUFFERED=1"
 EnvironmentFile=/etc/default/${SERVICE_NAME}
-ExecStart=$VENV_DIR/bin/gunicorn --workers $GUNICORN_WORKERS --bind ${GUNICORN_BIND} --timeout 120 --access-logfile - --error-logfile - app:app
+ExecStart=$VENV_DIR/bin/gunicorn --workers $GUNICORN_WORKERS --bind ${GUNICORN_BIND} --timeout 300 --access-logfile - --error-logfile - app:app
 Restart=always
 RestartSec=10
 
@@ -132,9 +132,9 @@ server {
         proxy_set_header X-Real-IP \$remote_addr;
         proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto \$scheme;
-        proxy_connect_timeout 120s;
-        proxy_read_timeout 120s;
-        send_timeout 120s;
+        proxy_connect_timeout 300s;
+        proxy_read_timeout 300s;
+        send_timeout 300s;
         proxy_redirect off;
         proxy_buffering off;
     }

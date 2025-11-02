@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#D4A93E" />
+    <title>Cortinas Brás — Cortinas Sob Medida & Enxovais Premium</title>
+    <meta name="description" content="Cortinas sob medida, enxovais e consultoria de decoração em São Paulo. Peça seu orçamento gratuito pelo WhatsApp ou por e-mail (resposta em até 24h)." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Cortinas Brás — Cortinas Sob Medida & Enxovais Premium" />
+    <meta property="og:description" content="Cortinas sob medida, enxovais e consultoria de decoração em São Paulo. Peça seu orçamento gratuito pelo WhatsApp ou e-mail." />
+    <meta property="og:image" content="/images/logo.png" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/images/logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+  <!-- EmailJS config: injected at build/runtime via meta tags (keep empty for local dev) -->
+  <meta name="emailjs-user-id" content="" />
+  <meta name="emailjs-service-id" content="" />
+  <meta name="emailjs-template-id" content="" />
+    <script>
+      tailwind.config = {
+        theme: {
+          fontFamily: { 'sans': ['Inter', 'system-ui', 'sans-serif'] },
+          extend: {
+            colors: {
+              brand: {
+                50: '#F8F5F1',
+                100: '#EAD5C7',
+                300: '#D4A93E',
+                500: '#D4A93E',
+                700: '#8B5C2A'
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      :root { --accent: #D4A93E; }
+      .card-hover { transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s; }
+      .card-hover:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(139,92,42,.12); }
+      .focus-ring:focus { outline: none; box-shadow: 0 0 0 4px rgba(212,169,62,.14); }
+      .visually-hidden { position: absolute !important; height: 1px; width: 1px; overflow: hidden; clip: rect(1px,1px,1px,1px); white-space: nowrap; }
+    </style>
+  </head>
+  <body class="antialiased bg-brand-50 text-brand-700 font-sans">
+    <!-- HEADER com logotipo centralizado -->
+    <header class="sticky top-0 z-50 bg-brand-50/90 backdrop-blur-md border-b border-brand-100">
+      <div class="container mx-auto px-6 py-4 flex flex-col items-center">
+        <img src="/images/logo-cortinas-bras.jpg" alt="Logotipo Cortinas Brás" class="w-24 h-auto mb-2" />
+        <h1 class="text-xl font-bold text-brand-700">Cortinas Brás</h1>
+        <p class="text-sm text-brand-300">Cortinas sob medida · Enxovais premium</p>
+        <nav class="flex items-center gap-8 mt-4" aria-label="Menu principal">
+          <a href="#inicio" class="text-sm hover:text-brand-700 transition">Início</a>
+          <a href="#produtos" class="text-sm hover:text-brand-700 transition">Produtos</a>
+          <a href="#sobre" class="text-sm hover:text-brand-700 transition">Sobre</a>
+          <a href="#contato" class="text-sm hover:text-brand-700 transition">Contato</a>
+        </nav>
+      </div>
+    </header>
+    <main id="main">
+      <!-- HERO -->
+      <section id="inicio" class="relative overflow-hidden">
+        <div class="bg-gradient-to-br from-brand-100 via-brand-50 to-brand-300">
+          <div class="container mx-auto px-6 py-16 lg:py-24">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+              <div>
+                <p class="uppercase text-xs text-brand-700 font-semibold tracking-wide">Tradição & Personalização</p>
+                <h2 class="mt-3 text-3xl md:text-5xl font-extrabold leading-tight text-brand-700">Renove sua casa com cortinas sob medida e enxovais premium</h2>
+                <p class="mt-3 text-lg text-brand-700 max-w-xl">Especialistas há mais de duas décadas, referência em São Paulo. Medição, instalação e atendimento personalizado garantindo qualidade e sofisticação.</p>
+                <div class="mt-8 flex flex-col sm:flex-row gap-3">
+                  <a id="hero-cta" href="#contato" class="inline-flex items-center justify-center gap-3 bg-brand-300 hover:bg-brand-500 text-white font-semibold px-6 py-3 rounded-full shadow-lg transition focus-ring" aria-label="Solicitar orçamento">
+                    Solicite Orçamento
+                  </a>
+                  <a href="https://wa.me/5511994013938?text=Olá! Quero orçamento para cortinas sob medida." target="_blank" rel="noopener" class="inline-flex items-center gap-2 justify-center border border-brand-300 text-brand-700 hover:bg-brand-100 px-6 py-3 rounded-full font-medium transition">
+                    WhatsApp Direto
+                  </a>
+                </div>
+                <ul class="mt-7 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-md text-sm text-brand-700">
+                  <li>✔ Medição gratuita</li>
+                  <li>✔ Atendimento familiar</li>
+                  <li>✔ Garantia de 2 anos</li>
+                </ul>
+              </div>
+              <div class="order-first lg:order-last flex justify-center">
+                <img src="/images/logo-cortinas-bras.jpg" alt="Logotipo Cortinas Brás" loading="lazy" class="w-full max-w-md rounded-2xl shadow-xl border border-brand-100 bg-brand-50" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- PRODUTOS -->
+      <section id="produtos" class="py-16 bg-brand-50">
+        <div class="container mx-auto px-6">
+          <div class="text-center mb-10">
+            <h3 class="text-2xl font-bold">Nossos Produtos</h3>
+            <p class="mt-2 text-brand-700 max-w-xl mx-auto">Tecidos, modelos e soluções pensadas para o seu ambiente.</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <article class="bg-white rounded-2xl border p-6 card-hover">
+              <div class="h-44 bg-gradient-to-br from-brand-100 to-brand-50 rounded-lg flex items-center justify-center mb-4">
+                <span class="text-4xl">🪟</span>
+              </div>
+              <h4 class="text-xl font-semibold mb-2">Cortinas Sob Medida</h4>
+              <p class="text-sm text-brand-700 mb-4">Blackout, voil, painéis e tecidos importados. Medição e instalação inclusas.</p>
+              <div class="flex gap-3">
+                <button data-product="Cortinas Sob Medida" class="w-full btn-wa bg-brand-300 hover:bg-brand-500 text-white py-3 rounded-lg font-semibold focus-ring">WhatsApp</button>
+                <button data-product="Cortinas Sob Medida" class="w-full btn-contact border border-brand-100 text-brand-700 py-3 rounded-lg font-semibold focus-ring">Orçamento</button>
+              </div>
+            </article>
+            <article class="bg-white rounded-2xl border p-6 card-hover">
+              <div class="h-44 bg-gradient-to-br from-brand-100 to-brand-50 rounded-lg flex items-center justify-center mb-4">
+                <span class="text-4xl">🛏️</span>
+              </div>
+              <h4 class="text-xl font-semibold mb-2">Roupa de Cama</h4>
+              <p class="text-sm text-brand-700 mb-4">Lençóis, edredons e jogos de cama em algodão premium e percal.</p>
+              <div class="flex gap-3">
+                <button data-product="Roupa de Cama" class="w-full btn-wa bg-brand-300 hover:bg-brand-500 text-white py-3 rounded-lg font-semibold focus-ring">WhatsApp</button>
+                <button data-product="Roupa de Cama" class="w-full btn-contact border border-brand-100 text-brand-700 py-3 rounded-lg font-semibold focus-ring">Orçamento</button>
+              </div>
+            </article>
+            <article class="bg-white rounded-2xl border p-6 card-hover">
+              <div class="h-44 bg-gradient-to-br from-brand-100 to-brand-50 rounded-lg flex items-center justify-center mb-4">
+                <span class="text-4xl">🛁</span>
+              </div>
+              <h4 class="text-xl font-semibold mb-2">Mesa & Banho</h4>
+              <p class="text-sm text-brand-700 mb-4">Toalhas, guardanapos e acessórios para mesa elegante.</p>
+              <div class="flex gap-3">
+                <button data-product="Mesa e Banho" class="w-full btn-wa bg-brand-300 hover:bg-brand-500 text-white py-3 rounded-lg font-semibold focus-ring">WhatsApp</button>
+                <button data-product="Mesa e Banho" class="w-full btn-contact border border-brand-100 text-brand-700 py-3 rounded-lg font-semibold focus-ring">Orçamento</button>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+      <!-- SOBRE -->
+      <section id="sobre" class="py-16 bg-brand-100">
+        <div class="container mx-auto px-6 grid lg:grid-cols-2 gap-10 items-center">
+          <div>
+            <h3 class="text-3xl font-bold">Sobre a Cortinas Brás</h3>
+            <p class="mt-4 text-brand-700">
+              Empresa familiar com mais de <strong>20 anos</strong> de atuação e uma das mais tradicionais de São Paulo.<br>
+              Produzindo cortinas de alta qualidade com atendimento personalizado.<br>
+              Referência em decoração nacional.
+            </p>
+            <div class="mt-6 grid grid-cols-2 gap-4">
+              <div class="p-4 bg-white rounded-lg shadow-sm">
+                <div class="text-2xl font-bold text-brand-300">20+</div>
+                <div class="text-sm text-brand-700">Anos de experiência</div>
+              </div>
+              <div class="p-4 bg-white rounded-lg shadow-sm">
+                <div class="text-2xl font-bold text-brand-300">5000+</div>
+                <div class="text-sm text-brand-700">Clientes satisfeitos</div>
+              </div>
+            </div>
+          </div>
+          <div class="rounded-2xl p-8 bg-white shadow flex flex-col items-center">
+            <h4 class="font-semibold text-brand-700 mb-2 mt-4">Qualidade garantida</h4>
+            <p class="text-brand-700">Materiais nobres, acabamento caprichado e atendimento consultivo para cada projeto.</p>
+            <div class="mt-6 flex gap-3">
+              <a href="#contato" class="px-4 py-2 bg-brand-300 text-white rounded-lg">Orçamento</a>
+              <a href="https://wa.me/5511994013938" target="_blank" rel="noopener" class="px-4 py-2 border border-brand-100 rounded-lg">WhatsApp</a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- CONTATO / FORMULÁRIO -->
+      <section id="contato" class="py-16 bg-brand-50">
+        <div class="container mx-auto px-6">
+          <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-8">
+              <h3 class="text-2xl font-bold">Solicite seu Orçamento Gratuito</h3>
+              <p class="text-brand-700 mt-2">Preencha o formulário abaixo e receba um orçamento por e-mail. Também enviaremos uma opção de contato direto pelo WhatsApp.</p>
+            </div>
+            <form id="contact-form" class="bg-brand-100 p-6 rounded-2xl border" autocomplete="on">
+              <fieldset class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="text-sm font-medium text-brand-700" for="name">Nome completo *</label>
+                  <input id="name" name="name" type="text" required class="mt-1 w-full px-4 py-3 rounded-lg border bg-white focus:ring-2 focus:ring-brand-300 focus:outline-none" placeholder="Seu nome completo" />
+                </div>
+                <div>
+                  <label class="text-sm font-medium text-brand-700" for="email">E-mail *</label>
+                  <input id="email" name="email" type="email" required class="mt-1 w-full px-4 py-3 rounded-lg border bg-white focus:ring-2 focus:ring-brand-300 focus:outline-none" placeholder="seu@email.com" />
+                </div>
+                <div>
+                  <label class="text-sm font-medium text-brand-700" for="phone">Telefone / WhatsApp *</label>
+                  <input id="phone" name="phone" type="tel" required class="mt-1 w-full px-4 py-3 rounded-lg border bg-white focus:ring-2 focus:ring-brand-300 focus:outline-none" placeholder="(11) 99999-9999" />
+                </div>
+                <div>
+                  <label class="text-sm font-medium text-brand-700" for="city">Cidade *</label>
+                  <input id="city" name="city" type="text" required class="mt-1 w-full px-4 py-3 rounded-lg border bg-white focus:ring-2 focus:ring-brand-300 focus:outline-none" placeholder="Sua cidade" />
+                </div>
+              </fieldset>
+              <fieldset class="mt-6 bg-white p-4 rounded-lg border">
+                <legend class="text-sm font-semibold text-brand-700">Tipo de Produto</legend>
+                <div class="mt-3 grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <label class="flex items-center gap-2"><input type="checkbox" name="products" value="Cortinas Sob Medida" class="w-4 h-4" /> <span class="text-sm">Cortinas Sob Medida</span></label>
+                  <label class="flex items-center gap-2"><input type="checkbox" name="products" value="Persianas" class="w-4 h-4" /> <span class="text-sm">Persianas</span></label>
+                  <label class="flex items-center gap-2"><input type="checkbox" name="products" value="Roupa de Cama" class="w-4 h-4" /> <span class="text-sm">Roupa de Cama</span></label>
+                  <label class="flex items-center gap-2"><input type="checkbox" name="products" value="Mesa e Banho" class="w-4 h-4" /> <span class="text-sm">Mesa e Banho</span></label>
+                  <label class="flex items-center gap-2"><input type="checkbox" name="products" value="Papel de Parede" class="w-4 h-4" /> <span class="text-sm">Papel de Parede</span></label>
+                  <label class="flex items-center gap-2"><input type="checkbox" name="products" value="Almofadas" class="w-4 h-4" /> <span class="text-sm">Almofadas</span></label>
+                </div>
+              </fieldset>
+              <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div>
+                  <label class="text-sm font-medium text-brand-700" for="ambiente">Ambiente</label>
+                  <select id="ambiente" name="ambiente" class="mt-1 w-full px-4 py-3 rounded-lg border bg-white focus:ring-2 focus:ring-brand-300 focus:outline-none">
+                    <option value="">Selecione</option>
+                    <option value="sala-estar">Sala de Estar</option>
+                    <option value="quarto-casal">Quarto do Casal</option>
+                    <option value="quarto-infantil">Quarto Infantil</option>
+                    <option value="cozinha">Cozinha</option>
+                    <option value="varanda">Varanda</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="text-sm font-medium text-brand-700" for="largura">Largura (m)</label>
+                  <input id="largura" name="largura" type="number" step="0.01" class="mt-1 w-full px-4 py-3 rounded-lg border bg-white focus:ring-2 focus:ring-brand-300 focus:outline-none" placeholder="Ex: 2.50" />
+                </div>
+                <div>
+                  <label class="text-sm font-medium text-brand-700" for="altura">Altura (m)</label>
+                  <input id="altura" name="altura" type="number" step="0.01" class="mt-1 w-full px-4 py-3 rounded-lg border bg-white focus:ring-2 focus:ring-brand-300 focus:outline-none" placeholder="Ex: 2.80" />
+                </div>
+              </div>
+              <div class="mt-6">
+                <label class="text-sm font-medium text-brand-700" for="message">Descreva seu projeto</label>
+                <textarea id="message" name="message" rows="4" class="mt-1 w-full px-4 py-3 rounded-lg border bg-white focus:ring-2 focus:ring-brand-300 focus:outline-none" placeholder="Informações adicionais, preferências, dúvidas..."></textarea>
+              </div>
+              <div class="mt-6 flex items-center gap-3">
+                <button id="submit-btn" type="submit" class="inline-flex items-center gap-3 bg-brand-300 hover:bg-brand-500 text-white px-6 py-3 rounded-full font-semibold shadow focus-ring">
+                  Enviar e Receber no WhatsApp
+                </button>
+                <div id="form-status" class="text-sm text-brand-700"></div>
+              </div>
+            </form>
+            <div id="success" class="hidden mt-6 p-4 rounded-lg bg-green-100 border border-green-200 text-green-800">Obrigado! Seu pedido foi enviado. Em breve entraremos em contato.</div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- FOOTER com logotipo -->
+    <footer class="bg-brand-700 text-white py-8">
+      <div class="container mx-auto px-6 text-center">
+        <div class="flex flex-col items-center justify-center gap-3 mb-4">
+          <img src="/images/logo-cortinas-bras.jpg" alt="Logotipo Cortinas Brás" class="w-12 h-auto mx-auto mb-2" />
+          <span class="font-semibold">Cortinas Brás</span>
+        </div>
+        <p class="text-brand-100">Rua Bresser, 1084 - Brás - CEP 03053-000 - São Paulo - SP</p>
+        <p class="text-brand-100">2024 - Todos os direitos reservados.</p>
+      </div>
+    </footer>
+    <script src="https://cdn.emailjs.com/sdk/3.2.0/email.min.js"></script>
+    <script>
+      // Read meta tags helper
+      function readMeta(name){ const m = document.querySelector('meta[name="'+name+'"]'); return m ? m.getAttribute('content') : ''; }
+
+      (function(){
+        var emailjsUser = readMeta('emailjs-user-id');
+        try {
+          if (emailjsUser) {
+            emailjs.init(emailjsUser);
+          } else {
+            console.warn('EmailJS user ID não fornecido via meta tag "emailjs-user-id". EmailJS desativado até configuração.');
+          }
+        } catch(e) { console.warn('EmailJS init falhou:', e); }
+      })();
+
+      function getCheckedProducts() {
+        return Array.from(document.querySelectorAll('input[name="products"]:checked')).map(i => i.value).join(', ');
+      }
+      document.querySelectorAll('.btn-wa').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const product = this.getAttribute('data-product') || '';
+          const message = encodeURIComponent(`Olá! Tenho interesse em: ${product}. Gostaria de receber um orçamento.`);
+          window.open(`https://wa.me/5511994013938?text=${message}`, '_blank');
+        });
+      });
+      document.querySelectorAll('.btn-contact').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.getElementById('contato').scrollIntoView({ behavior: 'smooth', block: 'center' });
+          const product = this.getAttribute('data-product');
+          if (product) {
+            const msg = document.getElementById('message');
+            if (msg) msg.value = `Interesse: ${product}\n` + (msg.value || '');
+          }
+        });
+      });
+      const form = document.getElementById('contact-form');
+      const submitBtn = document.getElementById('submit-btn');
+      const status = document.getElementById('form-status');
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = form.name.value.trim();
+        const email = form.email.value.trim();
+        const phone = form.phone.value.trim();
+        if (!name || !email || !phone) {
+          status.textContent = 'Por favor, preencha os campos obrigatórios.';
+          return;
+        }
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Enviando...';
+        status.textContent = '';
+        const data = {
+          name: name,
+          email: email,
+          phone: phone,
+          city: form.city.value || '',
+          products: getCheckedProducts(),
+          ambiente: form.ambiente.value || '',
+          largura: form.largura.value || '',
+          altura: form.altura.value || '',
+          message: form.message.value || ''
+        };
+
+        // Use meta-injected IDs (do not hardcode secret identifiers in repo)
+        const SERVICE_ID = readMeta('emailjs-service-id');
+        const TEMPLATE_ID = readMeta('emailjs-template-id');
+
+        if (SERVICE_ID && TEMPLATE_ID) {
+          emailjs.send(SERVICE_ID, TEMPLATE_ID, data).then(function() {
+            document.getElementById('success').classList.remove('hidden');
+          }, function(err) {
+            status.textContent = 'Não foi possível enviar por e-mail no momento. Vamos abrir o WhatsApp.';
+            console.warn('EmailJS send error:', err);
+          }).finally(() => {
+            const waMessage = encodeURIComponent(`Olá! Sou ${data.name} (${data.phone}). Gostaria de orçamento. Produtos: ${data.products || '—'}. Ambiente: ${data.ambiente || '—'}. Medidas: ${data.largura || '—'} x ${data.altura || '—'}. Observações: ${data.message || '—'}`);
+            window.open(`https://wa.me/5511994013938?text=${waMessage}`, '_blank');
+            setTimeout(() => {
+              submitBtn.disabled = false;
+              submitBtn.textContent = 'Enviar e Receber no WhatsApp';
+            }, 1200);
+          });
+        } else {
+          console.warn('EmailJS service/template IDs não configurados via meta tags. Pulando envio por e-mail.');
+          status.textContent = 'Envio por e-mail não configurado. Abrindo WhatsApp...';
+          const waMessage = encodeURIComponent(`Olá! Sou ${data.name} (${data.phone}). Gostaria de orçamento. Produtos: ${data.products || '—'}. Ambiente: ${data.ambiente || '—'}. Medidas: ${data.largura || '—'} x ${data.altura || '—'}. Observações: ${data.message || '—'}`);
+          window.open(`https://wa.me/5511994013938?text=${waMessage}`, '_blank');
+          setTimeout(() => {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Enviar e Receber no WhatsApp';
+          }, 1200);
+        }
+      });
+    </script>
+  </body>
+</html>
