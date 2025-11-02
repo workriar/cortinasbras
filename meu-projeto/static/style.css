@@ -1,193 +1,198 @@
-:root{
-  --bg: #0f1720;              /* dark background */
-  --card-bg: rgba(255,255,255,0.03);
-  --muted: #e0e6eb; /* lighter for better legibility */
-  --text: #f5f7f9;
-  --ouro: #b8860b;           /* gold */
-  --ouro-hover: #cf9a2b;
-  --accent: #25d366;         /* whatsapp accent kept */
-  --glass: rgba(255,255,255,0.04);
-  --card-radius: 12px;
-  --shadow-1: 0 6px 24px rgba(2,6,23,0.6);
-  --shadow-2: 0 10px 40px rgba(2,6,23,0.75);
-  --max-width: 1100px;
-  --space-sm: 0.6rem;
-  --space-md: 1.1rem;
-  --space-lg: 1.8rem;
-  --ff-sans: Inter, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+:root {
+  /* Pastel, light theme with refined gold */
+  --ouro: #9a6e20; /* richer/darker gold chosen */
+  --ouro-hover: #7b5418;
+  --fundo: #fbf7f3; /* very light warm pastel */
+  --card-bg: #fffefc; /* card / panel background */
+  --text-color: #2b2b2b; /* primary text */
+  --muted: #6b6b6b;
+  --borda: #efe9e3;
+  --input-bg: #fff;
+  --input-border: #ece2d6;
+  --input-focus: #caa85a;
 }
 
-/* Base reset */
-*,*::before,*::after{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  font-family:var(--ff-sans);
-  background:linear-gradient(180deg,var(--bg),#071019 140%);
-  color:var(--text);
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
+body {
+  background: var(--fundo);
+  color: var(--text-color);
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+  min-height: 100vh;
+  text-align: left;
 }
 
-/* Layout helpers */
-.container{max-width:var(--max-width)}
+.logo {
+  max-width: 160px;
+  height: auto;
+  margin: 0;
+  display: inline-block;
+}
+.text-gold { color: var(--ouro) !important; }
 
-/* Logo */
-.logo{width:clamp(120px,16vw,300px);height:auto;display:block;margin:0 auto;object-fit:contain}
-
-/* Headings */
-h1,h2,h3,h4{color:var(--text);margin:.25rem 0}
-.text-gold{color:var(--ouro)!important}
-.text-muted,.text-light{color:var(--muted)}
-
-/* Cards and panels */
-.card-refined{
-  background:var(--card-bg);
-  border-radius:var(--card-radius);
-  padding:1.25rem;
-  box-shadow:var(--shadow-1);
-  border:1px solid rgba(255,255,255,0.03);
+.bg-dark {
+  background-color: var(--card-bg) !important;
+  color: var(--text-color);
 }
 
-/* Buttons */
-.btn-warning{background:var(--ouro);border:none;color:#071018;font-weight:700;padding:.8rem 1.25rem;border-radius:10px;box-shadow:0 6px 18px rgba(183,130,15,0.18);transition:transform .16s ease,box-shadow .16s ease}
-.btn-warning:hover{background:var(--ouro-hover);transform:translateY(-3px);box-shadow:var(--shadow-2)}
-
-.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--text);padding:.6rem .9rem;border-radius:10px}
-
-/* Form fields */
-input,select,textarea{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--text);padding:.7rem .95rem;border-radius:8px;width:100%;transition:box-shadow .15s ease,border-color .15s ease}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ouro);box-shadow:0 6px 18px rgba(184,134,11,0.12)}
-label.form-label{font-weight:600;color:var(--ouro)}
-
-/* Map styling - keep responsive */
-.map-container,.maps-container{width:100%;aspect-ratio:16/9;min-height:240px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03);box-shadow:inset 0 0 0 1px rgba(255,255,255,0.02)}
-.map-container .map-iframe,.maps-container .map-iframe{width:100%;height:100%;border:0;display:block}
-
-.maps-info .info-item{background:transparent;padding:.8rem;border-radius:10px}
-.maps-info .info-item h5{margin-bottom:.35rem}
-
-/* Social icons */
-.social-icons{display:flex;justify-content:center;gap:14px}
-.social-icons a{display:inline-grid;place-items:center;width:48px;height:48px;border-radius:50%;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.04);transition:transform .16s ease,box-shadow .16s ease}
-.social-icons a svg{width:22px;height:22px;fill:var(--ouro)}
-.social-icons a:hover{transform:translateY(-6px);box-shadow:0 10px 30px rgba(0,0,0,0.5);}
-.social-icons a:hover svg{fill:var(--ouro-hover)}
-
-/* WhatsApp float */
-.whatsapp-float{position:fixed;right:18px;bottom:18px;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--accent);box-shadow:0 10px 30px rgba(2,6,23,0.6);border:2px solid rgba(255,255,255,0.06);transition:transform .18s ease}
-.whatsapp-float svg{width:28px;height:28px;fill:#fff}
-.whatsapp-float:hover{transform:translateY(-6px);box-shadow:0 18px 46px rgba(2,6,23,0.7)}
-
-/* Footer */
-/* Make footer clearly visible on the dark site and ensure links/text contrast.
-   Some footer elements use Bootstrap's .bg-dark which has higher specificity than
-   the element selector; use !important on the footer rules so the text remains
-   readable and not overridden by other classes. */
-footer{
-  background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
-  color:var(--muted);
-  padding:2rem 0;
-  border-top:1px solid rgba(255,255,255,0.04);
+.btn-warning {
+  background: var(--ouro);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  box-shadow: 0 6px 18px rgba(154,110,32,0.16);
+  transition: background 0.18s ease, transform 0.12s ease;
 }
-footer p{color:var(--muted)!important;margin:0}
-footer a, footer a:visited { color:var(--ouro)!important; text-decoration:none }
-footer a:hover { color:var(--ouro-hover)!important; text-decoration:underline }
-
-/* If the footer element also carries Bootstrap's .bg-dark, ensure inner text is still legible */
-footer.bg-dark, footer.bg-dark * { color:inherit !important }
-
-/* Prefer light text for dark-background containers inside the page (scoped to body)
-   - Avoid globally overriding Bootstrap's .bg-dark which may be used elsewhere.
-   - This keeps text readable while minimizing global side-effects. */
-body .bg-dark { color:var(--text) !important }
-/* If footer explicitly has .bg-dark ensure our footer background rule wins */
-footer.bg-dark { background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent) !important }
-
-/* Skip-link for keyboard users (visible on focus) */
-.skip-link{
-  position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:1000;
-}
-.skip-link:focus, .skip-link:active{
-  left:1rem;top:1rem;width:auto;height:auto;padding:.5rem .75rem;background:rgba(0,0,0,0.7);color:var(--text);border-radius:6px;box-shadow:var(--shadow-1)
+.btn-warning:hover, .btn-warning:focus {
+  background: var(--ouro-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(154,110,32,0.20);
 }
 
-/* Focus-visible styles for better keyboard visibility */
-a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
-  outline:3px solid var(--ouro);
-  outline-offset:3px;
-  border-radius:6px;
+input, select, textarea {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--text-color);
+  border-radius: 10px;
+  padding: 0.6em 1em;
+  font-size: 1rem;
+  transition: border 0.18s, box-shadow 0.18s;
+  margin-bottom: 0.6em;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--input-focus);
+  outline: none;
+  box-shadow: 0 6px 18px rgba(154,110,32,0.12);
 }
 
-/* Ensure muted text remains legible */
-.text-muted,.text-light{color:var(--muted)!important}
-
-/* Responsive tweaks */
-@media (max-width:768px){
-  .logo{width:clamp(88px,26vw,160px)}
-  .social-icons a{width:44px;height:44px}
-  .whatsapp-float{width:52px;height:52px;right:12px;bottom:12px}
+.carousel-inner img {
+  object-fit: cover;
+  min-height: 360px;
+  max-height: 520px;
 }
 
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
-
-/* small utility */
-.text-gold-light{color:rgba(184,134,11,0.9)}
-
-/* keep legacy selectors to avoid regressions */
-.map-container{/* legacy fallback: ensure map has at least a minimal height if used without .maps-container */min-height:260px}
-
-/* Mensagem de sucesso */
-#msgSuccess {
-    background-color: #d4edda;
-    border: 1px solid #c3e6cb;
-    border-radius: 4px;
-    color: #155724;
-    font-weight: bold;
-    margin-top: 1rem;
-    padding: 12px;
-    text-align: center;
-    animation: fadeIn 0.3s ease-in;
+.carousel-indicators button {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--ouro);
+  opacity: 0.4;
+  border: none;
+  margin: 0 4px;
+}
+.carousel-indicators .active {
+  background: var(--ouro);
+  opacity: 1;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 12px;
+}
+.social-icons a img, .social-icons a svg {
+  width: 40px;
+  height: 40px;
+  filter: none;
+  background: #fff;
+  border-radius: 50%;
+  padding: 6px;
+  color: var(--ouro);
+  box-shadow: 0 6px 18px rgba(154,110,32,0.06);
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.social-icons a:hover img, .social-icons a:hover svg {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(154,110,32,0.09);
 }
 
-/* Footer melhorado para visibilidade */
+.whatsapp-float {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  background: var(--ouro);
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  box-shadow: 0 6px 18px rgba(154,110,32,0.12);
+  border: 2.5px solid #fff;
+  transition: transform 0.2s, background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.whatsapp-float:hover {
+  transform: scale(1.08);
+  background: var(--ouro-hover);
+}
+
 footer {
-    background: #1a1a1a !important;
-    color: #e0e0e0 !important;
-    padding: 3rem 1rem !important;
-    border-top: 2px solid #b8860b !important;
-    text-align: center;
-    margin-top: 3rem;
+  background: transparent;
+  color: var(--text-color);
+  border-top: 1px solid var(--borda);
+  padding: 24px 0 12px 0;
+  font-size: 0.95rem;
 }
 
-footer address {
-    font-style: normal;
-    line-height: 1.8;
-    margin-bottom: 1.5rem;
+/* Benefit icon treatment for readability */
+.benefit-icon svg {
+  width: 48px;
+  height: 48px;
+  padding: 8px;
+  border-radius: 12px;
+  background: #fff;
+  color: var(--ouro);
+  box-shadow: 0 6px 18px rgba(154,110,32,0.08);
+  display: inline-block;
+  vertical-align: middle;
 }
 
-footer p {
-    color: #b0b0b0 !important;
-    margin-top: 1rem !important;
+@media (max-width: 768px) {
+  .logo { max-width: 80px; }
+  h1, .display-5 { font-size: 1.3rem; }
+  .carousel-inner img { min-height: 180px; max-height: 220px; }
+  .whatsapp-float { width: 44px; height: 44px; bottom: 12px; right: 12px; }
 }
 
-footer a {
-    color: #ffd700 !important;
-    text-decoration: none;
+/* Top header bar: put the logo on a black strip */
+.header-top{
+  background: var(--black, #000);
+  color: var(--white, #fff);
+  padding: 0.5rem 0;
+  position:relative;
+  z-index:4;
 }
+.header-top .container{display:flex; align-items:center; justify-content:space-between}
+.header-top .logo{max-width:160px}
 
-footer a:hover {
-    color: #ffed4e !important;
-    text-decoration: underline;
+/* Hero layout: carousel sits behind the right side; overlay ensures text readability */
+.hero-section{position:relative; min-height:60vh; overflow:hidden}
+.hero-section .hero-overlay{position:absolute; left:0; top:0; bottom:0; width:55%; z-index:1; background: linear-gradient(90deg, rgba(251,247,243,0.98) 0%, rgba(251,247,243,0.7) 100%);}
+.hero-content{position:relative; z-index:2}
+
+/* Place the carousel absolutely on the right half so it visually sits behind header and right column */
+#heroCarousel{position:absolute; top:0; right:0; bottom:0; left:45%; width:55%; height:100%; z-index:0}
+#heroCarousel .carousel-inner{height:100%}
+#heroCarousel .carousel-item img{width:100%; height:100%; object-fit:cover}
+
+/* Per-image framing tweaks to avoid awkward crops (object-position)
+  Tweak these if any slide feels off in the browser. */
+#heroCarousel .carousel-item img[src*="slide1.jpg"]{ object-position: center 35%; }
+#heroCarousel .carousel-item img[src*="slide2.jpg"]{ object-position: center 45%; }
+#heroCarousel .carousel-item img[src*="slide3.jpg"]{ object-position: center 40%; }
+#heroCarousel .carousel-item img[src$="slide2.svg"]{ object-position: center center; }
+#heroCarousel .carousel-item img[src$="slide3.svg"]{ object-position: center center; }
+
+/* Ensure header remains above the carousel */
+header.header-top{position:relative; z-index:5}
+
+/* Contrast helpers */
+.text-gold{color:var(--ouro) !important}
+.btn-warning{background:var(--ouro); border:none; color:#fff}
+
+@media (max-width: 991px){
+  /* On smaller screens carousel becomes normal block flow */
+  #heroCarousel{position:relative; left:0; width:100%; height:auto}
+  .hero-section .hero-overlay{display:none}
+  .hero-content{padding-top:1rem}
 }

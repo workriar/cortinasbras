@@ -1,0 +1,28 @@
+/* Subtle shadow variant for comparison
+   Load this instead of style.css to evaluate lighter shadows.
+   Only overrides shadowy properties; keeps the rest of the theme.
+*/
+:root{
+  --ouro: #9a6e20;
+  --ouro-hover: #7b5418;
+}
+
+/* Buttons */
+.btn-warning{ box-shadow: 0 4px 10px rgba(154,110,32,0.06) !important; }
+.btn-warning:hover, .btn-warning:focus{ box-shadow: 0 6px 14px rgba(154,110,32,0.08) !important; }
+
+/* Inputs focus */
+input:focus, select:focus, textarea:focus{ box-shadow: 0 4px 10px rgba(154,110,32,0.06) !important; }
+
+/* Social icons */
+.social-icons a img, .social-icons a svg{ box-shadow: 0 3px 8px rgba(154,110,32,0.03) !important; }
+.social-icons a:hover img, .social-icons a:hover svg{ box-shadow: 0 5px 12px rgba(154,110,32,0.04) !important; }
+
+/* WhatsApp float */
+.whatsapp-float{ box-shadow: 0 4px 12px rgba(154,110,32,0.06) !important; }
+
+/* Benefit icons */
+.benefit-icon svg{ box-shadow: 0 4px 10px rgba(154,110,32,0.04) !important; }
+
+/* General subtle panel shadow */
+.card-refined, .bg-dark, .testimonial-card{ box-shadow: 0 6px 18px rgba(154,110,32,0.04) !important; }
