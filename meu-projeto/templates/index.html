@@ -606,14 +606,13 @@
         setTimeout(() => {
           popup.classList.remove('show');
         }, 12000);
-      });
-
-      // Fechar popup ao clicar fora
-      document.addEventListener('click', function(e) {
-        const popup = document.getElementById('promo-popup');
-        if (e.target === popup) {
-          closePopup();
-        }
+        
+        // Fechar popup ao clicar fora (no overlay)
+        popup.addEventListener('click', function(e) {
+          if (e.target === popup) {
+            closePopup();
+          }
+        });
       });
 
       // Carrossel Hero com fade automático
