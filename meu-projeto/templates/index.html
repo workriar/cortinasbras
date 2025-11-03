@@ -66,9 +66,9 @@
   <body class="antialiased bg-brand-50 text-brand-700 font-sans">
     <!-- HEADER com logotipo -->
     <header id="main-header" class="sticky top-0 z-50 bg-black backdrop-blur-md border-b border-gray-800 transition-all duration-300">
-      <div class="container mx-auto px-6 py-4 flex items-center justify-center transition-all duration-300" id="header-container">
+      <div class="container mx-auto px-6 py-2 flex items-center justify-center transition-all duration-300" id="header-container">
         <div id="logo-section" class="transition-all duration-300">
-          <img src="/static/logo.png" alt="Logotipo Cortinas Brás" class="w-32 h-auto transition-all duration-300" id="header-logo" />
+          <img src="/static/logo.png" alt="Logotipo Cortinas Brás" class="w-24 h-auto transition-all duration-300" id="header-logo" />
         </div>
         
         <!-- Menu Hamburguer (aparece ao rolar) -->
@@ -528,23 +528,23 @@
         if (scrollTop > 50 && !isScrolled) {
           isScrolled = true;
           // Quando rolar: logo menor no canto esquerdo e mostra menu hamburguer
-          header.classList.add('py-2');
-          header.classList.remove('py-4');
+          header.classList.add('py-1');
+          header.classList.remove('py-2');
           headerContainer.classList.remove('justify-center');
           headerContainer.classList.add('justify-between');
-          headerLogo.classList.remove('w-32');
-          headerLogo.classList.add('w-16');
+          headerLogo.classList.remove('w-24');
+          headerLogo.classList.add('w-14');
           menuToggle.classList.remove('opacity-0', 'pointer-events-none');
           menuToggle.classList.add('opacity-100', 'pointer-events-auto');
         } else if (scrollTop <= 50 && isScrolled) {
           isScrolled = false;
           // No topo: logo grande centralizado e esconde menu
-          header.classList.remove('py-2');
-          header.classList.add('py-4');
+          header.classList.remove('py-1');
+          header.classList.add('py-2');
           headerContainer.classList.add('justify-center');
           headerContainer.classList.remove('justify-between');
-          headerLogo.classList.add('w-32');
-          headerLogo.classList.remove('w-16');
+          headerLogo.classList.add('w-24');
+          headerLogo.classList.remove('w-14');
           menuToggle.classList.add('opacity-0', 'pointer-events-none');
           menuToggle.classList.remove('opacity-100', 'pointer-events-auto');
           dropdownMenu.classList.add('hidden');
