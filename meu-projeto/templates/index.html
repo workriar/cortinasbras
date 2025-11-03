@@ -53,12 +53,13 @@
   </head>
   <body class="antialiased bg-brand-50 text-brand-700 font-sans">
     <!-- HEADER com logotipo centralizado -->
-    <header class="sticky top-0 z-50 bg-black backdrop-blur-md border-b border-gray-800">
-      <div class="container mx-auto px-6 py-4 flex flex-col items-center">
-        <img src="/static/logo.png" alt="Logotipo Cortinas Brás" class="w-24 h-auto mb-2" />
-        <h1 class="text-xl font-bold text-white">Cortinas Brás</h1>
-        <p class="text-sm text-brand-300">Cortinas sob medida · Enxovais premium</p>
-        <nav class="flex items-center gap-8 mt-4" aria-label="Menu principal">
+    <header id="main-header" class="sticky top-0 z-50 bg-black backdrop-blur-md border-b border-gray-800 transition-all duration-300">
+      <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+        <div id="logo-section" class="flex flex-col items-center flex-1 transition-all duration-300">
+          <img src="/static/logo.png" alt="Logotipo Cortinas Brás" class="w-24 h-auto mb-2 transition-all duration-300" id="header-logo" />
+          <p id="slogan" class="text-sm text-brand-300 uppercase tracking-wider transition-opacity duration-300">Descubra sua cortina</p>
+        </div>
+        <nav id="main-nav" class="flex items-center gap-8 transition-all duration-300" aria-label="Menu principal">
           <a href="#inicio" class="text-sm text-gray-300 hover:text-white transition">Início</a>
           <a href="#produtos" class="text-sm text-gray-300 hover:text-white transition">Produtos</a>
           <a href="#sobre" class="text-sm text-gray-300 hover:text-white transition">Sobre</a>
@@ -313,9 +314,9 @@
     <!-- FOOTER com logotipo -->
     <footer class="bg-black text-white py-8 border-t border-gray-800">
       <div class="container mx-auto px-6 text-center">
-        <div class="flex flex-col items-center justify-center gap-3 mb-4">
-          <img src="/static/logo.png" alt="Logotipo Cortinas Brás" class="w-12 h-auto mx-auto mb-2" />
-          <span class="font-semibold text-white">Cortinas Brás</span>
+        <div class="flex flex-col items-center justify-center gap-2 mb-4">
+          <img src="/static/logo.png" alt="Logotipo Cortinas Brás" class="w-16 h-auto mx-auto" />
+          <p class="text-sm text-brand-300 uppercase tracking-wider">Descubra sua cortina</p>
         </div>
         <p class="text-gray-400">Rua Bresser, 1084 - Brás - CEP 03053-000 - São Paulo - SP</p>
         <p class="text-gray-400">Contato: (11) 99289-1070</p>
@@ -447,6 +448,42 @@
             target.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
         });
+      });
+
+      // Header scroll behavior - menu move para o canto quando rolar
+      let lastScrollTop = 0;
+      const header = document.getElementById('main-header');
+      const logoSection = document.getElementById('logo-section');
+      const mainNav = document.getElementById('main-nav');
+      const slogan = document.getElementById('slogan');
+      const headerLogo = document.getElementById('header-logo');
+      
+      window.addEventListener('scroll', function() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (scrollTop > 50) {
+          // Quando rolar: logo menor no canto, menu à direita, slogan escondido
+          header.classList.add('py-2');
+          header.classList.remove('py-4');
+          logoSection.classList.remove('flex-1', 'flex-col');
+          logoSection.classList.add('flex-row');
+          headerLogo.classList.remove('w-24', 'mb-2');
+          headerLogo.classList.add('w-12');
+          slogan.classList.add('opacity-0', 'hidden');
+          mainNav.classList.add('ml-auto');
+        } else {
+          // No topo: layout centralizado original
+          header.classList.remove('py-2');
+          header.classList.add('py-4');
+          logoSection.classList.add('flex-1', 'flex-col');
+          logoSection.classList.remove('flex-row');
+          headerLogo.classList.add('w-24', 'mb-2');
+          headerLogo.classList.remove('w-12');
+          slogan.classList.remove('opacity-0', 'hidden');
+          mainNav.classList.remove('ml-auto');
+        }
+        
+        lastScrollTop = scrollTop;
       });
     </script>
   </body>
