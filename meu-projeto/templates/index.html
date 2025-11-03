@@ -876,19 +876,66 @@
         submitBtn.innerHTML = '<svg class="animate-spin w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Enviando...';
         status.textContent = '';
         
-        // Montar mensagem detalhada para WhatsApp
+        // Enviar para o backend primeiro (email + banco de dados)
+        fetch('/enviar', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            nome: nome,
+            telefone: telefone,
+            largura_parede: largura_parede,
+            altura_parede: altura_parede,
+            largura_janela: largura_janela,
+            altura_janela: altura_janela,
+            tecido: tecido,
+            instalacao: instalacao,
+            observacoes: observacoes,
+            endereco: endereco
+          })
+        })
+        .then(response => {
+          if (response.ok) {
+            console.log('✅ Orçamento salvo e email enviado!');
+          } else {
+            console.log('⚠️ Orçamento salvo mas email pode ter falha');
+          }
+        })
+        .catch(error => {
+          console.error('❌ Erro ao enviar:', error);
+        });
+        
+        // Montar mensagem FORMATADA para WhatsApp
         const waMessage = encodeURIComponent(
-          `🏠 *Orçamento de Cortinas*\n\n` +
-          `👤 *Nome:* ${nome}\n` +
-          `📱 *Telefone:* ${telefone}\n\n` +
-          `📏 *Medidas da Parede:*\n` +
-          `Largura: ${largura_parede}m | Altura: ${altura_parede}m\n\n` +
-          `🪟 *Medidas da Janela:*\n` +
-          `Largura: ${largura_janela}m | Altura: ${altura_janela}m\n\n` +
-          `🎨 *Tipo de Tecido:* ${tecido}\n` +
-          `🔧 *Tipo de Instalação:* ${instalacao}\n` +
-          `${observacoes ? `\n📝 *Observações:* ${observacoes}\n` : ''}` +
-          `${endereco ? `\n📍 *Endereço:* ${endereco}` : ''}`
+          `╔═══════════════════════════╗\n` +
+          `║  🏠 *ORÇAMENTO CORTINAS*  ║\n` +
+          `╚═══════════════════════════╝\n\n` +
+          
+          `┌─ 👤 *DADOS DO CLIENTE*\n` +
+          `│ Nome: *${nome}*\n` +
+          `│ Tel: *${telefone}*\n` +
+          `└────────────────────\n\n` +
+          
+          `┌─ � *MEDIDAS DA PAREDE*\n` +
+          `│ Largura: *${largura_parede}m*\n` +
+          `│ Altura: *${altura_parede}m*\n` +
+          `└────────────────────\n\n` +
+          
+          `┌─ 🪟 *MEDIDAS DA JANELA*\n` +
+          `│ Largura: *${largura_janela}m*\n` +
+          `│ Altura: *${altura_janela}m*\n` +
+          `└────────────────────\n\n` +
+          
+          `┌─ 🎨 *ESPECIFICAÇÕES*\n` +
+          `│ Tecido: *${tecido}*\n` +
+          `│ Instalação: *${instalacao}*\n` +
+          `└────────────────────\n` +
+          
+          `${observacoes ? `\n┌─ 📝 *OBSERVAÇÕES*\n│ ${observacoes}\n└────────────────────\n` : ''}` +
+          `${endereco ? `\n┌─ 📍 *ENDEREÇO*\n│ ${endereco}\n└────────────────────\n` : ''}` +
+          `\n━━━━━━━━━━━━━━━━━━━━\n` +
+          `✨ _Cortinas Brás - Qualidade há 20+ anos_`
         );
         
         // Pequeno delay para feedback visual
