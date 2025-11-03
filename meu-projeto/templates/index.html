@@ -66,13 +66,15 @@
   <body class="antialiased bg-brand-50 text-brand-700 font-sans">
     <!-- HEADER com logotipo -->
     <header id="main-header" class="sticky top-0 z-50 bg-black backdrop-blur-md border-b border-gray-800 transition-all duration-300">
-      <div class="container mx-auto px-6 py-2 flex items-center justify-center transition-all duration-300" id="header-container">
-        <div id="logo-section" class="transition-all duration-300">
-          <img src="/static/logo.png" alt="Logotipo Cortinas Brás" class="w-24 h-auto transition-all duration-300" id="header-logo" />
+      <div class="container mx-auto px-6 py-2 transition-all duration-300 relative" id="header-container">
+        <div class="flex items-center justify-center">
+          <div id="logo-section" class="transition-all duration-300">
+            <img src="/static/logo.png" alt="Logotipo Cortinas Brás" class="w-24 h-auto transition-all duration-300" id="header-logo" />
+          </div>
         </div>
         
-        <!-- Menu Hamburguer (aparece ao rolar) -->
-        <div id="menu-toggle" class="relative opacity-0 pointer-events-none transition-all duration-300">
+        <!-- Menu Hamburguer (aparece ao rolar) - posicionado absolutamente -->
+        <div id="menu-toggle" class="absolute right-6 top-1/2 -translate-y-1/2 opacity-0 pointer-events-none transition-all duration-300">
           <button id="hamburger-btn" class="flex flex-col gap-1.5 w-8 h-8 justify-center items-center group" aria-label="Menu">
             <span class="block w-6 h-0.5 bg-brand-300 transition-all group-hover:bg-white"></span>
             <span class="block w-6 h-0.5 bg-brand-300 transition-all group-hover:bg-white"></span>
@@ -523,6 +525,7 @@
       
       window.addEventListener('scroll', function() {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const logoWrapper = document.querySelector('#header-container > div');
         
         // Evitar múltiplas atualizações desnecessárias
         if (scrollTop > 50 && !isScrolled) {
@@ -530,8 +533,8 @@
           // Quando rolar: logo menor na ESQUERDA e mostra menu hamburguer
           header.classList.add('py-1');
           header.classList.remove('py-2');
-          headerContainer.classList.remove('justify-center');
-          headerContainer.classList.add('justify-between');
+          logoWrapper.classList.remove('justify-center');
+          logoWrapper.classList.add('justify-start');
           headerLogo.classList.remove('w-24');
           headerLogo.classList.add('w-14');
           menuToggle.classList.remove('opacity-0', 'pointer-events-none');
@@ -541,8 +544,8 @@
           // No topo: logo grande centralizado
           header.classList.remove('py-1');
           header.classList.add('py-2');
-          headerContainer.classList.add('justify-center');
-          headerContainer.classList.remove('justify-between');
+          logoWrapper.classList.add('justify-center');
+          logoWrapper.classList.remove('justify-start');
           headerLogo.classList.add('w-24');
           headerLogo.classList.remove('w-14');
           menuToggle.classList.add('opacity-0', 'pointer-events-none');
