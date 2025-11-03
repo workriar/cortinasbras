@@ -48,7 +48,7 @@
       </div>
 
       <!-- Mobile nav -->
-      <nav id="primary-navigation" class="d-none d-md-none bg-light border-top" role="navigation" aria-label="Menu móvel">
+      <nav id="primary-navigation" class="d-none d-md-block bg-light border-top" role="navigation" aria-label="Menu móvel">
         <div class="container py-3">
           <ul class="list-unstyled mb-0">
             <li class="py-2"><a href="#" class="text-decoration-none focus-ring">Início</a></li>
@@ -143,9 +143,15 @@
         const nav = document.getElementById('primary-navigation');
         if (!toggle || !nav) return;
         toggle.addEventListener('click', function(){
-          const isHidden = nav.classList.toggle('d-block');
-          toggle.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+          // classList.toggle returns true when the class was added (menu is now open)
+          const isOpen = nav.classList.toggle('d-block');
+          toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         });
+        // close menu on link click and keep ARIA in sync
+        nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+          nav.classList.remove('d-block');
+          toggle.setAttribute('aria-expanded','false');
+        }));
       })();
     </script>
 
