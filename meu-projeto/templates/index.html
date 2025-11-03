@@ -72,7 +72,7 @@
         </div>
         
         <!-- Menu Hamburguer (aparece ao rolar) -->
-        <div id="menu-toggle" class="opacity-0 pointer-events-none transition-all duration-300">
+        <div id="menu-toggle" class="absolute right-6 opacity-0 pointer-events-none transition-all duration-300">
           <button id="hamburger-btn" class="flex flex-col gap-1.5 w-8 h-8 justify-center items-center group" aria-label="Menu">
             <span class="block w-6 h-0.5 bg-brand-300 transition-all group-hover:bg-white"></span>
             <span class="block w-6 h-0.5 bg-brand-300 transition-all group-hover:bg-white"></span>
@@ -80,7 +80,7 @@
           </button>
           
           <!-- Dropdown Menu -->
-          <div id="dropdown-menu" class="hidden absolute right-6 top-full mt-2 bg-black border border-gray-800 rounded-lg shadow-2xl py-2 min-w-[150px]">
+          <div id="dropdown-menu" class="hidden absolute right-0 top-full mt-2 bg-black border border-gray-800 rounded-lg shadow-2xl py-2 min-w-[150px]">
             <a href="#inicio" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition">Início</a>
             <a href="#produtos" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition">Produtos</a>
             <a href="#sobre" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition">Sobre</a>
@@ -527,22 +527,20 @@
         // Evitar múltiplas atualizações desnecessárias
         if (scrollTop > 50 && !isScrolled) {
           isScrolled = true;
-          // Quando rolar: logo menor no canto esquerdo e mostra menu hamburguer
+          // Quando rolar: logo menor CENTRALIZADO e mostra menu hamburguer
           header.classList.add('py-1');
           header.classList.remove('py-2');
-          headerContainer.classList.remove('justify-center');
-          headerContainer.classList.add('justify-between');
+          // MANTÉM CENTRALIZADO
           headerLogo.classList.remove('w-24');
           headerLogo.classList.add('w-14');
           menuToggle.classList.remove('opacity-0', 'pointer-events-none');
           menuToggle.classList.add('opacity-100', 'pointer-events-auto');
         } else if (scrollTop <= 50 && isScrolled) {
           isScrolled = false;
-          // No topo: logo grande centralizado e esconde menu
+          // No topo: logo grande centralizado
           header.classList.remove('py-1');
           header.classList.add('py-2');
-          headerContainer.classList.add('justify-center');
-          headerContainer.classList.remove('justify-between');
+          // MANTÉM CENTRALIZADO
           headerLogo.classList.add('w-24');
           headerLogo.classList.remove('w-14');
           menuToggle.classList.add('opacity-0', 'pointer-events-none');
