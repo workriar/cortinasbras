@@ -53,6 +53,24 @@
         white-space: nowrap; 
         border-width: 0; 
       }
+      /* Carrossel Hero */
+      .hero-carousel {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+      }
+      .hero-slide {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transition: opacity 1.5s ease-in-out;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+      .hero-slide.active {
+        opacity: 0.15;
+      }
     </style>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17672945118"></script>
@@ -96,7 +114,13 @@
       <!-- HERO -->
       <section id="inicio" class="relative overflow-hidden">
         <div class="bg-gradient-to-br from-brand-50 via-white to-brand-100">
-          <div class="container mx-auto px-6 py-20 lg:py-32">
+          <!-- Carrossel de fundo com fade -->
+          <div class="hero-carousel">
+            <div class="hero-slide active" style="background-image: url('/static/cortina-wave-1.jpg')"></div>
+            <div class="hero-slide" style="background-image: url('/static/cortina-wave-2.jpg')"></div>
+            <div class="hero-slide" style="background-image: url('/static/enxoval-cama.jpg')"></div>
+          </div>
+          <div class="container mx-auto px-6 py-20 lg:py-32 relative z-10">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div class="space-y-6">
                 <div class="inline-flex items-center gap-2 px-4 py-2 bg-brand-100 text-brand-700 rounded-full text-sm font-medium shadow-sm">
@@ -412,6 +436,21 @@
     </a>
 
     <script>
+      // Carrossel Hero com fade automático
+      (function() {
+        const slides = document.querySelectorAll('.hero-slide');
+        let currentSlide = 0;
+        
+        function nextSlide() {
+          slides[currentSlide].classList.remove('active');
+          currentSlide = (currentSlide + 1) % slides.length;
+          slides[currentSlide].classList.add('active');
+        }
+        
+        // Troca de slide a cada 4 segundos
+        setInterval(nextSlide, 4000);
+      })();
+
       // Botões WhatsApp dos produtos
       document.querySelectorAll('.btn-wa').forEach(btn => {
         btn.addEventListener('click', function() {
