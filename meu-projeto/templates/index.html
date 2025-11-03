@@ -293,20 +293,20 @@
                   <input id="telefone" name="telefone" type="tel" required class="mt-1 w-full px-4 py-3 rounded-lg border bg-gray-50 focus:ring-2 focus:ring-brand-300 focus:outline-none focus:bg-white" placeholder="(11) 99999-9999" />
                 </div>
                 <div>
-                  <label class="text-sm font-medium text-brand-700" for="largura_parede">Largura da parede (m) *</label>
-                  <input id="largura_parede" name="largura_parede" type="number" step="0.01" required class="mt-1 w-full px-4 py-3 rounded-lg border bg-gray-50 focus:ring-2 focus:ring-brand-300 focus:outline-none focus:bg-white" placeholder="Ex: 3.20" />
+                  <label class="text-sm font-medium text-brand-700" for="largura_parede">Largura da parede (m) * <span class="text-xs text-gray-500">(0.01 - 20m)</span></label>
+                  <input id="largura_parede" name="largura_parede" type="number" step="0.01" min="0.01" max="20" required class="mt-1 w-full px-4 py-3 rounded-lg border bg-gray-50 focus:ring-2 focus:ring-brand-300 focus:outline-none focus:bg-white" placeholder="Ex: 3.20" title="Digite um valor entre 0.01 e 20 metros" />
                 </div>
                 <div>
-                  <label class="text-sm font-medium text-brand-700" for="altura_parede">Altura da parede (m) *</label>
-                  <input id="altura_parede" name="altura_parede" type="number" step="0.01" required class="mt-1 w-full px-4 py-3 rounded-lg border bg-gray-50 focus:ring-2 focus:ring-brand-300 focus:outline-none focus:bg-white" placeholder="Ex: 2.60" />
+                  <label class="text-sm font-medium text-brand-700" for="altura_parede">Altura da parede (m) * <span class="text-xs text-gray-500">(0.01 - 6m)</span></label>
+                  <input id="altura_parede" name="altura_parede" type="number" step="0.01" min="0.01" max="6" required class="mt-1 w-full px-4 py-3 rounded-lg border bg-gray-50 focus:ring-2 focus:ring-brand-300 focus:outline-none focus:bg-white" placeholder="Ex: 2.60" title="Digite um valor entre 0.01 e 6 metros" />
                 </div>
                 <div>
-                  <label class="text-sm font-medium text-brand-700" for="largura_janela">Largura da janela (m) *</label>
-                  <input id="largura_janela" name="largura_janela" type="number" step="0.01" required class="mt-1 w-full px-4 py-3 rounded-lg border bg-gray-50 focus:ring-2 focus:ring-brand-300 focus:outline-none focus:bg-white" placeholder="Ex: 1.80" />
+                  <label class="text-sm font-medium text-brand-700" for="largura_janela">Largura da janela (m) * <span class="text-xs text-gray-500">(0.01 - 5m)</span></label>
+                  <input id="largura_janela" name="largura_janela" type="number" step="0.01" min="0.01" max="5" required class="mt-1 w-full px-4 py-3 rounded-lg border bg-gray-50 focus:ring-2 focus:ring-brand-300 focus:outline-none focus:bg-white" placeholder="Ex: 1.80" title="Digite um valor entre 0.01 e 5 metros" />
                 </div>
                 <div>
-                  <label class="text-sm font-medium text-brand-700" for="altura_janela">Altura da janela (m) *</label>
-                  <input id="altura_janela" name="altura_janela" type="number" step="0.01" required class="mt-1 w-full px-4 py-3 rounded-lg border bg-gray-50 focus:ring-2 focus:ring-brand-300 focus:outline-none focus:bg-white" placeholder="Ex: 1.50" />
+                  <label class="text-sm font-medium text-brand-700" for="altura_janela">Altura da janela (m) * <span class="text-xs text-gray-500">(0.01 - 3m)</span></label>
+                  <input id="altura_janela" name="altura_janela" type="number" step="0.01" min="0.01" max="3" required class="mt-1 w-full px-4 py-3 rounded-lg border bg-gray-50 focus:ring-2 focus:ring-brand-300 focus:outline-none focus:bg-white" placeholder="Ex: 1.50" title="Digite um valor entre 0.01 e 3 metros" />
                 </div>
                 <div>
                   <label class="text-sm font-medium text-brand-700" for="tecido">Tipo de tecido *</label>
