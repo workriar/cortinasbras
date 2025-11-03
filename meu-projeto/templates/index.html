@@ -33,14 +33,14 @@
     <!-- Header: mobile toggle & centered logo -->
     <header class="py-2 border-bottom bg-light">
       <div class="container d-flex align-items-center justify-content-between">
-        <button id="nav-toggle" class="btn btn-link d-md-none p-1" aria-controls="primary-navigation" aria-expanded="false">
+        <button id="nav-toggle" class="btn btn-link d-md-none p-1" aria-controls="primary-navigation" aria-expanded="false" aria-label="Abrir menu">
           <span class="visually-hidden">Abrir menu</span>
           <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
 
         <div class="d-flex flex-grow-1 justify-content-center">
           <a href="#" class="d-inline-block" aria-label="Ir para o início">
-            <img src="/static/logo.png" alt="Cortinas Brás" class="logo mx-auto">
+            <img src="/static/logo.png" alt="Cortinas Brás" loading="lazy" class="logo mx-auto">
           </a>
         </div>
 
@@ -48,13 +48,13 @@
       </div>
 
       <!-- Mobile nav -->
-      <nav id="primary-navigation" class="d-none d-md-none bg-light border-top">
+      <nav id="primary-navigation" class="d-none d-md-none bg-light border-top" role="navigation" aria-label="Menu móvel">
         <div class="container py-3">
           <ul class="list-unstyled mb-0">
-            <li class="py-2"><a href="#" class="text-decoration-none">Início</a></li>
-            <li class="py-2"><a href="#produtos" class="text-decoration-none">Produtos</a></li>
-            <li class="py-2"><a href="#sobre" class="text-decoration-none">Sobre</a></li>
-            <li class="py-2"><a href="#form-orcamento" class="text-decoration-none">Contato</a></li>
+            <li class="py-2"><a href="#" class="text-decoration-none focus-ring">Início</a></li>
+            <li class="py-2"><a href="#produtos" class="text-decoration-none focus-ring">Produtos</a></li>
+            <li class="py-2"><a href="#sobre" class="text-decoration-none focus-ring">Sobre</a></li>
+            <li class="py-2"><a href="#form-orcamento" class="text-decoration-none focus-ring">Contato</a></li>
           </ul>
         </div>
       </nav>
