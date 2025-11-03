@@ -36,25 +36,79 @@
       }
     </script>
     <style>
-      :root { --accent: #D4A93E; }
+      :root { --accent: #D4A93E; --accent-700: #8B5C2A; --bg: #FBF7F4; }
+      /* Card hover and motion */
       .card-hover { transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s; }
-      .card-hover:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(139,92,42,.12); }
+      .card-hover:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(139,92,42,.10); }
+
+      /* Focus and accessible outlines */
       .focus-ring:focus { outline: none; box-shadow: 0 0 0 4px rgba(212,169,62,.14); }
+
+      /* Small utilities not in Tailwind CDN immediate set */
       .visually-hidden { position: absolute !important; height: 1px; width: 1px; overflow: hidden; clip: rect(1px,1px,1px,1px); white-space: nowrap; }
+
+      /* Buttons that better follow modern UX patterns */
+      .btn-primary { background: var(--accent); color: #fff; padding: .75rem 1.125rem; border-radius: 9999px; box-shadow: 0 8px 20px rgba(154,110,32,.14); }
+      .btn-primary:hover { filter: brightness(.97); transform: translateY(-1px); }
+      .btn-outline { border: 1px solid rgba(139,92,42,.12); background: transparent; color: var(--accent-700); padding: .65rem .9rem; border-radius: 9999px; }
+
+      /* Mobile navigation transition */
+      .mobile-nav { display: none; }
+      .mobile-nav.open { display: block; }
+      @media (max-width: 768px) {
+        nav.desktop { display: none; }
+        .mobile-toggle { display: inline-flex; }
+      }
+      @media (min-width: 769px) {
+        .mobile-toggle { display: none; }
+      }
+
+      /* Reduce visual noise on very small screens */
+      @media (max-width:420px) {
+        .container { padding-left: 1rem; padding-right: 1rem; }
+      }
     </style>
   </head>
-  <body class="antialiased bg-brand-50 text-brand-700 font-sans">
-    <!-- HEADER com logotipo centralizado -->
+    <body class="antialiased bg-brand-50 text-brand-700 font-sans">
+    <!-- HEADER com logotipo centralizado e navegação móvel -->
     <header class="sticky top-0 z-50 bg-brand-50/90 backdrop-blur-md border-b border-brand-100">
-      <div class="container mx-auto px-6 py-4 flex flex-col items-center">
-        <img src="/images/logo-cortinas-bras.jpg" alt="Logotipo Cortinas Brás" class="w-24 h-auto mb-2" />
-        <h1 class="text-xl font-bold text-brand-700">Cortinas Brás</h1>
-        <p class="text-sm text-brand-300">Cortinas sob medida · Enxovais premium</p>
-        <nav class="flex items-center gap-8 mt-4" aria-label="Menu principal">
-          <a href="#inicio" class="text-sm hover:text-brand-700 transition">Início</a>
-          <a href="#produtos" class="text-sm hover:text-brand-700 transition">Produtos</a>
-          <a href="#sobre" class="text-sm hover:text-brand-700 transition">Sobre</a>
-          <a href="#contato" class="text-sm hover:text-brand-700 transition">Contato</a>
+      <div class="container mx-auto px-6 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <!-- mobile toggle -->
+          <button class="mobile-toggle inline-flex items-center justify-center p-2 rounded-md text-brand-700" aria-controls="primary-navigation" aria-expanded="false" id="nav-toggle">
+            <span class="sr-only">Abrir menu</span>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+          </button>
+        </div>
+
+        <!-- logo centralizado visualmente -->
+        <div class="flex-1 flex items-center justify-center">
+          <a href="#inicio" class="group" aria-label="Ir para o início">
+            <img src="/images/logo-cortinas-bras.jpg" alt="Logotipo Cortinas Brás" class="w-28 sm:w-36 md:w-44 lg:w-52 h-auto object-contain" />
+          </a>
+        </div>
+
+        <!-- placeholder para manter logo centralizado -->
+        <div class="w-10" aria-hidden="true"></div>
+
+        <!-- desktop nav -->
+        <nav class="desktop absolute right-6 top-4" aria-label="Menu principal">
+          <ul class="flex items-center gap-6 text-sm">
+            <li><a href="#inicio" class="hover:text-brand-700 transition">Início</a></li>
+            <li><a href="#produtos" class="hover:text-brand-700 transition">Produtos</a></li>
+            <li><a href="#sobre" class="hover:text-brand-700 transition">Sobre</a></li>
+            <li><a href="#contato" class="hover:text-brand-700 transition">Contato</a></li>
+          </ul>
+        </nav>
+
+        <!-- mobile nav (hidden by default) -->
+        <nav id="primary-navigation" class="mobile-nav bg-brand-50 border-t border-brand-100 w-full px-6 py-4" aria-label="Menu móvel">
+          <ul class="flex flex-col gap-3">
+            <li><a href="#inicio" class="block py-2">Início</a></li>
+            <li><a href="#produtos" class="block py-2">Produtos</a></li>
+            <li><a href="#sobre" class="block py-2">Sobre</a></li>
+            <li><a href="#contato" class="block py-2">Contato</a></li>
+          </ul>
         </nav>
       </div>
     </header>
@@ -239,17 +293,36 @@
         </div>
       </section>
     </main>
-    <!-- FOOTER com logotipo -->
+    <!-- FOOTER com logotipo menor à esquerda -->
     <footer class="bg-brand-700 text-white py-8">
-      <div class="container mx-auto px-6 text-center">
-        <div class="flex flex-col items-center justify-center gap-3 mb-4">
-          <img src="/images/logo-cortinas-bras.jpg" alt="Logotipo Cortinas Brás" class="w-12 h-auto mx-auto mb-2" />
-          <span class="font-semibold">Cortinas Brás</span>
+      <div class="container mx-auto px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <img src="/images/logo-cortinas-bras.jpg" alt="Logotipo Cortinas Brás" class="w-16 sm:w-14 h-auto" />
+          <div>
+            <span class="font-semibold">Cortinas Brás</span>
+            <div class="text-sm text-brand-100">Rua Bresser, 1084 - Brás - São Paulo - SP</div>
+          </div>
         </div>
-        <p class="text-brand-100">Rua Bresser, 1084 - Brás - CEP 03053-000 - São Paulo - SP</p>
-        <p class="text-brand-100">2024 - Todos os direitos reservados.</p>
+        <div class="text-sm text-brand-100 text-center md:text-right">
+          <div>Contato: (11) 94014-0938</div>
+          <div class="mt-1">© 2024 — Todos os direitos reservados.</div>
+        </div>
       </div>
     </footer>
+    <script>
+      // Mobile navigation toggle
+      (function(){
+        const toggle = document.getElementById('nav-toggle');
+        const nav = document.getElementById('primary-navigation');
+        if (!toggle || !nav) return;
+        toggle.addEventListener('click', function(){
+          const isOpen = nav.classList.toggle('open');
+          toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+        // close menu on link click (mobile)
+        nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { nav.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); }));
+      })();
+    </script>
     <script src="https://cdn.emailjs.com/sdk/3.2.0/email.min.js"></script>
     <script>
       (function(){
