@@ -56,13 +56,13 @@ def enviar():
         lead = Lead(
             nome=data['nome'],
             telefone=data['telefone'],
-            largura_parede=float(data['largura_parede']),
-            altura_parede=float(data['altura_parede']),
-            largura_janela=float(data['largura_janela']),
-            altura_janela=float(data['altura_janela']),
-            tecido=data['tecido'],
-            instalacao=data['instalacao'],
-            observacoes=data.get('observacoes', ''),
+            largura_parede=float(data.get('largura_parede', 0) or 0),
+            altura_parede=float(data.get('altura_parede', 0) or 0),
+            largura_janela=float(data.get('largura_janela', 0) or 0),
+            altura_janela=float(data.get('altura_janela', 0) or 0),
+            tecido=data.get('tecido', 'Não especificado'),
+            instalacao=data.get('instalacao', 'Não especificado'),
+            observacoes=data.get('mensagem', data.get('observacoes', '')),
             endereco=data.get('endereco', '')
         )
         db.session.add(lead)
