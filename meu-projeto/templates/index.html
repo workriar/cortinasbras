@@ -83,11 +83,11 @@
       /* Carrossel de Promoções */
       .promo-carousel {
         position: relative;
-        width: 100vw;
-        margin-left: 50%;
-        transform: translateX(-50%);
+        max-width: 32rem;
+        margin: 0 auto;
         overflow: hidden;
-        height: 400px;
+        border-radius: 1.5rem;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
       }
       .promo-slide {
         position: absolute;
@@ -97,9 +97,16 @@
         background-size: contain;
         background-position: center;
         background-repeat: no-repeat;
+        padding: 1rem;
       }
       .promo-slide.active {
         opacity: 1;
+      }
+      .promo-slide img {
+        width: 100%;
+        height: auto;
+        border-radius: 1.5rem;
+        border: 2px solid #EAD5C7;
       }
       .promo-indicators {
         position: absolute;
@@ -208,18 +215,27 @@
                   </div>
                 </div>
               </div>
-              <div class="order-first lg:order-last">
-                <!-- Carrossel de Promoções em Tela Cheia -->
-                <div class="promo-carousel">
-                  <div class="promo-slide active" style="background-image: url('/static/promo1.jpg')"></div>
-                  <div class="promo-slide" style="background-image: url('/static/promo2.jpg')"></div>
-                  <div class="promo-slide" style="background-image: url('/static/promo3.jpg')"></div>
-                  
-                  <!-- Indicadores de slides -->
-                  <div class="promo-indicators">
-                    <div class="promo-indicator active" data-slide="0"></div>
-                    <div class="promo-indicator" data-slide="1"></div>
-                    <div class="promo-indicator" data-slide="2"></div>
+              <div class="order-first lg:order-last flex justify-center">
+                <div class="relative">
+                  <div class="absolute -inset-4 bg-gradient-to-r from-brand-300 to-brand-500 rounded-3xl blur-2xl opacity-20 animate-pulse"></div>
+                  <!-- Carrossel de Promoções -->
+                  <div class="promo-carousel relative">
+                    <div class="promo-slide active">
+                      <img src="/static/promo1.jpg" alt="Promoção 1" loading="lazy" class="relative w-full bg-white p-4" />
+                    </div>
+                    <div class="promo-slide">
+                      <img src="/static/promo2.jpg" alt="Promoção 2" loading="lazy" class="relative w-full bg-white p-4" />
+                    </div>
+                    <div class="promo-slide">
+                      <img src="/static/promo3.jpg" alt="Promoção 3" loading="lazy" class="relative w-full bg-white p-4" />
+                    </div>
+                    
+                    <!-- Indicadores de slides -->
+                    <div class="promo-indicators">
+                      <div class="promo-indicator active" data-slide="0"></div>
+                      <div class="promo-indicator" data-slide="1"></div>
+                      <div class="promo-indicator" data-slide="2"></div>
+                    </div>
                   </div>
                 </div>
               </div>
