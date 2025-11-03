@@ -52,19 +52,29 @@
     </script>
   </head>
   <body class="antialiased bg-brand-50 text-brand-700 font-sans">
-    <!-- HEADER com logotipo centralizado -->
+    <!-- HEADER com logotipo -->
     <header id="main-header" class="sticky top-0 z-50 bg-black backdrop-blur-md border-b border-gray-800 transition-all duration-300">
       <div class="container mx-auto px-6 py-4 flex items-center justify-between">
-        <div id="logo-section" class="flex flex-col items-center flex-1 transition-all duration-300">
-          <img src="/static/logo.png" alt="Logotipo Cortinas Brás" class="w-24 h-auto mb-2 transition-all duration-300" id="header-logo" />
-          <p id="slogan" class="text-sm text-brand-300 uppercase tracking-wider transition-opacity duration-300">Descubra sua cortina</p>
+        <div id="logo-section" class="transition-all duration-300">
+          <img src="/static/logo.png" alt="Logotipo Cortinas Brás" class="w-24 h-auto transition-all duration-300" id="header-logo" />
         </div>
-        <nav id="main-nav" class="flex items-center gap-8 transition-all duration-300" aria-label="Menu principal">
-          <a href="#inicio" class="text-sm text-gray-300 hover:text-white transition">Início</a>
-          <a href="#produtos" class="text-sm text-gray-300 hover:text-white transition">Produtos</a>
-          <a href="#sobre" class="text-sm text-gray-300 hover:text-white transition">Sobre</a>
-          <a href="#contato" class="text-sm text-gray-300 hover:text-white transition">Contato</a>
-        </nav>
+        
+        <!-- Menu Hamburguer (aparece ao rolar) -->
+        <div id="menu-toggle" class="opacity-0 pointer-events-none transition-all duration-300">
+          <button id="hamburger-btn" class="flex flex-col gap-1.5 w-8 h-8 justify-center items-center group" aria-label="Menu">
+            <span class="block w-6 h-0.5 bg-brand-300 transition-all group-hover:bg-white"></span>
+            <span class="block w-6 h-0.5 bg-brand-300 transition-all group-hover:bg-white"></span>
+            <span class="block w-6 h-0.5 bg-brand-300 transition-all group-hover:bg-white"></span>
+          </button>
+          
+          <!-- Dropdown Menu -->
+          <div id="dropdown-menu" class="hidden absolute right-6 top-full mt-2 bg-black border border-gray-800 rounded-lg shadow-2xl py-2 min-w-[150px]">
+            <a href="#inicio" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition">Início</a>
+            <a href="#produtos" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition">Produtos</a>
+            <a href="#sobre" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition">Sobre</a>
+            <a href="#contato" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition">Contato</a>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -450,40 +460,54 @@
         });
       });
 
-      // Header scroll behavior - menu move para o canto quando rolar
-      let lastScrollTop = 0;
+      // Header scroll behavior - mostra menu hamburguer ao rolar
       const header = document.getElementById('main-header');
-      const logoSection = document.getElementById('logo-section');
-      const mainNav = document.getElementById('main-nav');
-      const slogan = document.getElementById('slogan');
       const headerLogo = document.getElementById('header-logo');
+      const menuToggle = document.getElementById('menu-toggle');
+      const hamburgerBtn = document.getElementById('hamburger-btn');
+      const dropdownMenu = document.getElementById('dropdown-menu');
       
       window.addEventListener('scroll', function() {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         
         if (scrollTop > 50) {
-          // Quando rolar: logo menor no canto, menu à direita, slogan escondido
+          // Quando rolar: logo menor e mostra menu hamburguer
           header.classList.add('py-2');
           header.classList.remove('py-4');
-          logoSection.classList.remove('flex-1', 'flex-col');
-          logoSection.classList.add('flex-row');
-          headerLogo.classList.remove('w-24', 'mb-2');
-          headerLogo.classList.add('w-12');
-          slogan.classList.add('opacity-0', 'hidden');
-          mainNav.classList.add('ml-auto');
+          headerLogo.classList.remove('w-24');
+          headerLogo.classList.add('w-16');
+          menuToggle.classList.remove('opacity-0', 'pointer-events-none');
+          menuToggle.classList.add('opacity-100', 'pointer-events-auto');
         } else {
-          // No topo: layout centralizado original
+          // No topo: logo grande e esconde menu
           header.classList.remove('py-2');
           header.classList.add('py-4');
-          logoSection.classList.add('flex-1', 'flex-col');
-          logoSection.classList.remove('flex-row');
-          headerLogo.classList.add('w-24', 'mb-2');
-          headerLogo.classList.remove('w-12');
-          slogan.classList.remove('opacity-0', 'hidden');
-          mainNav.classList.remove('ml-auto');
+          headerLogo.classList.add('w-24');
+          headerLogo.classList.remove('w-16');
+          menuToggle.classList.add('opacity-0', 'pointer-events-none');
+          menuToggle.classList.remove('opacity-100', 'pointer-events-auto');
+          dropdownMenu.classList.add('hidden');
         }
-        
-        lastScrollTop = scrollTop;
+      });
+
+      // Toggle dropdown menu
+      hamburgerBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('hidden');
+      });
+
+      // Fechar menu ao clicar em um link
+      dropdownMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', function() {
+          dropdownMenu.classList.add('hidden');
+        });
+      });
+
+      // Fechar menu ao clicar fora
+      document.addEventListener('click', function(e) {
+        if (!menuToggle.contains(e.target)) {
+          dropdownMenu.classList.add('hidden');
+        }
       });
     </script>
   </body>
