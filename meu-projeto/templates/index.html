@@ -16,6 +16,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- AOS - Animate On Scroll -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -37,8 +40,91 @@
     </script>
     <style>
       :root { --accent: #D4A93E; }
-      .card-hover { transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s; }
-      .card-hover:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(139,92,42,.12); }
+      
+      /* Smooth scroll behavior */
+      html { scroll-behavior: smooth; }
+      
+      /* Reading progress bar */
+      .progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #D4A93E, #8B5C2A);
+        z-index: 9999;
+        transition: width 0.1s ease;
+      }
+      
+      /* Enhanced card hover with scale and glow */
+      .card-hover { 
+        transition: transform .35s cubic-bezier(.2,.9,.3,1), box-shadow .35s, filter .35s;
+      }
+      .card-hover:hover { 
+        transform: translateY(-8px) scale(1.02); 
+        box-shadow: 0 20px 50px rgba(139,92,42,.18);
+        filter: brightness(1.05);
+      }
+      
+      /* Ripple effect for buttons */
+      .btn-ripple {
+        position: relative;
+        overflow: hidden;
+      }
+      .btn-ripple::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+      }
+      .btn-ripple:active::after {
+        width: 300px;
+        height: 300px;
+      }
+      
+      /* Skeleton loading */
+      .skeleton {
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: skeleton-loading 1.5s infinite;
+      }
+      @keyframes skeleton-loading {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+      }
+      
+      /* Loading spinner */
+      .spinner {
+        border: 3px solid rgba(212,169,62,0.2);
+        border-top-color: #D4A93E;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      
+      /* Floating animation */
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+      }
+      .float { animation: float 3s ease-in-out infinite; }
+      
+      /* Pulse glow */
+      @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 20px rgba(212,169,62,0.3); }
+        50% { box-shadow: 0 0 40px rgba(212,169,62,0.6); }
+      }
+      .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+      
       .focus-ring:focus { outline: none; box-shadow: 0 0 0 4px rgba(212,169,62,.14); }
       .visually-hidden { position: absolute !important; height: 1px; width: 1px; overflow: hidden; clip: rect(1px,1px,1px,1px); white-space: nowrap; }
       /* Screen reader only - acessibilidade */
@@ -241,6 +327,9 @@
     </script>
   </head>
   <body class="antialiased bg-brand-50 text-brand-700 font-sans">
+    <!-- Reading Progress Bar -->
+    <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+    
     <!-- HEADER com logotipo -->
     <header id="main-header" class="sticky top-0 z-50 bg-black backdrop-blur-md border-b border-gray-800 transition-all duration-300">
       <div class="container mx-auto px-6 py-2 transition-all duration-300 relative" id="header-container">
@@ -281,35 +370,35 @@
           </div>
           <div class="container mx-auto px-6 py-20 lg:py-32 relative z-10">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <div class="space-y-6 hero-text-overlay">
-                <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm text-brand-700 rounded-full text-sm font-medium shadow-lg">
+              <div class="space-y-6 hero-text-overlay" data-aos="fade-right" data-aos-duration="1000">
+                <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm text-brand-700 rounded-full text-sm font-medium shadow-lg" data-aos="fade-down" data-aos-delay="100">
                   <span class="w-2 h-2 bg-brand-500 rounded-full animate-pulse"></span>
                   Tradição com estilo para o seu ambiente
                 </div>
-                <h2 class="text-4xl md:text-6xl font-bold leading-tight text-white">Transforme seu ambiente — <span class="text-brand-300">cortinas sob medida</span></h2>
-                <p class="text-xl text-gray-100 leading-relaxed">Renove sua casa com cortinas sob medida, feitas para você. Especialistas com mais de 20 anos em São Paulo: atendimento personalizado, fabricação própria e instalação especializada.</p>
-                <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                  <a id="hero-cta" href="#contato" class="group inline-flex items-center justify-center gap-3 bg-brand-500 hover:bg-brand-600 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1" aria-label="Solicitar orçamento">
+                <h2 class="text-4xl md:text-6xl font-bold leading-tight text-white" data-aos="fade-up" data-aos-delay="200">Transforme seu ambiente — <span class="text-brand-300">cortinas sob medida</span></h2>
+                <p class="text-xl text-gray-100 leading-relaxed" data-aos="fade-up" data-aos-delay="300">Renove sua casa com cortinas sob medida, feitas para você. Especialistas com mais de 20 anos em São Paulo: atendimento personalizado, fabricação própria e instalação especializada.</p>
+                <div class="flex flex-col sm:flex-row gap-4 pt-4" data-aos="fade-up" data-aos-delay="400">
+                  <a id="hero-cta" href="#contato" class="btn-ripple group inline-flex items-center justify-center gap-3 bg-brand-500 hover:bg-brand-600 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1" aria-label="Solicitar orçamento">
                     Solicite Orçamento
                     <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
                   </a>
-                  <a href="https://wa.me/5511992891070?text=Olá! Quero orçamento para cortinas sob medida." target="_blank" rel="noopener" class="group inline-flex items-center gap-3 justify-center bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                  <a href="https://wa.me/5511992891070?text=Olá! Quero orçamento para cortinas sob medida." target="_blank" rel="noopener" class="btn-ripple group inline-flex items-center gap-3 justify-center bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                     <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
                     </svg>
                     WhatsApp Direto
                   </a>
                 </div>
-                <div class="flex flex-wrap gap-6 pt-4 text-white">
-                  <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-lg">
+                <div class="flex flex-wrap gap-6 pt-4 text-white" data-aos="fade-up" data-aos-delay="500">
+                  <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-lg" data-aos="zoom-in" data-aos-delay="600">
                     <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
                     <span class="font-medium">Fabricação própria</span>
                   </div>
-                  <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-lg">
+                  <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-lg" data-aos="zoom-in" data-aos-delay="700">
                     <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
                     <span class="font-medium">Entrega em até 48h</span>
                   </div>
-                  <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-lg">
+                  <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-lg" data-aos="zoom-in" data-aos-delay="800">
                     <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
                     <span class="font-medium">Materiais de alta qualidade</span>
                   </div>
@@ -347,12 +436,12 @@
       <!-- GALERIA DE AMBIENTES -->
       <section class="py-16 bg-white">
         <div class="container mx-auto px-6">
-          <div class="text-center mb-10">
+          <div class="text-center mb-10" data-aos="fade-up">
             <h3 class="text-2xl font-bold">Ambientes que impressionam</h3>
             <p class="mt-2 text-brand-700 max-w-xl mx-auto">Veja nossos projetos com cortinas wave em trilho suíço, além de enxovais premium que transformam qualquer ambiente.</p>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="relative overflow-hidden rounded-2xl shadow-lg group">
+            <div class="relative overflow-hidden rounded-2xl shadow-lg group" data-aos="fade-up" data-aos-delay="100">
               <img src="/static/cortina-wave-1.jpg" alt="Cortina Wave com Trilho Suíço" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
               <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
                 <div class="text-white">
@@ -361,7 +450,7 @@
                 </div>
               </div>
             </div>
-            <div class="relative overflow-hidden rounded-2xl shadow-lg group">
+            <div class="relative overflow-hidden rounded-2xl shadow-lg group" data-aos="fade-up" data-aos-delay="200">
               <img src="/static/cortina-wave-2.jpg" alt="Ambiente com Cortina Wave" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
               <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
                 <div class="text-white">
@@ -370,7 +459,7 @@
                 </div>
               </div>
             </div>
-            <div class="relative overflow-hidden rounded-2xl shadow-lg group">
+            <div class="relative overflow-hidden rounded-2xl shadow-lg group" data-aos="fade-up" data-aos-delay="300">
               <img src="/static/enxoval-cama.jpg" alt="Enxoval de Cama Premium" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
               <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
                 <div class="text-white">
@@ -386,12 +475,12 @@
       <!-- PRODUTOS -->
       <section id="produtos" class="py-16 bg-gray-200">
         <div class="container mx-auto px-6">
-          <div class="text-center mb-10">
+          <div class="text-center mb-10" data-aos="fade-up">
             <h3 class="text-2xl font-bold">Nossos produtos</h3>
             <p class="mt-2 text-brand-700 max-w-xl mx-auto">Escolha a solução ideal para seu espaço: tecidos, modelos e acabamentos pensados para você.</p>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <article class="bg-white rounded-2xl border p-6 card-hover">
+            <article class="bg-white rounded-2xl border p-6 card-hover" data-aos="flip-left" data-aos-delay="100">
               <div class="h-44 bg-gradient-to-br from-brand-100 to-brand-50 rounded-lg flex items-center justify-center mb-4 relative overflow-hidden">
                 <div class="absolute inset-0 opacity-10">
                   <div class="absolute top-0 left-1/4 w-0.5 h-full bg-brand-300"></div>
@@ -410,11 +499,11 @@
               <h4 class="text-xl font-semibold mb-2">Cortinas Prontas</h4>
               <p class="text-sm text-brand-700 mb-4">Modelos variados, prontos para entrega imediata.</p>
               <div class="flex gap-3">
-                <button data-product="Cortinas Prontas" class="w-full btn-wa bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold focus-ring">WhatsApp</button>
-                <button data-product="Cortinas Prontas" class="w-full btn-contact border border-brand-100 text-brand-700 py-3 rounded-lg font-semibold focus-ring">Orçamento</button>
+                <button data-product="Cortinas Prontas" class="w-full btn-wa btn-ripple bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold focus-ring">WhatsApp</button>
+                <button data-product="Cortinas Prontas" class="w-full btn-contact btn-ripple border border-brand-100 text-brand-700 py-3 rounded-lg font-semibold focus-ring">Orçamento</button>
               </div>
             </article>
-            <article class="bg-white rounded-2xl border p-6 card-hover">
+            <article class="bg-white rounded-2xl border p-6 card-hover" data-aos="flip-left" data-aos-delay="200">
               <div class="h-44 bg-gradient-to-br from-brand-100 to-brand-50 rounded-lg flex items-center justify-center mb-4 relative overflow-hidden">
                 <div class="absolute inset-0 opacity-10">
                   <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -433,11 +522,11 @@
               <h4 class="text-xl font-semibold mb-2">Cortinas Sob Medida</h4>
               <p class="text-sm text-brand-700 mb-4">Blackout, voil, painéis, tecidos importados. Medição e instalação inclusas.</p>
               <div class="flex gap-3">
-                <button data-product="Cortinas Sob Medida" class="w-full btn-wa bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold focus-ring">WhatsApp</button>
-                <button data-product="Cortinas Sob Medida" class="w-full btn-contact border border-brand-100 text-brand-700 py-3 rounded-lg font-semibold focus-ring">Orçamento</button>
+                <button data-product="Cortinas Sob Medida" class="w-full btn-wa btn-ripple bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold focus-ring">WhatsApp</button>
+                <button data-product="Cortinas Sob Medida" class="w-full btn-contact btn-ripple border border-brand-100 text-brand-700 py-3 rounded-lg font-semibold focus-ring">Orçamento</button>
               </div>
             </article>
-            <article class="bg-white rounded-2xl border p-6 card-hover">
+            <article class="bg-white rounded-2xl border p-6 card-hover" data-aos="flip-left" data-aos-delay="300">
               <div class="h-44 bg-gradient-to-br from-brand-100 to-brand-50 rounded-lg flex items-center justify-center mb-4 relative overflow-hidden">
                 <div class="absolute inset-0 opacity-10">
                   <svg class="w-full h-full" viewBox="0 0 100 100">
@@ -461,8 +550,8 @@
               <h4 class="text-xl font-semibold mb-2">Cama • Mesa • Banho</h4>
               <p class="text-sm text-brand-700 mb-4">Lençóis, toalhas, jogos de cama e acessórios premium para o seu lar.</p>
               <div class="flex gap-3">
-                <button data-product="Cama-Mesa-Banho" class="w-full btn-wa bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold focus-ring">WhatsApp</button>
-                <button data-product="Cama-Mesa-Banho" class="w-full btn-contact border border-brand-100 text-brand-700 py-3 rounded-lg font-semibold focus-ring">Orçamento</button>
+                <button data-product="Cama-Mesa-Banho" class="w-full btn-wa btn-ripple bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold focus-ring">WhatsApp</button>
+                <button data-product="Cama-Mesa-Banho" class="w-full btn-contact btn-ripple border border-brand-100 text-brand-700 py-3 rounded-lg font-semibold focus-ring">Orçamento</button>
               </div>
             </article>
           </div>
@@ -472,28 +561,28 @@
       <!-- SOBRE -->
       <section id="sobre" class="py-16 bg-brand-100">
         <div class="container mx-auto px-6 grid lg:grid-cols-2 gap-10 items-center">
-          <div>
+          <div data-aos="fade-right">
             <h3 class="text-3xl font-bold">Sobre a Cortinas Brás</h3>
               <p class="mt-4 text-brand-700">
                 Empresa familiar com mais de <strong>20 anos de experiência</strong>, referência em decoração em São Paulo. Produção própria, atendimento consultivo e acabamento impecável.
               </p>
             <div class="mt-6 grid grid-cols-2 gap-4">
-              <div class="p-4 bg-white rounded-lg shadow-sm">
+              <div class="p-4 bg-white rounded-lg shadow-sm" data-aos="zoom-in" data-aos-delay="100">
                 <div class="text-2xl font-bold text-brand-300">20+</div>
                 <div class="text-sm text-brand-700">Mais de 20 anos de experiência</div>
               </div>
-              <div class="p-4 bg-white rounded-lg shadow-sm">
+              <div class="p-4 bg-white rounded-lg shadow-sm" data-aos="zoom-in" data-aos-delay="200">
                 <div class="text-2xl font-bold text-brand-300">5000+</div>
                 <div class="text-sm text-brand-700">Mais de 5.000 clientes satisfeitos</div>
               </div>
             </div>
           </div>
-          <div class="rounded-2xl p-8 bg-white shadow flex flex-col items-center">
+          <div class="rounded-2xl p-8 bg-white shadow flex flex-col items-center" data-aos="fade-left">
             <h4 class="font-semibold text-brand-700 mb-2 mt-4">Qualidade garantida</h4>
             <p class="text-brand-700">Materiais nobres, acabamento caprichado e atendimento consultivo para cada projeto.</p>
             <div class="mt-6 flex gap-3">
-              <a href="#contato" class="px-4 py-2 bg-brand-300 text-white rounded-lg">Orçamento</a>
-              <a href="https://wa.me/5511992891070" target="_blank" rel="noopener" class="px-4 py-2 border border-brand-100 rounded-lg">WhatsApp</a>
+              <a href="#contato" class="btn-ripple px-4 py-2 bg-brand-300 text-white rounded-lg">Orçamento</a>
+              <a href="https://wa.me/5511992891070" target="_blank" rel="noopener" class="btn-ripple px-4 py-2 border border-brand-100 rounded-lg">WhatsApp</a>
             </div>
           </div>
         </div>
@@ -503,11 +592,11 @@
       <section id="contato" class="py-16 bg-brand-50">
         <div class="container mx-auto px-6">
           <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-8">
+            <div class="text-center mb-8" data-aos="fade-up">
               <h3 class="text-2xl font-bold">Peça seu orçamento em poucos minutos!</h3>
               <p class="text-brand-700 mt-2">Preencha os dados abaixo — pedimos apenas nome e WhatsApp para contactarmos. Medidas e especificações são opcionais.</p>
             </div>
-            <form id="contact-form" method="POST" action="/enviar" class="bg-white p-8 rounded-2xl border shadow-lg" autocomplete="on">
+            <form id="contact-form" method="POST" action="/enviar" class="bg-white p-8 rounded-2xl border shadow-lg" autocomplete="on" data-aos="fade-up" data-aos-delay="200">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label class="text-sm font-medium text-brand-700" for="nome">Qual seu nome? *</label>
@@ -568,11 +657,12 @@
                 <textarea id="endereco" name="endereco" rows="2" class="mt-1 w-full px-4 py-3 rounded-lg border bg-gray-50 focus:ring-2 focus:ring-brand-300 focus:outline-none focus:bg-white" placeholder="Rua, número, bairro, cidade..."></textarea>
               </div>
               <div class="mt-8 flex items-center gap-3">
-                <button id="submit-btn" type="submit" class="group inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white px-10 py-5 rounded-xl font-bold shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 text-lg">
-                  <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                <button id="submit-btn" type="submit" class="btn-ripple group inline-flex items-center justify-center gap-3 bg-green-600 hover:bg-green-700 text-white px-10 py-5 rounded-xl font-bold shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 text-lg disabled:opacity-50 disabled:cursor-not-allowed">
+                  <svg id="submit-icon" class="w-6 h-6 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
                   </svg>
-                  Enviar para WhatsApp
+                  <div id="submit-spinner" class="spinner hidden"></div>
+                  <span id="submit-text">Enviar para WhatsApp</span>
                 </button>
                 <div id="form-status" class="text-sm text-brand-700"></div>
               </div>
@@ -1032,6 +1122,79 @@
         if (!menuToggle.contains(e.target)) {
           dropdownMenu.classList.add('hidden');
         }
+      });
+    </script>
+
+    <!-- Inicialização AOS e Progress Bar -->
+    <script>
+      // Inicializar AOS
+      AOS.init({
+        duration: 800,
+        easing: 'ease-in-out',
+        once: true,
+        offset: 100,
+        delay: 50
+      });
+
+      // Reading Progress Bar
+      window.addEventListener('scroll', function() {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById('progress-bar').style.width = scrolled + '%';
+      }, { passive: true });
+
+      // Enhanced form submission with loading state
+      (function() {
+        const formSubmitBtn = document.getElementById('submit-btn');
+        const formSubmitIcon = document.getElementById('submit-icon');
+        const formSubmitSpinner = document.getElementById('submit-spinner');
+        const formSubmitText = document.getElementById('submit-text');
+
+        if (formSubmitBtn) {
+          const originalFormHandler = contactForm.onsubmit;
+          contactForm.addEventListener('submit', function(e) {
+            // Mostrar loading state
+            formSubmitBtn.disabled = true;
+            formSubmitIcon.classList.add('hidden');
+            formSubmitSpinner.classList.remove('hidden');
+            formSubmitText.textContent = 'Enviando...';
+          }, { once: false });
+        }
+      })();
+
+      // Lazy loading para imagens (fallback caso loading="lazy" não funcione)
+      if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              if (img.dataset.src) {
+                img.src = img.dataset.src;
+                img.removeAttribute('data-src');
+              }
+              observer.unobserve(img);
+            }
+          });
+        });
+
+        document.querySelectorAll('img[data-src]').forEach(img => {
+          imageObserver.observe(img);
+        });
+      }
+
+      // Smooth scroll para links âncora
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
       });
     </script>
   </body>
