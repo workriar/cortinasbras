@@ -169,7 +169,7 @@
       </section>
 
       <!-- PRODUTOS -->
-      <section id="produtos" class="py-16 bg-gray-100">
+      <section id="produtos" class="py-16 bg-gray-200">
         <div class="container mx-auto px-6">
           <div class="text-center mb-10">
             <h3 class="text-2xl font-bold">Nossos Produtos</h3>
@@ -178,34 +178,51 @@
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <article class="bg-white rounded-2xl border p-6 card-hover">
               <div class="h-44 bg-gradient-to-br from-brand-100 to-brand-50 rounded-lg flex items-center justify-center mb-4">
-                <span class="text-4xl">🪟</span>
+                <svg aria-hidden="true" class="w-16 h-16 text-brand-500" fill="currentColor" viewBox="0 0 24 24" style="font-family: system-ui, 'Segoe UI Emoji', 'Apple Color Emoji', sans-serif;">
+                  <path d="M4 4h16v16H4V4zm2 2v12h12V6H6zm2 2h8v8H8V8z"/>
+                  <path d="M9 9h6v6H9z" opacity="0.5"/>
+                </svg>
+                <span class="sr-only">Ícone de janela representando cortinas</span>
               </div>
               <h4 class="text-xl font-semibold mb-2">Cortinas Prontas</h4>
               <p class="text-sm text-brand-700 mb-4">Variedade de modelos e tecidos prontos para entrega imediata.</p>
               <div class="flex gap-3">
-                <button data-product="Cortinas Prontas" class="w-full btn-wa bg-brand-300 hover:bg-brand-500 text-white py-3 rounded-lg font-semibold focus-ring">WhatsApp</button>
+                <button data-product="Cortinas Prontas" class="w-full btn-wa bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold focus-ring">WhatsApp</button>
                 <button data-product="Cortinas Prontas" class="w-full btn-contact border border-brand-100 text-brand-700 py-3 rounded-lg font-semibold focus-ring">Orçamento</button>
               </div>
             </article>
             <article class="bg-white rounded-2xl border p-6 card-hover">
               <div class="h-44 bg-gradient-to-br from-brand-100 to-brand-50 rounded-lg flex items-center justify-center mb-4">
-                <span class="text-4xl">�</span>
+                <svg aria-hidden="true" class="w-16 h-16 text-brand-500" fill="currentColor" viewBox="0 0 24 24" style="font-family: system-ui, 'Segoe UI Emoji', 'Apple Color Emoji', sans-serif;">
+                  <path d="M3 3h18v2H3V3zm0 16h18v2H3v-2z"/>
+                  <rect x="5" y="7" width="2" height="10" opacity="0.7"/>
+                  <rect x="9" y="7" width="2" height="10" opacity="0.7"/>
+                  <rect x="13" y="7" width="2" height="10" opacity="0.7"/>
+                  <rect x="17" y="7" width="2" height="10" opacity="0.7"/>
+                </svg>
+                <span class="sr-only">Ícone de régua representando medição personalizada</span>
               </div>
               <h4 class="text-xl font-semibold mb-2">Cortinas Sob Medida</h4>
               <p class="text-sm text-brand-700 mb-4">Blackout, voil, painéis e tecidos importados. Medição e instalação inclusas.</p>
               <div class="flex gap-3">
-                <button data-product="Cortinas Sob Medida" class="w-full btn-wa bg-brand-300 hover:bg-brand-500 text-white py-3 rounded-lg font-semibold focus-ring">WhatsApp</button>
+                <button data-product="Cortinas Sob Medida" class="w-full btn-wa bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold focus-ring">WhatsApp</button>
                 <button data-product="Cortinas Sob Medida" class="w-full btn-contact border border-brand-100 text-brand-700 py-3 rounded-lg font-semibold focus-ring">Orçamento</button>
               </div>
             </article>
             <article class="bg-white rounded-2xl border p-6 card-hover">
               <div class="h-44 bg-gradient-to-br from-brand-100 to-brand-50 rounded-lg flex items-center justify-center mb-4">
-                <span class="text-4xl">�️</span>
+                <svg aria-hidden="true" class="w-16 h-16 text-brand-500" fill="currentColor" viewBox="0 0 24 24" style="font-family: system-ui, 'Segoe UI Emoji', 'Apple Color Emoji', sans-serif;">
+                  <rect x="3" y="8" width="18" height="12" rx="2" opacity="0.3"/>
+                  <path d="M5 8h14c1.1 0 2 .9 2 2v8c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2v-8c0-1.1.9-2 2-2z"/>
+                  <circle cx="8" cy="6" r="2" opacity="0.7"/>
+                  <circle cx="16" cy="6" r="2" opacity="0.7"/>
+                </svg>
+                <span class="sr-only">Ícone de cama representando produtos de enxoval</span>
               </div>
               <h4 class="text-xl font-semibold mb-2">Cama-Mesa-Banho</h4>
               <p class="text-sm text-brand-700 mb-4">Lençóis, toalhas, jogos de cama e acessórios premium.</p>
               <div class="flex gap-3">
-                <button data-product="Cama-Mesa-Banho" class="w-full btn-wa bg-brand-300 hover:bg-brand-500 text-white py-3 rounded-lg font-semibold focus-ring">WhatsApp</button>
+                <button data-product="Cama-Mesa-Banho" class="w-full btn-wa bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold focus-ring">WhatsApp</button>
                 <button data-product="Cama-Mesa-Banho" class="w-full btn-contact border border-brand-100 text-brand-700 py-3 rounded-lg font-semibold focus-ring">Orçamento</button>
               </div>
             </article>
@@ -490,10 +507,14 @@
       const hamburgerBtn = document.getElementById('hamburger-btn');
       const dropdownMenu = document.getElementById('dropdown-menu');
       
+      let isScrolled = false;
+      
       window.addEventListener('scroll', function() {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         
-        if (scrollTop > 50) {
+        // Evitar múltiplas atualizações desnecessárias
+        if (scrollTop > 50 && !isScrolled) {
+          isScrolled = true;
           // Quando rolar: logo menor no canto esquerdo e mostra menu hamburguer
           header.classList.add('py-2');
           header.classList.remove('py-4');
@@ -503,7 +524,8 @@
           headerLogo.classList.add('w-16');
           menuToggle.classList.remove('opacity-0', 'pointer-events-none');
           menuToggle.classList.add('opacity-100', 'pointer-events-auto');
-        } else {
+        } else if (scrollTop <= 50 && isScrolled) {
+          isScrolled = false;
           // No topo: logo grande centralizado e esconde menu
           header.classList.remove('py-2');
           header.classList.add('py-4');
@@ -515,7 +537,7 @@
           menuToggle.classList.remove('opacity-100', 'pointer-events-auto');
           dropdownMenu.classList.add('hidden');
         }
-      });
+      }, { passive: true });
 
       // Toggle dropdown menu
       hamburgerBtn.addEventListener('click', function(e) {
