@@ -390,7 +390,7 @@
     <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
     
     <!-- HEADER com logotipo -->
-    <header id="main-header" class="sticky top-0 z-50 bg-black backdrop-blur-md border-b border-gray-800 transition-all duration-300">
+    <header id="main-header" class="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-md border-b border-gray-800 transition-all duration-300 shadow-lg">
       <div class="container mx-auto px-6 py-2 transition-all duration-300 relative" id="header-container">
         <div class="flex items-center justify-center">
           <div id="logo-section" class="transition-all duration-300">
@@ -417,7 +417,7 @@
       </div>
     </header>
 
-    <main id="main">
+    <main id="main" class="pt-16">
       <!-- HERO -->
       <section id="inicio" class="relative overflow-hidden">
         <div class="bg-gradient-to-br from-brand-50 via-white to-brand-100">
@@ -609,34 +609,113 @@
       </section>
 
       <!-- SOBRE -->
-      <section id="sobre" class="py-16 bg-brand-100">
-        <div class="container mx-auto px-6 grid lg:grid-cols-2 gap-10 items-center">
-          <div data-aos="fade-right">
-            <h3 class="text-3xl font-bold">SOBRE A CORTINAS BRÁS</h3>
-              <p class="mt-4 text-brand-700">
-                Empresa familiar com mais de <strong>20 anos de experiência</strong>, referência em decoração em São Paulo. Produção própria, atendimento consultivo e acabamento impecável.
-              </p>
-            <div class="mt-6 grid grid-cols-2 gap-4">
-              <div class="p-4 bg-white rounded-lg shadow-sm" data-aos="zoom-in" data-aos-delay="100">
-                <div class="text-2xl font-bold text-brand-300">20+</div>
-                <div class="text-sm text-brand-700">Mais de 20 anos de experiência</div>
-              </div>
-              <div class="p-4 bg-white rounded-lg shadow-sm" data-aos="zoom-in" data-aos-delay="200">
-                <div class="text-2xl font-bold text-brand-300">5000+</div>
-                <div class="text-sm text-brand-700">Mais de 5.000 clientes satisfeitos</div>
-              </div>
-            </div>
+      <section id="sobre" class="py-20 bg-brand-100">
+        <div class="container mx-auto px-6">
+          <!-- Título e introdução -->
+          <div class="text-center mb-12" data-aos="fade-up">
+            <h3 class="text-4xl font-bold text-brand-700 mb-4">Sobre a Cortinas Brás</h3>
+            <p class="text-lg text-brand-700 max-w-3xl mx-auto">
+              Tradição, qualidade e atendimento personalizado há mais de duas décadas no coração de São Paulo.
+            </p>
           </div>
-          <div class="rounded-2xl p-8 bg-white shadow flex flex-col items-center" data-aos="fade-left">
-            <!-- Imagem da Fachada da Loja -->
-            <div class="w-full mb-6 rounded-xl overflow-hidden shadow-lg">
-              <img src="/static/fachada-loja.jpg" alt="Fachada Cortinas Brás" class="w-full h-auto object-cover" loading="lazy" />
+
+          <!-- Grid principal -->
+          <div class="grid lg:grid-cols-2 gap-12 items-start mb-16">
+            <!-- Coluna esquerda - História e valores -->
+            <div data-aos="fade-right">
+              <div class="bg-white rounded-2xl p-8 shadow-lg mb-6">
+                <h4 class="text-2xl font-bold text-brand-700 mb-4">Nossa História</h4>
+                <p class="text-brand-700 mb-4 leading-relaxed">
+                  Desde 2003, a <strong>Cortinas Brás</strong> é sinônimo de excelência em decoração de ambientes. Fundada como empresa familiar no tradicional bairro do Brás, em São Paulo, crescemos junto com nossos clientes, sempre mantendo nossos valores de qualidade, honestidade e dedicação.
+                </p>
+                <p class="text-brand-700 leading-relaxed">
+                  Com produção 100% própria e equipe especializada, transformamos cada projeto em uma experiência única, do primeiro contato até a instalação final.
+                </p>
+              </div>
+
+              <!-- Estatísticas -->
+              <div class="grid grid-cols-2 gap-4">
+                <div class="p-6 bg-white rounded-xl shadow-md text-center" data-aos="zoom-in" data-aos-delay="100">
+                  <div class="text-3xl font-bold text-brand-500 mb-2">20+</div>
+                  <div class="text-sm text-brand-700 font-medium">Anos de Experiência</div>
+                </div>
+                <div class="p-6 bg-white rounded-xl shadow-md text-center" data-aos="zoom-in" data-aos-delay="200">
+                  <div class="text-3xl font-bold text-brand-500 mb-2">5.000+</div>
+                  <div class="text-sm text-brand-700 font-medium">Clientes Satisfeitos</div>
+                </div>
+                <div class="p-6 bg-white rounded-xl shadow-md text-center" data-aos="zoom-in" data-aos-delay="300">
+                  <div class="text-3xl font-bold text-brand-500 mb-2">48h</div>
+                  <div class="text-sm text-brand-700 font-medium">Entrega Rápida</div>
+                </div>
+                <div class="p-6 bg-white rounded-xl shadow-md text-center" data-aos="zoom-in" data-aos-delay="400">
+                  <div class="text-3xl font-bold text-brand-500 mb-2">100%</div>
+                  <div class="text-sm text-brand-700 font-medium">Produção Própria</div>
+                </div>
+              </div>
             </div>
-            <h4 class="font-semibold text-brand-700 mb-2">QUALIDADE GARANTIDA</h4>
-            <p class="text-brand-700">Materiais nobres, acabamento caprichado e atendimento consultivo para cada projeto.</p>
-            <div class="mt-6 flex gap-3">
-              <a href="#contato" class="btn-ripple px-4 py-2 bg-brand-300 text-white rounded-lg">Orçamento</a>
-              <a href="https://wa.me/5511992891070" target="_blank" rel="noopener" class="btn-ripple px-4 py-2 border border-brand-100 rounded-lg">WhatsApp</a>
+
+            <!-- Coluna direita - Imagem e diferenciais -->
+            <div data-aos="fade-left">
+              <!-- Imagem da Fachada -->
+              <div class="rounded-2xl overflow-hidden shadow-2xl mb-6">
+                <img src="/static/fachada-loja.jpg" alt="Fachada Cortinas Brás" class="w-full h-auto object-cover" loading="lazy" />
+              </div>
+
+              <!-- Diferenciais -->
+              <div class="bg-white rounded-2xl p-8 shadow-lg">
+                <h4 class="text-2xl font-bold text-brand-700 mb-6 text-center">Nossos Diferenciais</h4>
+                <div class="space-y-4">
+                  <div class="flex items-start gap-3">
+                    <svg class="w-6 h-6 text-brand-500 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    <div>
+                      <h5 class="font-semibold text-brand-700">Atendimento Consultivo</h5>
+                      <p class="text-sm text-brand-700">Especialistas que entendem suas necessidades e sugerem as melhores soluções.</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <svg class="w-6 h-6 text-brand-500 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    <div>
+                      <h5 class="font-semibold text-brand-700">Medição e Instalação Gratuitas</h5>
+                      <p class="text-sm text-brand-700">Vamos até você para garantir medidas precisas e instalação perfeita.</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <svg class="w-6 h-6 text-brand-500 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    <div>
+                      <h5 class="font-semibold text-brand-700">Tecidos Importados e Nacionais</h5>
+                      <p class="text-sm text-brand-700">Amplo catálogo com as melhores marcas e qualidade garantida.</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <svg class="w-6 h-6 text-brand-500 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    <div>
+                      <h5 class="font-semibold text-brand-700">Garantia de Qualidade</h5>
+                      <p class="text-sm text-brand-700">Materiais nobres, acabamento impecável e garantia em todos os serviços.</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Botões de ação -->
+                <div class="mt-8 flex flex-col sm:flex-row gap-3">
+                  <a href="#contato" class="btn-ripple flex-1 text-center px-6 py-3 bg-brand-500 hover:bg-brand-600 text-white rounded-lg font-semibold transition-all duration-300">Solicitar Orçamento</a>
+                  <a href="https://wa.me/5511992891070?text=Olá! Gostaria de conhecer mais sobre a Cortinas Brás." target="_blank" rel="noopener" class="btn-ripple flex-1 text-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition-all duration-300">
+                    <span class="flex items-center justify-center gap-2">
+                      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
+                      </svg>
+                      WhatsApp
+                    </span>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
