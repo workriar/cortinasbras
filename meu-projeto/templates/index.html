@@ -1344,10 +1344,18 @@
       const backToTop = document.getElementById('backToTop');
       function toggleBackToTop() {
         if (!backToTop) return;
-        if (window.scrollY > 300) {
+        const shouldShow = window.scrollY > 300;
+        // If it becomes visible now, add show and trigger a pulse animation once
+        if (shouldShow && !backToTop.classList.contains('show')) {
           backToTop.classList.add('show');
-        } else {
+          // Add pulse class for the animation; remove after one cycle
+          if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            backToTop.classList.add('pulse');
+            setTimeout(() => backToTop.classList.remove('pulse'), 2200);
+          }
+        } else if (!shouldShow) {
           backToTop.classList.remove('show');
+          backToTop.classList.remove('pulse');
         }
       }
 
