@@ -318,3 +318,46 @@ header.header-top{position:relative; z-index:5}
   .hero-section .hero-overlay{display:none}
   .hero-content{padding-top:1rem}
 }
+
+/* Back to top button styles (moved from template) */
+.back-to-top{
+  position:fixed;
+  right:1rem;
+  bottom:1.5rem;
+  width:48px;
+  height:48px;
+  border-radius:9999px;
+  background:rgba(59,130,246,0.95); /* indigo-500 */
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 6px 18px rgba(15,23,42,0.2);
+  cursor:pointer;
+  border:0;
+  z-index:9999;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .22s ease, transform .18s ease;
+}
+.back-to-top.show{ opacity:1; pointer-events:auto; transform:translateY(0); }
+.back-to-top:active{ transform:translateY(1px) }
+.back-to-top:focus{ outline:3px solid rgba(255,255,255,0.3); outline-offset:2px }
+
+/* Pulse effect when shown (only if user does not prefer reduced motion) */
+@keyframes backToTopPulse {
+  0% { box-shadow: 0 6px 18px rgba(15,23,42,0.12); transform: translateY(0); }
+  50% { box-shadow: 0 10px 28px rgba(15,23,42,0.18); transform: translateY(-2px); }
+  100% { box-shadow: 0 6px 18px rgba(15,23,42,0.12); transform: translateY(0); }
+}
+.back-to-top.show.pulse {
+  animation: backToTopPulse 2s ease-in-out infinite;
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .back-to-top, .back-to-top.show, .back-to-top.show.pulse {
+    transition: none !important;
+    animation: none !important;
+  }
+}
