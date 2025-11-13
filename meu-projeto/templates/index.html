@@ -1127,7 +1127,7 @@
         document.getElementById('submit-text').textContent = 'Enviando...';
         status.textContent = '';
         
-        // Enviar para o backend primeiro (salvar no banco de dados)
+        // Enviar para o backend primeiro (salvar no banco de dados e enviar email)
         fetch('/enviar', {
           method: 'POST',
           headers: {
@@ -1144,11 +1144,15 @@
             endereco: endereco
           })
         })
-        .then(response => {
-          if (response.ok) {
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
             console.log('✅ Orçamento salvo com sucesso!');
-          } else {
-            console.log('⚠️ Falha ao salvar orçamento');
+            if (data.email_sent) {
+              console.log('✅ Email enviado para vendas@cortinasbras.com.br');
+            } else {
+              console.log('⚠️ Orçamento salvo, mas email não foi enviado');
+            }
           }
         })
         .catch(error => {

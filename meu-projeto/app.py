@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, redirect, url_for
+from flask import Flask, render_template, request, send_file, redirect, url_for, jsonify
 from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 from reportlab.pdfgen import canvas
@@ -38,6 +38,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 class Lead(db.Model):
+    __tablename__ = 'leads'
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(80))
     telefone = db.Column(db.String(30))
@@ -164,8 +165,10 @@ def enviar():
         p.save()
         buffer.seek(0)
 
-        # Enviar email (sempre enviar, não apenas em produção)
+        # Enviar email (sempre enviar)
+        email_sent = False
         try:
+            print(f"📧 Tentando enviar email para vendas@cortinasbras.com.br...")
             msg = Message(
                 subject=f"📋 Novo Orçamento - {lead.nome} - {lead.criado_em.strftime('%d/%m/%Y %H:%M')}",
                 recipients=['vendas@cortinasbras.com.br']
@@ -209,12 +212,19 @@ def enviar():
             """
             msg.attach(f"orcamento_{lead.nome.replace(' ', '_')}_{lead.criado_em.strftime('%Y%m%d_%H%M')}.pdf", "application/pdf", buffer.read())
             mail.send(msg)
+            email_sent = True
             print("✅ Email enviado com sucesso para vendas@cortinasbras.com.br!")
         except Exception as email_error:
             app.logger.error(f"Falha ao enviar email: {email_error}")
             print(f"⚠️ Erro ao enviar email: {email_error}")
+            print(f"⚠️ Detalhes do erro: {str(email_error)}")
 
-        return "success"
+        return jsonify({
+            'success': True, 
+            'email_sent': email_sent,
+            'lead_id': lead.id,
+            'message': 'Orçamento salvo com sucesso!'
+        })
     
     except Exception as err:
         print(f"❌ Erro: {err}")
