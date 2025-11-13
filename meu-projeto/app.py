@@ -11,13 +11,14 @@ app = Flask(__name__)
 # Configurações para produção Locaweb
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'chave-secreta-padrao')
 
-# Configurações de Email Locaweb
-app.config['MAIL_SERVER'] = 'smtplw.com.br'  # Ou use o servidor da Locaweb
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME', 'seu-email@seudominio.com.br')
+# Configurações de Email Cronos
+app.config['MAIL_SERVER'] = 'mail.cronos-painel.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME', 'vendas@cortinasbras.com.br')
 app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD', 'sua-senha')
-app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_DEFAULT_SENDER', 'contato@cortinasbras.com.br')
+app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_DEFAULT_SENDER', 'vendas@cortinasbras.com.br')
 
 mail = Mail(app)
 
