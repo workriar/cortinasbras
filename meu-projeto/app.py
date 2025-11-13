@@ -58,8 +58,8 @@ def enviar():
             telefone=data['telefone'],
             largura_parede=float(data.get('largura_parede', 0) or 0),
             altura_parede=float(data.get('altura_parede', 0) or 0),
-            largura_janela=float(data.get('largura_janela', 0) or 0),
-            altura_janela=float(data.get('altura_janela', 0) or 0),
+            largura_janela=0.0,  # Campo não mais coletado, manter compatibilidade com DB
+            altura_janela=0.0,   # Campo não mais coletado, manter compatibilidade com DB
             tecido=data.get('tecido', 'Não especificado'),
             instalacao=data.get('instalacao', 'Não especificado'),
             observacoes=data.get('mensagem', data.get('observacoes', '')),
@@ -75,12 +75,11 @@ def enviar():
         p.drawString(50, 800, f"Data: {lead.criado_em.strftime('%d/%m/%Y %H:%M')}")
         p.drawString(50, 780, f"Nome: {lead.nome}")
         p.drawString(50, 760, f"Telefone: {lead.telefone}")
-        p.drawString(50, 740, f"Parede: {lead.largura_parede}m x {lead.altura_parede}m")
-        p.drawString(50, 720, f"Janela: {lead.largura_janela}m x {lead.altura_janela}m")
-        p.drawString(50, 700, f"Tecido: {lead.tecido}")
-        p.drawString(50, 680, f"Instalação: {lead.instalacao}")
-        p.drawString(50, 660, f"Obs.: {lead.observacoes}")
-        p.drawString(50, 640, f"Endereço: {lead.endereco}")
+        p.drawString(50, 740, f"Medidas da Parede: {lead.largura_parede}m x {lead.altura_parede}m")
+        p.drawString(50, 720, f"Tecido: {lead.tecido}")
+        p.drawString(50, 700, f"Instalação: {lead.instalacao}")
+        p.drawString(50, 680, f"Obs.: {lead.observacoes}")
+        p.drawString(50, 660, f"Endereço: {lead.endereco}")
         p.save()
         buffer.seek(0)
 
@@ -99,9 +98,9 @@ def enviar():
                 Tecido: {lead.tecido}
                 Instalação: {lead.instalacao}
                 
-                Dimensões:
-                - Parede: {lead.largura_parede}m x {lead.altura_parede}m
-                - Janela: {lead.largura_janela}m x {lead.altura_janela}m
+                Medidas da Parede:
+                - Largura: {lead.largura_parede}m
+                - Altura: {lead.altura_parede}m
                 
                 Observações: {lead.observacoes}
                 Endereço: {lead.endereco}
@@ -130,12 +129,11 @@ def baixar_pdf(lead_id):
     p.drawString(50, 800, f"Data: {lead.criado_em.strftime('%d/%m/%Y %H:%M')}")
     p.drawString(50, 780, f"Nome: {lead.nome}")
     p.drawString(50, 760, f"Telefone: {lead.telefone}")
-    p.drawString(50, 740, f"Parede: {lead.largura_parede}m x {lead.altura_parede}m")
-    p.drawString(50, 720, f"Janela: {lead.largura_janela}m x {lead.altura_janela}m")
-    p.drawString(50, 700, f"Tecido: {lead.tecido}")
-    p.drawString(50, 680, f"Instalação: {lead.instalacao}")
-    p.drawString(50, 660, f"Obs.: {lead.observacoes}")
-    p.drawString(50, 640, f"Endereço: {lead.endereco}")
+    p.drawString(50, 740, f"Medidas da Parede: {lead.largura_parede}m x {lead.altura_parede}m")
+    p.drawString(50, 720, f"Tecido: {lead.tecido}")
+    p.drawString(50, 700, f"Instalação: {lead.instalacao}")
+    p.drawString(50, 680, f"Obs.: {lead.observacoes}")
+    p.drawString(50, 660, f"Endereço: {lead.endereco}")
     p.save()
     buffer.seek(0)
     return send_file(buffer, as_attachment=True, download_name='orcamento.pdf', mimetype='application/pdf')
