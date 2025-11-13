@@ -143,6 +143,13 @@
       }
       .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
       
+      /* Fade in animation */
+      @keyframes fade-in {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-fade-in { animation: fade-in 0.5s ease-out; }
+      
       .focus-ring:focus { outline: none; box-shadow: 0 0 0 4px rgba(212,169,62,.14); }
       .visually-hidden { position: absolute !important; height: 1px; width: 1px; overflow: hidden; clip: rect(1px,1px,1px,1px); white-space: nowrap; }
       /* Screen reader only - acessibilidade */
@@ -805,9 +812,15 @@
                 <div id="form-status" class="text-sm text-brand-700"></div>
               </div>
             </form>
-            <div id="success" class="hidden mt-6 p-6 rounded-2xl bg-green-50 border-2 border-green-200 text-green-800 flex items-center gap-3">
-              <svg class="w-6 h-6 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-              <p class="font-medium">Obrigado! Seu pedido foi enviado. Em breve entraremos em contato.</p>
+            <div id="success" class="hidden mt-6 p-6 md:p-8 rounded-2xl bg-gradient-to-r from-green-50 to-green-100 border-2 border-green-400 shadow-xl animate-fade-in">
+              <div class="flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
+                <svg class="w-12 h-12 md:w-16 md:h-16 text-green-600 flex-shrink-0 animate-bounce" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <div class="flex-1">
+                  <h4 class="text-xl md:text-2xl font-bold text-green-800 mb-2">✅ Orçamento Enviado com Sucesso!</h4>
+                  <p class="text-green-700 font-medium">Obrigado! Seu pedido foi enviado para nosso WhatsApp e email.</p>
+                  <p class="text-green-600 text-sm mt-1">Em breve entraremos em contato para finalizar seu orçamento.</p>
+                </div>
+              </div>
             </div>
 
             <!-- Mapa Incorporado -->
@@ -1142,40 +1155,41 @@
           console.error('❌ Erro ao enviar:', error);
         });
         
-        // Montar mensagem FORMATADA para WhatsApp
+        // Montar mensagem FORMATADA e LIMPA para WhatsApp
         const waMessage = encodeURIComponent(
-          `╔═══════════════════════════╗\n` +
-          `║  🏠 *ORÇAMENTO CORTINAS*  ║\n` +
-          `╚═══════════════════════════╝\n\n` +
+          `*🏠 ORÇAMENTO DE CORTINAS SOB MEDIDA*\n` +
+          `━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
           
-          `┌─ 👤 *DADOS DO CLIENTE*\n` +
-          `│ Nome: *${nome}*\n` +
-          `│ Tel: *${telefone}*\n` +
-          `└────────────────────\n\n` +
+          `*👤 DADOS DO CLIENTE*\n` +
+          `• Nome: *${nome}*\n` +
+          `• Telefone: *${telefone}*\n\n` +
           
-          `┌─ 📐 *MEDIDAS DA PAREDE*\n` +
-          `│ Largura: *${largura_parede}m*\n` +
-          `│ Altura: *${altura_parede}m*\n` +
-          `└────────────────────\n\n` +
+          `*📐 MEDIDAS DA PAREDE*\n` +
+          `• Largura: *${largura_parede}m*\n` +
+          `• Altura: *${altura_parede}m*\n\n` +
           
-          `┌─ 🎨 *ESPECIFICAÇÕES*\n` +
-          `│ Tecido: *${tecido}*\n` +
-          `│ Instalação: *${instalacao}*\n` +
-          `└────────────────────\n` +
+          `*🎨 ESPECIFICAÇÕES*\n` +
+          `• Tecido: *${tecido}*\n` +
+          `• Instalação: *${instalacao}*\n` +
           
-          `${observacoes ? `\n┌─ 📝 *OBSERVAÇÕES*\n│ ${observacoes}\n└────────────────────\n` : ''}` +
-          `${endereco ? `\n┌─ 📍 *ENDEREÇO*\n│ ${endereco}\n└────────────────────\n` : ''}` +
-          `\n━━━━━━━━━━━━━━━━━━━━\n` +
-          `✨ _Cortinas Brás - Qualidade há 20+ anos_`
+          `${observacoes ? `\n*📝 OBSERVAÇÕES*\n${observacoes}\n` : ''}` +
+          `${endereco ? `\n*📍 ENDEREÇO PARA INSTALAÇÃO*\n${endereco}\n` : ''}` +
+          `\n━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+          `✨ *Cortinas Brás* | Há mais de 20 anos transformando ambientes\n` +
+          `📍 Av. Celso Garcia, 129 - Brás, São Paulo\n` +
+          `🌐 www.cortinasbras.com.br`
         );
         
-        // Pequeno delay para feedback visual
+        // Delay para feedback visual
         setTimeout(() => {
           // Abre WhatsApp
           window.open(`https://wa.me/5511992891070?text=${waMessage}`, '_blank');
           
           // Mostra mensagem de sucesso
           document.getElementById('success').classList.remove('hidden');
+          
+          // Scroll suave até o modal de sucesso
+          document.getElementById('success').scrollIntoView({ behavior: 'smooth', block: 'center' });
           
           // Reseta formulário
           form.reset();
@@ -1186,10 +1200,10 @@
           document.getElementById('submit-spinner').classList.add('hidden');
           document.getElementById('submit-text').textContent = 'Enviar para WhatsApp';
           
-          // Esconde mensagem após 5 segundos
+          // Esconde mensagem após 10 segundos (aumentado de 5 para 10)
           setTimeout(() => {
             document.getElementById('success').classList.add('hidden');
-          }, 5000);
+          }, 10000);
         }, 800);
       });
 
