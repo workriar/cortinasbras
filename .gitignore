@@ -70,3 +70,8 @@ ehthumbs.db
 .codex/
 .ollama/
 novo-repo/
+
+# Large files
+.antigravity-server/
+backup_meu-projeto_*.tar.gz
+.gemini/

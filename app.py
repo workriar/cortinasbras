@@ -4,6 +4,11 @@ from flask_sqlalchemy import SQLAlchemy
 from reportlab.pdfgen import canvas
 import io, datetime
 import os
+from datetime import timezone
+import pytz
+
+# Timezone de São Paulo
+SP_TZ = pytz.timezone('America/Sao_Paulo')
 
 app = Flask(__name__)
 
@@ -43,7 +48,7 @@ class Lead(db.Model):
     instalacao = db.Column(db.String(30))
     observacoes = db.Column(db.Text)
     endereco = db.Column(db.Text)
-    criado_em = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    criado_em = db.Column(db.DateTime, default=lambda: datetime.datetime.now(SP_TZ))
 
 @app.route('/')
 def index():
@@ -132,8 +137,10 @@ def enviar():
         # Enviar email (sempre tentar enviar)
         try:
             buffer.seek(0)  # Reset buffer position
+            # Garantir que a hora esteja no timezone de São Paulo
+            hora_sp = lead.criado_em.strftime('%d/%m/%Y às %H:%M')
             msg = Message(
-                subject=f"🏠 Novo Orçamento - {lead.nome}",
+                subject=f"🏠 Novo Orçamento - {lead.nome} - {hora_sp}",
                 recipients=['vendas@cortinasbras.com.br'],
                 reply_to=lead.telefone if '@' in lead.telefone else None
             )
