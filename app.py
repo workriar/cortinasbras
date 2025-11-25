@@ -409,7 +409,24 @@ app.jinja_env.globals.update(whatsapp_message=whatsapp_message)
 # Configuração para produção
 # Garantir que as tabelas existam (mesmo rodando via Gunicorn)
 with app.app_context():
-    db.create_all()
+    # Se for SQLite, garantir que o diretório existe
+    db_uri = app.config['SQLALCHEMY_DATABASE_URI']
+    if db_uri.startswith('sqlite:///'):
+        db_path = db_uri.replace('sqlite:///', '')
+        if '/' in db_path:
+            db_dir = os.path.dirname(db_path)
+            if db_dir and not os.path.exists(db_dir):
+                try:
+                    os.makedirs(db_dir, exist_ok=True)
+                    print(f"✅ Diretório do banco criado: {db_dir}")
+                except Exception as e:
+                    print(f"❌ Erro ao criar diretório do banco: {e}")
+    
+    try:
+        db.create_all()
+        print("✅ Tabelas do banco verificadas/criadas com sucesso")
+    except Exception as e:
+        print(f"❌ Erro ao criar tabelas: {e}")
 
 if __name__ == "__main__":
     # Em produção, use Gunicorn ou outro WSGI server
