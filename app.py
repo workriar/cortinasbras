@@ -411,6 +411,7 @@ app.jinja_env.globals.update(whatsapp_message=whatsapp_message)
 with app.app_context():
     db.create_all()
 
+if __name__ == "__main__":
     # Em produção, use Gunicorn ou outro WSGI server
     port = int(os.environ.get('PORT', 5001))
     debug_mode = not os.environ.get('PRODUCTION')
