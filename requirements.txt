@@ -1,10 +1,8 @@
 Flask==2.3.3
 Flask-Mail==0.9.1
 Flask-SQLAlchemy==3.0.5
-reportlab==4.0.4
+ReportLab==4.0.4
 PyMySQL==1.0.2
-mysqlclient>=2.2.0
+mysqlclient==2.1.1
 gunicorn==21.2.0
 requests==2.31.0
-pytz==2025.2
-python-dotenv==1.0.0

@@ -1,234 +1,170 @@
-# 🪟 Cortinas Brás - Sistema de Orçamentos
+# Cortinas Bresser - Sistema de Orçamentos
 
-> Landing page moderna com formulário de orçamento integrado ao WhatsApp, gestão de leads e tracking de conversões do Google Ads.
+Sistema web para orçamentos de cortinas sob medida com geração de PDF e envio automático por email.
 
-## 📋 Funcionalidades
+## 🚀 Deploy
 
-- ✅ Formulário de orçamento responsivo
-- ✅ Envio automático para WhatsApp
-- ✅ Armazenamento de leads em banco de dados
-- ✅ Geração de PDF com orçamento
-- ✅ Painel admin para visualizar leads
-- ✅ Integração com Google Ads para tracking de conversões
-- ✅ Mapa interativo do Google Maps
-- ✅ Design moderno com tema dark/gold
+Este projeto está preparado para deploy no **EasyPanel (Hostinger VPS)** usando Docker.
 
-## 🚀 Deploy Rápido
+📖 **[Guia Completo de Deploy](./DEPLOY-EASYPANEL.md)**
 
-### Opção 1: Deploy em VPS (Recomendado)
+## 🛠️ Tecnologias
 
-```bash
-# 1. Conecte-se ao seu VPS
-ssh root@seu-servidor
+- **Backend:** Python 3.11 + Flask
+- **Banco de Dados:** SQLite (desenvolvimento) / MySQL (produção opcional)
+- **Email:** Flask-Mail com SMTP
+- **PDF:** ReportLab
+- **Deploy:** Docker + EasyPanel
 
-# 2. Clone o repositório
-git clone https://github.com/seu-usuario/cortinas-bras.git /root/app
-cd /root/app
+## 📦 Estrutura do Projeto
 
-# 3. Execute o script de deploy
-sudo bash deploy_vps_improved.sh
-
-# 4. Configure as variáveis de ambiente
-sudo nano /etc/default/cortinas-bras
-
-# 5. Reinicie o serviço
-sudo systemctl restart cortinas-bras
-
-# 6. Teste a aplicação internamente
-curl -I http://127.0.0.1:8000
+```
+cortinas-app/
+├── app.py                    # Aplicação Flask principal
+├── requirements.txt          # Dependências Python
+├── templates/                # Templates HTML
+│   ├── index.html           # Página principal
+│   └── admin_leads.html     # Admin de leads
+├── static/                   # Arquivos estáticos (CSS, JS, imagens)
+├── Dockerfile               # Container Docker
+├── docker-compose.yml       # Orquestração Docker
+├── .dockerignore           # Arquivos ignorados no build
+├── .env.example            # Exemplo de variáveis de ambiente
+└── DEPLOY-EASYPANEL.md     # Guia de deploy completo
 ```
 
-> **Importante:** o Nginx deve encaminhar as requisições para `http://127.0.0.1:8000`, que é a porta usada pelo Gunicorn nos scripts de deploy. Após qualquer alteração rode `sudo nginx -t && sudo systemctl reload nginx`.
+## 🏃 Executar Localmente
 
-### Opção 2: Deploy com Docker
-
-```bash
-# Build
-docker build -t cortinas-bras:latest .
-
-# Run
-docker run -d -p 80:5000 \
-  -e PRODUCTION=1 \
-  -e SECRET_KEY=sua-chave-secreta \
-  -e MAIL_USERNAME=seu-email@dominio.com \
-  -e MAIL_PASSWORD=sua-senha \
-  --name cortinas-bras \
-  cortinas-bras:latest
-```
-
-### Opção 3: Heroku/Render
+### 1. Instalar Dependências
 
 ```bash
-# Heroku
-git push heroku main
-heroku config:set PRODUCTION=1 SECRET_KEY=xxx MAIL_USERNAME=xxx
+# Criar ambiente virtual
+python -m venv venv
 
-# Render
-# Configure via dashboard:
-# - Build: pip install -r requirements.txt
-# - Start: gunicorn app:app
-```
+# Ativar ambiente virtual
+# Windows:
+venv\Scripts\activate
+# Linux/Mac:
+source venv/bin/activate
 
-## 💻 Desenvolvimento Local
-
-### Pré-requisitos
-
-- Python 3.8+
-- pip
-- virtualenv (opcional, mas recomendado)
-
-### Instalação
-
-```bash
-# 1. Clone o repositório
-git clone https://github.com/seu-usuario/cortinas-bras.git
-cd cortinas-bras
-
-# 2. Crie e ative o ambiente virtual
-python3 -m venv venv
-source venv/bin/activate  # Linux/Mac
-# ou
-venv\Scripts\activate  # Windows
-
-# 3. Instale as dependências
+# Instalar dependências
 pip install -r requirements.txt
+```
 
-# 4. Configure as variáveis de ambiente
+### 2. Configurar Variáveis de Ambiente
+
+Copie `.env.example` para `.env` e configure:
+
+```bash
 cp .env.example .env
-nano .env  # Edite com suas configurações
+```
 
-# 5. Inicialize o banco de dados
-python -c "from app import app, db; app.app_context().push(); db.create_all()"
+Edite o arquivo `.env` com suas configurações.
 
-# 6. Execute a aplicação
+### 3. Executar Aplicação
+
+```bash
 python app.py
 ```
 
-Acesse: http://127.0.0.1:5001
+Acesse: http://localhost:5000
 
-## ⚙️ Configuração
-
-### Variáveis de Ambiente
-
-Crie um arquivo `.env` baseado no `.env.example`:
+### 4. Executar com Docker (Desenvolvimento)
 
 ```bash
-PRODUCTION=1
-SECRET_KEY=sua-chave-secreta-gerada
-MAIL_USERNAME=seu-email@dominio.com.br
-MAIL_PASSWORD=sua-senha-email
-MAIL_DEFAULT_SENDER=contato@cortinasbras.com.br
-DATABASE_URL=sqlite:///leads.db  # ou mysql://user:pass@host/db
+# Build da imagem
+docker build -t cortinas-app .
+
+# Executar container
+docker run -p 8000:8000 \
+  -e PRODUCTION=false \
+  cortinas-app
 ```
 
-**Gerar SECRET_KEY segura:**
+Acesse: http://localhost:8000
+
+## 🌐 Deploy em Produção
+
+### EasyPanel (Recomendado)
+
+Siga o guia completo: **[DEPLOY-EASYPANEL.md](./DEPLOY-EASYPANEL.md)**
+
+Resumo dos passos:
+1. ✅ Fazer push do código para GitHub
+2. ✅ Conectar repositório no EasyPanel
+3. ✅ Configurar variáveis de ambiente
+4. ✅ Deploy automático!
+
+## 📧 Configuração de Email
+
+### Hostinger SMTP
+
+```env
+MAIL_USERNAME=seu-email@dominio.com
+MAIL_PASSWORD=sua-senha
+MAIL_DEFAULT_SENDER=contato@cortinasbras.com.br
+```
+
+Servidor SMTP (em `app.py`):
+- Host: `smtp.hostinger.com`
+- Port: `587`
+- TLS: `True`
+
+## 💾 Banco de Dados
+
+### SQLite (Padrão - Desenvolvimento)
+
+Arquivo local: `instance/leads.db`
+
+```env
+DATABASE_URL=sqlite:///leads.db
+```
+
+### MySQL (Produção)
+
+```env
+DATABASE_URL=mysql://usuario:senha@host/database
+```
+
+## 🔒 Segurança
+
+- ✅ Use sempre HTTPS em produção
+- ✅ Gere uma SECRET_KEY forte
+- ✅ Não commite o arquivo `.env`
+- ✅ Use variáveis de ambiente para credenciais
+
+Gerar SECRET_KEY:
 ```bash
 python -c "import secrets; print(secrets.token_hex(32))"
 ```
 
-### Configurar HTTPS (Let's Encrypt)
+## 📊 Admin
 
-```bash
-# Instalar Certbot
-sudo apt install certbot python3-certbot-nginx
-
-# Obter certificado
-sudo certbot --nginx -d seudominio.com -d www.seudominio.com
-
-# Renovação automática já está configurada
-```
-
-## 📊 Painel Admin
-
-Acesse o painel de leads em: `http://seu-dominio/admin/leads`
-
-## 🔧 Manutenção
-
-### Ver logs do serviço
-```bash
-sudo journalctl -u cortinas-bras -f
-```
-
-### Reiniciar serviço
-```bash
-sudo systemctl restart cortinas-bras
-```
-
-### Atualizar aplicação
-```bash
-cd /root/app
-git pull
-sudo systemctl restart cortinas-bras
-```
-
-### Backup do banco de dados
-```bash
-sudo cp /root/app/leads.db /root/app/backups/leads-$(date +%Y%m%d).db
-```
-
-## 📁 Estrutura do Projeto
+Visualize os leads cadastrados:
 
 ```
-cortinas-bras/
-├── app.py                    # Aplicação Flask principal
-├── requirements.txt          # Dependências Python
-├── Dockerfile               # Imagem Docker
-├── Procfile                 # Deploy Heroku
-├── deploy_vps_improved.sh   # Script de deploy VPS
-├── .env.example             # Exemplo de variáveis
-├── templates/
-│   ├── index.html          # Landing page principal
-│   └── admin_leads.html    # Painel admin
-├── static/
-│   ├── style.css           # Estilos CSS
-│   ├── script.js           # JavaScript (legado)
-│   ├── logo.png
-│   └── icons/
-└── README.md
+http://seu-dominio.com/admin/leads
 ```
 
-## 🛠️ Tecnologias Utilizadas
+> ⚠️ **Importante:** Adicione autenticação antes de usar em produção!
 
-- **Backend:** Flask, SQLAlchemy, Flask-Mail
-- **Frontend:** HTML5, CSS3, JavaScript, Bootstrap 5
-- **Banco de Dados:** SQLite (dev) / MySQL (prod)
-- **Deploy:** Gunicorn, Nginx, Systemd
-- **Tracking:** Google Ads Conversion Tracking
+## 🧪 Testes
 
-## 🐛 Solução de Problemas
+Teste localmente antes de fazer deploy:
 
-### Erro de permissão no banco de dados
-```bash
-sudo chown cortinas:cortinas /root/app/leads.db
-```
+1. ✅ Formulário de orçamento
+2. ✅ Geração de PDF
+3. ✅ Envio de email
+4. ✅ Salvamento no banco
 
-### Serviço não inicia
-```bash
-# Verificar logs
-sudo journalctl -u cortinas-bras -n 50
+## 📄 Licença
 
-# Testar manualmente
-source /root/app/venv/bin/activate
-cd /root/app
-python app.py
-```
+Projeto proprietário - Cortinas Bresser © 2024
 
-### Nginx retorna 502 Bad Gateway
-```bash
-# Verificar se o Gunicorn está rodando
-sudo systemctl status cortinas-bras
+## 📞 Suporte
 
-# Verificar logs do Nginx
-sudo tail -f /var/log/nginx/cortinas-bras-error.log
-```
+Para dúvidas sobre deploy, consulte: [DEPLOY-EASYPANEL.md](./DEPLOY-EASYPANEL.md)
 
-## 📝 Licença
+---
 
-© 2025 Cortinas Brás - Todos os direitos reservados
-
-## 📧 Contato
-
-- **Site:** https://cortinasbras.com.br
-- **Email:** contato@cortinasbras.com.br
-- **WhatsApp:** (11) 99289-1070
-- **Endereço:** Av. Celso Garcia, 129 - Brás, São Paulo - SP
+**Status:** ✅ Pronto para deploy no EasyPanel
