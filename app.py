@@ -407,16 +407,39 @@ app.jinja_env.globals.update(whatsapp_message=whatsapp_message)
 # Configuração para produção
 @app.route('/test-email')
 def test_email_route():
+    recipient = request.args.get('to', 'loja@cortinasbras.com.br')
     try:
         msg = Message(
-            subject="Teste Manual de Rota",
-            recipients=['loja@cortinasbras.com.br'],
-            body="Teste de envio direto pela rota /test-email"
+            subject="Teste Diagnóstico",
+            recipients=[recipient],
+            body=f"Teste de envio para {recipient}"
         )
         mail.send(msg)
-        return "Email enviado com sucesso! Verifique sua caixa de entrada."
+        return f"Email enviado para {recipient} com sucesso!"
     except Exception as e:
-        return f"Erro ao enviar email: {str(e)}", 500
+        return f"Erro ao enviar para {recipient}: {str(e)}", 500
+
+@app.route('/test-email-pdf')
+def test_email_pdf_route():
+    try:
+        # Gerar PDF de teste
+        buffer = io.BytesIO()
+        p = canvas.Canvas(buffer)
+        p.drawString(100, 750, "PDF de Teste de Diagnóstico")
+        p.save()
+        buffer.seek(0)
+        
+        msg = Message(
+            subject="Teste Manual de Rota (COM Anexo)",
+            recipients=['loja@cortinasbras.com.br'],
+            body="Teste de envio direto pela rota /test-email-pdf COM anexo PDF."
+        )
+        msg.attach("teste.pdf", "application/pdf", buffer.read())
+        
+        mail.send(msg)
+        return "Email COM anexo enviado com sucesso!"
+    except Exception as e:
+        return f"Erro ao enviar email com anexo: {str(e)}", 500
 
 if __name__ == "__main__":
     with app.app_context():
