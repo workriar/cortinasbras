@@ -119,32 +119,38 @@ def enviar():
         db.session.add(lead)
         db.session.commit()
 
-        # Criar PDF
-        buffer = io.BytesIO()
-        p = canvas.Canvas(buffer)
-        p.drawString(50, 820, "Orçamento Cortinas Sob Medida")
-        p.drawString(50, 800, f"Data: {lead.criado_em.strftime('%d/%m/%Y %H:%M')}")
-        p.drawString(50, 780, f"Nome: {lead.nome}")
-        p.drawString(50, 760, f"Telefone: {lead.telefone}")
-        p.drawString(50, 740, f"Parede: {lead.largura_parede}m x {lead.altura_parede}m")
-        p.drawString(50, 720, f"Janela: {lead.largura_janela}m x {lead.altura_janela}m")
-        p.drawString(50, 700, f"Tecido: {lead.tecido}")
-        p.drawString(50, 680, f"Instalação: {lead.instalacao}")
-        p.drawString(50, 660, f"Obs.: {lead.observacoes}")
-        p.drawString(50, 640, f"Endereço: {lead.endereco}")
-        p.save()
-        buffer.seek(0)
+        # Criar PDF Profissional
+        try:
+            from pdf_generator import generate_orcamento_pdf
+            buffer = generate_orcamento_pdf(lead)
+            print("✅ PDF gerado com sucesso")
+        except Exception as pdf_error:
+            print(f"❌ Erro ao gerar PDF: {pdf_error}")
+            import traceback
+            traceback.print_exc()
+            # Fallback para PDF simples se falhar
+            buffer = io.BytesIO()
+            p = canvas.Canvas(buffer)
+            p.drawString(100, 750, f"Orçamento #{lead.id} - {lead.nome}")
+            p.save()
+            buffer.seek(0)
 
         # Enviar email (sempre tentar enviar)
         try:
             buffer.seek(0)  # Reset buffer position
             # Garantir que a hora esteja no timezone de São Paulo
             hora_sp = lead.criado_em.strftime('%d/%m/%Y às %H:%M')
+            
+            subject = f"🏠 Novo Orçamento - {lead.nome} - {hora_sp}"
+            recipients = ['loja@cortinasbras.com.br']
+            
             msg = Message(
-                subject=f"🏠 Novo Orçamento - {lead.nome} - {hora_sp}",
-                recipients=['loja@cortinasbras.com.br'],
+                subject=subject,
+                recipients=recipients,
                 reply_to=lead.telefone if '@' in lead.telefone else None
             )
+            
+            # Template HTML
             msg.html = f"""
             <html>
             <body style="font-family: 'Segoe UI', Arial, sans-serif; padding: 20px; background-color: #f5f5f5; margin: 0;">
@@ -257,17 +263,27 @@ def enviar():
             </body>
             </html>
             """
-            msg.attach("orcamento.pdf", "application/pdf", buffer.read())
+            
+            # Anexar PDF
+            filename = f"orcamento_{lead.id}_{lead.nome.split()[0]}.pdf"
+            msg.attach(filename, "application/pdf", buffer.read())
+            
+            # Enviar
             mail.send(msg)
-            print(f"✅ Email enviado para loja@cortinasbras.com.br (Lead #{lead.id})")
+            print(f"✅ Email enviado para {recipients} (Lead #{lead.id})")
+            
         except Exception as email_error:
             app.logger.error(f"❌ Falha ao enviar email: {email_error}")
             print(f"❌ Erro ao enviar email: {email_error}")
+            import traceback
+            traceback.print_exc()
 
         return "success"
     
     except Exception as err:
-        print(f"❌ Erro: {err}")
+        print(f"❌ Erro geral no endpoint /enviar: {err}")
+        import traceback
+        traceback.print_exc()
         return "Erro ao enviar!", 500
 
 @app.route('/orcamento/<int:lead_id>/pdf')
