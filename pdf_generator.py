@@ -74,34 +74,30 @@ def generate_orcamento_pdf(lead):
     
     elements = []
     
-    # 1. Logo (se existir)
+    # 1. Logo (se existir) – já centralizado
     logo_path = os.path.join(os.path.dirname(__file__), 'static', 'logo.png')
     if os.path.exists(logo_path):
         try:
-            # Ajustar tamanho do logo mantendo proporção
             img = Image(logo_path, width=4*cm, height=1.5*cm, kind='proportional')
             img.hAlign = 'CENTER'
             elements.append(img)
             elements.append(Spacer(1, 1*cm))
         except Exception:
             pass
-            
+
     # 2. Título e Data
     elements.append(Paragraph("ORÇAMENTO DE CORTINAS", style_title))
-    
     data_formatada = lead.criado_em.strftime('%d/%m/%Y às %H:%M')
     elements.append(Paragraph(f"Solicitação recebida em: {data_formatada}", style_subtitle))
     elements.append(Spacer(1, 0.5*cm))
-    
-    # 3. Dados do Cliente (Tabela)
-    elements.append(Paragraph("DADOS DO CLIENTE", style_section))
-    
+
+    # 3. Dados do Cliente (Tabela) – com ícone dourado
+    elements.append(Paragraph(f"<font color='{COLOR_GOLD}'>📋</font> DADOS DO CLIENTE", style_section))
     data_cliente = [
         ['Nome:', lead.nome],
         ['Telefone:', lead.telefone],
-        ['ID do Orçamento:', f"#{lead.id}"]
+        ['ID do Orçamento:', f"#{lead.id}" ]
     ]
-    
     table_cliente = Table(data_cliente, colWidths=[4*cm, 12*cm])
     table_cliente.setStyle(TableStyle([
         ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
@@ -114,10 +110,9 @@ def generate_orcamento_pdf(lead):
     ]))
     elements.append(table_cliente)
     elements.append(Spacer(1, 1*cm))
-    
-    # 4. Medidas e Especificações
-    elements.append(Paragraph("MEDIDAS E ESPECIFICAÇÕES", style_section))
-    
+
+    # 4. Medidas e Especificações – com ícone dourado
+    elements.append(Paragraph(f"<font color='{COLOR_GOLD}'>📐</font> MEDIDAS E ESPECIFICAÇÕES", style_section))
     data_specs = [
         ['ITEM', 'DETALHES'],
         ['Largura da Parede', f"{lead.largura_parede} metros"],
@@ -125,7 +120,6 @@ def generate_orcamento_pdf(lead):
         ['Tipo de Tecido', lead.tecido],
         ['Tipo de Instalação', lead.instalacao]
     ]
-    
     table_specs = Table(data_specs, colWidths=[6*cm, 10*cm])
     table_specs.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), COLOR_GOLD),
@@ -135,7 +129,6 @@ def generate_orcamento_pdf(lead):
         ('FONTSIZE', (0, 0), (-1, 0), 12),
         ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
         ('TOPPADDING', (0, 0), (-1, 0), 12),
-        
         ('BACKGROUND', (0, 1), (-1, -1), colors.white),
         ('GRID', (0, 0), (-1, -1), 1, colors.lightgrey),
         ('FONTSIZE', (0, 1), (-1, -1), 11),
@@ -144,18 +137,17 @@ def generate_orcamento_pdf(lead):
     ]))
     elements.append(table_specs)
     elements.append(Spacer(1, 1*cm))
-    
-    # 5. Observações e Endereço
+
+    # 5. Observações e Endereço – com ícones dourados
     if lead.observacoes:
-        elements.append(Paragraph("OBSERVAÇÕES", style_section))
+        elements.append(Paragraph(f"<font color='{COLOR_GOLD}'>📝</font> OBSERVAÇÕES", style_section))
         elements.append(Paragraph(lead.observacoes, style_normal))
         elements.append(Spacer(1, 0.5*cm))
-        
     if lead.endereco:
-        elements.append(Paragraph("ENDEREÇO DE INSTALAÇÃO", style_section))
+        elements.append(Paragraph(f"<font color='{COLOR_GOLD}'>📍</font> ENDEREÇO DE INSTALAÇÃO", style_section))
         elements.append(Paragraph(lead.endereco, style_normal))
         elements.append(Spacer(1, 1*cm))
-        
+
     # 6. Rodapé
     elements.append(Spacer(1, 2*cm))
     footer_text = """
@@ -170,7 +162,7 @@ def generate_orcamento_pdf(lead):
         textColor=colors.gray,
         fontSize=10
     )))
-    
+
     # Construir PDF
     doc.build(elements)
     buffer.seek(0)

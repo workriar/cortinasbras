@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, send_file, redirect, url_for
 from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 from reportlab.pdfgen import canvas
+from dotenv import load_dotenv
 import io, datetime
 import os
 from datetime import timezone
@@ -11,6 +12,7 @@ import pytz
 SP_TZ = pytz.timezone('America/Sao_Paulo')
 
 app = Flask(__name__)
+load_dotenv()
 
 # Configurações para produção Locaweb
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'chave-secreta-padrao')
@@ -409,7 +411,7 @@ app.jinja_env.globals.update(whatsapp_message=whatsapp_message)
 with app.app_context():
     db.create_all()
 
-if __name__ == "__main__":
     # Em produção, use Gunicorn ou outro WSGI server
     port = int(os.environ.get('PORT', 5001))
-    app.run(host='0.0.0.0', debug=not os.environ.get('PRODUCTION'), port=port)
+    debug_mode = not os.environ.get('PRODUCTION')
+    app.run(host='0.0.0.0', debug=debug_mode, port=port)
