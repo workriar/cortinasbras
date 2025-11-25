@@ -405,8 +405,22 @@ def whatsapp_message(lead):
 app.jinja_env.globals.update(whatsapp_message=whatsapp_message)
 
 # Configuração para produção
+@app.route('/test-email')
+def test_email_route():
+    try:
+        msg = Message(
+            subject="Teste Manual de Rota",
+            recipients=['loja@cortinasbras.com.br'],
+            body="Teste de envio direto pela rota /test-email"
+        )
+        mail.send(msg)
+        return "Email enviado com sucesso! Verifique sua caixa de entrada."
+    except Exception as e:
+        return f"Erro ao enviar email: {str(e)}", 500
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
     # Em produção, use Gunicorn ou outro WSGI server
-    app.run(debug=not os.environ.get('PRODUCTION'), port=5001)
+    port = int(os.environ.get('PORT', 5001))
+    app.run(host='0.0.0.0', debug=not os.environ.get('PRODUCTION'), port=port)
