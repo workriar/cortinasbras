@@ -141,7 +141,7 @@ def enviar():
             hora_sp = lead.criado_em.strftime('%d/%m/%Y às %H:%M')
             msg = Message(
                 subject=f"🏠 Novo Orçamento - {lead.nome} - {hora_sp}",
-                recipients=['vendas@cortinasbras.com.br'],
+                recipients=['loja@cortinasbras.com.br'],
                 reply_to=lead.telefone if '@' in lead.telefone else None
             )
             msg.html = f"""
@@ -185,7 +185,7 @@ def enviar():
             """
             msg.attach("orcamento.pdf", "application/pdf", buffer.read())
             mail.send(msg)
-            print(f"✅ Email enviado para vendas@cortinasbras.com.br (Lead #{lead.id})")
+            print(f"✅ Email enviado para loja@cortinasbras.com.br (Lead #{lead.id})")
         except Exception as email_error:
             app.logger.error(f"❌ Falha ao enviar email: {email_error}")
             print(f"❌ Erro ao enviar email: {email_error}")
