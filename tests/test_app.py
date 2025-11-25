@@ -60,5 +60,10 @@ class TestApp(unittest.TestCase):
         if os.path.exists(pdf_path):
             os.remove(pdf_path)
 
+    def test_index(self):
+        response = self.app.get('/')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Cortinas', response.data)
+
 if __name__ == '__main__':
     unittest.main()
