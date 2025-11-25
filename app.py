@@ -146,39 +146,112 @@ def enviar():
             )
             msg.html = f"""
             <html>
-            <body style="font-family: Arial, sans-serif; padding: 20px; background-color: #f5f5f5;">
-                <div style="max-width: 600px; margin: 0 auto; background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                    <h2 style="color: #D4A93E; border-bottom: 2px solid #D4A93E; padding-bottom: 10px;">
-                        🏠 Novo Orçamento de Cortinas
-                    </h2>
+            <body style="font-family: 'Segoe UI', Arial, sans-serif; padding: 20px; background-color: #f5f5f5; margin: 0;">
+                <div style="max-width: 650px; margin: 0 auto; background-color: white; padding: 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); overflow: hidden;">
                     
-                    <div style="margin: 20px 0;">
-                        <h3 style="color: #333; margin-bottom: 15px;">👤 Dados do Cliente</h3>
-                        <p><strong>Nome:</strong> {lead.nome}</p>
-                        <p><strong>Telefone:</strong> <a href="tel:{lead.telefone}">{lead.telefone}</a></p>
-                        <p><strong>WhatsApp:</strong> <a href="https://wa.me/55{lead.telefone.replace('(','').replace(')','').replace('-','').replace(' ','')}">Enviar mensagem</a></p>
+                    <!-- Header -->
+                    <div style="background: linear-gradient(135deg, #D4A93E 0%, #8B5C2A 100%); padding: 30px; text-align: center;">
+                        <h1 style="color: white; margin: 0; font-size: 28px; font-weight: 600;">
+                            🏠 Novo Orçamento de Cortinas
+                        </h1>
+                        <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0; font-size: 14px;">
+                            Recebido em {lead.criado_em.strftime('%d/%m/%Y às %H:%M')}
+                        </p>
                     </div>
                     
-                    <div style="margin: 20px 0; background-color: #f9f9f9; padding: 15px; border-radius: 5px;">
-                        <h3 style="color: #333; margin-bottom: 15px;">📏 Medidas</h3>
-                        <p><strong>Parede:</strong> {lead.largura_parede}m (largura) × {lead.altura_parede}m (altura)</p>
-                        <p><strong>Janela:</strong> {lead.largura_janela}m (largura) × {lead.altura_janela}m (altura)</p>
+                    <!-- Content -->
+                    <div style="padding: 30px;">
+                        
+                        <!-- Dados do Cliente -->
+                        <div style="margin-bottom: 25px; padding: 20px; background-color: #f9f9f9; border-radius: 8px; border-left: 4px solid #D4A93E;">
+                            <h2 style="color: #333; margin: 0 0 15px 0; font-size: 18px; display: flex; align-items: center;">
+                                <span style="margin-right: 8px;">👤</span> Dados do Cliente
+                            </h2>
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <tr>
+                                    <td style="padding: 8px 0; color: #666; font-weight: 600; width: 120px;">Nome:</td>
+                                    <td style="padding: 8px 0; color: #333; font-size: 16px;"><strong>{lead.nome}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 0; color: #666; font-weight: 600;">Telefone:</td>
+                                    <td style="padding: 8px 0;">
+                                        <a href="tel:{lead.telefone}" style="color: #D4A93E; text-decoration: none; font-weight: 600;">{lead.telefone}</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 0; color: #666; font-weight: 600;">WhatsApp:</td>
+                                    <td style="padding: 8px 0;">
+                                        <a href="https://wa.me/55{lead.telefone.replace('(','').replace(')','').replace('-','').replace(' ','')}" 
+                                           style="display: inline-block; background-color: #25D366; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px;">
+                                            💬 Enviar Mensagem
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <!-- Medidas -->
+                        <div style="margin-bottom: 25px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border-left: 4px solid #D4A93E;">
+                            <h2 style="color: #333; margin: 0 0 15px 0; font-size: 18px; display: flex; align-items: center;">
+                                <span style="margin-right: 8px;">📏</span> Medidas da Parede
+                            </h2>
+                            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                                <div style="flex: 1; min-width: 200px;">
+                                    <div style="background-color: white; padding: 15px; border-radius: 6px; text-align: center;">
+                                        <div style="color: #666; font-size: 12px; text-transform: uppercase; margin-bottom: 5px;">Largura</div>
+                                        <div style="color: #D4A93E; font-size: 28px; font-weight: 700;">{lead.largura_parede}m</div>
+                                    </div>
+                                </div>
+                                <div style="flex: 1; min-width: 200px;">
+                                    <div style="background-color: white; padding: 15px; border-radius: 6px; text-align: center;">
+                                        <div style="color: #666; font-size: 12px; text-transform: uppercase; margin-bottom: 5px;">Altura</div>
+                                        <div style="color: #D4A93E; font-size: 28px; font-weight: 700;">{lead.altura_parede}m</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Especificações -->
+                        <div style="margin-bottom: 25px; padding: 20px; background-color: #f0f8ff; border-radius: 8px; border-left: 4px solid #D4A93E;">
+                            <h2 style="color: #333; margin: 0 0 15px 0; font-size: 18px; display: flex; align-items: center;">
+                                <span style="margin-right: 8px;">🎨</span> Especificações
+                            </h2>
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <tr>
+                                    <td style="padding: 8px 0; color: #666; font-weight: 600; width: 150px;">Tipo de Tecido:</td>
+                                    <td style="padding: 8px 0; color: #333; font-weight: 600; font-size: 15px;">{lead.tecido}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 0; color: #666; font-weight: 600;">Tipo de Instalação:</td>
+                                    <td style="padding: 8px 0; color: #333; font-weight: 600; font-size: 15px;">{lead.instalacao}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        {f'''<div style="margin-bottom: 25px; padding: 20px; background-color: #fffbf0; border-radius: 8px; border-left: 4px solid #D4A93E;">
+                            <h2 style="color: #333; margin: 0 0 10px 0; font-size: 18px; display: flex; align-items: center;">
+                                <span style="margin-right: 8px;">📝</span> Observações
+                            </h2>
+                            <p style="color: #555; line-height: 1.6; margin: 0; white-space: pre-wrap;">{lead.observacoes}</p>
+                        </div>''' if lead.observacoes else ''}
+                        
+                        {f'''<div style="margin-bottom: 25px; padding: 20px; background-color: #f0fff4; border-radius: 8px; border-left: 4px solid #D4A93E;">
+                            <h2 style="color: #333; margin: 0 0 10px 0; font-size: 18px; display: flex; align-items: center;">
+                                <span style="margin-right: 8px;">📍</span> Endereço para Instalação
+                            </h2>
+                            <p style="color: #555; line-height: 1.6; margin: 0; white-space: pre-wrap;">{lead.endereco}</p>
+                        </div>''' if lead.endereco else ''}
+                        
                     </div>
                     
-                    <div style="margin: 20px 0;">
-                        <h3 style="color: #333; margin-bottom: 15px;">🎨 Especificações</h3>
-                        <p><strong>Tecido:</strong> {lead.tecido}</p>
-                        <p><strong>Tipo de Instalação:</strong> {lead.instalacao}</p>
+                    <!-- Footer -->
+                    <div style="background-color: #f9f9f9; padding: 20px 30px; border-top: 1px solid #eee;">
+                        <p style="color: #999; font-size: 12px; margin: 0; text-align: center;">
+                            ID do Lead: <strong>#{lead.id}</strong> | 
+                            Cortinas Brás - Qualidade há mais de 20 anos
+                        </p>
                     </div>
                     
-                    {f'<div style="margin: 20px 0; background-color: #fff9e6; padding: 15px; border-left: 3px solid #D4A93E;"><h3 style="color: #333; margin-bottom: 10px;">📝 Observações</h3><p>{lead.observacoes}</p></div>' if lead.observacoes else ''}
-                    
-                    {f'<div style="margin: 20px 0;"><h3 style="color: #333; margin-bottom: 10px;">📍 Endereço para Instalação</h3><p>{lead.endereco}</p></div>' if lead.endereco else ''}
-                    
-                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #999; font-size: 12px;">
-                        <p>Orçamento recebido em: {lead.criado_em.strftime('%d/%m/%Y às %H:%M')}</p>
-                        <p>ID do Lead: #{lead.id}</p>
-                    </div>
                 </div>
             </body>
             </html>
