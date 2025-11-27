@@ -467,7 +467,9 @@ with app.app_context():
         db.create_all()
         print("✅ Tabelas do banco verificadas/criadas com sucesso")
     except Exception as e:
-        print(f"❌ Erro ao criar tabelas: {e}")
+        print(f"❌ Erro crítico ao conectar/criar tabelas no banco: {e}")
+        # Não matar a aplicação, permitir que suba mesmo sem banco (para debug/home)
+        pass
 
 if __name__ == "__main__":
     # Em produção, use Gunicorn ou outro WSGI server
