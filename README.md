@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🪟 Cortinas Brás - Sistema de Orçamentos
 
 > Landing page moderna com formulário de orçamento integrado ao WhatsApp, gestão de leads e tracking de conversões do Google Ads.
@@ -122,10 +123,149 @@ DATABASE_URL=sqlite:///leads.db  # ou mysql://user:pass@host/db
 ```
 
 **Gerar SECRET_KEY segura:**
+=======
+# Cortinas Bresser - Sistema de Orçamentos
+
+Sistema web para orçamentos de cortinas sob medida com geração de PDF e envio automático por email.
+
+## 🚀 Deploy
+
+Este projeto está preparado para deploy no **EasyPanel (Hostinger VPS)** usando Docker.
+
+📖 **[Guia Completo de Deploy](./DEPLOY-EASYPANEL.md)**
+
+## 🛠️ Tecnologias
+
+- **Backend:** Python 3.11 + Flask
+- **Banco de Dados:** SQLite (desenvolvimento) / MySQL (produção opcional)
+- **Email:** Flask-Mail com SMTP
+- **PDF:** ReportLab
+- **Deploy:** Docker + EasyPanel
+
+## 📦 Estrutura do Projeto
+
+```
+cortinas-app/
+├── app.py                    # Aplicação Flask principal
+├── requirements.txt          # Dependências Python
+├── templates/                # Templates HTML
+│   ├── index.html           # Página principal
+│   └── admin_leads.html     # Admin de leads
+├── static/                   # Arquivos estáticos (CSS, JS, imagens)
+├── Dockerfile               # Container Docker
+├── docker-compose.yml       # Orquestração Docker
+├── .dockerignore           # Arquivos ignorados no build
+├── .env.example            # Exemplo de variáveis de ambiente
+└── DEPLOY-EASYPANEL.md     # Guia de deploy completo
+```
+
+## 🏃 Executar Localmente
+
+### 1. Instalar Dependências
+
+```bash
+# Criar ambiente virtual
+python -m venv venv
+
+# Ativar ambiente virtual
+# Windows:
+venv\Scripts\activate
+# Linux/Mac:
+source venv/bin/activate
+
+# Instalar dependências
+pip install -r requirements.txt
+```
+
+### 2. Configurar Variáveis de Ambiente
+
+Copie `.env.example` para `.env` e configure:
+
+```bash
+cp .env.example .env
+```
+
+Edite o arquivo `.env` com suas configurações.
+
+### 3. Executar Aplicação
+
+```bash
+python app.py
+```
+
+Acesse: http://localhost:5000
+
+### 4. Executar com Docker (Desenvolvimento)
+
+```bash
+# Build da imagem
+docker build -t cortinas-app .
+
+# Executar container
+docker run -p 8000:8000 \
+  -e PRODUCTION=false \
+  cortinas-app
+```
+
+Acesse: http://localhost:8000
+
+## 🌐 Deploy em Produção
+
+### EasyPanel (Recomendado)
+
+Siga o guia completo: **[DEPLOY-EASYPANEL.md](./DEPLOY-EASYPANEL.md)**
+
+Resumo dos passos:
+1. ✅ Fazer push do código para GitHub
+2. ✅ Conectar repositório no EasyPanel
+3. ✅ Configurar variáveis de ambiente
+4. ✅ Deploy automático!
+
+## 📧 Configuração de Email
+
+### Hostinger SMTP
+
+```env
+MAIL_USERNAME=seu-email@dominio.com
+MAIL_PASSWORD=sua-senha
+MAIL_DEFAULT_SENDER=contato@cortinasbras.com.br
+```
+
+Servidor SMTP (em `app.py`):
+- Host: `smtp.hostinger.com`
+- Port: `587`
+- TLS: `True`
+
+## 💾 Banco de Dados
+
+### SQLite (Padrão - Desenvolvimento)
+
+Arquivo local: `instance/leads.db`
+
+```env
+DATABASE_URL=sqlite:///leads.db
+```
+
+### MySQL (Produção)
+
+```env
+DATABASE_URL=mysql://usuario:senha@host/database
+```
+
+## 🔒 Segurança
+
+- ✅ Use sempre HTTPS em produção
+- ✅ Gere uma SECRET_KEY forte
+- ✅ Não commite o arquivo `.env`
+- ✅ Use variáveis de ambiente para credenciais
+
+Gerar SECRET_KEY:
+>>>>>>> 78c9a6c (Fix: Form submission, PDF generation with logo, and WhatsApp message)
 ```bash
 python -c "import secrets; print(secrets.token_hex(32))"
 ```
 
+<<<<<<< HEAD
 ### Configurar HTTPS (Let's Encrypt)
 
 ```bash
@@ -232,3 +372,35 @@ sudo tail -f /var/log/nginx/cortinas-bras-error.log
 - **Email:** contato@cortinasbras.com.br
 - **WhatsApp:** (11) 99289-1070
 - **Endereço:** Av. Celso Garcia, 129 - Brás, São Paulo - SP
+=======
+## 📊 Admin
+
+Visualize os leads cadastrados:
+
+```
+http://seu-dominio.com/admin/leads
+```
+
+> ⚠️ **Importante:** Adicione autenticação antes de usar em produção!
+
+## 🧪 Testes
+
+Teste localmente antes de fazer deploy:
+
+1. ✅ Formulário de orçamento
+2. ✅ Geração de PDF
+3. ✅ Envio de email
+4. ✅ Salvamento no banco
+
+## 📄 Licença
+
+Projeto proprietário - Cortinas Bresser © 2024
+
+## 📞 Suporte
+
+Para dúvidas sobre deploy, consulte: [DEPLOY-EASYPANEL.md](./DEPLOY-EASYPANEL.md)
+
+---
+
+**Status:** ✅ Pronto para deploy no EasyPanel
+>>>>>>> 78c9a6c (Fix: Form submission, PDF generation with logo, and WhatsApp message)

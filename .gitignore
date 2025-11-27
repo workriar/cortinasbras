@@ -1,10 +1,42 @@
+<<<<<<< HEAD
 # IDE e Editor
 .vscode-server/
+=======
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# Flask
+instance/
+.webassets-cache
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment Variables
+.env
+.env.local
+.env.production
+
+# IDE
+>>>>>>> 78c9a6c (Fix: Form submission, PDF generation with logo, and WhatsApp message)
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+<<<<<<< HEAD
 
 # Sistema
 .cache/
@@ -75,3 +107,44 @@ novo-repo/
 .antigravity-server/
 backup_meu-projeto_*.tar.gz
 .gemini/
+=======
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Build
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Arquivos antigos/desenvolvimento
+dev_bras/
+passenger_wsgi.py
+.htaccess
+
+# PDF temporários
+orcamento_*.pdf
+>>>>>>> 78c9a6c (Fix: Form submission, PDF generation with logo, and WhatsApp message)

@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - PRODUCTION=true
+      - SECRET_KEY=${SECRET_KEY:-sua-chave-secreta-aqui}
+      - DATABASE_URL=${DATABASE_URL:-sqlite:///leads.db}
+      - MAIL_USERNAME=${MAIL_USERNAME:-seu-email@seudominio.com.br}
+      - MAIL_PASSWORD=${MAIL_PASSWORD:-sua-senha}
+      - MAIL_DEFAULT_SENDER=${MAIL_DEFAULT_SENDER:-contato@cortinasbras.com.br}
+    volumes:
+      - ./instance:/app/instance
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+  # Opcional: MySQL Database
+  # Descomente se quiser usar MySQL em container
+  # db:
+  #   image: mysql:8.0
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+  #     MYSQL_DATABASE: cortinas_db
+  #     MYSQL_USER: ${MYSQL_USER:-cortinas_user}
+  #     MYSQL_PASSWORD: ${MYSQL_PASSWORD:-cortinas_password}
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
+  #   restart: unless-stopped
+  #   healthcheck:
+  #     test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+
+  # volumes:
+  #   mysql_data:
