@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, send_file, redirect, url_for
 from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
 import io, datetime
 import os
 from datetime import timezone
@@ -103,13 +104,19 @@ def sitemap():
 def enviar():
     data = request.form
     try:
+        # Helper para converter float
+        def parse_float(val):
+            if not val: return 0.0
+            if isinstance(val, (float, int)): return float(val)
+            return float(str(val).replace(',', '.'))
+
         lead = Lead(
             nome=data['nome'],
             telefone=data['telefone'],
-            largura_parede=float(data.get('largura_parede', 0) or 0),
-            altura_parede=float(data.get('altura_parede', 0) or 0),
-            largura_janela=float(data.get('largura_janela', 0) or 0),
-            altura_janela=float(data.get('altura_janela', 0) or 0),
+            largura_parede=parse_float(data.get('larguraparede', data.get('largura_parede', 0))),
+            altura_parede=parse_float(data.get('alturaparede', data.get('altura_parede', 0))),
+            largura_janela=parse_float(data.get('largura_janela', 0)),
+            altura_janela=parse_float(data.get('altura_janela', 0)),
             tecido=data.get('tecido', 'Não especificado'),
             instalacao=data.get('instalacao', 'Não especificado'),
             observacoes=data.get('mensagem', data.get('observacoes', '')),
@@ -120,19 +127,53 @@ def enviar():
 
         # Criar PDF
         buffer = io.BytesIO()
-        p = canvas.Canvas(buffer)
-        p.drawString(50, 820, "Orçamento Cortinas Sob Medida")
-        p.drawString(50, 800, f"Data: {lead.criado_em.strftime('%d/%m/%Y %H:%M')}")
-        p.drawString(50, 780, f"Nome: {lead.nome}")
-        p.drawString(50, 760, f"Telefone: {lead.telefone}")
-        p.drawString(50, 740, f"Parede: {lead.largura_parede}m x {lead.altura_parede}m")
-        p.drawString(50, 720, f"Janela: {lead.largura_janela}m x {lead.altura_janela}m")
-        p.drawString(50, 700, f"Tecido: {lead.tecido}")
-        p.drawString(50, 680, f"Instalação: {lead.instalacao}")
-        p.drawString(50, 660, f"Obs.: {lead.observacoes}")
-        p.drawString(50, 640, f"Endereço: {lead.endereco}")
+        p = canvas.Canvas(buffer, pagesize=A4)
+        width, height = A4
+        
+        # Logo Centralizado
+        logo_path = os.path.join(app.static_folder, 'logo.png')
+        if os.path.exists(logo_path):
+            # Desenha o logo centralizado no topo (ajuste as coordenadas conforme necessário)
+            # width/2 - (logo_width/2) para centralizar X
+            p.drawImage(logo_path, width/2 - 50, height - 100, width=100, height=50, preserveAspectRatio=True, mask='auto')
+
+        p.setFont("Helvetica-Bold", 16)
+        p.drawCentredString(width/2, height - 130, "Orçamento Cortinas Sob Medida")
+        
+        p.setFont("Helvetica", 12)
+        y = height - 160
+        p.drawString(50, y, f"Data: {lead.criado_em.strftime('%d/%m/%Y %H:%M')}")
+        y -= 25
+        p.drawString(50, y, f"Nome: {lead.nome}")
+        y -= 20
+        p.drawString(50, y, f"Telefone: {lead.telefone}")
+        y -= 20
+        p.drawString(50, y, f"Parede: {lead.largura_parede}m x {lead.altura_parede}m")
+        y -= 20
+        if lead.largura_janela or lead.altura_janela:
+            p.drawString(50, y, f"Janela: {lead.largura_janela}m x {lead.altura_janela}m")
+            y -= 20
+        p.drawString(50, y, f"Tecido: {lead.tecido}")
+        y -= 20
+        p.drawString(50, y, f"Instalação: {lead.instalacao}")
+        y -= 20
+        p.drawString(50, y, f"Obs.: {lead.observacoes}")
+        y -= 20
+        p.drawString(50, y, f"Endereço: {lead.endereco}")
+        
         p.save()
         buffer.seek(0)
+        pdf_content = buffer.getvalue()
+
+        # Salvar PDF na pasta 'orcamentos'
+        try:
+            pdf_dir = os.path.join(os.getcwd(), 'orcamentos')
+            os.makedirs(pdf_dir, exist_ok=True)
+            pdf_filename = f"orcamento_{lead.id}.pdf"
+            with open(os.path.join(pdf_dir, pdf_filename), 'wb') as f:
+                f.write(pdf_content)
+        except Exception as e:
+            print(f"Erro ao salvar PDF localmente: {e}")
 
         # Enviar email (sempre tentar enviar)
         try:
@@ -194,23 +235,46 @@ def enviar():
     
     except Exception as err:
         print(f"❌ Erro: {err}")
+        import traceback
+        traceback.print_exc()
         return "Erro ao enviar!", 500
 
 @app.route('/orcamento/<int:lead_id>/pdf')
 def baixar_pdf(lead_id):
     lead = Lead.query.get_or_404(lead_id)
     buffer = io.BytesIO()
-    p = canvas.Canvas(buffer)
-    p.drawString(50, 820, "Orçamento Cortinas Sob Medida")
-    p.drawString(50, 800, f"Data: {lead.criado_em.strftime('%d/%m/%Y %H:%M')}")
-    p.drawString(50, 780, f"Nome: {lead.nome}")
-    p.drawString(50, 760, f"Telefone: {lead.telefone}")
-    p.drawString(50, 740, f"Parede: {lead.largura_parede}m x {lead.altura_parede}m")
-    p.drawString(50, 720, f"Janela: {lead.largura_janela}m x {lead.altura_janela}m")
-    p.drawString(50, 700, f"Tecido: {lead.tecido}")
-    p.drawString(50, 680, f"Instalação: {lead.instalacao}")
-    p.drawString(50, 660, f"Obs.: {lead.observacoes}")
-    p.drawString(50, 640, f"Endereço: {lead.endereco}")
+    p = canvas.Canvas(buffer, pagesize=A4)
+    width, height = A4
+    
+    # Logo Centralizado
+    logo_path = os.path.join(app.static_folder, 'logo.png')
+    if os.path.exists(logo_path):
+        p.drawImage(logo_path, width/2 - 50, height - 100, width=100, height=50, preserveAspectRatio=True, mask='auto')
+
+    p.setFont("Helvetica-Bold", 16)
+    p.drawCentredString(width/2, height - 130, "Orçamento Cortinas Sob Medida")
+    
+    p.setFont("Helvetica", 12)
+    y = height - 160
+    p.drawString(50, y, f"Data: {lead.criado_em.strftime('%d/%m/%Y %H:%M')}")
+    y -= 25
+    p.drawString(50, y, f"Nome: {lead.nome}")
+    y -= 20
+    p.drawString(50, y, f"Telefone: {lead.telefone}")
+    y -= 20
+    p.drawString(50, y, f"Parede: {lead.largura_parede}m x {lead.altura_parede}m")
+    y -= 20
+    if lead.largura_janela or lead.altura_janela:
+        p.drawString(50, y, f"Janela: {lead.largura_janela}m x {lead.altura_janela}m")
+        y -= 20
+    p.drawString(50, y, f"Tecido: {lead.tecido}")
+    y -= 20
+    p.drawString(50, y, f"Instalação: {lead.instalacao}")
+    y -= 20
+    p.drawString(50, y, f"Obs.: {lead.observacoes}")
+    y -= 20
+    p.drawString(50, y, f"Endereço: {lead.endereco}")
+    
     p.save()
     buffer.seek(0)
     return send_file(buffer, as_attachment=True, download_name='orcamento.pdf', mimetype='application/pdf')

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pré-Orçamento Cortinas Brás</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f8f5f1;
+      color: #222;
+    }
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 32px 12px 48px 12px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(139,92,42,0.08);
+      margin-top: 32px;
+    }
+    h1 {
+      color: #8b5c2a;
+      font-size: 2.1em;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    .subtitle {
+      color: #d4a93e;
+      font-size: 1.1em;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    label {
+      font-weight: bold;
+      color: #8b5c2a;
+      display: block;
+      margin-top: 18px;
+      margin-bottom: 6px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1.5px solid #d4a93e;
+      border-radius: 8px;
+      font-size: 1em;
+      margin-bottom: 8px;
+      background: #f8f5f1;
+      color: #222;
+      box-sizing: border-box;
+    }
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .option-label {
+      background: #f8f5f1;
+      border: 1.5px solid #d4a93e;
+      border-radius: 8px;
+      padding: 10px 18px;
+      cursor: pointer;
+      color: #8b5c2a;
+      font-weight: 500;
+      transition: background 0.2s, border 0.2s;
+    }
+    .option-label input[type="checkbox"], .option-label input[type="radio"] {
+      margin-right: 8px;
+    }
+    .option-label.selected, .option-label:hover {
+      background: #d4a93e;
+      color: #fff;
+      border-color: #8b5c2a;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      margin-top: 24px;
+    }
+    .btn {
+      background: linear-gradient(135deg, #d4a93e, #8b5c2a);
+      color: #fff;
+      padding: 14px 32px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+      box-shadow: 0 4px 15px rgba(139, 69, 19, 0.13);
+    }
+    .btn:hover {
+      background: linear-gradient(135deg, #8b5c2a, #d4a93e);
+    }
+    @media (max-width: 600px) {
+      .container { padding: 10px 2px 32px 2px; }
+      h1 { font-size: 1.3em; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Pré-Orçamento Cortinas Brás</h1>
+    <div class="subtitle">Preencha para facilitar seu atendimento personalizado</div>
+    <form id="pre-orcamento-form">
+      <label>Para te auxiliar na sua escolha, sua cortina você gostaria:</label>
+      <div class="options">
+        <label class="option-label"><input type="checkbox" name="preferencia" value="Mais sofisticada e chique"> Cortina mais sofisticada e chique</label>
+        <label class="option-label"><input type="checkbox" name="preferencia" value="Mais em conta, simples"> Cortina mais em conta, simples</label>
+        <label class="option-label"><input type="checkbox" name="preferencia" value="Passe a luz"> Gostaria que passe a luz</label>
+        <label class="option-label"><input type="checkbox" name="preferencia" value="Corte a luz do sol"> Gostaria que cortasse a luz do sol</label>
+        <label class="option-label"><input type="checkbox" name="preferencia" value="Com forro (2 tecidos)"> Com forro (2 tecidos)</label>
+        <label class="option-label"><input type="checkbox" name="preferencia" value="Sem forro (1 tecido)"> Sem forro (1 tecido)</label>
+      </div>
+      <label>Prazo de entrega:</label>
+      <select name="prazo">
+        <option value="10 dias corridos">10 dias corridos</option>
+        <option value="A combinar">A combinar</option>
+      </select>
+      <label>Entrega:</label>
+      <select name="entrega">
+        <option value="Uber/99 Flash">Uber/99 Flash</option>
+        <option value="Retirada na loja">Retirada na loja</option>
+      </select>
+      <label>Horário de atendimento da loja:</label>
+      <select name="horario">
+        <option value="Sábado 08h às 17h (Brás)">Sábado 08h às 17h (Brás)</option>
+        <option value="Sábado 08h às 14h (Bresser)">Sábado 08h às 14h (Bresser)</option>
+      </select>
+      <label>Endereço:</label>
+      <select name="endereco">
+        <option value="Av. Celso Garcia 129, Brás - cortinas Brás">Av. Celso Garcia 129, Brás - cortinas Brás</option>
+        <option value="Rua Bresser 1084 - cortinas Bresser">Rua Bresser 1084 - cortinas Bresser</option>
+      </select>
+      <label>Sua cortina seria para:</label>
+      <div class="options">
+        <label class="option-label"><input type="radio" name="tipo" value="Trilho" required> Trilho</label>
+        <label class="option-label"><input type="radio" name="tipo" value="Varão" required> Varão</label>
+      </div>
+      <label>Qual a medida do espaço da largura da parede (em metros)?</label>
+      <input type="text" name="largura" placeholder="Ex: 2,50" required>
+      <label>Qual a medida da altura (em metros)?</label>
+      <input type="text" name="altura" placeholder="Ex: 2,80" required>
+      <label>Lá tem sanca, cortineiro (teto rebaixado) ou o trilho/varão ficaria exposto?</label>
+      <input type="text" name="cortineiro" placeholder="Descreva ou selecione">
+      <label>Você já tem algum tecido em mente ou ainda não sabe qual gostaria?</label>
+      <input type="text" name="tecido" placeholder="Descreva ou deixe em branco se não souber">
+      <label>Informações adicionais:</label>
+      <textarea name="adicionais" rows="3" placeholder="Preferências, dúvidas, observações..."></textarea>
+      <div class="actions">
+        <button type="button" class="btn" onclick="enviarWhatsApp()">Enviar no WhatsApp</button>
+        <button type="button" class="btn" onclick="gerarPDF()">Gerar PDF</button>
+      </div>
+    </form>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    function coletarRespostas() {
+      const form = document.getElementById('pre-orcamento-form');
+      const data = {};
+      const preferencia = Array.from(form.querySelectorAll('input[name="preferencia"]:checked')).map(i => i.value);
+      data.preferencia = preferencia.join(', ');
+      data.prazo = form.prazo.value;
+      data.entrega = form.entrega.value;
+      data.horario = form.horario.value;
+      data.endereco = form.endereco.value;
+      data.tipo = form.tipo.value;
+      data.largura = form.largura.value;
+      data.altura = form.altura.value;
+      data.cortineiro = form.cortineiro.value;
+      data.tecido = form.tecido.value;
+      data.adicionais = form.adicionais.value;
+      return data;
+    }
+    function formatarMensagem(data) {
+      return `Pré-Orçamento Cortinas Brás\n\n` +
+        `Preferência: ${data.preferencia}\n` +
+        `Prazo de entrega: ${data.prazo}\n` +
+        `Entrega: ${data.entrega}\n` +
+        `Horário de atendimento: ${data.horario}\n` +
+        `Endereço: ${data.endereco}\n` +
+        `Tipo: ${data.tipo}\n` +
+        `Largura: ${data.largura} m\n` +
+        `Altura: ${data.altura} m\n` +
+        `Cortineiro/Sanca: ${data.cortineiro}\n` +
+        `Tecido: ${data.tecido}\n` +
+        `Informações adicionais: ${data.adicionais}`;
+    }
+    function enviarWhatsApp() {
+      const data = coletarRespostas();
+      const msg = encodeURIComponent(formatarMensagem(data));
+      window.open(`https://wa.me/5511994013938?text=${msg}`,'_blank');
+    }
+    function gerarPDF() {
+      const data = coletarRespostas();
+      const doc = new window.jspdf.jsPDF();
+      doc.setFont('helvetica','');
+      doc.setFontSize(18);
+      doc.setTextColor(139,92,42);
+      doc.text('Pré-Orçamento Cortinas Brás', 15, 18);
+      doc.setFontSize(12);
+      doc.setTextColor(60,60,60);
+      let y = 30;
+      function addLine(label, value) {
+        doc.setFont(undefined, 'bold');
+        doc.text(label, 15, y);
+        doc.setFont(undefined, 'normal');
+        doc.text(value || '-', 80, y);
+        y += 9;
+      }
+      addLine('Preferência:', data.preferencia);
+      addLine('Prazo de entrega:', data.prazo);
+      addLine('Entrega:', data.entrega);
+      addLine('Horário de atendimento:', data.horario);
+      addLine('Endereço:', data.endereco);
+      addLine('Tipo:', data.tipo);
+      addLine('Largura (m):', data.largura);
+      addLine('Altura (m):', data.altura);
+      addLine('Cortineiro/Sanca:', data.cortineiro);
+      addLine('Tecido:', data.tecido);
+      addLine('Informações adicionais:', data.adicionais);
+      doc.save('pre-orcamento-cortinas-bras.pdf');
+    }
+    // Marcar opção selecionada visualmente
+    document.querySelectorAll('.option-label input').forEach(input => {
+      input.addEventListener('change', function() {
+        const group = this.type === 'radio' ? `input[name="${this.name}"]` : null;
+        if (group) {
+          document.querySelectorAll(group).forEach(i => i.parentElement.classList.remove('selected'));
+        }
+        if (this.checked) {
+          this.parentElement.classList.add('selected');
+        } else {
+          this.parentElement.classList.remove('selected');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
