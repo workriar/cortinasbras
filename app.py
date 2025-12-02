@@ -123,7 +123,7 @@ def enviar():
             tecido=data.get('tecido', 'Não especificado'),
             instalacao=data.get('instalacao', 'Não especificado'),
             observacoes=data.get('mensagem', data.get('observacoes', '')),
-            endereco=data.get('endereco', '')
+            endereco=''
         )
         db.session.add(lead)
         db.session.commit()
@@ -264,12 +264,7 @@ def enviar():
                             <p style="color: #555; line-height: 1.6; margin: 0; white-space: pre-wrap;">{lead.observacoes}</p>
                         </div>''' if lead.observacoes else ''}
                         
-                        {f'''<div style="margin-bottom: 25px; padding: 20px; background-color: #f0fff4; border-radius: 8px; border-left: 4px solid #D4A93E;">
-                            <h2 style="color: #333; margin: 0 0 10px 0; font-size: 18px; display: flex; align-items: center;">
-                                <span style="margin-right: 8px;">📍</span> Endereço para Instalação
-                            </h2>
-                            <p style="color: #555; line-height: 1.6; margin: 0; white-space: pre-wrap;">{lead.endereco}</p>
-                        </div>''' if lead.endereco else ''}
+
                         
                     </div>
                     
@@ -342,7 +337,7 @@ def baixar_pdf(lead_id):
     y -= 20
     p.drawString(50, y, f"Obs.: {lead.observacoes}")
     y -= 20
-    p.drawString(50, y, f"Endereço: {lead.endereco}")
+
     
     p.save()
     buffer.seek(0)
@@ -429,7 +424,7 @@ def export_leads_pdf():
         Janela: {lead.largura_janela}m × {lead.altura_janela}m<br/>
         Tecido: {lead.tecido} | Instalação: {lead.instalacao}<br/>
         {f'Observações: {lead.observacoes}<br/>' if lead.observacoes else ''}
-        {f'Endereço: {lead.endereco}<br/>' if lead.endereco else ''}
+
         Data: {lead.criado_em.strftime('%d/%m/%Y %H:%M')}
         """
         elements.append(Paragraph(detail_text, styles['Normal']))

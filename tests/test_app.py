@@ -36,7 +36,7 @@ class TestApp(unittest.TestCase):
             'tecido': 'Linho',
             'instalacao': 'Teto',
             'observacoes': 'Teste automatizado',
-            'endereco': 'Rua Teste, 123'
+
         }
 
         # Send POST request

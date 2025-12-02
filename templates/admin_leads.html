@@ -30,6 +30,16 @@
             }
         }
     </style>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-379796222">
+    </script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'AW-379796222');
+    </script>
 </head>
 
 <body class="bg-gray-50 text-gray-900 antialiased">
@@ -243,11 +253,7 @@
                                         <p class="text-sm text-gray-600">{{ lead.observacoes if lead.observacoes else
                                             'Nenhuma observação' }}</p>
                                     </div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-700 mb-2">📍 Endereço:</h4>
-                                        <p class="text-sm text-gray-600">{{ lead.endereco if lead.endereco else 'Não
-                                            informado' }}</p>
-                                    </div>
+
                                 </div>
                             </td>
                         </tr>

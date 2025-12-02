@@ -143,10 +143,7 @@ def generate_orcamento_pdf(lead):
         elements.append(Paragraph(f"<font color='{COLOR_GOLD}'>📝</font> OBSERVAÇÕES", style_section))
         elements.append(Paragraph(lead.observacoes, style_normal))
         elements.append(Spacer(1, 0.5*cm))
-    if lead.endereco:
-        elements.append(Paragraph(f"<font color='{COLOR_GOLD}'>📍</font> ENDEREÇO DE INSTALAÇÃO", style_section))
-        elements.append(Paragraph(lead.endereco, style_normal))
-        elements.append(Spacer(1, 1*cm))
+
 
     # 6. Rodapé
     elements.append(Spacer(1, 2*cm))

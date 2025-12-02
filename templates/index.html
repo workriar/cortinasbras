@@ -463,6 +463,27 @@
     gtag('js', new Date());
     gtag('config', 'AW-17672945118');
   </script>
+  <script>
+    gtag('event', 'ads_conversion_Compra_1', {
+      // <event_parameters>
+    });
+  </script>
+
+  <!-- Event snippet for Enviar formulário de leads conversion page -->
+  <script>
+    function gtag_report_conversion(url) {
+      var callback = function () {
+        if (typeof (url) != 'undefined') {
+          window.location = url;
+        }
+      };
+      gtag('event', 'conversion', {
+        'send_to': 'AW-17672945118/NDfiCJKV5bMbEN77jutB',
+        'event_callback': callback
+      });
+      return false;
+    }
+  </script>
 
   <!-- Meta Pixel Code -->
   <script>
@@ -482,6 +503,16 @@
   </script>
 
   <!-- End Meta Pixel Code -->
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-379796222">
+  </script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'AW-379796222');
+  </script>
 </head>
 
 <body class="antialiased bg-brand-50 text-brand-700 font-sans">
@@ -978,13 +1009,7 @@
                 class="mt-1 w-full px-4 py-3 rounded-lg border bg-gray-50 focus:ring-2 focus:ring-brand-300 focus:outline-none focus:bg-white"
                 placeholder="Cor preferida, tipo de ambiente, itens importantes (opcional)"></textarea>
             </div>
-            <div class="mt-6">
-              <label class="text-sm font-medium text-brand-700" for="endereco">Endereço para instalação
-                (opcional)</label>
-              <textarea id="endereco" name="endereco" rows="2"
-                class="mt-1 w-full px-4 py-3 rounded-lg border bg-gray-50 focus:ring-2 focus:ring-brand-300 focus:outline-none focus:bg-white"
-                placeholder="Rua, número, bairro, cidade..."></textarea>
-            </div>
+
             <div class="mt-8 flex items-center gap-3">
               <button id="submit-btn" type="submit"
                 class="btn-ripple group inline-flex items-center justify-center gap-3 bg-green-600 hover:bg-green-700 text-white px-10 py-5 rounded-xl font-bold shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 text-lg disabled:opacity-50 disabled:cursor-not-allowed">
@@ -1136,6 +1161,7 @@
     // Confirmar e abrir WhatsApp
     document.getElementById('confirm-whatsapp').addEventListener('click', function () {
       if (pendingWhatsAppUrl) {
+        gtag_report_conversion(); // Dispara conversão Google Ads
         window.open(pendingWhatsAppUrl, '_blank');
         closeWhatsAppModal();
       }
@@ -1247,7 +1273,7 @@
       const tecido = form.tecido.value;
       const instalacao = form.instalacao.value;
       const observacoes = form.observacoes.value.trim();
-      const endereco = form.endereco.value.trim();
+
 
       // Agora apenas nome e telefone são obrigatórios — medidas e especificações são opcionais
       if (!nome || !telefone) {
@@ -1274,7 +1300,7 @@
           tecido: tecido,
           instalacao: instalacao,
           observacoes: observacoes,
-          endereco: endereco
+
         })
       })
         .then(response => {
@@ -1310,13 +1336,13 @@
         `└────────────────────\n` +
 
         `${observacoes ? `\n┌─ 📝 *OBSERVAÇÕES*\n│ ${observacoes}\n└────────────────────\n` : ''}` +
-        `${endereco ? `\n┌─ 📍 *ENDEREÇO*\n│ ${endereco}\n└────────────────────\n` : ''}` +
         `\n━━━━━━━━━━━━━━━━━━━━\n` +
         `✨ _Cortinas Brás - Qualidade há 20+ anos_`
       );
 
       // Pequeno delay para feedback visual
       setTimeout(() => {
+        gtag_report_conversion(); // Dispara conversão Google Ads
         // Abre WhatsApp
         window.open(`https://wa.me/5511992891070?text=${waMessage}`, '_blank');
 
