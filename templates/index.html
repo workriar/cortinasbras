@@ -455,35 +455,9 @@
       }
     }
   </style>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17672945118"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'AW-17672945118');
-  </script>
-  <script>
-    gtag('event', 'ads_conversion_Compra_1', {
-      // <event_parameters>
-    });
-  </script>
 
-  <!-- Event snippet for Enviar formulário de leads conversion page -->
-  <script>
-    function gtag_report_conversion(url) {
-      var callback = function () {
-        if (typeof (url) != 'undefined') {
-          window.location = url;
-        }
-      };
-      gtag('event', 'conversion', {
-        'send_to': 'AW-17672945118/NDfiCJKV5bMbEN77jutB',
-        'event_callback': callback
-      });
-      return false;
-    }
-  </script>
+
+
 
   <!-- Meta Pixel Code -->
   <script>
@@ -512,6 +486,24 @@
     gtag('js', new Date());
 
     gtag('config', 'AW-379796222');
+  </script>
+  <!-- Google tag (gtag.js) event - delayed navigation helper -->
+  <script>
+    // Helper function to delay opening a URL until a gtag event is sent.
+    // Call it in response to an action that should navigate to a URL.
+    function gtagSendEvent(url) {
+      var callback = function () {
+        if (typeof url === 'string') {
+          window.location = url;
+        }
+      };
+      gtag('event', 'ads_conversion_Compra_1', {
+        'event_callback': callback,
+        'event_timeout': 2000,
+        // <event_parameters>
+      });
+      return false;
+    }
   </script>
 </head>
 
@@ -1161,7 +1153,7 @@
     // Confirmar e abrir WhatsApp
     document.getElementById('confirm-whatsapp').addEventListener('click', function () {
       if (pendingWhatsAppUrl) {
-        gtag_report_conversion(); // Dispara conversão Google Ads
+        gtagSendEvent(); // Dispara conversão Google Ads
         window.open(pendingWhatsAppUrl, '_blank');
         closeWhatsAppModal();
       }
@@ -1342,7 +1334,7 @@
 
       // Pequeno delay para feedback visual
       setTimeout(() => {
-        gtag_report_conversion(); // Dispara conversão Google Ads
+        gtagSendEvent(); // Dispara conversão Google Ads
         // Abre WhatsApp
         window.open(`https://wa.me/5511992891070?text=${waMessage}`, '_blank');
 
