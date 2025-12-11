@@ -212,8 +212,22 @@ def baixar_pdf(lead_id):
     return send_file(buffer, as_attachment=True, download_name=f"orcamento_{lead.id}.pdf", mimetype='application/pdf')
 
 # Inicialização
+# Inicialização
 with app.app_context():
-    db.create_all()
+    # Garantir diretório para SQLite se necessário
+    if str(db.engine.url).startswith('sqlite'):
+        db_path = str(db.engine.url).replace('sqlite:///', '')
+        if '/' in db_path:
+            db_dir = os.path.dirname(db_path)
+            if db_dir and not os.path.exists(db_dir):
+                os.makedirs(db_dir, exist_ok=True)
+
+    try:
+        db.create_all()
+        app.logger.info("✅ Banco de dados inicializado com sucesso")
+    except Exception as e:
+        app.logger.error(f"❌ Erro ao conectar/criar banco de dados: {e}")
+        # Não matar a aplicação, permitir rodar (erro 500 aparecerá apenas nas rotas de banco)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5001)))
