@@ -67,6 +67,14 @@
                         </svg>
                         Exportar PDF
                     </a>
+                    <button onclick="window.location.reload()"
+                        class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition font-medium flex items-center gap-2"
+                        title="Atualizar Lista">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
@@ -94,9 +102,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm text-gray-600 font-medium">Hoje</p>
-                        <p class="text-3xl font-bold text-gray-700 mt-1">{{ leads|selectattr('criado_em', 'gt',
-                            leads[0].criado_em - leads[0].criado_em.replace(hour=0, minute=0, second=0) if leads else
-                            0)|list|length if leads else 0 }}</p>
+                        <p class="text-3xl font-bold text-gray-700 mt-1">{{ stats.today }}</p>
                     </div>
                     <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
                         <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -318,6 +324,21 @@
         searchInput.addEventListener('input', filterRows);
         filterTecido.addEventListener('change', filterRows);
         filterInstalacao.addEventListener('change', filterRows);
+
+        // Auto-refresh a cada 30 segundos
+        setTimeout(() => {
+            if (!document.hidden) { // Apenas se a aba estiver ativa para economizar recursos e não perder scroll
+                // Verificar se o usuário digitou na busca, se sim, não atualizar para não atrapalhar
+                if (searchInput.value === '') {
+                    window.location.reload();
+                }
+            } else {
+                // Se estiver inativo, verificar quando ativar
+                document.addEventListener('visibilitychange', function () {
+                    if (!document.hidden) window.location.reload();
+                }, { once: true });
+            }
+        }, 30000);
     </script>
 </body>
 

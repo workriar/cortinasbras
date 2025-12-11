@@ -74,11 +74,12 @@ def generate_orcamento_pdf(lead):
     
     elements = []
     
-    # 1. Logo (se existir) – já centralizado
+    # 1. Logo (se existir)
     logo_path = os.path.join(os.path.dirname(__file__), 'static', 'logo.png')
     if os.path.exists(logo_path):
         try:
-            img = Image(logo_path, width=4*cm, height=1.5*cm, kind='proportional')
+            # Aumentar um pouco o logo
+            img = Image(logo_path, width=5*cm, height=2*cm, kind='proportional')
             img.hAlign = 'CENTER'
             elements.append(img)
             elements.append(Spacer(1, 1*cm))
@@ -107,6 +108,8 @@ def generate_orcamento_pdf(lead):
         ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
         ('BACKGROUND', (0, 0), (-1, -1), COLOR_BG),
         ('GRID', (0, 0), (-1, -1), 0.5, colors.white),
+        ('BOX', (0, 0), (-1, -1), 1, COLOR_GOLD),  # Borda dourada
+        ('ROUNDEDCORNERS', [8, 8, 8, 8]),
     ]))
     elements.append(table_cliente)
     elements.append(Spacer(1, 1*cm))
@@ -116,10 +119,19 @@ def generate_orcamento_pdf(lead):
     data_specs = [
         ['ITEM', 'DETALHES'],
         ['Largura da Parede', f"{lead.largura_parede} metros"],
-        ['Altura da Parede', f"{lead.altura_parede} metros"],
+        ['Altura da Parede', f"{lead.altura_parede} metros"]
+    ]
+    
+    # Adicionar Janela se houver medidas
+    if lead.largura_janela > 0 or lead.altura_janela > 0:
+        data_specs.append(['Largura da Janela', f"{lead.largura_janela} metros"])
+        data_specs.append(['Altura da Janela', f"{lead.altura_janela} metros"])
+
+    data_specs.extend([
         ['Tipo de Tecido', lead.tecido],
         ['Tipo de Instalação', lead.instalacao]
-    ]
+    ])
+
     table_specs = Table(data_specs, colWidths=[6*cm, 10*cm])
     table_specs.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), COLOR_GOLD),
@@ -133,7 +145,8 @@ def generate_orcamento_pdf(lead):
         ('GRID', (0, 0), (-1, -1), 1, colors.lightgrey),
         ('FONTSIZE', (0, 1), (-1, -1), 11),
         ('PADDING', (0, 1), (-1, -1), 10),
-        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, COLOR_BG])
+        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, COLOR_BG]),
+        ('BOX', (0, 0), (-1, -1), 1, COLOR_GOLD),
     ]))
     elements.append(table_specs)
     elements.append(Spacer(1, 1*cm))
@@ -141,7 +154,8 @@ def generate_orcamento_pdf(lead):
     # 5. Observações e Endereço – com ícones dourados
     if lead.observacoes:
         elements.append(Paragraph(f"<font color='{COLOR_GOLD}'>📝</font> OBSERVAÇÕES", style_section))
-        elements.append(Paragraph(lead.observacoes, style_normal))
+        OBS_STYLE = ParagraphStyle('Obs', parent=style_normal, backColor=colors.HexColor('#FDFBF7'), borderPadding=10, borderColor=COLOR_GOLD, borderWidth=1, borderRadius=5)
+        elements.append(Paragraph(lead.observacoes, OBS_STYLE))
         elements.append(Spacer(1, 0.5*cm))
 
 

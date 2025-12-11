@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-# IDE e Editor
-.vscode-server/
-=======
 # Python
 __pycache__/
 *.py[cod]
@@ -23,6 +19,7 @@ instance/
 *.db
 *.sqlite
 *.sqlite3
+leads.db
 
 # Environment Variables
 .env
@@ -30,13 +27,12 @@ instance/
 .env.production
 
 # IDE
->>>>>>> 78c9a6c (Fix: Form submission, PDF generation with logo, and WhatsApp message)
 .vscode/
 .idea/
+.vscode-server/
 *.swp
 *.swo
 *~
-<<<<<<< HEAD
 
 # Sistema
 .cache/
@@ -50,50 +46,26 @@ instance/
 .wget-hsts
 snap/
 
-# Python
-venv/
-nome_do_venv/
-.venv/
-env/
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-*.so
-*.egg
-*.egg-info/
-dist/
+# Build & Dist
 build/
+dist/
+*.egg-info/
+*.egg
+
+# Logs
 *.log
-instance/
-
-# Banco de dados
-*.db
-*.sqlite
-*.sqlite3
-leads.db
-
-# Variáveis de ambiente e credenciais
-.env
-.env.local
-.env.production
-*.pem
-*.key
-*.crt
+logs/
 
 # Backups
 backups/
 *.bak
 
-# Node modules (se houver)
+# Node modules
 node_modules/
 package-lock.json
 
-# MacOS
+# OS
 .DS_Store
-
-# Windows
 Thumbs.db
 ehthumbs.db
 
@@ -101,50 +73,12 @@ ehthumbs.db
 .codegpt/
 .codex/
 .ollama/
-novo-repo/
-
-# Large files
-.antigravity-server/
-backup_meu-projeto_*.tar.gz
 .gemini/
-=======
-.DS_Store
+.antigravity-server/
 
-# Logs
-*.log
-logs/
-
-# Build
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
-
-# OS
-Thumbs.db
-.DS_Store
-
-# Arquivos antigos/desenvolvimento
+# Arquivos gerados pela aplicação e temporários
+orcamentos/
+orcamento_*.pdf
 dev_bras/
 passenger_wsgi.py
 .htaccess
-
-# PDF temporários
-orcamento_*.pdf
->>>>>>> 78c9a6c (Fix: Form submission, PDF generation with logo, and WhatsApp message)

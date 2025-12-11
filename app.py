@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, redirect, url_for
+from flask import Flask, render_template, request, send_file, redirect, url_for, jsonify
 from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 from reportlab.pdfgen import canvas
@@ -111,197 +111,163 @@ def enviar():
         def parse_float(val):
             if not val: return 0.0
             if isinstance(val, (float, int)): return float(val)
-            return float(str(val).replace(',', '.'))
+            try:
+                return float(str(val).replace(',', '.'))
+            except ValueError:
+                return 0.0
 
         lead = Lead(
-            nome=data['nome'],
-            telefone=data['telefone'],
-            largura_parede=parse_float(data.get('larguraparede', data.get('largura_parede', 0))),
-            altura_parede=parse_float(data.get('alturaparede', data.get('altura_parede', 0))),
+            nome=data.get('nome', 'Sem Nome'),
+            telefone=data.get('telefone', 'Sem Telefone'),
+            largura_parede=parse_float(data.get('largura_parede', 0)),
+            altura_parede=parse_float(data.get('altura_parede', 0)),
             largura_janela=parse_float(data.get('largura_janela', 0)),
             altura_janela=parse_float(data.get('altura_janela', 0)),
             tecido=data.get('tecido', 'Não especificado'),
             instalacao=data.get('instalacao', 'Não especificado'),
-            observacoes=data.get('mensagem', data.get('observacoes', '')),
+            observacoes=data.get('observacoes', ''),
             endereco=''
         )
         db.session.add(lead)
         db.session.commit()
+        
+        print(f"✅ Lead #{lead.id} salvo no banco.")
 
         # Criar PDF Profissional
+        pdf_buffer = None
         try:
             from pdf_generator import generate_orcamento_pdf
-            buffer = generate_orcamento_pdf(lead)
+            pdf_buffer = generate_orcamento_pdf(lead)
             print("✅ PDF gerado com sucesso")
             
-            # Salvar PDF na pasta 'orcamentos'
+            # Salvar PDF na pasta 'orcamentos' para backup
             try:
-                pdf_content = buffer.getvalue()
-                pdf_dir = os.path.join(os.getcwd(), 'orcamentos')
-                os.makedirs(pdf_dir, exist_ok=True)
-                pdf_filename = f"orcamento_{lead.id}.pdf"
-                with open(os.path.join(pdf_dir, pdf_filename), 'wb') as f:
-                    f.write(pdf_content)
-                print(f"✅ PDF salvo em: {os.path.join(pdf_dir, pdf_filename)}")
+                if pdf_buffer:
+                    pdf_content = pdf_buffer.getvalue()
+                    pdf_dir = os.path.join(os.getcwd(), 'orcamentos')
+                    os.makedirs(pdf_dir, exist_ok=True)
+                    pdf_filename = f"orcamento_{lead.id}.pdf"
+                    with open(os.path.join(pdf_dir, pdf_filename), 'wb') as f:
+                        f.write(pdf_content)
+                    print(f"✅ PDF salvo localmente: {pdf_filename}")
             except Exception as e:
-                print(f"⚠️ Erro ao salvar PDF localmente: {e}")
+                print(f"⚠️ Erro ao salvar PDF localmente (não crítico): {e}")
 
         except Exception as pdf_error:
             print(f"❌ Erro ao gerar PDF: {pdf_error}")
             import traceback
             traceback.print_exc()
-            # Fallback para PDF simples se falhar
-            buffer = io.BytesIO()
-            p = canvas.Canvas(buffer)
-            p.drawString(100, 750, f"Orçamento #{lead.id} - {lead.nome}")
-            p.save()
-            buffer.seek(0)
 
-        # Enviar email (sempre tentar enviar)
+        # Enviar email
+        email_sent = False
         try:
-            buffer.seek(0)  # Reset buffer position
-            # Garantir que a hora esteja no timezone de São Paulo
-            hora_sp = lead.criado_em.strftime('%d/%m/%Y às %H:%M')
-            
-            subject = f"🏠 Novo Orçamento - {lead.nome} - {hora_sp}"
+            # Assunto com emoji para destaque
+            subject = f"🏠 Novo Orçamento #{lead.id} - {lead.nome}"
             recipients = ['loja@cortinasbras.com.br']
             
             msg = Message(
                 subject=subject,
                 recipients=recipients,
-                reply_to=lead.telefone if '@' in lead.telefone else None
+                reply_to=lead.telefone if '@' in lead.telefone else 'noreply@cortinasbras.com.br'
             )
             
-            # Template HTML
+            # Hora formatada
+            hora_sp = lead.criado_em.strftime('%d/%m/%Y às %H:%M')
+
+            # Template HTML do Email
             msg.html = f"""
             <html>
-            <body style="font-family: 'Segoe UI', Arial, sans-serif; padding: 20px; background-color: #f5f5f5; margin: 0;">
-                <div style="max-width: 650px; margin: 0 auto; background-color: white; padding: 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); overflow: hidden;">
+            <body style="font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;">
+                <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow: hidden;">
                     
                     <!-- Header -->
-                    <div style="background: linear-gradient(135deg, #D4A93E 0%, #8B5C2A 100%); padding: 30px; text-align: center;">
-                        <h1 style="color: white; margin: 0; font-size: 28px; font-weight: 600;">
-                            🏠 Novo Orçamento de Cortinas
-                        </h1>
-                        <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0; font-size: 14px;">
-                            Recebido em {lead.criado_em.strftime('%d/%m/%Y às %H:%M')}
-                        </p>
+                    <div style="background-color: #D4A93E; padding: 20px; text-align: center;">
+                        <h1 style="color: #ffffff; margin: 0; font-size: 24px;">Novo Lead Recebido</h1>
+                        <p style="color: #ffffff; margin: 5px 0 0; opacity: 0.9;">{hora_sp}</p>
                     </div>
-                    
-                    <!-- Content -->
+
+                    <!-- Conteúdo -->
                     <div style="padding: 30px;">
-                        
-                        <!-- Dados do Cliente -->
-                        <div style="margin-bottom: 25px; padding: 20px; background-color: #f9f9f9; border-radius: 8px; border-left: 4px solid #D4A93E;">
-                            <h2 style="color: #333; margin: 0 0 15px 0; font-size: 18px; display: flex; align-items: center;">
-                                <span style="margin-right: 8px;">👤</span> Dados do Cliente
-                            </h2>
-                            <table style="width: 100%; border-collapse: collapse;">
-                                <tr>
-                                    <td style="padding: 8px 0; color: #666; font-weight: 600; width: 120px;">Nome:</td>
-                                    <td style="padding: 8px 0; color: #333; font-size: 16px;"><strong>{lead.nome}</strong></td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 8px 0; color: #666; font-weight: 600;">Telefone:</td>
-                                    <td style="padding: 8px 0;">
-                                        <a href="tel:{lead.telefone}" style="color: #D4A93E; text-decoration: none; font-weight: 600;">{lead.telefone}</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 8px 0; color: #666; font-weight: 600;">WhatsApp:</td>
-                                    <td style="padding: 8px 0;">
-                                        <a href="https://wa.me/55{lead.telefone.replace('(','').replace(')','').replace('-','').replace(' ','')}" 
-                                           style="display: inline-block; background-color: #25D366; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px;">
-                                            💬 Enviar Mensagem
-                                        </a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        
-                        <!-- Medidas -->
-                        <div style="margin-bottom: 25px; padding: 20px; background-color: #fff9e6; border-radius: 8px; border-left: 4px solid #D4A93E;">
-                            <h2 style="color: #333; margin: 0 0 15px 0; font-size: 18px; display: flex; align-items: center;">
-                                <span style="margin-right: 8px;">📏</span> Medidas da Parede
-                            </h2>
-                            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-                                <div style="flex: 1; min-width: 200px;">
-                                    <div style="background-color: white; padding: 15px; border-radius: 6px; text-align: center;">
-                                        <div style="color: #666; font-size: 12px; text-transform: uppercase; margin-bottom: 5px;">Largura</div>
-                                        <div style="color: #D4A93E; font-size: 28px; font-weight: 700;">{lead.largura_parede}m</div>
-                                    </div>
-                                </div>
-                                <div style="flex: 1; min-width: 200px;">
-                                    <div style="background-color: white; padding: 15px; border-radius: 6px; text-align: center;">
-                                        <div style="color: #666; font-size: 12px; text-transform: uppercase; margin-bottom: 5px;">Altura</div>
-                                        <div style="color: #D4A93E; font-size: 28px; font-weight: 700;">{lead.altura_parede}m</div>
-                                    </div>
-                                </div>
+                        <div style="margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 20px;">
+                            <h2 style="color: #333; font-size: 18px; margin-top: 0;">👤 Dados do Cliente</h2>
+                            <p style="margin: 5px 0;"><strong>Nome:</strong> {lead.nome}</p>
+                            <p style="margin: 5px 0;"><strong>Telefone:</strong> <a href="tel:{lead.telefone}" style="color: #D4A93E; text-decoration: none;">{lead.telefone}</a></p>
+                            
+                            <div style="margin-top: 15px;">
+                                <a href="https://wa.me/55{lead.telefone.replace('(','').replace(')','').replace('-','').replace(' ','')}" 
+                                   style="background-color: #25D366; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
+                                   Iniciar Conversa no WhatsApp
+                                </a>
                             </div>
                         </div>
-                        
-                        <!-- Especificações -->
-                        <div style="margin-bottom: 25px; padding: 20px; background-color: #f0f8ff; border-radius: 8px; border-left: 4px solid #D4A93E;">
-                            <h2 style="color: #333; margin: 0 0 15px 0; font-size: 18px; display: flex; align-items: center;">
-                                <span style="margin-right: 8px;">🎨</span> Especificações
-                            </h2>
+
+                        <div style="margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 20px;">
+                            <h2 style="color: #333; font-size: 18px; margin-top: 0;">📏 Medidas e Detalhes</h2>
                             <table style="width: 100%; border-collapse: collapse;">
                                 <tr>
-                                    <td style="padding: 8px 0; color: #666; font-weight: 600; width: 150px;">Tipo de Tecido:</td>
-                                    <td style="padding: 8px 0; color: #333; font-weight: 600; font-size: 15px;">{lead.tecido}</td>
+                                    <td style="padding: 8px 0; color: #666;">Parede:</td>
+                                    <td style="padding: 8px 0; font-weight: bold;">{lead.largura_parede}m (L) x {lead.altura_parede}m (A)</td>
                                 </tr>
                                 <tr>
-                                    <td style="padding: 8px 0; color: #666; font-weight: 600;">Tipo de Instalação:</td>
-                                    <td style="padding: 8px 0; color: #333; font-weight: 600; font-size: 15px;">{lead.instalacao}</td>
+                                    <td style="padding: 8px 0; color: #666;">Tecido:</td>
+                                    <td style="padding: 8px 0; font-weight: bold;">{lead.tecido}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 0; color: #666;">Instalação:</td>
+                                    <td style="padding: 8px 0; font-weight: bold;">{lead.instalacao}</td>
                                 </tr>
                             </table>
                         </div>
-                        
-                        {f'''<div style="margin-bottom: 25px; padding: 20px; background-color: #fffbf0; border-radius: 8px; border-left: 4px solid #D4A93E;">
-                            <h2 style="color: #333; margin: 0 0 10px 0; font-size: 18px; display: flex; align-items: center;">
-                                <span style="margin-right: 8px;">📝</span> Observações
-                            </h2>
-                            <p style="color: #555; line-height: 1.6; margin: 0; white-space: pre-wrap;">{lead.observacoes}</p>
-                        </div>''' if lead.observacoes else ''}
-                        
 
-                        
+                        {f'''<div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px;">
+                            <h3 style="margin: 0 0 10px; font-size: 16px; color: #555;">Observações:</h3>
+                            <p style="margin: 0; color: #333; font-style: italic;">"{lead.observacoes}"</p>
+                        </div>''' if lead.observacoes else ''}
                     </div>
-                    
+
                     <!-- Footer -->
-                    <div style="background-color: #f9f9f9; padding: 20px 30px; border-top: 1px solid #eee;">
-                        <p style="color: #999; font-size: 12px; margin: 0; text-align: center;">
-                            ID do Lead: <strong>#{lead.id}</strong> | 
-                            Cortinas Brás - Qualidade há mais de 20 anos
-                        </p>
+                    <div style="background-color: #333; padding: 15px; text-align: center; color: #999; font-size: 12px;">
+                        <p style="margin: 0;">Lead ID: #{lead.id}</p>
+                        <p style="margin: 5px 0 0;">Cortinas Brás - Sistema Automático</p>
                     </div>
-                    
                 </div>
             </body>
             </html>
             """
             
-            # Anexar PDF
-            filename = f"orcamento_{lead.id}_{lead.nome.split()[0]}.pdf"
-            msg.attach(filename, "application/pdf", buffer.read())
+            # Anexar PDF se gerado com sucesso
+            if pdf_buffer:
+                pdf_buffer.seek(0)
+                filename = f"Orcamento_{lead.nome.split()[0]}_{lead.id}.pdf"
+                msg.attach(filename, "application/pdf", pdf_buffer.read())
             
-            # Enviar
             mail.send(msg)
-            print(f"✅ Email enviado para {recipients} (Lead #{lead.id})")
+            email_sent = True
+            print(f"✅ Email enviado com sucesso para {recipients}")
             
         except Exception as email_error:
-            app.logger.error(f"❌ Falha ao enviar email: {email_error}")
-            print(f"❌ Erro ao enviar email: {email_error}")
+            print(f"❌ ERRO CRÍTICO AO ENVIAR EMAIL: {email_error}")
             import traceback
             traceback.print_exc()
+            # Não falhar a requisição se o email falhar, priorizar salvar o lead
 
-        return "success"
+        # Gerar link do WhatsApp para retorno
+        wa_text = f"Olá {lead.nome}, recebi seu orçamento de cortinas (ID #{lead.id}).\n\n*Medidas:* {lead.largura_parede}m x {lead.altura_parede}m\n*Tecido:* {lead.tecido}\n*Instalação:* {lead.instalacao}\n\nPodemos continuar o atendimento?"
+        wa_url = f"https://wa.me/55{lead.telefone.replace('(','').replace(')','').replace('-','').replace(' ','')}?text={wa_text}"
+
+        return jsonify({
+            "status": "success", 
+            "message": "Lead salvo com sucesso",
+            "email_sent": email_sent,
+            "whatsapp_url": wa_url,
+            "lead_id": lead.id
+        }), 200
     
     except Exception as err:
         print(f"❌ Erro geral no endpoint /enviar: {err}")
         import traceback
         traceback.print_exc()
-        return "Erro ao enviar!", 500
+        return jsonify({"status": "error", "message": str(err)}), 500
 
 @app.route('/orcamento/<int:lead_id>/pdf')
 def baixar_pdf(lead_id):
@@ -346,7 +312,18 @@ def baixar_pdf(lead_id):
 @app.route('/admin/leads')
 def admin_leads():
     leads = Lead.query.order_by(Lead.criado_em.desc()).all()
-    return render_template('admin_leads.html', leads=leads)
+    
+    # Estatísticas
+    import datetime
+    now = datetime.datetime.now()
+    today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    
+    stats = {
+        'total': len(leads),
+        'today': len([l for l in leads if l.criado_em >= today_start])
+    }
+    
+    return render_template('admin_leads.html', leads=leads, stats=stats)
 
 @app.route('/admin/leads/export-pdf')
 def export_leads_pdf():
