@@ -80,5 +80,4 @@ ehthumbs.db
 orcamentos/
 orcamento_*.pdf
 dev_bras/
-passenger_wsgi.py
 .htaccess
