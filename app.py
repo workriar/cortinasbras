@@ -146,9 +146,29 @@ def enviar():
         threading.Thread(target=send_async_email, args=(app, msg)).start()
 
         # WhatsApp Link (Cliente -> Empresa)
-        # Número da empresa: 11992891070
-        wa_text = f"Olá, meu nome é {lead.nome}. Fiz um orçamento no site (ID #{lead.id}).\n\n*Medidas:* {lead.largura_parede}m x {lead.altura_parede}m\n*Tecido:* {lead.tecido}\n*Instalação:* {lead.instalacao}\n\nGostaria de prosseguir."
-        wa_url = f"https://wa.me/55119992891070?text={wa_text}"
+        # Número da empresa: 11992891070 (Confirmado pelo user)
+        msg_parts = [
+            f"Olá, meu nome é {lead.nome}. Fiz um orçamento no site (ID #{lead.id}).",
+            "", # Quebra de linha
+            f"*Parede:* {lead.largura_parede}m (L) x {lead.altura_parede}m (A)"
+        ]
+        
+        if lead.largura_janela or lead.altura_janela:
+             msg_parts.append(f"*Janela:* {lead.largura_janela}m (L) x {lead.altura_janela}m (A)")
+
+        msg_parts.append(f"*Tecido:* {lead.tecido}")
+        msg_parts.append(f"*Instalação:* {lead.instalacao}")
+        
+        if lead.observacoes:
+            msg_parts.append(f"*Obs:* {lead.observacoes}")
+            
+        msg_parts.append("")
+        msg_parts.append("Gostaria de prosseguir com o atendimento.")
+
+        import urllib.parse
+        wa_text = "\n".join(msg_parts)
+        wa_text_encoded = urllib.parse.quote(wa_text)
+        wa_url = f"https://wa.me/5511992891070?text={wa_text_encoded}"
 
         return jsonify({
             "status": "success",
