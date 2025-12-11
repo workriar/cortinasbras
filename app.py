@@ -130,9 +130,10 @@ def enviar():
             app.logger.error(f"Erro ao gerar/salvar PDF: {e}")
 
         # Preparar Email
+        recipients = ['loja@cortinasbras.com.br']
         msg = Message(
             subject=f"🏠 Novo Orçamento #{lead.id} - {lead.nome}",
-            recipients=[app.config['MAIL_USERNAME']],
+            recipients=recipients,
             reply_to=lead.telefone if '@' in lead.telefone else app.config['MAIL_DEFAULT_SENDER']
         )
         msg.html = render_template('email_template.html', lead=lead, hora=lead.criado_em.strftime('%d/%m/%Y às %H:%M'))
@@ -144,9 +145,10 @@ def enviar():
         # Enviar Email em Background Thread par não travar o user
         threading.Thread(target=send_async_email, args=(app, msg)).start()
 
-        # WhatsApp Link
-        wa_text = f"Olá {lead.nome}, recebi seu orçamento (ID #{lead.id}).\nMedidas: {lead.largura_parede}m x {lead.altura_parede}m\nTecido: {lead.tecido}\nPodemos continuar?"
-        wa_url = f"https://wa.me/55{lead.telefone.replace('(','').replace(')','').replace('-','').replace(' ','')}?text={wa_text}"
+        # WhatsApp Link (Cliente -> Empresa)
+        # Número da empresa: 11992891070
+        wa_text = f"Olá, meu nome é {lead.nome}. Fiz um orçamento no site (ID #{lead.id}).\n\n*Medidas:* {lead.largura_parede}m x {lead.altura_parede}m\n*Tecido:* {lead.tecido}\n*Instalação:* {lead.instalacao}\n\nGostaria de prosseguir."
+        wa_url = f"https://wa.me/55119992891070?text={wa_text}"
 
         return jsonify({
             "status": "success",
