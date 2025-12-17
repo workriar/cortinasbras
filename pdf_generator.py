@@ -74,8 +74,8 @@ def generate_orcamento_pdf(lead):
     
     elements = []
     
-    # 1. Logo (se existir)
-    logo_path = os.path.join(os.path.dirname(__file__), 'static', 'logo.png')
+    # 1. Logo (se existir) - versão marrom vinho para PDF
+    logo_path = os.path.join(os.path.dirname(__file__), 'static', 'logo_pdf.png')
     if os.path.exists(logo_path):
         try:
             # Aumentar um pouco o logo
