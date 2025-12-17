@@ -5,10 +5,11 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY', 'chave-secreta-padrao-seguranca')
     
     # Configurações de Email
-    MAIL_SERVER = 'smtp.hostinger.com' # Corrigido para Hostinger com base no erro anterior
-    MAIL_PORT = 465
-    MAIL_USE_SSL = True
-    MAIL_USE_TLS = False
+    # Configurações de Email
+    MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.hostinger.com')
+    MAIL_PORT = int(os.environ.get('MAIL_PORT', 465))
+    MAIL_USE_SSL = os.environ.get('MAIL_USE_SSL', 'True') == 'True'
+    MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', 'False') == 'True'
     
     # Auto-fix para o username se o user esquecer do dominio
     _mail_user = os.environ.get('MAIL_USERNAME', 'loja@cortinasbras.com.br')
