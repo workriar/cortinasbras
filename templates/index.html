@@ -1,78 +1,1537 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ title | default('Cortinas sob medida em São Paulo') }}</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="description" content="{{ description | default('Transforme seu ambiente com sofisticação, tecidos nobres e instalação profissional. Solicite seu orçamento personalizado!') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-</head>
-<body>
-    <header>
-        <div class="logo-container">
-            <img src="{{ url_for('static', filename='logobras.png') }}" alt="Logo Cortinas Brás" class="logo">
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
+    <meta name="theme-color" content="#D4A93E" />
+  <title>Cortinas Sob Medida SP | Cortinas Wave e Blackout | Cortinas Brás</title>
+  <meta name="description" content="⭐ Cortinas sob medida em São Paulo há 20+ anos. Cortina Wave trilho suíço, blackout, voil e enxovais premium. Fabricação própria, entrega 48h, instalação grátis. Orçamento WhatsApp!" />
+  <meta name="keywords" content="cortinas sob medida sp, cortinas wave, cortinas blackout são paulo, cortinas bras, cortina trilho suíço, enxoval premium, cortinas zona leste sp, cortinas personalizadas" />
+  <meta name="author" content="Cortinas Brás" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="canonical" href="https://www.cortinasbras.com.br/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.cortinasbras.com.br/" />
+  <meta property="og:site_name" content="Cortinas Brás" />
+  <meta property="og:title" content="Cortinas Sob Medida SP | Cortina Wave, Blackout e Enxoval Premium" />
+  <meta property="og:description" content="⭐ Há 20+ anos transformando ambientes com cortinas sob medida. Cortina Wave, blackout, voil. Fabricação própria SP. Entrega 48h. Orçamento grátis WhatsApp!" />
+    <meta property="og:image" content="https://www.cortinasbras.com.br/static/hero-bg-1.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Cortinas sob medida - Cortinas Brás São Paulo" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Cortinas Sob Medida SP | Cortina Wave e Blackout | Cortinas Brás" />
+    <meta name="twitter:description" content="⭐ Há 20+ anos transformando ambientes. Cortinas sob medida, Wave, blackout. Fabricação própria SP. Entrega 48h!" />
+    <meta name="twitter:image" content="https://www.cortinasbras.com.br/static/hero-bg-1.jpg" />
+    <link rel="icon" href="/static/favicon.ico" />
+    <link rel="apple-touch-icon" href="/static/logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://www.google.com" />
+    <link rel="dns-prefetch" href="https://www.facebook.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet"></noscript>
+    <!-- AOS - Animate On Scroll -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"></noscript>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          fontFamily: { 'sans': ['Inter', 'system-ui', 'sans-serif'] },
+          extend: {
+            colors: {
+              brand: {
+                50: '#F8F5F1',
+                100: '#EAD5C7',
+                300: '#D4A93E',
+                500: '#D4A93E',
+                700: '#8B5C2A'
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      :root { --accent: #D4A93E; }
+      
+      /* Prevenir scroll horizontal e overflow */
+      html, body {
+        max-width: 100vw;
+        overflow-x: hidden;
+        position: relative;
+      }
+      
+      * {
+        box-sizing: border-box;
+      }
+      
+      /* Prevenir body lock quando popup está aberto */
+      body.popup-open {
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+      }
+      
+      /* Smooth scroll behavior */
+      html { scroll-behavior: smooth; }
+      
+      /* Reading progress bar */
+      .progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #D4A93E, #8B5C2A);
+        z-index: 9999;
+        transition: width 0.1s ease;
+      }
+      
+      /* Enhanced card hover with scale and glow */
+      .card-hover { 
+        transition: transform .35s cubic-bezier(.2,.9,.3,1), box-shadow .35s, filter .35s;
+      }
+      .card-hover:hover { 
+        transform: translateY(-8px) scale(1.02); 
+        box-shadow: 0 20px 50px rgba(139,92,42,.18);
+        filter: brightness(1.05);
+      }
+      
+      /* Ripple effect for buttons */
+      .btn-ripple {
+        position: relative;
+        overflow: hidden;
+      }
+      .btn-ripple::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+      }
+      .btn-ripple:active::after {
+        width: 300px;
+        height: 300px;
+      }
+      
+      /* Skeleton loading */
+      .skeleton {
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: skeleton-loading 1.5s infinite;
+      }
+      @keyframes skeleton-loading {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+      }
+      
+      /* Loading spinner */
+      .spinner {
+        border: 3px solid rgba(212,169,62,0.2);
+        border-top-color: #D4A93E;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      
+      /* Floating animation */
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+      }
+      .float { animation: float 3s ease-in-out infinite; }
+      
+      /* Pulse glow */
+      @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 20px rgba(212,169,62,0.3); }
+        50% { box-shadow: 0 0 40px rgba(212,169,62,0.6); }
+      }
+      .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+      
+      .focus-ring:focus { outline: none; box-shadow: 0 0 0 4px rgba(212,169,62,.14); }
+      .visually-hidden { position: absolute !important; height: 1px; width: 1px; overflow: hidden; clip: rect(1px,1px,1px,1px); white-space: nowrap; }
+      /* Screen reader only - acessibilidade */
+      .sr-only { 
+        position: absolute; 
+        width: 1px; 
+        height: 1px; 
+        padding: 0; 
+        margin: -1px; 
+        overflow: hidden; 
+        clip: rect(0,0,0,0); 
+        white-space: nowrap; 
+        border-width: 0; 
+      }
+      /* Carrossel Hero */
+      .hero-carousel {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+      }
+      .hero-slide {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transition: opacity 1.5s ease-in-out;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+      .hero-slide.active {
+        opacity: 0.9;
+      }
+      .hero-slide::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.15) 100%);
+      }
+      .hero-text-overlay {
+        text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      }
+      /* Carrossel de Promoções */
+      .promo-carousel {
+        position: relative;
+        max-width: 32rem;
+        margin: 0 auto;
+        overflow: hidden;
+        border-radius: 1.5rem;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      }
+      .promo-slide {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        padding: 1rem;
+      }
+      .promo-slide.active {
+        opacity: 1;
+      }
+      .promo-slide img {
+        width: 100%;
+        height: auto;
+        border-radius: 1.5rem;
+        border: 2px solid #EAD5C7;
+      }
+      .promo-indicators {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+        z-index: 10;
+      }
+      .promo-indicator {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.5);
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .promo-indicator.active {
+        background: #D4A93E;
+        width: 30px;
+        border-radius: 5px;
+      }
+      /* Popup suspenso */
+      .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s, visibility 0.3s;
+        padding: 1rem;
+        box-sizing: border-box;
+        overflow-y: auto;
+      }
+      .popup-overlay.show {
+        opacity: 1;
+        visibility: visible;
+      }
+      .popup-content {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        max-width: 500px;
+        width: 100%;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+        position: relative;
+        transform: translateY(-20px);
+        transition: transform 0.3s;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        margin: auto;
+        box-sizing: border-box;
+      }
+      
+      /* Responsividade mobile do popup */
+      @media (max-width: 640px) {
+        .popup-overlay {
+          padding: 0.5rem;
+        }
+        .popup-content {
+          padding: 1rem;
+          max-height: calc(100vh - 1rem);
+          width: calc(100% - 1rem);
+        }
+      }
+      .popup-overlay.show .popup-content {
+        transform: translateY(0);
+      }
+      .popup-image {
+        margin: -1.5rem -1.5rem 1rem -1.5rem;
+        border-radius: 1rem 1rem 0 0;
+        overflow: hidden;
+      }
+      .popup-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
+        max-height: 200px;
+      }
+      
+      /* Mobile adjustments */
+      @media (max-width: 640px) {
+        .popup-image {
+          margin: -1rem -1rem 0.75rem -1rem;
+        }
+        .popup-image img {
+          max-height: 150px;
+        }
+      }
+      .popup-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        cursor: pointer;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.9);
+        transition: background 0.2s;
+        z-index: 10;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      }
+      .popup-close:hover {
+        background: white;
+      }
+      /* Modal de confirmação WhatsApp */
+      .whatsapp-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s, visibility 0.3s;
+        padding: 1rem;
+        box-sizing: border-box;
+      }
+      .whatsapp-modal.show {
+        opacity: 1;
+        visibility: visible;
+      }
+      .whatsapp-modal-content {
+        background: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        max-width: 400px;
+        width: 100%;
+        text-align: center;
+        transform: scale(0.9);
+        transition: transform 0.3s;
+        box-sizing: border-box;
+      }
+      .whatsapp-modal.show .whatsapp-modal-content {
+        transform: scale(1);
+      }
+      
+      /* Responsividade mobile do modal WhatsApp */
+      @media (max-width: 640px) {
+        .whatsapp-modal {
+          padding: 0.5rem;
+        }
+        .whatsapp-modal-content {
+          padding: 1.5rem;
+          width: calc(100% - 1rem);
+        }
+      }
+    </style>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17672945118"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);} 
+      gtag('js', new Date());
+      gtag('config', 'AW-17672945118');
+    </script>
+
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1369616001422186');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1369616001422186&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+    
+    <!-- Structured Data - LocalBusiness Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "@id": "https://www.cortinasbras.com.br/#business",
+      "name": "Cortinas Brás",
+      "image": "https://www.cortinasbras.com.br/static/fachada-loja.jpg",
+      "logo": "https://www.cortinasbras.com.br/static/logo.png",
+      "url": "https://www.cortinasbras.com.br",
+      "telephone": "+55-11-99289-1070",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. Celso Garcia, 129",
+        "addressLocality": "São Paulo",
+        "addressRegion": "SP",
+        "postalCode": "03015-000",
+        "addressCountry": "BR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -23.539800,
+        "longitude": -46.613716
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "opens": "09:00",
+          "closes": "18:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:00",
+          "closes": "14:00"
+        }
+      ],
+      "sameAs": [
+        "https://facebook.com/cortinasbras",
+        "https://instagram.com/cortinasbras",
+        "https://tiktok.com/@cortinasbras"
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "250"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Catálogo de Cortinas e Enxovais",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Product",
+              "name": "Cortinas Sob Medida",
+              "description": "Cortinas personalizadas com diversos tecidos: Gaze de Linho, Blackout, Voil e Tecidos Alto Padrão"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Product",
+              "name": "Cortina Wave Trilho Suíço",
+              "description": "Sistema de cortina wave com trilho suíço para ondas perfeitas e elegância"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Product",
+              "name": "Enxovais Premium",
+              "description": "Lençóis, toalhas, jogos de cama e acessórios premium para cama, mesa e banho"
+            }
+          }
+        ]
+      }
+    }
+    </script>
+    
+    <!-- Structured Data - WebSite Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": "https://www.cortinasbras.com.br/#website",
+      "url": "https://www.cortinasbras.com.br",
+      "name": "Cortinas Brás",
+      "description": "Cortinas sob medida em São Paulo há mais de 20 anos",
+      "publisher": {
+        "@id": "https://www.cortinasbras.com.br/#business"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.cortinasbras.com.br/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    
+    <!-- Structured Data - BreadcrumbList Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.cortinasbras.com.br/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Produtos",
+          "item": "https://www.cortinasbras.com.br/#produtos"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Sobre",
+          "item": "https://www.cortinasbras.com.br/#sobre"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "Contato",
+          "item": "https://www.cortinasbras.com.br/#contato"
+        }
+      ]
+    }
+    </script>
+  </head>
+  <body class="antialiased bg-brand-50 text-brand-700 font-sans">
+    <!-- Reading Progress Bar -->
+    <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+    
+    <!-- HEADER com logotipo -->
+    <header id="main-header" class="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-md border-b border-gray-800 transition-all duration-300 shadow-lg">
+      <div class="container mx-auto px-6 py-2 transition-all duration-300 relative" id="header-container">
+        <div class="flex items-center justify-center">
+          <div id="logo-section" class="transition-all duration-300">
+            <img src="/static/logo.png" alt="Logotipo Cortinas Brás" class="w-24 h-auto transition-all duration-300" id="header-logo" />
+          </div>
         </div>
-        <nav aria-label="Navegação principal">
-            <a href="#form-orcamento">Orçamento</a>
-            <a href="#contato">Contato</a>
-        </nav>
-        <h1>{{ heading | default('Cortinas sob medida em São Paulo') }}</h1>
-        <p>{{ subheading | default('Transforme seu ambiente com sofisticação, tecidos nobres e instalação profissional.') }}</p>
+        
+        <!-- Menu Hamburguer (aparece ao rolar) - posicionado absolutamente -->
+        <div id="menu-toggle" class="absolute right-6 top-1/2 -translate-y-1/2 opacity-0 pointer-events-none transition-all duration-300">
+          <button id="hamburger-btn" class="flex flex-col gap-1.5 w-8 h-8 justify-center items-center group" aria-label="Menu">
+            <span class="block w-6 h-0.5 bg-brand-300 transition-all group-hover:bg-white"></span>
+            <span class="block w-6 h-0.5 bg-brand-300 transition-all group-hover:bg-white"></span>
+            <span class="block w-6 h-0.5 bg-brand-300 transition-all group-hover:bg-white"></span>
+          </button>
+          
+          <!-- Dropdown Menu -->
+          <div id="dropdown-menu" class="hidden absolute right-0 top-full mt-2 bg-black border border-gray-800 rounded-lg shadow-2xl py-2 min-w-[150px] z-50">
+            <a href="#inicio" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition">Início</a>
+            <a href="#produtos" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition">Produtos</a>
+            <a href="#sobre" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition">Sobre</a>
+            <a href="#contato" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition">Contato</a>
+          </div>
+        </div>
+      </div>
     </header>
 
-    <!-- Carrossel dinâmico Flask -->
-    <section class="carousel" aria-label="Galeria de cortinas">
-        <div class="carousel-slides">
-            {% for img in slides %}
-                <div class="slide{% if loop.index0 == 0 %} active{% endif %}">
-                    <img src="{{ url_for('static', filename=img.src) }}" alt="{{ img.alt }}">
+    <main id="main" class="pt-16">
+      <!-- HERO -->
+      <section id="inicio" class="relative overflow-hidden">
+        <div class="bg-gradient-to-br from-brand-50 via-white to-brand-100">
+          <!-- Carrossel de fundo com fade -->
+          <div class="hero-carousel">
+            <div class="hero-slide active" style="background-image: url('/static/hero-bg-1.jpg')"></div>
+            <div class="hero-slide" style="background-image: url('/static/hero-bg-2.jpg')"></div>
+            <div class="hero-slide" style="background-image: url('/static/hero-bg-3.jpg')"></div>
+          </div>
+          <div class="container mx-auto px-6 py-20 lg:py-32 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <div class="space-y-6 hero-text-overlay" data-aos="fade-right" data-aos-duration="1000">
+                <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm text-brand-700 rounded-full text-sm font-medium shadow-lg" data-aos="fade-down" data-aos-delay="100">
+                  <span class="w-2 h-2 bg-brand-500 rounded-full animate-pulse"></span>
+                  Tradição com estilo para o seu ambiente
                 </div>
-            {% endfor %}
-        </div>
-        <button class="carousel-btn prev" aria-label="Slide anterior">&#10094;</button>
-        <button class="carousel-btn next" aria-label="Próximo slide">&#10095;</button>
-    </section>
-
-    <main>
-        <section class="hero">
-            <h2>{{ hero_title | default('Decore seu ambiente com tradição, referência em SP') }}</h2>
-            <p>{{ hero_desc | default('Solicite um orçamento rápido e personalizado!') }}</p>
-            <button id="cta-btn" class="btn-primary">Quero meu orçamento</button>
-        </section>
-        <section class="form-section" id="form-orcamento">
-            <h3>Peça seu orçamento em poucos minutos!</h3>
-            <form method="POST" action="{{ url_for('enviar') }}" id="lp-form">
-                <label for="nome">Nome</label>
-                <input type="text" name="nome" id="nome" placeholder="Seu nome" required autocomplete="name">
-                <label for="telefone">Whatsapp</label>
-                <input type="tel" name="telefone" id="telefone" placeholder="Telefone WhatsApp" required autocomplete="tel">
-                <label for="larguraparede">Largura da parede (m) <span class="input-example">Ex: 1,5</span></label>
-                <input type="text" name="larguraparede" id="larguraparede" placeholder="Ex: 1,5" required pattern="[0-9]+([\.,][0-9]+)?">
-                <label for="alturaparede">Altura da parede (m) <span class="input-example">Ex: 1,5</span></label>
-                <input type="text" name="alturaparede" id="alturaparede" placeholder="Ex: 1,5" required pattern="[0-9]+([\.,][0-9]+)?">
-                <button type="submit" class="btn-primary">Solicitar orçamento</button>
-            </form>
-            <div id="msgSuccess" style="display:none;">Orçamento enviado com sucesso!</div>
-    </section>
-
-    <section class="map-section" aria-label="Mapa do endereço">
-            <h3>Como chegar</h3>
-            <div class="map-container" style="width:100%;max-width:600px;margin:auto;">
-                <iframe src="https://www.google.com/maps?q=Av.+Celso+Garcia,+129+-+Br%C3%A1s,+S%C3%A3o+Paulo-SP&output=embed" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <h1 class="text-4xl md:text-6xl font-bold leading-tight text-white" data-aos="fade-up" data-aos-delay="200">Cortinas Sob Medida em São Paulo — <span class="text-brand-300">Transforme seu Ambiente</span></h1>
+                <p class="text-xl text-gray-100 leading-relaxed" data-aos="fade-up" data-aos-delay="300">Renove sua casa com cortinas sob medida, feitas para você.<br>Especialistas com mais de 20 anos em São Paulo:<br>Atendimento personalizado, fabricação própria e instalação especializada.</p>
+                <div class="flex flex-col sm:flex-row gap-4 pt-4" data-aos="fade-up" data-aos-delay="400">
+                  <a id="hero-cta" href="#contato" class="btn-ripple group inline-flex items-center justify-center gap-3 bg-brand-500 hover:bg-brand-600 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1" aria-label="Solicitar orçamento">
+                    Solicite Orçamento
+                    <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                  </a>
+                  <a href="https://wa.me/5511992891070?text=Olá! Quero orçamento para cortinas sob medida." target="_blank" rel="noopener" class="btn-ripple group inline-flex items-center gap-3 justify-center bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                    <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
+                    </svg>
+                    WhatsApp Direto
+                  </a>
+                </div>
+                <div class="flex flex-wrap gap-6 pt-4 text-white" data-aos="fade-up" data-aos-delay="500">
+                  <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-lg" data-aos="zoom-in" data-aos-delay="600">
+                    <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                    <span class="font-medium">Fabricação própria</span>
+                  </div>
+                  <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-lg" data-aos="zoom-in" data-aos-delay="700">
+                    <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                    <span class="font-medium">Entrega em até 48h</span>
+                  </div>
+                  <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-lg" data-aos="zoom-in" data-aos-delay="800">
+                    <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                    <span class="font-medium">Materiais de alta qualidade</span>
+                  </div>
+                </div>
+              </div>
+              <div class="order-first lg:order-last flex justify-center">
+                <div class="relative">
+                  <div class="absolute -inset-4 bg-gradient-to-r from-brand-300 to-brand-500 rounded-3xl blur-2xl opacity-20 animate-pulse"></div>
+                  <!-- Carrossel de Promoções -->
+                  <div class="promo-carousel relative">
+                    <div class="promo-slide active">
+                      <img src="/static/promo2.jpg" alt="Promoção 1" loading="lazy" class="relative w-full bg-white p-4" />
+                    </div>
+                    <div class="promo-slide">
+                      <img src="/static/promo1.jpg" alt="Promoção 2" loading="lazy" class="relative w-full bg-white p-4" />
+                    </div>
+                    <div class="promo-slide">
+                      <img src="/static/promo3.jpg" alt="Promoção 3" loading="lazy" class="relative w-full bg-white p-4" />
+                    </div>
+                    
+                    <!-- Indicadores de slides -->
+                    <div class="promo-indicators">
+                      <div class="promo-indicator active" data-slide="0"></div>
+                      <div class="promo-indicator" data-slide="1"></div>
+                      <div class="promo-indicator" data-slide="2"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-    </section>
+          </div>
+        </div>
+      </section>
+
+      <!-- GALERIA DE AMBIENTES -->
+      <section class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+          <div class="text-center mb-10" data-aos="fade-up">
+            <h2 class="text-2xl font-bold">Ambientes que Impressionam com Cortinas Wave</h2>
+            <p class="mt-2 text-brand-700 max-w-xl mx-auto">Veja nossos projetos com cortinas wave em trilho suíço, além de enxovais premium que transformam qualquer ambiente em São Paulo.</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="relative overflow-hidden rounded-2xl shadow-lg group" data-aos="fade-up" data-aos-delay="100">
+              <img src="/static/cortina-wave-1.jpg" alt="Cortina Wave com Trilho Suíço - Cortinas Brás São Paulo" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" width="400" height="320">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
+                <div class="text-white">
+                  <h4 class="font-bold text-lg">Cortina Wave</h4>
+                  <p class="text-sm">Trilho suíço com ondas perfeitas</p>
+                </div>
+              </div>
+            </div>
+            <div class="relative overflow-hidden rounded-2xl shadow-lg group" data-aos="fade-up" data-aos-delay="200">
+              <img src="/static/cortina-wave-2.jpg" alt="Sala de estar com Cortina Wave sob medida - Cortinas Brás" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" width="400" height="320">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
+                <div class="text-white">
+                  <h4 class="font-bold text-lg">Sala de Estar</h4>
+                  <p class="text-sm">Elegância com cortina wave</p>
+                </div>
+              </div>
+            </div>
+            <div class="relative overflow-hidden rounded-2xl shadow-lg group" data-aos="fade-up" data-aos-delay="300">
+              <img src="/static/enxoval-cama.jpg" alt="Enxoval de cama premium - Lençóis e jogos de cama nobres São Paulo" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" width="400" height="320">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
+                <div class="text-white">
+                  <h4 class="font-bold text-lg">Enxoval Premium</h4>
+                  <p class="text-sm">Lençóis e jogos de cama nobres</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PRODUTOS -->
+      <section id="produtos" class="py-16 bg-gray-200">
+        <div class="container mx-auto px-6">
+          <div class="text-center mb-10" data-aos="fade-up">
+            <h2 class="text-2xl font-bold">Cortinas e Enxovais Sob Medida em SP</h2>
+            <p class="mt-2 text-brand-700 max-w-xl mx-auto">Escolha a solução ideal para seu espaço: <br>Tecidos, modelos e acabamentos pensados para você.</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <article class="bg-white rounded-2xl border p-6 card-hover" data-aos="flip-left" data-aos-delay="100">
+              <div class="h-44 bg-gradient-to-br from-brand-100 to-brand-50 rounded-lg flex items-center justify-center mb-4 relative overflow-hidden">
+                <div class="absolute inset-0 opacity-10">
+                  <div class="absolute top-0 left-1/4 w-0.5 h-full bg-brand-300"></div>
+                  <div class="absolute top-0 left-2/4 w-0.5 h-full bg-brand-300"></div>
+                  <div class="absolute top-0 left-3/4 w-0.5 h-full bg-brand-300"></div>
+                </div>
+                <svg aria-hidden="true" class="w-20 h-20 text-brand-500 relative z-10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 4h18v16H3z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 4h18M3 20h18" stroke-width="2"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 7v10M10 7v10M14 7v10M18 7v10" opacity="0.5"/>
+                  <circle cx="12" cy="12" r="3" fill="currentColor" opacity="0.2"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M7 4L7 7M17 4L17 7" stroke-width="2"/>
+                </svg>
+                <span class="sr-only">Ícone decorativo de cortinas prontas</span>
+              </div>
+              <h4 class="text-xl font-semibold mb-2">CORTINAS PRONTAS</h4>
+              <p class="text-sm text-brand-700 mb-4">Modelos variados, prontos para entrega imediata.</p>
+              <button data-product="Cortinas Prontas" class="w-full btn-contact btn-ripple bg-brand-500 hover:bg-brand-600 text-white py-3 rounded-lg font-semibold focus-ring transition-all duration-300">Quero um orçamento!</button>
+            </article>
+            <article class="bg-white rounded-2xl border p-6 card-hover" data-aos="flip-left" data-aos-delay="200">
+              <div class="h-44 bg-gradient-to-br from-brand-100 to-brand-50 rounded-lg flex items-center justify-center mb-4 relative overflow-hidden">
+                <div class="absolute inset-0 opacity-10">
+                  <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <path d="M0,0 Q25,30 50,0 T100,0 L100,100 Q75,70 50,100 T0,100 Z" fill="currentColor" class="text-brand-300"/>
+                  </svg>
+                </div>
+                <svg aria-hidden="true" class="w-20 h-20 text-brand-500 relative z-10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <rect x="4" y="3" width="16" height="18" rx="1" stroke-width="2"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 3h16M4 21h16" stroke-width="2.5"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M7 6v12M11 6v12M15 6v12M19 6v12" opacity="0.6"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 10h6M9 14h6" stroke-width="2" opacity="0.3"/>
+                  <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+                </svg>
+                <span class="sr-only">Ícone decorativo de cortinas sob medida</span>
+              </div>
+              <h4 class="text-xl font-semibold mb-2">CORTINAS SOB MEDIDA</h4>
+              <p class="text-sm text-brand-700 mb-4">Trabalhamos com diversos tecidos: <br> Gaze de Linho, Blackout, Voil e Tecidos Alto Padrão.</p>
+              <button data-product="Cortinas Sob Medida" class="w-full btn-contact btn-ripple bg-brand-500 hover:bg-brand-600 text-white py-3 rounded-lg font-semibold focus-ring transition-all duration-300">Quero um orçamento!</button>
+            </article>
+            <article class="bg-white rounded-2xl border p-6 card-hover" data-aos="flip-left" data-aos-delay="300">
+              <div class="h-44 bg-gradient-to-br from-brand-100 to-brand-50 rounded-lg flex items-center justify-center mb-4 relative overflow-hidden">
+                <div class="absolute inset-0 opacity-10">
+                  <svg class="w-full h-full" viewBox="0 0 100 100">
+                    <circle cx="20" cy="20" r="15" fill="currentColor" class="text-brand-300"/>
+                    <circle cx="80" cy="30" r="12" fill="currentColor" class="text-brand-300"/>
+                    <circle cx="50" cy="70" r="18" fill="currentColor" class="text-brand-300"/>
+                    <circle cx="85" cy="75" r="10" fill="currentColor" class="text-brand-300"/>
+                  </svg>
+                </div>
+                <svg aria-hidden="true" class="w-20 h-20 text-brand-500 relative z-10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <rect x="3" y="10" width="18" height="10" rx="2" stroke-width="2"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 10V8a2 2 0 012-2h14a2 2 0 012 2v2" stroke-width="1.5"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 20v-3M20 20v-3" stroke-width="2"/>
+                  <circle cx="8" cy="5" r="1.5" fill="currentColor"/>
+                  <circle cx="16" cy="5" r="1.5" fill="currentColor"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 13h12M6 16h12" opacity="0.4" stroke-width="1.5"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v10" opacity="0.3"/>
+                </svg>
+                <span class="sr-only">Ícone decorativo de produtos para cama, mesa e banho</span>
+              </div>
+              <h4 class="text-xl font-semibold mb-2">CAMA • MESA • BANHO</h4>
+              <p class="text-sm text-brand-700 mb-4">Lençóis, toalhas, jogos de cama e acessórios premium para o seu lar.</p>
+              <button data-product="Cama-Mesa-Banho" class="w-full btn-contact btn-ripple bg-brand-500 hover:bg-brand-600 text-white py-3 rounded-lg font-semibold focus-ring transition-all duration-300">Quero um orçamento!</button>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- SOBRE -->
+      <section id="sobre" class="py-20 bg-brand-100">
+        <div class="container mx-auto px-6">
+          <!-- Título e introdução -->
+          <div class="text-center mb-12" data-aos="fade-up">
+            <h2 class="text-4xl font-bold text-brand-700 mb-4">Sobre a Cortinas Brás - 20 Anos em SP</h2>
+            <p class="text-lg text-brand-700 max-w-3xl mx-auto">
+              Tradição, qualidade e atendimento personalizado há mais de duas décadas no coração de São Paulo.
+            </p>
+          </div>
+
+          <!-- Grid principal -->
+          <div class="grid lg:grid-cols-2 gap-12 items-start mb-16">
+            <!-- Coluna esquerda - História e valores -->
+            <div data-aos="fade-right">
+              <div class="bg-white rounded-2xl p-8 shadow-lg mb-6">
+                <h4 class="text-2xl font-bold text-brand-700 mb-4">Nossa História</h4>
+                <p class="text-brand-700 mb-4 leading-relaxed">
+                  Desde 2003, a <strong>Cortinas Brás</strong> é sinônimo de excelência em decoração de ambientes. Fundada como empresa familiar no tradicional bairro do Brás, em São Paulo, crescemos junto com nossos clientes, sempre mantendo nossos valores de qualidade, honestidade e dedicação.
+                </p>
+                <p class="text-brand-700 leading-relaxed">
+                  Com produção 100% própria e equipe especializada, transformamos cada projeto em uma experiência única, do primeiro contato até a instalação final.
+                </p>
+              </div>
+
+              <!-- Estatísticas -->
+              <div class="grid grid-cols-2 gap-4">
+                <div class="p-6 bg-white rounded-xl shadow-md text-center" data-aos="zoom-in" data-aos-delay="100">
+                  <div class="text-3xl font-bold text-brand-500 mb-2">20+</div>
+                  <div class="text-sm text-brand-700 font-medium">Anos de Experiência</div>
+                </div>
+                <div class="p-6 bg-white rounded-xl shadow-md text-center" data-aos="zoom-in" data-aos-delay="200">
+                  <div class="text-3xl font-bold text-brand-500 mb-2">5.000+</div>
+                  <div class="text-sm text-brand-700 font-medium">Clientes Satisfeitos</div>
+                </div>
+                <div class="p-6 bg-white rounded-xl shadow-md text-center" data-aos="zoom-in" data-aos-delay="300">
+                  <div class="text-3xl font-bold text-brand-500 mb-2">48h</div>
+                  <div class="text-sm text-brand-700 font-medium">Entrega Rápida</div>
+                </div>
+                <div class="p-6 bg-white rounded-xl shadow-md text-center" data-aos="zoom-in" data-aos-delay="400">
+                  <div class="text-3xl font-bold text-brand-500 mb-2">100%</div>
+                  <div class="text-sm text-brand-700 font-medium">Produção Própria</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Coluna direita - Imagem e diferenciais -->
+            <div data-aos="fade-left">
+              <!-- Imagem da Fachada -->
+              <div class="rounded-2xl overflow-hidden shadow-2xl mb-6">
+                <img src="/static/fachada-loja.jpg" alt="Fachada da loja Cortinas Brás - Av. Celso Garcia 129, Brás, São Paulo" class="w-full h-auto object-cover" loading="lazy" width="600" height="400" />
+              </div>
+
+              <!-- Diferenciais -->
+              <div class="bg-white rounded-2xl p-8 shadow-lg">
+                <h4 class="text-2xl font-bold text-brand-700 mb-6 text-center">Nossos Diferenciais</h4>
+                <div class="space-y-4">
+                  <div class="flex items-start gap-3">
+                    <svg class="w-6 h-6 text-brand-500 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    <div>
+                      <h5 class="font-semibold text-brand-700">Atendimento Consultivo</h5>
+                      <p class="text-sm text-brand-700">Especialistas que entendem suas necessidades e sugerem as melhores soluções.</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <svg class="w-6 h-6 text-brand-500 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    <div>
+                      <h5 class="font-semibold text-brand-700">Medição e Instalação Gratuitas</h5>
+                      <p class="text-sm text-brand-700">Vamos até você para garantir medidas precisas e instalação perfeita.</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <svg class="w-6 h-6 text-brand-500 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    <div>
+                      <h5 class="font-semibold text-brand-700">Tecidos Importados e Nacionais</h5>
+                      <p class="text-sm text-brand-700">Amplo catálogo com as melhores marcas e qualidade garantida.</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <svg class="w-6 h-6 text-brand-500 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    <div>
+                      <h5 class="font-semibold text-brand-700">Garantia de Qualidade</h5>
+                      <p class="text-sm text-brand-700">Materiais nobres, acabamento impecável e garantia em todos os serviços.</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Botões de ação -->
+                <div class="mt-8 flex flex-col sm:flex-row gap-3">
+                  <a href="#contato" class="btn-ripple flex-1 text-center px-6 py-3 bg-brand-500 hover:bg-brand-600 text-white rounded-lg font-semibold transition-all duration-300">Solicitar Orçamento</a>
+                  <a href="https://wa.me/5511992891070?text=Olá! Gostaria de conhecer mais sobre a Cortinas Brás." target="_blank" rel="noopener" class="btn-ripple flex-1 text-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition-all duration-300">
+                    <span class="flex items-center justify-center gap-2">
+                      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
+                      </svg>
+                      WhatsApp
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTATO / FORMULÁRIO -->
+      <section id="contato" class="py-16 bg-brand-50">
+        <div class="container mx-auto px-6">
+          <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-8" data-aos="fade-up">
+              <h2 class="text-2xl font-bold">Peça Orçamento de Cortinas Sob Medida</h2>
+              <p class="text-brand-700 mt-2">Preencha os dados abaixo — apenas observações e endereço são opcionais.</p>
+            </div>
+            <form id="contact-form" method="POST" action="/enviar" class="bg-white p-8 rounded-2xl border shadow-lg" autocomplete="on" data-aos="fade-up" data-aos-delay="200">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="text-sm font-medium text-brand-700" for="nome">Qual seu nome? *</label>
+                  <input id="nome" name="nome" type="text" required class="mt-1 w-full px-4 py-3 rounded-lg border bg-gray-50 focus:ring-2 focus:ring-brand-300 focus:outline-none focus:bg-white" placeholder="Digite seu primeiro nome" />
+                </div>
+                <div>
+                  <label class="text-sm font-medium text-brand-700" for="telefone">Telefone / WhatsApp *</label>
+                  <input id="telefone" name="telefone" type="tel" required class="mt-1 w-full px-4 py-3 rounded-lg border bg-gray-50 focus:ring-2 focus:ring-brand-300 focus:outline-none focus:bg-white" placeholder="(11) 99999-9999" />
+                </div>
+                <div>
+                  <label class="text-sm font-medium text-brand-700" for="largura_parede">Largura da parede (m) *</label>
+                  <input id="largura_parede" name="largura_parede" type="number" step="0.01" min="0.01" max="20" required class="mt-1 w-full px-4 py-3 rounded-lg border bg-gray-50 focus:ring-2 focus:ring-brand-300 focus:outline-none focus:bg-white" placeholder="Ex: 3.20" title="Digite um valor entre 0.01 e 20 metros" />
+                </div>
+                <div>
+                  <label class="text-sm font-medium text-brand-700" for="altura_parede">Altura da parede (m) *</label>
+                  <input id="altura_parede" name="altura_parede" type="number" step="0.01" min="0.01" max="6" required class="mt-1 w-full px-4 py-3 rounded-lg border bg-gray-50 focus:ring-2 focus:ring-brand-300 focus:outline-none focus:bg-white" placeholder="Ex: 2.60" title="Digite um valor entre 0.01 e 6 metros" />
+                </div>
+                <div>
+                  <label class="text-sm font-medium text-brand-700" for="tecido">Tipo de tecido *</label>
+                  <select id="tecido" name="tecido" required class="mt-1 w-full px-4 py-3 rounded-lg border bg-gray-50 focus:ring-2 focus:ring-brand-300 focus:outline-none focus:bg-white">
+                    <option value="">Selecione...</option>
+                    <option value="Blackout">Blackout</option>
+                    <option value="Voil">Voil</option>
+                    <option value="Linho (Variedades)">Linho (Variedades)</option>
+                    <option value="Seda">Seda</option>
+                    <option value="Outros">Outros</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="text-sm font-medium text-brand-700" for="instalacao">Tipo de instalação *</label>
+                  <select id="instalacao" name="instalacao" required class="mt-1 w-full px-4 py-3 rounded-lg border bg-gray-50 focus:ring-2 focus:ring-brand-300 focus:outline-none focus:bg-white">
+                    <option value="">Selecione...</option>
+                    <option value="Varão">Varão</option>
+                    <option value="Trilho">Trilho</option>
+                    <option value="Não sei">Não sei / Preciso de ajuda</option>
+                  </select>
+                </div>
+              </div>
+                <div class="mt-6">
+                  <label class="text-sm font-medium text-brand-700" for="observacoes">Observações adicionais</label>
+                  <textarea id="observacoes" name="observacoes" rows="3" class="mt-1 w-full px-4 py-3 rounded-lg border bg-gray-50 focus:ring-2 focus:ring-brand-300 focus:outline-none focus:bg-white" placeholder="Cor preferida, tipo de ambiente, itens importantes (opcional)"></textarea>
+                </div>
+              <div class="mt-6">
+                <label class="text-sm font-medium text-brand-700" for="endereco">Endereço para instalação (opcional)</label>
+                <textarea id="endereco" name="endereco" rows="2" class="mt-1 w-full px-4 py-3 rounded-lg border bg-gray-50 focus:ring-2 focus:ring-brand-300 focus:outline-none focus:bg-white" placeholder="Rua, número, bairro, cidade..."></textarea>
+              </div>
+              <div class="mt-8 flex items-center gap-3">
+                <button id="submit-btn" type="submit" class="btn-ripple group inline-flex items-center justify-center gap-3 bg-green-600 hover:bg-green-700 text-white px-10 py-5 rounded-xl font-bold shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 text-lg disabled:opacity-50 disabled:cursor-not-allowed">
+                  <svg id="submit-icon" class="w-6 h-6 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
+                  </svg>
+                  <div id="submit-spinner" class="spinner hidden"></div>
+                  <span id="submit-text">Enviar para WhatsApp</span>
+                </button>
+                <div id="form-status" class="text-sm text-brand-700"></div>
+              </div>
+            </form>
+            <div id="success" class="hidden mt-6 p-6 rounded-2xl bg-green-50 border-2 border-green-200 text-green-800 flex items-center gap-3">
+              <svg class="w-6 h-6 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              <p class="font-medium">Obrigado! Seu pedido foi enviado. Em breve entraremos em contato.</p>
+            </div>
+
+            <!-- Mapa Incorporado -->
+            <div class="mt-12">
+              <h4 class="text-xl font-bold text-center mb-4">Nossa Localização</h4>
+              <div class="rounded-2xl overflow-hidden shadow-lg border">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.7970715989504!2d-46.61371692387674!3d-23.53980006080193!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce58df8c06a2cd%3A0xc9828fe2be527cdc!2sAv.%20Celso%20Garcia%2C%20129%20-%20Br%C3%A1s%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2003015-000!5e0!3m2!1sen!2sbr!4v1762143012061!5m2!1sen!2sbr" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
-    <footer id="contato">
-        <address>
-            Av. Celso Garcia, 129 - Brás, São Paulo-SP<br>
-            WhatsApp: (11) 99289-1070 <br>
-            E-mail: <a href="mailto:contato@cortinasbras.com.br">contato@cortinasbras.com.br</a>
-        </address>
-        <p>© 2025 Cortinas Brs - Todos os direitos reservados.</p>
+    <!-- FOOTER com logotipo -->
+    <footer class="bg-black text-white py-6 border-t border-gray-800">
+      <div class="container mx-auto px-6 text-center">
+        <div class="flex flex-col items-center justify-center gap-1 mb-3">
+          <img src="/static/logo.png" alt="Logotipo Cortinas Brás" class="w-20 h-auto mx-auto" />
+          <p class="text-xs text-brand-300 uppercase tracking-wider">Descubra sua cortina</p>
+        </div>
+        
+        <!-- Redes Sociais -->
+        <div class="flex items-center justify-center gap-4 my-3">
+          <a href="https://facebook.com/cortinasbras" target="_blank" rel="noopener" aria-label="Facebook" class="hover:scale-110 transition-transform">
+            <svg class="w-5 h-5 text-brand-300 hover:text-brand-500 transition" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+          </a>
+          <a href="https://instagram.com/cortinasbras" target="_blank" rel="noopener" aria-label="Instagram" class="hover:scale-110 transition-transform">
+            <svg class="w-5 h-5 text-brand-300 hover:text-brand-500 transition" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
+          </a>
+          <a href="https://tiktok.com/@cortinasbras" target="_blank" rel="noopener" aria-label="TikTok" class="hover:scale-110 transition-transform">
+            <svg class="w-5 h-5 text-brand-300 hover:text-brand-500 transition" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+            </svg>
+          </a>
+        </div>
+        
+        <p class="text-xs text-gray-400">Av. Celso Garcia, 129 - Brás - CEP 03015-000 - São Paulo - SP</p>
+        <p class="text-xs text-gray-400 mt-1">Contato: (11) 99289-1070</p>
+        <p class="text-xs text-gray-500 mt-2">© 2025 Cortinas Brás — Todos os direitos reservados.</p>
+      </div>
     </footer>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-</body>
+    <!-- Popup Promocional -->
+    <div id="promo-popup" class="popup-overlay">
+      <div class="popup-content">
+        <div class="popup-close" onclick="closePopup()">
+          <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </div>
+        <!-- Imagem do Popup -->
+        <div class="popup-image">
+          <img src="/static/popup-promo.jpg" alt="Promoção Cortinas" loading="lazy" />
+        </div>
+        <div class="text-center">
+          <div class="mb-4">
+            <span class="inline-block px-4 py-2 bg-brand-500 text-white rounded-full text-sm font-bold">🎉 CUPOM DE DESCONTO</span>
+          </div>
+          <h3 class="text-2xl font-bold text-brand-700 mb-3">10% NA PRIMEIRA COMPRA</h3>
+          <p class="text-gray-600 mb-6">APROVEITE E DESCUBRA SUA NOVA CORTINA!</p>
+          <a href="https://wa.me/5511992891070?text=Olá! Vi a promoção e quero orçamento!" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-bold shadow-lg transition-all hover:scale-105">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
+            </svg>
+            Falar no WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Confirmação WhatsApp -->
+    <div id="whatsapp-modal" class="whatsapp-modal">
+      <div class="whatsapp-modal-content">
+        <div class="mb-4">
+          <svg class="w-16 h-16 mx-auto text-green-500" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Continuar no WhatsApp?</h3>
+        <p class="text-gray-600 mb-6">Você será redirecionado para o WhatsApp para continuar a conversa.</p>
+        <div class="flex gap-3 justify-center">
+          <button onclick="closeWhatsAppModal()" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition">
+            Cancelar
+          </button>
+          <button id="confirm-whatsapp" class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition">
+            Continuar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botão flutuante WhatsApp -->
+    <a href="https://wa.me/5511992891070?text=Olá! Quero orçamento para cortinas." class="fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-2xl transition-all hover:scale-110 animate-pulse" aria-label="Fale conosco no WhatsApp" target="_blank" rel="noopener" style="animation-duration: 2s;">
+      <svg class="w-9 h-9" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+    </a>
+
+    <script>
+      // Modal de Confirmação WhatsApp
+      let pendingWhatsAppUrl = '';
+      
+      function showWhatsAppModal(url) {
+        pendingWhatsAppUrl = url;
+        const modal = document.getElementById('whatsapp-modal');
+        modal.classList.add('show');
+        document.body.classList.add('popup-open');
+      }
+      
+      function closeWhatsAppModal() {
+        const modal = document.getElementById('whatsapp-modal');
+        modal.classList.remove('show');
+        document.body.classList.remove('popup-open');
+        pendingWhatsAppUrl = '';
+      }
+      
+      // Interceptar todos os cliques em links do WhatsApp
+      document.addEventListener('click', function(e) {
+        const target = e.target.closest('a[href*="wa.me"], a[href*="whatsapp"], button.btn-wa');
+        
+        if (target) {
+          e.preventDefault();
+          
+          let whatsappUrl;
+          if (target.tagName === 'BUTTON') {
+            // Para botões de produto
+            const product = target.getAttribute('data-product') || '';
+            const message = encodeURIComponent(`Olá! Tenho interesse em: ${product}. Gostaria de receber um orçamento.`);
+            whatsappUrl = `https://wa.me/5511992891070?text=${message}`;
+          } else {
+            // Para links diretos
+            whatsappUrl = target.getAttribute('href');
+          }
+          
+          showWhatsAppModal(whatsappUrl);
+        }
+      });
+      
+      // Confirmar e abrir WhatsApp
+      document.getElementById('confirm-whatsapp').addEventListener('click', function() {
+        if (pendingWhatsAppUrl) {
+          window.open(pendingWhatsAppUrl, '_blank');
+          closeWhatsAppModal();
+        }
+      });
+      
+      // Fechar modal ao clicar fora
+      document.getElementById('whatsapp-modal').addEventListener('click', function(e) {
+        if (e.target === this) {
+          closeWhatsAppModal();
+        }
+      });
+
+      // Popup Promocional - Aparece e some após 10 segundos
+      function closePopup() {
+        const popup = document.getElementById('promo-popup');
+        popup.classList.remove('show');
+        document.body.classList.remove('popup-open');
+      }
+
+      window.addEventListener('load', function() {
+        const popup = document.getElementById('promo-popup');
+        
+        // Mostra popup após 2 segundos
+        setTimeout(() => {
+          popup.classList.add('show');
+          document.body.classList.add('popup-open');
+        }, 2000);
+        
+        // Esconde automaticamente após 10 segundos (2s de delay + 10s = 12s total)
+        setTimeout(() => {
+          popup.classList.remove('show');
+          document.body.classList.remove('popup-open');
+        }, 12000);
+        
+        // Fechar popup ao clicar fora (no overlay)
+        popup.addEventListener('click', function(e) {
+          if (e.target === popup) {
+            closePopup();
+          }
+        });
+      });
+
+      // Carrossel Hero com fade automático
+      (function() {
+        const slides = document.querySelectorAll('.hero-slide');
+        let currentSlide = 0;
+        
+        function nextSlide() {
+          slides[currentSlide].classList.remove('active');
+          currentSlide = (currentSlide + 1) % slides.length;
+          slides[currentSlide].classList.add('active');
+        }
+        
+        // Troca de slide a cada 4 segundos
+        setInterval(nextSlide, 4000);
+      })();
+
+      // Carrossel de Promoções
+      (function() {
+        const promoSlides = document.querySelectorAll('.promo-slide');
+        const indicators = document.querySelectorAll('.promo-indicator');
+        let currentPromoSlide = 0;
+        let promoInterval;
+        
+        function goToSlide(index) {
+          promoSlides[currentPromoSlide].classList.remove('active');
+          indicators[currentPromoSlide].classList.remove('active');
+          currentPromoSlide = index;
+          promoSlides[currentPromoSlide].classList.add('active');
+          indicators[currentPromoSlide].classList.add('active');
+        }
+        
+        function nextPromoSlide() {
+          const nextIndex = (currentPromoSlide + 1) % promoSlides.length;
+          goToSlide(nextIndex);
+        }
+        
+        function startPromoCarousel() {
+          promoInterval = setInterval(nextPromoSlide, 5000);
+        }
+        
+        function stopPromoCarousel() {
+          clearInterval(promoInterval);
+        }
+        
+        // Indicadores clicáveis
+        indicators.forEach((indicator, index) => {
+          indicator.addEventListener('click', () => {
+            stopPromoCarousel();
+            goToSlide(index);
+            startPromoCarousel();
+          });
+        });
+        
+        // Iniciar carrossel automático
+        startPromoCarousel();
+        
+        // Pausar ao passar o mouse
+        const promoCarousel = document.querySelector('.promo-carousel');
+        promoCarousel.addEventListener('mouseenter', stopPromoCarousel);
+        promoCarousel.addEventListener('mouseleave', startPromoCarousel);
+      })();
+
+      // Botões WhatsApp dos produtos
+      document.querySelectorAll('.btn-wa').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const product = this.getAttribute('data-product') || '';
+          const message = encodeURIComponent(`Olá! Tenho interesse em: ${product}. Gostaria de receber um orçamento.`);
+          window.open(`https://wa.me/5511992891070?text=${message}`, '_blank');
+        });
+      });
+
+      // Botões de orçamento - scroll para formulário
+      document.querySelectorAll('.btn-contact').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.getElementById('contato').scrollIntoView({ behavior: 'smooth', block: 'center' });
+          const product = this.getAttribute('data-product');
+          if (product) {
+            const msg = document.getElementById('mensagem');
+            if (msg) msg.value = `Interesse: ${product}\n` + (msg.value || '');
+          }
+        });
+      });
+
+      // Formulário de contato - enviar para WhatsApp
+      const contactForm = document.getElementById('contact-form');
+      const submitBtn = document.getElementById('submit-btn');
+      const submitIcon = document.getElementById('submit-icon');
+      const submitSpinner = document.getElementById('submit-spinner');
+      const submitText = document.getElementById('submit-text');
+      const status = document.getElementById('form-status');
+      
+      if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          const nome = contactForm.nome.value.trim();
+          const telefone = contactForm.telefone.value.trim();
+          const largura_parede = contactForm.largura_parede.value;
+          const altura_parede = contactForm.altura_parede.value;
+          const tecido = contactForm.tecido.value;
+          const instalacao = contactForm.instalacao.value;
+          const observacoes = contactForm.observacoes.value.trim();
+          const endereco = contactForm.endereco.value.trim();
+          
+          // Validação dos campos obrigatórios
+          if (!nome || !telefone || !largura_parede || !altura_parede || !tecido || !instalacao) {
+            status.textContent = 'Por favor, preencha todos os campos obrigatórios (*)';
+            status.className = 'text-sm text-red-600 font-semibold';
+            return;
+          }
+          
+          // Mostrar loading state
+          submitBtn.disabled = true;
+          submitIcon.classList.add('hidden');
+          submitSpinner.classList.remove('hidden');
+          submitText.textContent = 'Enviando...';
+          status.textContent = '';
+          
+          // Enviar para o backend primeiro (email + banco de dados)
+          fetch('/enviar', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+              nome: nome,
+              telefone: telefone,
+              largura_parede: largura_parede,
+              altura_parede: altura_parede,
+              tecido: tecido,
+              instalacao: instalacao,
+              observacoes: observacoes,
+              endereco: endereco
+            })
+          })
+          .then(response => {
+            if (response.ok) {
+              console.log('✅ Orçamento salvo e email enviado!');
+            } else {
+              console.log('⚠️ Orçamento salvo mas email pode ter falha');
+            }
+          })
+          .catch(error => {
+            console.error('❌ Erro ao enviar:', error);
+          });
+          
+          // Montar mensagem FORMATADA para WhatsApp
+          const waMessage = encodeURIComponent(
+            `╔═══════════════════════════╗\n` +
+            `║  🏠 *ORÇAMENTO CORTINAS*  ║\n` +
+            `╚═══════════════════════════╝\n\n` +
+            
+            `┌─ 👤 *DADOS DO CLIENTE*\n` +
+            `│ Nome: *${nome}*\n` +
+            `│ Tel: *${telefone}*\n` +
+            `└────────────────────\n\n` +
+            
+            `┌─ 📏 *MEDIDAS DA PAREDE*\n` +
+            `│ Largura: *${largura_parede}m*\n` +
+            `│ Altura: *${altura_parede}m*\n` +
+            `└────────────────────\n\n` +
+            
+            `┌─ 🎨 *ESPECIFICAÇÕES*\n` +
+            `│ Tecido: *${tecido}*\n` +
+            `│ Instalação: *${instalacao}*\n` +
+            `└────────────────────\n` +
+            
+            `${observacoes ? `\n┌─ 📝 *OBSERVAÇÕES*\n│ ${observacoes}\n└────────────────────\n` : ''}` +
+            `${endereco ? `\n┌─ 📍 *ENDEREÇO*\n│ ${endereco}\n└────────────────────\n` : ''}` +
+            `\n━━━━━━━━━━━━━━━━━━━━\n` +
+            `✨ _Cortinas Brás - Qualidade há 20+ anos_`
+          );
+          
+          // Pequeno delay para feedback visual
+          setTimeout(() => {
+            // Abre WhatsApp
+            window.open(`https://wa.me/5511992891070?text=${waMessage}`, '_blank');
+            
+            // Mostra mensagem de sucesso
+            document.getElementById('success').classList.remove('hidden');
+            
+            // Reseta formulário
+            contactForm.reset();
+            
+            // Restaura botão
+            submitBtn.disabled = false;
+            submitIcon.classList.remove('hidden');
+            submitSpinner.classList.add('hidden');
+            submitText.textContent = 'Enviar para WhatsApp';
+            
+            // Esconde mensagem após 5 segundos
+            setTimeout(() => {
+              document.getElementById('success').classList.add('hidden');
+            }, 5000);
+          }, 800);
+        });
+      }
+
+      // Smooth scroll para links internos com offset para o header
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          const target = document.querySelector(targetId);
+          if (target) {
+            const headerHeight = document.getElementById('main-header').offsetHeight;
+            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
+            window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+          }
+        });
+      });
+
+      // Header scroll behavior - mostra menu hamburguer ao rolar
+      const header = document.getElementById('main-header');
+      const headerContainer = document.getElementById('header-container');
+      const headerLogo = document.getElementById('header-logo');
+      const menuToggle = document.getElementById('menu-toggle');
+      const hamburgerBtn = document.getElementById('hamburger-btn');
+      const dropdownMenu = document.getElementById('dropdown-menu');
+      
+      let isScrolled = false;
+      
+      window.addEventListener('scroll', function() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const logoWrapper = document.querySelector('#header-container > div');
+        
+        // Evitar múltiplas atualizações desnecessárias
+        if (scrollTop > 50 && !isScrolled) {
+          isScrolled = true;
+          // Quando rolar: logo menor na ESQUERDA e mostra menu hamburguer
+          header.classList.add('py-1');
+          header.classList.remove('py-2');
+          logoWrapper.classList.remove('justify-center');
+          logoWrapper.classList.add('justify-start');
+          headerLogo.classList.remove('w-24');
+          headerLogo.classList.add('w-14');
+          menuToggle.classList.remove('opacity-0', 'pointer-events-none');
+          menuToggle.classList.add('opacity-100', 'pointer-events-auto');
+        } else if (scrollTop <= 50 && isScrolled) {
+          isScrolled = false;
+          // No topo: logo grande centralizado
+          header.classList.remove('py-1');
+          header.classList.add('py-2');
+          logoWrapper.classList.add('justify-center');
+          logoWrapper.classList.remove('justify-start');
+          headerLogo.classList.add('w-24');
+          headerLogo.classList.remove('w-14');
+          menuToggle.classList.add('opacity-0', 'pointer-events-none');
+          menuToggle.classList.remove('opacity-100', 'pointer-events-auto');
+          dropdownMenu.classList.add('hidden');
+        }
+      }, { passive: true });
+
+      // Toggle dropdown menu
+      hamburgerBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('hidden');
+      });
+
+      // Fechar menu ao clicar em um link
+      dropdownMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', function() {
+          dropdownMenu.classList.add('hidden');
+        });
+      });
+
+      // Fechar menu ao clicar fora
+      document.addEventListener('click', function(e) {
+        if (!menuToggle.contains(e.target)) {
+          dropdownMenu.classList.add('hidden');
+        }
+      });
+    </script>
+
+    <!-- Inicialização AOS e Progress Bar -->
+    <script>
+      // Inicializar AOS
+      AOS.init({
+        duration: 800,
+        easing: 'ease-in-out',
+        once: true,
+        offset: 100,
+        delay: 50
+      });
+
+      // Reading Progress Bar
+      window.addEventListener('scroll', function() {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById('progress-bar').style.width = scrolled + '%';
+      }, { passive: true });
+
+      // Enhanced form submission with loading state
+      (function() {
+        const formSubmitBtn = document.getElementById('submit-btn');
+        const formSubmitIcon = document.getElementById('submit-icon');
+        const formSubmitSpinner = document.getElementById('submit-spinner');
+        const formSubmitText = document.getElementById('submit-text');
+
+        if (formSubmitBtn) {
+          const originalFormHandler = contactForm.onsubmit;
+          contactForm.addEventListener('submit', function(e) {
+            // Mostrar loading state
+            formSubmitBtn.disabled = true;
+            formSubmitIcon.classList.add('hidden');
+            formSubmitSpinner.classList.remove('hidden');
+            formSubmitText.textContent = 'Enviando...';
+          }, { once: false });
+        }
+      })();
+
+      // Lazy loading para imagens (fallback caso loading="lazy" não funcione)
+      if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              if (img.dataset.src) {
+                img.src = img.dataset.src;
+                img.removeAttribute('data-src');
+              }
+              observer.unobserve(img);
+            }
+          });
+        });
+
+        document.querySelectorAll('img[data-src]').forEach(img => {
+          imageObserver.observe(img);
+        });
+      }
+
+      // Smooth scroll para links âncora
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+
+      // Back to top button handling
+      const backToTop = document.getElementById('backToTop');
+      function toggleBackToTop() {
+        if (!backToTop) return;
+        const shouldShow = window.scrollY > 300;
+        // If it becomes visible now, add show and trigger a pulse animation once
+        if (shouldShow && !backToTop.classList.contains('show')) {
+          backToTop.classList.add('show');
+          // Add pulse class for the animation; remove after one cycle
+          if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            backToTop.classList.add('pulse');
+            setTimeout(() => backToTop.classList.remove('pulse'), 2200);
+          }
+        } else if (!shouldShow) {
+          backToTop.classList.remove('show');
+          backToTop.classList.remove('pulse');
+        }
+      }
+
+      window.addEventListener('scroll', toggleBackToTop, { passive: true });
+      // Ensure button works if page already scrolled on load
+      document.addEventListener('DOMContentLoaded', toggleBackToTop);
+
+      if (backToTop) {
+        backToTop.addEventListener('click', (e) => {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+    </script>
+
+    <!-- Back to top button -->
+
+    <button id="backToTop" class="back-to-top" aria-label="Voltar ao topo" title="Voltar ao topo">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M10 6.5L5 11.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M10 6.5L15 11.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </body>
 </html>
