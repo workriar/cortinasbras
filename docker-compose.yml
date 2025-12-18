@@ -4,23 +4,24 @@ services:
   web:
     build: .
     ports:
-      - "8000:8000"
+      - "3001:3000"
     environment:
-      - PRODUCTION=true
-      - SECRET_KEY=${SECRET_KEY:-sua-chave-secreta-aqui}
-      - DATABASE_URL=${DATABASE_URL:-sqlite:///leads.db}
-      - MAIL_USERNAME=${MAIL_USERNAME:-seu-email@seudominio.com.br}
-      - MAIL_PASSWORD=${MAIL_PASSWORD:-sua-senha}
-      - MAIL_DEFAULT_SENDER=${MAIL_DEFAULT_SENDER:-contato@cortinasbras.com.br}
+      - NODE_ENV=production
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
     volumes:
-      - ./instance:/app/instance
+      - ./next-app/leads.db:/app/leads.db
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8000/" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:3000/" ]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 40s
+      start_period: 60s
   # Opcional: MySQL Database
   # Descomente se quiser usar MySQL em container
   # db:
