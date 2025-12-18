@@ -10,6 +10,7 @@ venv/
 env/
 ENV/
 .venv
+nome_do_venv/
 
 # Flask
 instance/
@@ -70,3 +71,44 @@ passenger_wsgi.py
 
 # PDF temporários
 orcamento_*.pdf
+
+# Sistema e Cache
+.cache/
+.local/
+.config/
+.npm/
+.gradle/
+.dotnet/
+.java/
+.ollama/
+.pm2/
+.ssh/
+.wget-hsts
+.bash_history
+
+# Docker
+.docker/
+
+# Backups
+backups/
+backup_*.tar.gz
+*.tar.gz
+
+# Ferramentas de desenvolvimento
+.antigravity-server/
+.gemini/
+.codegpt/
+.codex/
+.continue/
+.cline/
+.amp/
+.vscode-server/
+Cline/
+Sixth/
+
+# Diretórios grandes desnecessários
+oracleJdk-25/
+snap/
+
+# Scripts de sincronização (opcional - remova esta linha se quiser versionar)
+sync_production.sh
