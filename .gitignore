@@ -96,7 +96,6 @@ backup_*.tar.gz
 
 # Ferramentas de desenvolvimento
 .antigravity-server/
-.gemini/
 .codegpt/
 .codex/
 .continue/
