@@ -1,0 +1,45 @@
+Š	version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=production
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+    volumes:
+      - ./next-app/leads.db:/app/leads.db
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3000/" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+  # Opcional: MySQL Database
+  # Descomente se quiser usar MySQL em container
+  # db:
+  #   image: mysql:8.0
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+  #     MYSQL_DATABASE: cortinas_db
+  #     MYSQL_USER: ${MYSQL_USER:-cortinas_user}
+  #     MYSQL_PASSWORD: ${MYSQL_PASSWORD:-cortinas_password}
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
+  #   restart: unless-stopped
+  #   healthcheck:
+  #     test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+
+  # volumes:
+  #   mysql_data:
+Š	*cascade08"(7d1ff6d9dd889cf1f1b32ad06faa484ea67a78672file:///root/docker-compose.yml:file:///root

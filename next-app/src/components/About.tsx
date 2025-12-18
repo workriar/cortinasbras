@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 import { History, Award, Users } from "lucide-react";
 
 const stats = [
-    { icon: History, label: "20+ Anos", description: "De experiência no mercado" },
-    { icon: Award, label: "Premium", description: "Acabamento de alto padrão" },
-    { icon: Users, label: "10k+", description: "Clientes satisfeitos em SP" },
+    { icon: History, label: "20+", description: "Anos de Experiência" },
+    { icon: Award, label: "100%", description: "Produção Própria" },
+    { icon: Users, label: "5.000+", description: "Clientes Satisfeitos" },
 ];
 
 export default function About() {
@@ -19,16 +19,13 @@ export default function About() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-4xl font-extrabold mb-8 text-brand-300">Nossa Essência</h2>
+                        <h2 className="text-4xl font-extrabold mb-8 text-brand-300">Sobre a Cortinas Brás</h2>
                         <div className="space-y-6 text-brand-100 text-lg leading-relaxed">
                             <p>
-                                Fundada em 2003 no tradicional bairro do Brás, a <strong>Cortinas Brás</strong> nasceu com o propósito de levar sofisticação e conforto para os lares paulistanos através de cortinas e enxovais de fabricação própria.
+                                Desde 2003, a <strong>Cortinas Brás</strong> é sinônimo de excelência em decoração de ambientes. Fundada como empresa familiar no tradicional bairro do Brás, em São Paulo, crescemos junto com nossos clientes, sempre mantendo nossos valores de qualidade, honestidade e dedicação.
                             </p>
                             <p>
-                                Acreditamos que cada janela é uma moldura para a vida. Por isso, aliamos a precisão do corte artesanal à tecnologia dos tecidos italianos e espanhóis, garantindo durabilidade e um caimento impecável.
-                            </p>
-                            <p>
-                                Nosso diferencial está no atendimento "At home": levamos o catálogo até você para que a escolha seja feita no conforto do seu ambiente, garantindo que as cores e texturas harmonizem perfeitamente com sua iluminação natural.
+                                Com produção 100% própria e equipe especializada, transformamos cada projeto em uma experiêcia única, do primeiro contato até a instalação final.
                             </p>
                         </div>
 

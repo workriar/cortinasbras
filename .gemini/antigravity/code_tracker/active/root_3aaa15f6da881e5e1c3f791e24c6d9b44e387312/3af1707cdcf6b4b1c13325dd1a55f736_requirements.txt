@@ -1,0 +1,10 @@
+­Flask==2.3.3
+Flask-Mail==0.9.1
+Flask-SQLAlchemy==3.0.5
+ReportLab==4.0.4
+PyMySQL==1.0.2
+mysqlclient==2.1.1
+gunicorn==21.2.0
+requests==2.31.0
+python-dotenv==1.0.0
+pytz==2023.3­"(3aaa15f6da881e5e1c3f791e24c6d9b44e3873122file:///root/requirements.txt:file:///root

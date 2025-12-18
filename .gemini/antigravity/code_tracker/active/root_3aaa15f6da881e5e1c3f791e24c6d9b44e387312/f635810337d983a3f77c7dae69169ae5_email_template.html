@@ -1,0 +1,65 @@
+�<!DOCTYPE html>
+<html>
+
+<body style="font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;">
+    <div
+        style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow: hidden;">
+
+        <!-- Header -->
+        <div style="background-color: #D4A93E; padding: 20px; text-align: center;">
+            <h1 style="color: #ffffff; margin: 0; font-size: 24px;">Novo Lead Recebido</h1>
+            <p style="color: #ffffff; margin: 5px 0 0; opacity: 0.9;">{{ hora }}</p>
+        </div>
+
+        <!-- Conteúdo -->
+        <div style="padding: 30px;">
+            <div style="margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 20px;">
+                <h2 style="color: #333; font-size: 18px; margin-top: 0;">👤 Dados do Cliente</h2>
+                <p style="margin: 5px 0;"><strong>Nome:</strong> {{ lead.nome }}</p>
+                <p style="margin: 5px 0;"><strong>Telefone:</strong> <a href="tel:{{ lead.telefone }}"
+                        style="color: #D4A93E; text-decoration: none;">{{ lead.telefone }}</a></p>
+
+                <div style="margin-top: 15px;">
+                    <a href="https://wa.me/55{{ lead.telefone.replace('(','').replace(')','').replace('-','').replace(' ','') }}"
+                        style="background-color: #25D366; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
+                        Iniciar Conversa no WhatsApp
+                    </a>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 20px;">
+                <h2 style="color: #333; font-size: 18px; margin-top: 0;">📏 Medidas e Detalhes</h2>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="padding: 8px 0; color: #666;">Parede:</td>
+                        <td style="padding: 8px 0; font-weight: bold;">{{ lead.largura_parede }}m (L) x {{
+                            lead.altura_parede }}m (A)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0; color: #666;">Tecido:</td>
+                        <td style="padding: 8px 0; font-weight: bold;">{{ lead.tecido }}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0; color: #666;">Instalação:</td>
+                        <td style="padding: 8px 0; font-weight: bold;">{{ lead.instalacao }}</td>
+                    </tr>
+                </table>
+            </div>
+
+            {% if lead.observacoes %}
+            <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px;">
+                <h3 style="margin: 0 0 10px; font-size: 16px; color: #555;">Observações:</h3>
+                <p style="margin: 0; color: #333; font-style: italic;">"{{ lead.observacoes }}"</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Footer -->
+        <div style="background-color: #333; padding: 15px; text-align: center; color: #999; font-size: 12px;">
+            <p style="margin: 0;">Lead ID: #{{ lead.id }}</p>
+            <p style="margin: 5px 0 0;">Cortinas Brás - Sistema Automático</p>
+        </div>
+    </div>
+</body>
+
+</html>�"(3aaa15f6da881e5e1c3f791e24c6d9b44e3873122*file:///root/templates/email_template.html:file:///root

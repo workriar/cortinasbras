@@ -1,0 +1,202 @@
+# 🔑 Configurar Deploy Key - Passo a Passo
+
+## Objetivo
+Permitir que o EasyPanel faça pull do repositório GitHub configurando uma Deploy Key SSH.
+
+---
+
+## 📋 Passo 1: Obter a Deploy Key do EasyPanel
+
+### 1.1 Acessar o Projeto no EasyPanel
+1. Abra seu painel EasyPanel
+2. Navegue até o projeto **cortinas-bresser** (ou nome do seu projeto)
+
+### 1.2 Encontrar a Deploy Key
+Dependendo da versão do EasyPanel, a chave pode estar em:
+
+**Opção A - Aba Git/Repository:**
+1. Clique na aba **"Git"** ou **"Repository"**
+2. Procure por **"Deploy Key"** ou **"SSH Key"**
+3. Você verá algo como:
+   ```
+   ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAB... easypanel@server
+   ```
+
+**Opção B - Settings:**
+1. Clique em **"Settings"** do projeto
+2. Vá em **"Git Settings"** ou **"Repository Settings"**
+3. Procure por **"Public Key"** ou **"Deploy Key"**
+
+**Opção C - Service Settings:**
+1. Clique no serviço (cortinas-web)
+2. Vá em **"Source"** ou **"Git"**
+3. Procure por **"SSH Key"** ou **"Deploy Key"**
+
+### 1.3 Copiar a Chave
+1. **Copie toda a chave SSH** (começa com `ssh-rsa` ou `ssh-ed25519`)
+2. A chave deve ter este formato:
+   ```
+   ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDExampleKey1234567890...
+   ```
+
+> ⚠️ **Importante:** Copie a chave **PÚBLICA** (não a privada)
+
+---
+
+## 📋 Passo 2: Adicionar Deploy Key no GitHub
+
+### 2.1 Acessar Configurações do Repositório
+1. Abra: https://github.com/workriar/cortinasbras
+2. Clique em **"Settings"** (ícone de engrenagem no topo)
+
+### 2.2 Adicionar Deploy Key
+1. No menu lateral esquerdo, clique em **"Deploy keys"**
+2. Clique no botão **"Add deploy key"** (canto superior direito)
+
+### 2.3 Configurar a Deploy Key
+Preencha o formulário:
+
+**Title (Título):**
+```
+EasyPanel Deploy Key
+```
+
+**Key (Chave):**
+```
+[Cole aqui a chave SSH que você copiou do EasyPanel]
+```
+
+**Allow write access:**
+- ✅ **NÃO marque** esta opção (o EasyPanel só precisa ler)
+- Marque apenas se o EasyPanel precisar fazer push (não é o caso)
+
+### 2.4 Salvar
+1. Clique em **"Add key"**
+2. Você verá a chave listada com um ícone verde ✅
+
+---
+
+## 📋 Passo 3: Testar o Deploy no EasyPanel
+
+### 3.1 Forçar Rebuild
+No EasyPanel:
+1. Volte ao seu projeto
+2. Clique em **"Rebuild"** ou **"Redeploy"**
+3. Ou clique em **"Pull & Deploy"** se disponível
+
+### 3.2 Monitorar os Logs
+1. Vá na aba **"Logs"** ou **"Build Logs"**
+2. Você deve ver:
+   ```
+   ✅ Pulling data from origin/main
+   ✅ Successfully pulled changes
+   ✅ Building Docker image...
+   ```
+
+### 3.3 Aguardar Deploy
+- O deploy deve completar em 2-5 minutos
+- Status deve mudar para **"Running"** ou **"Healthy"**
+
+---
+
+## 🔍 Verificação
+
+### Se Funcionou:
+- ✅ Logs mostram "Successfully pulled changes"
+- ✅ Build inicia normalmente
+- ✅ Container fica em estado "Running"
+- ✅ Site está acessível
+
+### Se Ainda Falhar:
+Verifique:
+1. **Chave copiada corretamente?** (sem espaços extras)
+2. **Repositório é privado?** (deploy key deve estar ativa)
+3. **Branch correta?** (deve ser `main`)
+
+---
+
+## 🆘 Troubleshooting
+
+### Erro: "Permission denied (publickey)"
+**Causa:** Deploy key não foi adicionada ou está incorreta
+
+**Solução:**
+1. Verifique se a chave no GitHub está **exatamente** igual à do EasyPanel
+2. Certifique-se de copiar a chave **completa** (incluindo `ssh-rsa` no início)
+3. Tente remover e adicionar a deploy key novamente
+
+### Erro: "Repository not found"
+**Causa:** URL do repositório incorreta
+
+**Solução:**
+1. No EasyPanel, verifique se a URL é: `git@github.com:workriar/cortinasbras.git`
+2. Ou tente com HTTPS: `https://github.com/workriar/cortinasbras.git`
+
+### Erro: "Failed to pull changes" (ainda)
+**Causa:** Pode haver conflitos ou problemas de rede
+
+**Solução:**
+1. No EasyPanel, tente **"Force Rebuild"** ou **"Clean Build"**
+2. Verifique se há opção de **"Reset to remote"** ou **"Hard reset"**
+
+---
+
+## 📸 Capturas de Tela Úteis
+
+### No GitHub - Deploy Keys:
+Você verá algo assim após adicionar:
+```
+✅ EasyPanel Deploy Key
+   ssh-rsa AAAAB3Nza...
+   Added on Dec 18, 2025
+   Never used / Last used: a few seconds ago
+```
+
+### No EasyPanel - Logs de Sucesso:
+```
+[INFO] Pulling data from origin/main
+[INFO] From github.com:workriar/cortinasbras
+[INFO]  * branch            main       -> FETCH_HEAD
+[INFO] Already up to date.
+[INFO] Building Docker image...
+```
+
+---
+
+## ✅ Checklist Final
+
+Antes de testar o deploy:
+- [ ] Copiei a chave SSH pública do EasyPanel
+- [ ] Adicionei a deploy key no GitHub (Settings → Deploy keys)
+- [ ] A chave está ativa no GitHub (ícone verde)
+- [ ] Cliquei em "Rebuild" no EasyPanel
+- [ ] Estou monitorando os logs
+
+---
+
+## 🎉 Próximos Passos
+
+Após o deploy funcionar:
+1. ✅ Verifique se o site está acessível
+2. ✅ Teste o formulário de orçamento
+3. ✅ Futuras alterações farão deploy automático ao fazer `git push`
+
+---
+
+## 💡 Dica para o Futuro
+
+Agora que a deploy key está configurada:
+```bash
+# Sempre que fizer alterações:
+git add .
+git commit -m "Descrição da alteração"
+git push origin main
+
+# O EasyPanel detectará automaticamente e fará deploy!
+```
+
+---
+
+**Repositório:** https://github.com/workriar/cortinasbras  
+**Branch:** main  
+**Deploy Key:** Configurada ✅

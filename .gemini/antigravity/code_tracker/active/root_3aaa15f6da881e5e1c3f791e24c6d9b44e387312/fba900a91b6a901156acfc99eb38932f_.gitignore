@@ -1,0 +1,113 @@
+�# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+nome_do_venv/
+
+# Flask
+instance/
+.webassets-cache
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment Variables
+.env
+.env.local
+.env.production
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Build
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Arquivos antigos/desenvolvimento
+dev_bras/
+passenger_wsgi.py
+.htaccess
+
+# PDF temporários
+orcamento_*.pdf
+
+# Sistema e Cache
+.cache/
+.local/
+.config/
+.npm/
+.gradle/
+.dotnet/
+.java/
+.ollama/
+.pm2/
+.ssh/
+.wget-hsts
+.bash_history
+
+# Docker
+.docker/
+
+# Backups
+backups/
+backup_*.tar.gz
+*.tar.gz
+
+# Ferramentas de desenvolvimento
+.antigravity-server/
+.codegpt/
+.codex/
+.continue/
+.cline/
+.amp/
+.vscode-server/
+Cline/
+Sixth/
+
+# Diretórios grandes desnecessários
+oracleJdk-25/
+snap/
+
+# Scripts de sincronização (opcional - remova esta linha se quiser versionar)
+sync_production.sh
+�"(3aaa15f6da881e5e1c3f791e24c6d9b44e3873122file:///root/.gitignore:file:///root

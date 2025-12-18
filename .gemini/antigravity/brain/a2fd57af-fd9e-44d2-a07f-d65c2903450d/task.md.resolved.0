@@ -1,0 +1,8 @@
+- [ ] Draft implementation plan for PDF generation and email integration
+- [ ] Implement PDF generation service (`src/services/pdf.ts`)
+- [ ] Create API route to generate and send PDF (`src/pages/api/generate-pdf.ts`)
+- [ ] Update UI components to trigger PDF generation (Hero, Gallery)
+- [ ] Add email sending logic with attachment
+- [ ] Write tests for new functionality
+- [ ] Verify end-to-end flow
+- [ ] Update documentation

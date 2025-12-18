@@ -1,0 +1,64 @@
+�Atue como um desenvolvedor Python experiente. Gostaria que você implementasse um projeto web utilizando Flask com as seguintes especificações e funcionalidades, baseadas em um sistema de orçamentos de cortinas já existente:
+
+## Stack Tecnológica
+- **Backend:** Python com Flask
+- **Banco de Dados:** SQLAlchemy (SQLite para dev, compatível com outros para prod)
+- **Geração de PDF:** ReportLab
+- **Emails:** Flask-Mail
+- **Frontend:** HTML5, CSS3 (Vanilla), Jinja2 templates
+
+## Modelo de Dados (Classe Lead)
+Crie uma tabela 'leads' com os seguintes campos:
+- id (Integer, PK)
+- nome (String)
+- telefone (String)
+- largura_parede (Float)
+- altura_parede (Float)
+- largura_janela (Float)
+- altura_janela (Float)
+- tecido (String)
+- instalacao (String)
+- observacoes (Text)
+- endereco (Text)
+- criado_em (DateTime, default=now)
+
+## Funcionalidades e Rotas Principais
+
+1.  **Página Inicial (Rota `/`)**
+    - Renderizar um formulário de orçamento (`index.html`).
+    - Campos para capturar nome, telefone, medidas (parede/janela), tipo de tecido, tipo de instalação e endereço.
+
+2.  **Processamento de Orçamento (Rota `/enviar` [POST])**
+    - Receber os dados do formulário.
+    - Salvar o novo Lead no banco de dados.
+    - Gerar um PDF de orçamento personalizado em memória (sem salvar em disco) usando ReportLab.
+    - Enviar dois e-mails:
+        - **Para a Loja:** Notificação de novo lead com o PDF anexado.
+        - **Para o Cliente:** Confirmação de recebimento com o PDF anexado.
+    - Exibir uma página de sucesso ou erro.
+
+3.  **Download de PDF (Rota `/download_pdf/<id>`)**
+    - Permitir que o usuário baixe o PDF do orçamento gerado dinamicamente, buscando os dados pelo ID do lead.
+
+4.  **Painel Administrativo (Rota `/admin/leads`)**
+    - Proteger com autenticação básica (Basic Auth) usando variáveis de ambiente para usuário/senha.
+    - Listar todos os leads cadastrados em uma tabela.
+    - Incluir botão para gerar link de WhatsApp pré-formatado para cada lead.
+
+5.  **Exportação de Relatório (Rota `/admin/export_pdf`)**
+    - Gerar e baixar um PDF contendo a lista completa de todos os leads para controle administrativo.
+
+6.  **SEO e Utilitários**
+    - **`robots.txt` e `sitemap.xml`:** Rotas dedicadas para servir esses arquivos dinamicamente para indexação.
+    - **Integração WhatsApp:** Criar uma função auxiliar que gera um link `wa.me` com uma mensagem personalizada contendo o nome do cliente e o ID do orçamento.
+
+## Detalhes da Geração de PDF (Módulo `pdf_generator.py`)
+Implemente uma função `generate_orcamento_pdf(lead)` que:
+- Receba o objeto Lead.
+- Crie um layout profissional A4.
+- Inclua cabeçalho com Logo e Título.
+- Crie tabelas estilizadas para "Dados do Cliente" e "Medidas/Especificações".
+- Retorne o buffer de bytes do PDF.
+
+Por favor, implemente a estrutura do projeto, o arquivo principal `app.py` e o gerador de PDF seguindo estas diretrizes.
+�"(3aaa15f6da881e5e1c3f791e24c6d9b44e3873122'file:///root/prompt_funcionalidades.txt:file:///root

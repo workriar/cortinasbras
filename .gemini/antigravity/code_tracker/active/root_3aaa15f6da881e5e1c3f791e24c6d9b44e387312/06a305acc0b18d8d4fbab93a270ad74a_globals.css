@@ -1,0 +1,72 @@
+”@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #F8F5F1;
+  --color-brand-100: #EAD5C7;
+  --color-brand-300: #D4A93E;
+  --color-brand-500: #D4A93E;
+  --color-brand-700: #8B5C2A;
+  
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+:root {
+  --background: #F8F5F1;
+  --foreground: #8B5C2A;
+  --accent: #D4A93E;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Utilities */
+.glass-header {
+  @apply bg-black/80 backdrop-blur-md border-b border-white/10;
+}
+
+.card-hover {
+  @apply transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-brand-500/20;
+}
+
+.btn-primary {
+  @apply bg-brand-500 hover:bg-brand-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 active:scale-95 shadow-lg hover:shadow-brand-500/30;
+}
+
+.btn-whatsapp {
+  @apply bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 active:scale-95 shadow-lg hover:shadow-green-600/30;
+}
+
+/* Animations from original index.html */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #D4A93E, #8B5C2A);
+  z-index: 9999;
+  transition: width 0.1s ease;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(212, 169, 62, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(212, 169, 62, 0.6); }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+”"(3aaa15f6da881e5e1c3f791e24c6d9b44e3873122)file:///root/next-app/src/app/globals.css:file:///root

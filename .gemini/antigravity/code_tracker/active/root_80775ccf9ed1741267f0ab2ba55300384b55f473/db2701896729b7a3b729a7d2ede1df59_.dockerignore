@@ -1,0 +1,103 @@
+�# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+nome_do_venv/
+
+# Flask
+instance/
+.webassets-cache
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Logs
+*.log
+logs/
+
+# Environment
+.env
+.env.local
+
+# Documentation
+README.md
+*.md
+
+# Other
+dev_bras/
+public_html/
+
+# Diretórios grandes que não devem ir para produção
+backups/
+backup_*.tar.gz
+*.tar.gz
+oracleJdk-25/
+snap/
+.cache/
+.local/
+.npm/
+.gradle/
+.dotnet/
+.java/
+.ollama/
+.pm2/
+.vscode-server/
+.antigravity-server/
+.gemini/
+.codegpt/
+.codex/
+.continue/
+.cline/
+.amp/
+Cline/
+Sixth/
+frontend-react/
+.docker/
+.config/
+.ssh/
+
+# Scripts de desenvolvimento
+sync_production.sh
+deploy*.sh
+post_deploy*.sh
+fix_*.sh
+test_*.py
+verify_*.py
+�*cascade08"(80775ccf9ed1741267f0ab2ba55300384b55f4732file:///root/.dockerignore:file:///root

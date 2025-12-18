@@ -1,0 +1,8 @@
+# Sincronização Produção com Pasta Local
+
+## Tarefas
+- [/] Verificar status do Git e alterações locais
+- [ ] Criar script de sincronização automatizado
+- [ ] Adicionar e commitar alterações
+- [ ] Enviar para repositório remoto (GitHub)
+- [ ] Verificar deploy automático ou instruir próximos passos

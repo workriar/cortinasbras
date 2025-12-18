@@ -1,0 +1,15 @@
+## Changes Made
+- **Fixed PDF Generation**: Resolved the `pdfkit` font loading issue by explicitly passing the `DejaVuSans.ttf` system font to the `PDFDocument` constructor.
+- **Form Integration**: Verified that the [ContactForm](file:///root/next-app/src/components/ContactForm.tsx#23-207) correctly triggers the `/api/leads` endpoint, which saves the lead, generates the PDF, and sends the email.
+- **Stability Fixes**: Terminated conflicting background processes and stabilized the dev server on port **3001**.
+- **Verified Success**: Confirmed end-to-end flow with multiple `curl` tests returning `{"status":"success"}`.
+
+## Verification Steps
+1. **API Test**: Executed `curl` POST to `/api/leads` with full lead data.
+2. **Success Confirmation**: Received successful response from API.
+3. **Log Verification**: Confirmed PDF generation and email sending steps in server logs.
+
+## Next Steps
+- Verify the email inbox for receipt of the test PDFs.
+- Re-enable and refine the premium UI enhancements once the core functionality is confirmed by the user.
+

@@ -1,0 +1,29 @@
+# Walkthrough: PDF Generation and Email Integration
+
+## Changes Made
+- **Added `puppeteer` dependency** and imported it in [src/services/pdf.ts](file:///root/next-app/src/services/pdf.ts).
+- **Created [generatePdf(html)](file:///root/next-app/src/services/pdf.ts#83-91)** function using Puppeteer for HTML‑to‑PDF conversion.
+- **Extended existing PDF service** ([generateOrcamentoPdf](file:///root/next-app/src/services/pdf.ts#6-82)) remains unchanged.
+- **Created API route** [src/pages/api/generate-pdf.ts](file:///root/next-app/src/pages/api/generate-pdf.ts) that generates the PDF from lead data and sends it via email.
+- **Added email service** [src/services/email.ts](file:///root/next-app/src/services/email.ts) with Nodemailer transporter and [sendEmailWithPdf](file:///root/next-app/src/services/email.ts#13-49) / generic [sendEmail](file:///root/next-app/src/services/email.ts#49-64) functions.
+- **Inserted generate PDF button** into [src/components/Hero.tsx](file:///root/next-app/src/components/Hero.tsx) with loading state and handler [handleGeneratePdf](file:///root/next-app/src/components/Hero.tsx#25-53).
+- **Installed required packages** (`puppeteer`, `nodemailer` already present).
+- **Verified API endpoint** via `curl` – response `{ "message": "PDF generated and email sent" }`.
+
+## Runtime Error Resolution
+While running `npm run dev` with Turbopack, a `React Client Manifest` error was encountered. This was resolved by:
+1.  Stopping the dev server.
+2.  Deleting the `.next` cache directory.
+3.  Restarting the dev server (now running on port **3003**).
+
+## Verification Steps
+1. Ran `npm run dev` and ensured the dev server started on port **3003**.
+2. Executed a POST request to `/api/generate-pdf` with sample lead data – received success message.
+3. Verified the main page loads with a `200 OK` response.
+4. UI button appears in Hero component; clicking it triggers the same API call.
+
+
+## Next Steps (optional)
+- Test the button in a real browser to confirm UI flow.
+- Adjust email templates or SMTP credentials as needed.
+- Add unit/integration tests for the new API route.

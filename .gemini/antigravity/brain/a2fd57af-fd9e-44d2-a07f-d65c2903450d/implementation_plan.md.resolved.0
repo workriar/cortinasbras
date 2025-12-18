@@ -1,0 +1,54 @@
+# PDF Generation and Email Integration Plan
+
+## Goal Description
+Implement a feature that generates a PDF from content on the site and sends it as an email attachment when a user triggers the action. This will involve creating a PDF generation service, an API route to handle PDF creation and email sending, and updating UI components to initiate the process.
+
+## Proposed Changes
+---
+### Services
+#### [MODIFY] pdf.ts (file:///root/next-app/src/services/pdf.ts)
+- Add a function `generatePdf(html: string): Promise<Buffer>` that uses a library like `pdf-lib` or `puppeteer` to convert HTML to PDF.
+- Export the function for use in API routes.
+
+---
+### API Routes
+#### [NEW] generate-pdf.ts (file:///root/next-app/src/pages/api/generate-pdf.ts)
+- Create an API endpoint that receives HTML content, calls `generatePdf`, and sends an email with the PDF attached using an email service (e.g., Nodemailer).
+- Respond with success/failure status.
+
+---
+### UI Components
+#### [MODIFY] Hero.tsx (file:///root/next-app/src/components/Hero.tsx)
+- Add a button "Generate PDF & Email" that calls the new API route.
+- Show loading state and success/error messages.
+
+#### [MODIFY] Gallery.tsx (file:///root/next-app/src/components/Gallery.tsx)
+- Optionally allow PDF generation for gallery items.
+
+---
+### Email Configuration
+#### [NEW] email.ts (file:///root/next-app/src/services/email.ts)
+- Configure Nodemailer transporter with existing SMTP settings.
+- Export a function `sendEmail(to: string, subject: string, html: string, attachment: Buffer)`.
+
+---
+### Environment Variables
+- Add `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` to `.env.local` if not present.
+
+## Verification Plan
+### Automated Tests
+- Add unit test for `generatePdf` ensuring it returns a Buffer.
+- Add integration test for API route `/api/generate-pdf` mocking email service and verifying response.
+- Run `npm test` (assumes Jest setup).
+
+### Manual Verification
+1. Start dev server: `npm run dev`.
+2. Navigate to the page with the Hero component.
+3. Click "Generate PDF & Email".
+4. Verify email received with PDF attachment.
+5. Check that PDF content matches the rendered HTML.
+
+## Dependencies
+- `pdf-lib` or `puppeteer` for PDF generation.
+- `nodemailer` for email sending.
+- Ensure these are added to `package.json`.
