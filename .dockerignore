@@ -22,6 +22,7 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+nome_do_venv/
 
 # Flask
 instance/
@@ -49,6 +50,7 @@ Thumbs.db
 
 # Logs
 *.log
+logs/
 
 # Environment
 .env
@@ -61,3 +63,40 @@ README.md
 # Other
 dev_bras/
 public_html/
+
+# Diretórios grandes que não devem ir para produção
+backups/
+backup_*.tar.gz
+*.tar.gz
+oracleJdk-25/
+snap/
+.cache/
+.local/
+.npm/
+.gradle/
+.dotnet/
+.java/
+.ollama/
+.pm2/
+.vscode-server/
+.antigravity-server/
+.gemini/
+.codegpt/
+.codex/
+.continue/
+.cline/
+.amp/
+Cline/
+Sixth/
+frontend-react/
+.docker/
+.config/
+.ssh/
+
+# Scripts de desenvolvimento
+sync_production.sh
+deploy*.sh
+post_deploy*.sh
+fix_*.sh
+test_*.py
+verify_*.py
