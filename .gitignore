@@ -33,6 +33,7 @@ instance/
 *.swo
 *~
 .DS_Store
+.gemini/
 
 # Logs
 *.log
@@ -108,5 +109,6 @@ Sixth/
 oracleJdk-25/
 snap/
 
-# Scripts de sincronização (opcional - remova esta linha se quiser versionar)
+# Scripts de sincronização e deployment
 sync_production.sh
+quick_deploy.sh
