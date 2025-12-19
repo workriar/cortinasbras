@@ -51,7 +51,7 @@ export default function AdminLeads() {
             {/* Sidebar / Header */}
             <header className="bg-white border-b border-gray-200 py-4 px-8 flex items-center justify-between sticky top-0 z-30">
                 <div className="flex items-center gap-4">
-                    <Image src="/static/logo.png" alt="Logo" width={40} height={40} className="w-10 h-auto" />
+                    <Image src="/static/logo.png" alt="Logo" width={32} height={32} className="w-8 h-auto" />
                     <h1 className="text-xl font-bold text-brand-700">Dashboard de Leads</h1>
                 </div>
                 <div className="flex items-center gap-4">

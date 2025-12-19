@@ -12,8 +12,8 @@ export default function Footer() {
                             <Image
                                 src="/static/logo.png"
                                 alt="Cortinas Brás"
-                                width={120}
-                                height={50}
+                                width={90}
+                                height={38}
                                 className="brightness-0 invert h-auto w-auto"
                             />
                         </Link>

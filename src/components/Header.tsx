@@ -27,8 +27,8 @@ export default function Header() {
                     <Image
                         src="/static/logo.png"
                         alt="Cortinas Brás - Cortinas sob medida em São Paulo"
-                        width={80}
-                        height={32}
+                        width={60}
+                        height={24}
                         className="h-auto w-auto"
                         priority
                     />
