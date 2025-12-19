@@ -1,28 +1,39 @@
 # Build Stage
 FROM node:20-slim AS builder
 
-# Instalar dependências do Puppeteer para build
+# Instalar dependências básicas
 RUN apt-get update && apt-get install -y \
-    chromium \
-    fonts-liberation \
-    && rm -rf /var/lib/apt/lists/*
+  python3 \
+  make \
+  g++ \
+  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY next-app/package*.json ./
-RUN npm ci --only=production
+RUN npm ci
 COPY next-app/ .
 RUN npm run build
 
 # Production Stage
 FROM node:20-slim AS runner
 
-# Instalar dependências do Puppeteer no runtime
+# Instalar Chromium e dependências para Puppeteer
 RUN apt-get update && apt-get install -y \
-    chromium \
-    fonts-liberation \
-    fonts-dejavu-core \
-    fontconfig \
-    && rm -rf /var/lib/apt/lists/*
+  chromium \
+  fonts-liberation \
+  fonts-dejavu-core \
+  fontconfig \
+  ca-certificates \
+  libnss3 \
+  libatk-bridge2.0-0 \
+  libxcomposite1 \
+  libxdamage1 \
+  libxrandr2 \
+  libgbm1 \
+  libasound2 \
+  libpangocairo-1.0-0 \
+  libxshmfence1 \
+  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 ENV NODE_ENV=production
@@ -34,7 +45,7 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
-# Criar diretório para banco de dados
+# Criar diretório para banco de dados ou arquivos persistentes
 RUN mkdir -p /app/data && chown -R node:node /app
 
 # Usar usuário não-root
