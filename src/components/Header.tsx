@@ -1,22 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
 export default function Header() {
-    const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50);
-        };
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
 
     const navLinks = [
         { name: "Início", href: "#inicio" },
@@ -26,33 +17,25 @@ export default function Header() {
     ];
 
     return (
-        <header
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
-                    ? "glass-header py-2 shadow-lg"
-                    : "bg-gradient-to-b from-black/50 to-transparent py-6"
-                }`}
-        >
-            <div className={`container mx-auto px-6 transition-all duration-500 ${isScrolled ? "flex items-center justify-between" : "flex flex-col items-center"
-                }`}>
-                {/* Logo */}
+        <header className="fixed top-0 left-0 right-0 z-50 glass-header py-3 shadow-lg">
+            <div className="container mx-auto px-6 flex items-center justify-between">
+                {/* Logo - Always small and on left */}
                 <Link
                     href="/"
-                    className={`relative transition-all duration-500 hover:scale-105 ${isScrolled ? "order-1" : "mb-4"
-                        }`}
+                    className="relative transition-transform duration-300 hover:scale-105"
                 >
                     <Image
                         src="/static/logo.png"
                         alt="Cortinas Brás - Cortinas sob medida em São Paulo"
-                        width={isScrolled ? 100 : 180}
-                        height={isScrolled ? 40 : 72}
-                        className="h-auto w-auto transition-all duration-500"
+                        width={120}
+                        height={48}
+                        className="h-auto w-auto"
                         priority
                     />
                 </Link>
 
                 {/* Desktop Nav */}
-                <nav className={`hidden md:flex items-center gap-8 ${isScrolled ? "order-2" : ""
-                    }`}>
+                <nav className="hidden md:flex items-center gap-8">
                     {navLinks.map((link) => (
                         <Link
                             key={link.name}
@@ -73,7 +56,7 @@ export default function Header() {
 
                 {/* Mobile Menu Toggle */}
                 <button
-                    className={`md:hidden text-brand-300 p-2 ${isScrolled ? "order-3" : "absolute top-6 right-6"}`}
+                    className="md:hidden text-brand-300 p-2"
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                     aria-label="Menu de navegação"
                 >

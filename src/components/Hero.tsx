@@ -69,7 +69,7 @@ export default function Hero() {
     }, []);
 
     return (
-        <section id="inicio" className="relative min-h-screen flex items-center overflow-hidden">
+        <section id="inicio" className="relative min-h-screen flex items-center overflow-hidden pt-20">
             {/* Background Carousel */}
             <div className="absolute inset-0 z-0">
                 <AnimatePresence mode="wait">
