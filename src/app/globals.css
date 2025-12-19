@@ -24,24 +24,262 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom Utilities */
+/* ========================================
+   PREMIUM ANIMATIONS - Delicate & Elegant
+   ======================================== */
+
+/* Subtle Fabric Wave - Simula movimento delicado de tecido */
+@keyframes fabric-wave {
+  0%, 100% {
+    transform: translateY(0) scaleY(1);
+    filter: brightness(1);
+  }
+  25% {
+    transform: translateY(-3px) scaleY(1.01);
+    filter: brightness(1.05);
+  }
+  50% {
+    transform: translateY(-5px) scaleY(1.02);
+    filter: brightness(1.08);
+  }
+  75% {
+    transform: translateY(-3px) scaleY(1.01);
+    filter: brightness(1.05);
+  }
+}
+
+/* Silk Shimmer - Brilho suave como seda */
+@keyframes silk-shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* Gentle Float - Flutuação delicada */
+@keyframes gentle-float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-8px) rotate(0.5deg);
+  }
+  66% {
+    transform: translateY(-4px) rotate(-0.5deg);
+  }
+}
+
+/* Elegant Fade In Up */
+@keyframes elegant-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Luxury Glow Pulse */
+@keyframes luxury-glow {
+  0%, 100% {
+    box-shadow: 
+      0 0 20px rgba(212, 169, 62, 0.15),
+      0 0 40px rgba(212, 169, 62, 0.1),
+      0 0 60px rgba(212, 169, 62, 0.05);
+  }
+  50% {
+    box-shadow: 
+      0 0 30px rgba(212, 169, 62, 0.25),
+      0 0 60px rgba(212, 169, 62, 0.15),
+      0 0 90px rgba(212, 169, 62, 0.1);
+  }
+}
+
+/* Soft Scale Hover */
+@keyframes soft-scale {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Delicate Rotate */
+@keyframes delicate-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Curtain Drape - Efeito de cortina caindo */
+@keyframes curtain-drape {
+  0% {
+    clip-path: inset(0 0 100% 0);
+    opacity: 0;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+/* Shimmer Gradient - Para textos premium */
+@keyframes shimmer-text {
+  0% {
+    background-position: -100% center;
+  }
+  100% {
+    background-position: 100% center;
+  }
+}
+
+/* Ripple Effect - Ondulação suave */
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
 .glass-header {
   @apply bg-black/80 backdrop-blur-md border-b border-white/10;
 }
 
 .card-hover {
-  @apply transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-brand-500/20;
+  @apply transition-all duration-500 ease-out;
+  @apply hover:-translate-y-3 hover:scale-[1.02];
+  @apply hover:shadow-2xl hover:shadow-brand-500/20;
+}
+
+.card-premium {
+  @apply relative overflow-hidden;
+  @apply bg-gradient-to-br from-white via-brand-50/50 to-white;
+  @apply border border-brand-100/50;
+  @apply transition-all duration-700 ease-out;
+}
+
+.card-premium::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(212, 169, 62, 0.1) 50%,
+    transparent 70%
+  );
+  animation: silk-shimmer 3s linear infinite;
 }
 
 .btn-primary {
-  @apply bg-brand-500 hover:bg-brand-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 active:scale-95 shadow-lg hover:shadow-brand-500/30;
+  @apply relative overflow-hidden;
+  @apply bg-brand-500 hover:bg-brand-700 text-white font-bold;
+  @apply py-3 px-6 rounded-xl;
+  @apply transition-all duration-300 ease-out;
+  @apply active:scale-95;
+  @apply shadow-lg hover:shadow-2xl hover:shadow-brand-500/40;
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-primary:active::after {
+  width: 300px;
+  height: 300px;
 }
 
 .btn-whatsapp {
-  @apply bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 active:scale-95 shadow-lg hover:shadow-green-600/30;
+  @apply bg-green-600 hover:bg-green-700 text-white font-bold;
+  @apply py-3 px-6 rounded-xl;
+  @apply transition-all duration-300 ease-out;
+  @apply active:scale-95;
+  @apply shadow-lg hover:shadow-2xl hover:shadow-green-600/40;
 }
 
-/* Animations from original index.html */
+.btn-secondary {
+  @apply bg-white/10 hover:bg-white/20 text-white font-bold;
+  @apply py-3 px-6 rounded-xl;
+  @apply backdrop-blur-md border border-white/20;
+  @apply transition-all duration-300 ease-out;
+  @apply active:scale-95;
+  @apply shadow-lg hover:shadow-2xl hover:shadow-white/20;
+}
+
+/* Text Effects */
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--accent) 0%,
+    #f0d98f 25%,
+    var(--accent) 50%,
+    #f0d98f 75%,
+    var(--accent) 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-text 3s linear infinite;
+}
+
+/* Animation Classes */
+.animate-fabric-wave {
+  animation: fabric-wave 4s ease-in-out infinite;
+}
+
+.animate-gentle-float {
+  animation: gentle-float 6s ease-in-out infinite;
+}
+
+.animate-luxury-glow {
+  animation: luxury-glow 3s ease-in-out infinite;
+}
+
+.animate-elegant-fade-in {
+  animation: elegant-fade-in-up 0.8s ease-out forwards;
+}
+
+.animate-curtain-drape {
+  animation: curtain-drape 1.2s ease-out forwards;
+}
+
+.animate-delicate-rotate {
+  animation: delicate-rotate 20s linear infinite;
+}
+
+/* Progress Bar */
 .progress-bar {
   position: fixed;
   top: 0;
@@ -52,20 +290,85 @@ body {
   transition: width 0.1s ease;
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+/* Scroll Reveal */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
 
-.animate-float {
-  animation: float 3s ease-in-out infinite;
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(212, 169, 62, 0.3); }
-  50% { box-shadow: 0 0 40px rgba(212, 169, 62, 0.6); }
+/* Hover Lift Effect */
+.hover-lift {
+  @apply transition-all duration-500 ease-out;
 }
 
-.pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
+.hover-lift:hover {
+  transform: translateY(-12px) scale(1.03);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.1),
+    0 0 60px rgba(212, 169, 62, 0.15);
+}
+
+/* Parallax Container */
+.parallax-slow {
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Gradient Border Animation */
+.gradient-border {
+  position: relative;
+  background: linear-gradient(white, white) padding-box,
+              linear-gradient(135deg, #D4A93E, #8B5C2A, #D4A93E) border-box;
+  border: 2px solid transparent;
+  border-radius: 1rem;
+}
+
+/* Soft Blur Backdrop */
+.soft-blur {
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+/* Premium Card Shadow */
+.shadow-premium {
+  box-shadow: 
+    0 4px 6px -1px rgba(212, 169, 62, 0.1),
+    0 2px 4px -1px rgba(212, 169, 62, 0.06),
+    0 0 0 1px rgba(212, 169, 62, 0.05);
+}
+
+.shadow-premium-lg {
+  box-shadow: 
+    0 20px 25px -5px rgba(212, 169, 62, 0.1),
+    0 10px 10px -5px rgba(212, 169, 62, 0.04),
+    0 0 0 1px rgba(212, 169, 62, 0.05);
+}
+
+/* Smooth Transitions */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Focus States */
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+/* Selection */
+::selection {
+  background-color: var(--accent);
+  color: white;
+}
+
+::-moz-selection {
+  background-color: var(--accent);
+  color: white;
 }

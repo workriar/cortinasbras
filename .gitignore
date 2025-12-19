@@ -1,114 +1,97 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
+# Dependencies
+node_modules
+/.pnp
+.pnp.js
 
-# Virtual Environment
-venv/
-env/
-ENV/
-.venv
-nome_do_venv/
+# Testing
+/coverage
 
-# Flask
-instance/
-.webassets-cache
+# Next.js
+/.next/
+/out/
+/build
+
+# Production
+/dist
+
+# Environment variables
+.env
+.env*.local
+.env.production
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local development
+.vercel
+.turbo
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
 
 # Database
 *.db
 *.sqlite
 *.sqlite3
+/data
 
-# Environment Variables
-.env
-.env.local
-.env.production
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# OS
+.DS_Store
+*.pem
+Thumbs.db
 
 # IDE
-.vscode/
-.idea/
+.vscode
+.idea
 *.swp
 *.swo
 *~
-.DS_Store
-.gemini/
 
-# Logs
-*.log
-logs/
+# Python (legacy - can be removed if fully migrated)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
 
-# Build
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
-
-# OS
-Thumbs.db
-.DS_Store
-
-# Arquivos antigos/desenvolvimento
-dev_bras/
-passenger_wsgi.py
-.htaccess
-
-# PDF temporários
-orcamento_*.pdf
-
-# Sistema e Cache
-.cache/
-.local/
-.config/
-.npm/
-.gradle/
-.dotnet/
-.java/
-.ollama/
-.pm2/
-.ssh/
-.wget-hsts
-.bash_history
-
-# Docker
-.docker/
-
-# Backups
+# Legacy Flask files (archived)
+flask-legacy/
+templates/
+static/
 backups/
-backup_*.tar.gz
-*.tar.gz
+orcamentos/
+public_html/
 
-# Ferramentas de desenvolvimento
-.antigravity-server/
-.codegpt/
-.codex/
-.continue/
-.cline/
-.amp/
-.vscode-server/
-Cline/
-Sixth/
+# Temporary files
+tmp/
+temp/
+*.tmp
 
-# Diretórios grandes desnecessários
-oracleJdk-25/
-snap/
+# PDFs generated
+*.pdf
+!public/static/*.pdf
 
-# Scripts de sincronização e deployment
-sync_production.sh
-quick_deploy.sh
+# Misc
+.lesshst
+foo.tmp
+server
+.amp
+.continue
+.gemini
+get-docker.sh

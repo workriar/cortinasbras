@@ -70,20 +70,34 @@ export default function Hero() {
 
     return (
         <section id="inicio" className="relative min-h-screen flex items-center overflow-hidden pt-16">
-            {/* Background Carousel */}
+            {/* Background Carousel with Parallax */}
             <div className="absolute inset-0 z-0">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={currentSlide}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 0.6 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 1.5 }}
+                        initial={{ opacity: 0, scale: 1.1 }}
+                        animate={{ opacity: 0.7, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{
+                            duration: 2,
+                            ease: [0.43, 0.13, 0.23, 0.96]
+                        }}
                         className="absolute inset-0 bg-cover bg-center"
                         style={{ backgroundImage: `url(${slides[currentSlide]})` }}
                     />
                 </AnimatePresence>
-                <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+                {/* Gradient Overlay with Shimmer */}
+                <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/50 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-brand-900/20" />
+
+                {/* Decorative Elements - Simulating Fabric Texture */}
+                <div className="absolute top-0 right-0 w-1/3 h-full opacity-10">
+                    <div className="absolute inset-0 animate-fabric-wave"
+                        style={{
+                            background: 'repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(212, 169, 62, 0.1) 10px, rgba(212, 169, 62, 0.1) 11px)'
+                        }}
+                    />
+                </div>
             </div>
 
             <div className="container mx-auto px-6 pt-24 pb-12 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
@@ -92,29 +106,64 @@ export default function Hero() {
                     initial={{ opacity: 0, x: -50 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.8 }}
+                    transition={{
+                        duration: 1,
+                        ease: [0.25, 0.46, 0.45, 0.94]
+                    }}
                     className="space-y-8"
                 >
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-brand-300 text-sm font-semibold border border-white/10">
+                    {/* Badge with Gentle Float */}
+                    <motion.div
+                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-md rounded-full text-brand-300 text-sm font-semibold border border-white/20 shadow-premium animate-gentle-float"
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                    >
                         <span className="w-2 h-2 bg-brand-500 rounded-full animate-pulse" />
                         Tradição com estilo para o seu ambiente
-                    </div>
+                    </motion.div>
 
+                    {/* Title with Shimmer Effect */}
                     <h1 className="text-5xl md:text-7xl font-extrabold text-white leading-tight">
-                        Transforme seu ambiente —{" "}
-                        <span className="text-brand-300 relative">
+                        <motion.span
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2, duration: 0.8 }}
+                            className="block"
+                        >
+                            Transforme seu ambiente —{" "}
+                        </motion.span>
+                        <motion.span
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4, duration: 0.8 }}
+                            className="relative inline-block text-shimmer"
+                        >
                             cortinas sob medida
-                            <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 100 10" preserveAspectRatio="none">
-                                <path d="M0 5 Q 25 0, 50 5 T 100 5" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.3" />
+                            <svg className="absolute -bottom-2 left-0 w-full opacity-40" viewBox="0 0 100 10" preserveAspectRatio="none">
+                                <motion.path
+                                    d="M0 5 Q 25 0, 50 5 T 100 5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    initial={{ pathLength: 0 }}
+                                    animate={{ pathLength: 1 }}
+                                    transition={{ delay: 0.8, duration: 1.5, ease: "easeInOut" }}
+                                />
                             </svg>
-                        </span>
+                        </motion.span>
                     </h1>
 
-                    <p className="text-xl text-gray-200 max-w-lg leading-relaxed">
+                    {/* Description with Fade In */}
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.6, duration: 1 }}
+                        className="text-xl text-gray-200 max-w-lg leading-relaxed"
+                    >
                         Renove sua casa com cortinas sob medida, feitas para você.
                         Especialistas com mais de 20 anos em São Paulo:
                         Atendimento personalizado, fabricação própria e instalação especializada.
-                    </p>
+                    </motion.p>
 
                     <div className="flex flex-wrap gap-4 pt-4">
                         <motion.a
@@ -161,41 +210,67 @@ export default function Hero() {
                     </div>
                 </motion.div>
 
-                {/* Promo Carousel */}
+                {/* Promo Carousel - Premium Design */}
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, scale: 0.9, y: 30 }}
+                    whileInView={{ opacity: 1, scale: 1, y: 0 }}
                     viewport={{ once: true }}
+                    transition={{
+                        duration: 1.2,
+                        ease: [0.25, 0.46, 0.45, 0.94]
+                    }}
                     className="relative aspect-[4/5] max-w-md mx-auto w-full lg:ml-auto"
                 >
-                    <div className="absolute -inset-4 bg-brand-500/20 blur-3xl rounded-full animate-pulse" />
-                    <div className="relative h-full bg-white/5 backdrop-blur-sm p-4 rounded-3xl border border-white/10 overflow-hidden shadow-2xl">
+                    {/* Animated Glow Background */}
+                    <div className="absolute -inset-6 bg-gradient-to-r from-brand-500/20 via-brand-300/20 to-brand-500/20 blur-3xl rounded-full animate-luxury-glow" />
+
+                    {/* Decorative Ring */}
+                    <div className="absolute -inset-2 border-2 border-brand-300/20 rounded-3xl animate-delicate-rotate"
+                        style={{ animationDuration: '30s' }}
+                    />
+
+                    {/* Main Card */}
+                    <div className="relative h-full bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md p-5 rounded-3xl border border-white/20 overflow-hidden shadow-premium-lg">
+                        {/* Shimmer Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-[silk-shimmer_4s_linear_infinite]" />
+
                         <AnimatePresence mode="wait">
                             <motion.div
                                 key={currentPromo}
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -20 }}
-                                transition={{ duration: 0.5 }}
+                                initial={{ opacity: 0, scale: 0.95, rotateY: 10 }}
+                                animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                                exit={{ opacity: 0, scale: 0.95, rotateY: -10 }}
+                                transition={{
+                                    duration: 0.7,
+                                    ease: [0.43, 0.13, 0.23, 0.96]
+                                }}
                                 className="relative h-full w-full"
                             >
                                 <Image
                                     src={promos[currentPromo]}
                                     alt="Oferta Especial"
                                     fill
-                                    className="object-cover rounded-2xl"
+                                    className="object-cover rounded-2xl shadow-2xl"
                                     priority
                                 />
+
+                                {/* Subtle Overlay Gradient */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent rounded-2xl" />
                             </motion.div>
                         </AnimatePresence>
 
-                        {/* Indicators */}
-                        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
+                        {/* Elegant Indicators */}
+                        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2.5 z-10">
                             {promos.map((_, i) => (
-                                <div
+                                <motion.div
                                     key={i}
-                                    className={`h-2 rounded-full transition-all duration-300 ${i === currentPromo ? "w-8 bg-brand-500" : "w-2 bg-white/20"
+                                    className={`h-2 rounded-full transition-all duration-500 ${i === currentPromo
+                                            ? "w-10 bg-brand-500 shadow-lg shadow-brand-500/50"
+                                            : "w-2 bg-white/30 hover:bg-white/50"
                                         }`}
+                                    whileHover={{ scale: 1.2 }}
+                                    onClick={() => setCurrentPromo(i)}
+                                    style={{ cursor: 'pointer' }}
                                 />
                             ))}
                         </div>
