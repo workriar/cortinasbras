@@ -1,57 +1,38 @@
-# Build Stage
-FROM node:20-slim AS builder
+# Use Python 3.11 slim image
+FROM python:3.11-slim
 
-# Instalar dependências básicas
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-  python3 \
-  make \
-  g++ \
+  gcc \
+  default-libmysqlclient-dev \
+  pkg-config \
   && rm -rf /var/lib/apt/lists/*
 
+# Set working directory
 WORKDIR /app
-COPY next-app/package*.json ./
-RUN npm ci
-COPY next-app/ .
-RUN npm run build
 
-# Production Stage
-FROM node:20-slim AS runner
+# Copy requirements first for better caching
+COPY requirements.txt .
 
-# Instalar Chromium e dependências para Puppeteer
-RUN apt-get update && apt-get install -y \
-  chromium \
-  fonts-liberation \
-  fonts-dejavu-core \
-  fontconfig \
-  ca-certificates \
-  libnss3 \
-  libatk-bridge2.0-0 \
-  libxcomposite1 \
-  libxdamage1 \
-  libxrandr2 \
-  libgbm1 \
-  libasound2 \
-  libpangocairo-1.0-0 \
-  libxshmfence1 \
-  && rm -rf /var/lib/apt/lists/*
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-WORKDIR /app
-ENV NODE_ENV=production
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+# Copy application files
+COPY . .
 
-# Copiar arquivos do build
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
+# Create instance directory for SQLite
+RUN mkdir -p instance orcamentos logs
 
-# Criar diretório para banco de dados ou arquivos persistentes
-RUN mkdir -p /app/data && chown -R node:node /app
+# Set environment variables
+ENV FLASK_APP=app.py
+ENV PYTHONUNBUFFERED=1
 
-# Usar usuário não-root
-USER node
+# Expose port
+EXPOSE 5000
 
-EXPOSE 3000
-ENV PORT=3000
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD python -c "import requests; requests.get('http://localhost:5000/', timeout=2)" || exit 1
 
-CMD ["node", "server.js"]
+# Run with gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "--timeout", "120", "app:app"]
