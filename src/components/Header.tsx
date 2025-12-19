@@ -12,7 +12,7 @@ export default function Header() {
 
     useEffect(() => {
         const handleScroll = () => {
-            setIsScrolled(window.scrollY > 20);
+            setIsScrolled(window.scrollY > 50);
         };
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
@@ -27,47 +27,55 @@ export default function Header() {
 
     return (
         <header
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-                    ? "glass-header py-2"
-                    : "bg-transparent py-4"
+            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
+                    ? "glass-header py-2 shadow-lg"
+                    : "bg-gradient-to-b from-black/50 to-transparent py-6"
                 }`}
         >
-            <div className="container mx-auto px-6 flex items-center justify-between">
-                <Link href="/" className="relative transition-transform duration-300 hover:scale-105">
+            <div className={`container mx-auto px-6 transition-all duration-500 ${isScrolled ? "flex items-center justify-between" : "flex flex-col items-center"
+                }`}>
+                {/* Logo */}
+                <Link
+                    href="/"
+                    className={`relative transition-all duration-500 hover:scale-105 ${isScrolled ? "order-1" : "mb-4"
+                        }`}
+                >
                     <Image
                         src="/static/logo.png"
-                        alt="Cortinas Brás"
-                        width={isScrolled ? 80 : 100}
-                        height={40}
-                        className="h-auto w-auto transition-all duration-300"
+                        alt="Cortinas Brás - Cortinas sob medida em São Paulo"
+                        width={isScrolled ? 100 : 180}
+                        height={isScrolled ? 40 : 72}
+                        className="h-auto w-auto transition-all duration-500"
                         priority
                     />
                 </Link>
 
                 {/* Desktop Nav */}
-                <nav className="hidden md:flex items-center gap-8">
+                <nav className={`hidden md:flex items-center gap-8 ${isScrolled ? "order-2" : ""
+                    }`}>
                     {navLinks.map((link) => (
                         <Link
                             key={link.name}
                             href={link.href}
-                            className="text-sm font-medium text-white/80 hover:text-brand-300 transition-colors"
+                            className="text-sm font-medium text-white/90 hover:text-brand-300 transition-colors relative group"
                         >
                             {link.name}
+                            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-300 transition-all group-hover:w-full"></span>
                         </Link>
                     ))}
                     <Link
                         href="#contato"
-                        className="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2 rounded-full text-sm font-bold transition-all hover:shadow-lg hover:shadow-brand-500/30"
+                        className="bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all hover:shadow-lg hover:shadow-brand-500/50 hover:scale-105"
                     >
-                        Orçamento
+                        Orçamento Grátis
                     </Link>
                 </nav>
 
                 {/* Mobile Menu Toggle */}
                 <button
-                    className="md:hidden text-brand-300 p-2"
+                    className={`md:hidden text-brand-300 p-2 ${isScrolled ? "order-3" : "absolute top-6 right-6"}`}
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    aria-label="Menu"
+                    aria-label="Menu de navegação"
                 >
                     {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
                 </button>
@@ -87,7 +95,7 @@ export default function Header() {
                                 <Link
                                     key={link.name}
                                     href={link.href}
-                                    className="text-lg font-medium text-white/90 hover:text-brand-300 py-2 border-b border-white/5"
+                                    className="text-lg font-medium text-white/90 hover:text-brand-300 py-2 border-b border-white/5 transition-colors"
                                     onClick={() => setIsMobileMenuOpen(false)}
                                 >
                                     {link.name}
@@ -95,7 +103,7 @@ export default function Header() {
                             ))}
                             <Link
                                 href="#contato"
-                                className="bg-brand-500 text-white text-center py-4 rounded-xl font-bold mt-2"
+                                className="bg-gradient-to-r from-brand-500 to-brand-600 text-white text-center py-4 rounded-xl font-bold mt-2 hover:scale-105 transition-transform"
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 Solicitar Orçamento
