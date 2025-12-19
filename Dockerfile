@@ -1,38 +1,22 @@
-# Use Python 3.11 slim image
-FROM python:3.11-slim
+FROM python:3.12-slim
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-  gcc \
-  default-libmysqlclient-dev \
-  pkg-config \
-  && rm -rf /var/lib/apt/lists/*
-
-# Set working directory
 WORKDIR /app
 
-# Copy requirements first for better caching
+# Copia requirements primeiro (cache otimizado)
 COPY requirements.txt .
-
-# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application files
+# Copia código
 COPY . .
 
-# Create instance directory for SQLite
-RUN mkdir -p instance orcamentos logs
+# Cria diretórios persistentes
+RUN mkdir -p /opt/meu-projeto && \
+  chown -R www-data:www-data /opt/meu-projeto
 
-# Set environment variables
-ENV FLASK_APP=app.py
-ENV PYTHONUNBUFFERED=1
+# Variáveis de ambiente (build args do EasyPanel sobrescrevem)
+ENV PRODUCTION=1
+ENV DATABASE_URL=sqlite:////opt/meu-projeto/leads.db
 
-# Expose port
-EXPOSE 5000
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD python -c "import requests; requests.get('http://localhost:5000/', timeout=2)" || exit 1
-
-# Run with gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "--timeout", "120", "app:app"]
+# Roda Gunicorn (padrão para Flask em produção)
+EXPOSE 8000
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "app:app"]
