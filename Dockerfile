@@ -1,29 +1,65 @@
-FROM python:3.12-slim
+# Build Stage
+FROM node:20-slim AS builder
+
+# Instalar dependências básicas para build
+RUN apt-get update && apt-get install -y \
+  python3 \
+  make \
+  g++ \
+  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Instalar dependências do sistema para mysqlclient
-RUN apt-get update && apt-get install -y \
-  gcc \
-  default-libmysqlclient-dev \
-  pkg-config \
-  && rm -rf /var/lib/apt/lists/*
+# Copiar package files
+COPY package*.json ./
+RUN npm ci
 
-# Copia requirements primeiro (cache otimizado)
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copia código
+# Copiar código fonte
 COPY . .
 
-# Cria diretórios persistentes
-RUN mkdir -p /opt/meu-projeto && \
-  chown -R www-data:www-data /opt/meu-projeto
+# Build da aplicação Next.js
+RUN npm run build
 
-# Variáveis de ambiente (build args do EasyPanel sobrescrevem)
-ENV PRODUCTION=1
-ENV DATABASE_URL=sqlite:////opt/meu-projeto/leads.db
+# Production Stage
+FROM node:20-slim AS runner
 
-# Roda Gunicorn (padrão para Flask em produção)
-EXPOSE 8000
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "app:app"]
+# Instalar Chromium e dependências para Puppeteer
+RUN apt-get update && apt-get install -y \
+  chromium \
+  fonts-liberation \
+  fonts-dejavu-core \
+  fontconfig \
+  ca-certificates \
+  libnss3 \
+  libatk-bridge2.0-0 \
+  libxcomposite1 \
+  libxdamage1 \
+  libxrandr2 \
+  libgbm1 \
+  libasound2 \
+  libpangocairo-1.0-0 \
+  libxshmfence1 \
+  && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Configurar ambiente de produção
+ENV NODE_ENV=production
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+
+# Copiar arquivos do build
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+# Criar diretório para banco de dados
+RUN mkdir -p /app/data && chown -R node:node /app
+
+# Usar usuário não-root
+USER node
+
+EXPOSE 3000
+ENV PORT=3000
+
+CMD ["node", "server.js"]
