@@ -1,65 +1,60 @@
-# Build Stage
-FROM node:20-slim AS builder
+# Dockerfile para Next.js - Cortinas Brás
+FROM node:20-alpine AS base
 
-# Instalar dependências básicas para build
-RUN apt-get update && apt-get install -y \
-  python3 \
-  make \
-  g++ \
-  && rm -rf /var/lib/apt/lists/*
+# Instalar dependências do sistema necessárias
+RUN apk add --no-cache libc6-compat chromium
+
+# Configurar Puppeteer para usar o Chromium instalado
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
 WORKDIR /app
 
-# Copiar package files
+# Copiar arquivos de dependências
 COPY package*.json ./
+
+# Instalar dependências
+FROM base AS deps
 RUN npm ci
 
-# Copiar código fonte
+# Builder
+FROM base AS builder
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Build da aplicação Next.js
+# Desabilitar telemetria do Next.js
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Build da aplicação
 RUN npm run build
 
-# Production Stage
-FROM node:20-slim AS runner
+# Runner - Imagem de produção
+FROM base AS runner
 
-# Instalar Chromium e dependências para Puppeteer
-RUN apt-get update && apt-get install -y \
-  chromium \
-  fonts-liberation \
-  fonts-dejavu-core \
-  fontconfig \
-  ca-certificates \
-  libnss3 \
-  libatk-bridge2.0-0 \
-  libxcomposite1 \
-  libxdamage1 \
-  libxrandr2 \
-  libgbm1 \
-  libasound2 \
-  libpangocairo-1.0-0 \
-  libxshmfence1 \
-  && rm -rf /var/lib/apt/lists/*
-
-WORKDIR /app
-
-# Configurar ambiente de produção
 ENV NODE_ENV=production
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV NEXT_TELEMETRY_DISABLED=1
 
-# Copiar arquivos do build
+# Criar usuário não-root
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Criar diretório para dados persistentes
+RUN mkdir -p /app/data && chown -R nextjs:nodejs /app/data
+
+# Copiar arquivos necessários
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Criar diretório para banco de dados
-RUN mkdir -p /app/data && chown -R node:node /app
-
-# Usar usuário não-root
-USER node
+USER nextjs
 
 EXPOSE 3000
+
 ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"
 
 CMD ["node", "server.js"]

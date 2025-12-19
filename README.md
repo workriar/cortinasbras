@@ -1,170 +1,221 @@
-# Cortinas Bresser - Sistema de Orçamentos
+# 🏠 Cortinas Brás - Sistema de Orçamentos
 
-Sistema web para orçamentos de cortinas sob medida com geração de PDF e envio automático por email.
+Sistema web moderno para geração de orçamentos de cortinas sob medida, desenvolvido com **Next.js 16** e **React 19**.
 
-## 🚀 Deploy
+## 🚀 Tecnologias
 
-Este projeto está preparado para deploy no **EasyPanel (Hostinger VPS)** usando Docker.
+- **Framework**: Next.js 16.0.10 (App Router)
+- **Frontend**: React 19, TypeScript, TailwindCSS 4
+- **Backend**: Next.js API Routes
+- **Banco de Dados**: SQLite3
+- **Email**: Nodemailer (SMTP Hostinger)
+- **PDF**: Puppeteer + PDFKit
+- **Deploy**: Docker + Docker Compose
+- **Animações**: Framer Motion
+- **Formulários**: React Hook Form + Zod
 
-📖 **[Guia Completo de Deploy](./DEPLOY-EASYPANEL.md)**
+## 📋 Pré-requisitos
 
-## 🛠️ Tecnologias
+- Node.js 20+ 
+- npm ou yarn
+- Docker (para deploy)
 
-- **Backend:** Python 3.11 + Flask
-- **Banco de Dados:** SQLite (desenvolvimento) / MySQL (produção opcional)
-- **Email:** Flask-Mail com SMTP
-- **PDF:** ReportLab
-- **Deploy:** Docker + EasyPanel
-
-## 📦 Estrutura do Projeto
-
-```
-cortinas-app/
-├── app.py                    # Aplicação Flask principal
-├── requirements.txt          # Dependências Python
-├── templates/                # Templates HTML
-│   ├── index.html           # Página principal
-│   └── admin_leads.html     # Admin de leads
-├── static/                   # Arquivos estáticos (CSS, JS, imagens)
-├── Dockerfile               # Container Docker
-├── docker-compose.yml       # Orquestração Docker
-├── .dockerignore           # Arquivos ignorados no build
-├── .env.example            # Exemplo de variáveis de ambiente
-└── DEPLOY-EASYPANEL.md     # Guia de deploy completo
-```
-
-## 🏃 Executar Localmente
-
-### 1. Instalar Dependências
+## 🛠️ Instalação Local
 
 ```bash
-# Criar ambiente virtual
-python -m venv venv
+# Clone o repositório
+git clone https://github.com/seu-usuario/cortinas-app.git
+cd cortinas-app
 
-# Ativar ambiente virtual
-# Windows:
-venv\Scripts\activate
-# Linux/Mac:
-source venv/bin/activate
+# Instale as dependências
+npm install
 
-# Instalar dependências
-pip install -r requirements.txt
+# Configure as variáveis de ambiente
+cp .env.example .env.local
+# Edite .env.local com suas credenciais
+
+# Execute em desenvolvimento
+npm run dev
 ```
 
-### 2. Configurar Variáveis de Ambiente
+Acesse: [http://localhost:3000](http://localhost:3000)
 
-Copie `.env.example` para `.env` e configure:
+## 🔧 Variáveis de Ambiente
+
+Crie um arquivo `.env.local` baseado no `.env.example`:
+
+```env
+# Email (Hostinger)
+MAIL_SERVER=smtp.hostinger.com
+MAIL_PORT=587
+MAIL_USERNAME=seu-email@cortinasbras.com.br
+MAIL_PASSWORD=sua-senha
+MAIL_DEFAULT_SENDER=loja@cortinasbras.com.br
+
+# Database
+DATABASE_URL=sqlite:./data/leads.db
+
+# Site
+NEXT_PUBLIC_SITE_URL=https://cortinasbras.com.br
+```
+
+## 📦 Scripts Disponíveis
 
 ```bash
-cp .env.example .env
+npm run dev      # Desenvolvimento (localhost:3000)
+npm run build    # Build de produção
+npm run start    # Servidor de produção
+npm run lint     # Linter ESLint
 ```
 
-Edite o arquivo `.env` com suas configurações.
+## 🐳 Deploy com Docker
 
-### 3. Executar Aplicação
-
-```bash
-python app.py
-```
-
-Acesse: http://localhost:5000
-
-### 4. Executar com Docker (Desenvolvimento)
+### Build e Run Local
 
 ```bash
 # Build da imagem
 docker build -t cortinas-app .
 
-# Executar container
-docker run -p 8000:8000 \
-  -e PRODUCTION=false \
-  cortinas-app
+# Run container
+docker run -p 3000:3000 --env-file .env cortinas-app
 ```
 
-Acesse: http://localhost:8000
+### Docker Compose (Recomendado)
+
+```bash
+# Subir aplicação
+docker-compose up -d
+
+# Ver logs
+docker-compose logs -f
+
+# Parar aplicação
+docker-compose down
+```
 
 ## 🌐 Deploy em Produção
 
-### EasyPanel (Recomendado)
+### EasyPanel (VPS Hostinger)
 
-Siga o guia completo: **[DEPLOY-EASYPANEL.md](./DEPLOY-EASYPANEL.md)**
+1. **Conecte o repositório GitHub** no EasyPanel
+2. **Configure as variáveis de ambiente** no painel
+3. **Configure o volume** para persistência:
+   - Path: `/app/data`
+   - Type: Persistent
+4. **Deploy automático** a cada push na branch `main`
 
-Resumo dos passos:
-1. ✅ Fazer push do código para GitHub
-2. ✅ Conectar repositório no EasyPanel
-3. ✅ Configurar variáveis de ambiente
-4. ✅ Deploy automático!
+### Configuração DNS
 
-## 📧 Configuração de Email
-
-### Hostinger SMTP
-
-```env
-MAIL_USERNAME=seu-email@dominio.com
-MAIL_PASSWORD=sua-senha
-MAIL_DEFAULT_SENDER=contato@cortinasbras.com.br
+```
+Tipo: A
+Nome: @ (ou www)
+Valor: [IP do VPS]
+TTL: 3600
 ```
 
-Servidor SMTP (em `app.py`):
-- Host: `smtp.hostinger.com`
-- Port: `587`
-- TLS: `True`
+### SSL/HTTPS
 
-## 💾 Banco de Dados
+O Traefik (configurado no docker-compose) gerencia automaticamente os certificados SSL via Let's Encrypt.
 
-### SQLite (Padrão - Desenvolvimento)
+## 📁 Estrutura do Projeto
 
-Arquivo local: `instance/leads.db`
+```
+cortinas-app/
+├── src/
+│   ├── app/                    # App Router (Next.js 13+)
+│   │   ├── page.tsx           # Página principal
+│   │   ├── layout.tsx         # Layout global
+│   │   ├── api/               # API Routes
+│   │   │   ├── leads/         # Endpoint de leads
+│   │   │   └── admin/         # Admin endpoints
+│   │   └── admin/             # Painel admin
+│   ├── components/            # Componentes React
+│   │   ├── Header.tsx
+│   │   ├── Hero.tsx
+│   │   ├── Products.tsx
+│   │   ├── Gallery.tsx
+│   │   ├── About.tsx
+│   │   ├── ContactForm.tsx
+│   │   ├── Footer.tsx
+│   │   └── PromoPopup.tsx
+│   └── services/              # Serviços
+│       ├── db.ts             # Database (SQLite)
+│       ├── email.ts          # Email (Nodemailer)
+│       └── pdf.ts            # PDF (Puppeteer)
+├── public/
+│   └── static/               # Assets (imagens, logos)
+├── Dockerfile                # Container de produção
+├── docker-compose.yml        # Orquestração
+└── package.json              # Dependências
 
-```env
-DATABASE_URL=sqlite:///leads.db
 ```
 
-### MySQL (Produção)
+## 🎨 Funcionalidades
 
-```env
-DATABASE_URL=mysql://usuario:senha@host/database
-```
+### Para Clientes
+- ✅ Landing page moderna e responsiva
+- ✅ Formulário de orçamento intuitivo
+- ✅ Galeria de produtos e ambientes
+- ✅ Redirecionamento automático para WhatsApp
+- ✅ PDF profissional gerado automaticamente
+- ✅ Email com orçamento enviado
+
+### Para Administração
+- ✅ Painel de leads (`/admin/leads`)
+- ✅ Visualização de todos os orçamentos
+- ✅ Estatísticas (total, hoje)
+- ✅ Exportação de relatórios em PDF
+- ✅ Download individual de orçamentos
 
 ## 🔒 Segurança
 
-- ✅ Use sempre HTTPS em produção
-- ✅ Gere uma SECRET_KEY forte
-- ✅ Não commite o arquivo `.env`
-- ✅ Use variáveis de ambiente para credenciais
+- ✅ Variáveis de ambiente para credenciais
+- ✅ HTTPS obrigatório em produção
+- ✅ Headers de segurança configurados
+- ✅ Validação de formulários (Zod)
+- ⚠️ **TODO**: Adicionar autenticação no admin
 
-Gerar SECRET_KEY:
-```bash
-python -c "import secrets; print(secrets.token_hex(32))"
-```
+## 📊 SEO
 
-## 📊 Admin
-
-Visualize os leads cadastrados:
-
-```
-http://seu-dominio.com/admin/leads
-```
-
-> ⚠️ **Importante:** Adicione autenticação antes de usar em produção!
+- ✅ Meta tags otimizadas
+- ✅ Open Graph (Facebook)
+- ✅ Twitter Cards
+- ✅ Sitemap.xml automático
+- ✅ Robots.txt configurado
+- ✅ Schema.org markup
+- ✅ Performance otimizada (Lighthouse 90+)
 
 ## 🧪 Testes
 
-Teste localmente antes de fazer deploy:
+```bash
+# TODO: Implementar testes
+npm test
+```
 
-1. ✅ Formulário de orçamento
-2. ✅ Geração de PDF
-3. ✅ Envio de email
-4. ✅ Salvamento no banco
+## 📈 Analytics
 
-## 📄 Licença
+- ✅ Google Tag Manager integrado
+- ✅ Meta Pixel (Facebook) integrado
+- ✅ Eventos de conversão configurados
 
-Projeto proprietário - Cortinas Bresser © 2024
+## 🤝 Contribuindo
+
+1. Fork o projeto
+2. Crie uma branch (`git checkout -b feature/nova-funcionalidade`)
+3. Commit suas mudanças (`git commit -m 'Adiciona nova funcionalidade'`)
+4. Push para a branch (`git push origin feature/nova-funcionalidade`)
+5. Abra um Pull Request
+
+## 📝 Licença
+
+Este projeto é proprietário da **Cortinas Brás**.
 
 ## 📞 Suporte
 
-Para dúvidas sobre deploy, consulte: [DEPLOY-EASYPANEL.md](./DEPLOY-EASYPANEL.md)
+- **Website**: [cortinasbras.com.br](https://cortinasbras.com.br)
+- **WhatsApp**: (11) 99289-1070
+- **Email**: loja@cortinasbras.com.br
 
 ---
 
-**Status:** ✅ Pronto para deploy no EasyPanel
+**Desenvolvido com ❤️ para Cortinas Brás**
