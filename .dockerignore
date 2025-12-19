@@ -8,21 +8,8 @@ venv/
 env/
 ENV/
 build/
-develop-eggs/
 dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
 *.egg-info/
-.installed.cfg
-*.egg
-nome_do_venv/
 
 # Flask
 instance/
@@ -38,7 +25,6 @@ instance/
 .idea/
 *.swp
 *.swo
-*~
 
 # OS
 .DS_Store
@@ -60,41 +46,16 @@ logs/
 README.md
 *.md
 
-# Other
+# Development directories
 dev_bras/
 public_html/
-
-# Diretórios grandes que não devem ir para produção
 backups/
-backup_*.tar.gz
-*.tar.gz
-oracleJdk-25/
-snap/
-.cache/
-.local/
-.npm/
-.gradle/
-.dotnet/
-.java/
-.ollama/
-.pm2/
-.vscode-server/
-.antigravity-server/
-.gemini/
-.codegpt/
-.codex/
-.continue/
-.cline/
-.amp/
-Cline/
-Sixth/
 frontend-react/
 .docker/
-.config/
-.ssh/
+.continue/
+.amp/
 
-# Scripts de desenvolvimento
-sync_production.sh
+# Scripts
 deploy*.sh
 post_deploy*.sh
 fix_*.sh
