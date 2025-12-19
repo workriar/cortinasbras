@@ -7,38 +7,34 @@ services:
       - "3001:3000"
     environment:
       - NODE_ENV=production
-      - SMTP_HOST=${SMTP_HOST}
-      - SMTP_PORT=${SMTP_PORT}
-      - SMTP_USER=${SMTP_USER}
-      - SMTP_PASS=${SMTP_PASS}
+      - PORT=3000
+      - NEXT_PUBLIC_SITE_URL=https://cortinasbras.com.br
+      - SECRET_KEY=${SECRET_KEY:-change-me-in-production}
+      - MAIL_SERVER=${MAIL_SERVER:-mail.cronos-painel.com}
+      - MAIL_PORT=${MAIL_PORT:-465}
       - MAIL_USERNAME=${MAIL_USERNAME}
       - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - MAIL_DEFAULT_SENDER=${MAIL_DEFAULT_SENDER}
+      - DATABASE_URL=sqlite:///data/leads.db
+      - PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+      - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
     volumes:
-      - ./next-app/leads.db:/app/leads.db
+      - ./data:/app/data
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cortinasbras.rule=Host(`cortinasbras.com.br`) || Host(`www.cortinasbras.com.br`)"
+      - "traefik.http.routers.cortinasbras.entrypoints=websecure"
+      - "traefik.http.routers.cortinasbras.tls.certresolver=letsencrypt"
+      - "traefik.http.services.cortinasbras.loadbalancer.server.port=3000"
+      - "traefik.http.routers.cortinasbras-http.rule=Host(`cortinasbras.com.br`) || Host(`www.cortinasbras.com.br`)"
+      - "traefik.http.routers.cortinasbras-http.entrypoints=web"
+      - "traefik.http.routers.cortinasbras-http.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true"
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:3000/" ]
+      test: [ "CMD", "node", "-e", "require('http').get('http://localhost:3000', (r) => process.exit(r.statusCode === 200 ? 0 : 1))" ]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 60s
-  # Opcional: MySQL Database
-  # Descomente se quiser usar MySQL em container
-  # db:
-  #   image: mysql:8.0
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
-  #     MYSQL_DATABASE: cortinas_db
-  #     MYSQL_USER: ${MYSQL_USER:-cortinas_user}
-  #     MYSQL_PASSWORD: ${MYSQL_PASSWORD:-cortinas_password}
-  #   volumes:
-  #     - mysql_data:/var/lib/mysql
-  #   restart: unless-stopped
-  #   healthcheck:
-  #     test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
-
-  # volumes:
-  #   mysql_data:
