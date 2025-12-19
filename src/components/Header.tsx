@@ -17,9 +17,9 @@ export default function Header() {
     ];
 
     return (
-        <header className="fixed top-0 left-0 right-0 z-50 glass-header py-3 shadow-lg">
+        <header className="fixed top-0 left-0 right-0 z-50 glass-header py-2 shadow-lg">
             <div className="container mx-auto px-6 flex items-center justify-between">
-                {/* Logo - Always small and on left */}
+                {/* Logo - Small and on left */}
                 <Link
                     href="/"
                     className="relative transition-transform duration-300 hover:scale-105"
@@ -27,8 +27,8 @@ export default function Header() {
                     <Image
                         src="/static/logo.png"
                         alt="Cortinas Brás - Cortinas sob medida em São Paulo"
-                        width={120}
-                        height={48}
+                        width={80}
+                        height={32}
                         className="h-auto w-auto"
                         priority
                     />
