@@ -130,7 +130,7 @@ export default function Hero() {
                             transition={{ delay: 0.2, duration: 0.8 }}
                             className="block"
                         >
-                            Transforme seu ambiente —{" "}
+                            Cortinas Sob Medida e Cortinas Prontas em São Paulo
                         </motion.span>
                         <motion.span
                             initial={{ opacity: 0, y: 20 }}
@@ -138,7 +138,7 @@ export default function Hero() {
                             transition={{ delay: 0.4, duration: 0.8 }}
                             className="relative inline-block text-shimmer"
                         >
-                            cortinas sob medida
+                            Decoração Elegante para Todos os Ambientes
                             <svg className="absolute -bottom-2 left-0 w-full opacity-40" viewBox="0 0 100 10" preserveAspectRatio="none">
                                 <motion.path
                                     d="M0 5 Q 25 0, 50 5 T 100 5"
@@ -160,7 +160,7 @@ export default function Hero() {
                         transition={{ delay: 0.6, duration: 1 }}
                         className="text-xl text-gray-200 max-w-lg leading-relaxed"
                     >
-                        Renove sua casa com cortinas sob medida, feitas para você.
+                        Transformamos ambientes com cortinas sob medida de alto padrão, cortinas prontas com entrega rápida e uma linha completa de cama, mesa e banho, unindo sofisticação, conforto e praticidade.
                         Especialistas com mais de 20 anos em São Paulo:
                         Atendimento personalizado, fabricação própria e instalação especializada.
                     </motion.p>
@@ -265,8 +265,8 @@ export default function Hero() {
                                 <motion.div
                                     key={i}
                                     className={`h-2 rounded-full transition-all duration-500 ${i === currentPromo
-                                            ? "w-10 bg-brand-500 shadow-lg shadow-brand-500/50"
-                                            : "w-2 bg-white/30 hover:bg-white/50"
+                                        ? "w-10 bg-brand-500 shadow-lg shadow-brand-500/50"
+                                        : "w-2 bg-white/30 hover:bg-white/50"
                                         }`}
                                     whileHover={{ scale: 1.2 }}
                                     onClick={() => setCurrentPromo(i)}
