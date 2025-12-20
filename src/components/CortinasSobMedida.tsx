@@ -35,7 +35,7 @@ export default function CortinasSobMedida() {
                         <span className="w-3 h-3 bg-brand-500 rounded-full" /> Projeto personalizado para seu ambiente
                     </li>
                     <li className="flex items-center gap-2">
-                        <span className="w-3 h-3 bg-brand-500 rounded-full" /> Instalação especializada
+                        <span className="w-3 h-3 bg-brand-500 rounded-full" /> Atendimento Exclusivo
                     </li>
                 </ul>
                 <motion.a

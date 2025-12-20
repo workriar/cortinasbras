@@ -25,7 +25,7 @@ export default function About() {
                                 Desde 2003, a <strong>Cortinas Brás</strong> é sinônimo de excelência em decoração de ambientes. Fundada como empresa familiar no tradicional bairro do Brás, em São Paulo, crescemos junto com nossos clientes, sempre mantendo nossos valores de qualidade, honestidade e dedicação.
                             </p>
                             <p>
-                                Com produção 100% própria e equipe especializada, transformamos cada projeto em uma experiêcia única, do primeiro contato até a instalação final.
+                                Com produção 100% própria e equipe especializada, transformamos cada projeto em uma experiência única, do primeiro contato até a entrega final.
                             </p>
                         </div>
 

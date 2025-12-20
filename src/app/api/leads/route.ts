@@ -51,12 +51,15 @@ export async function POST(req: Request) {
             console.error("Erro ao enviar e-mail:", mailError);
         }
 
-        // 4. Gerar Link do WhatsApp
-        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://cortinasbras.com.br";
+        // 4. Gerar Link do WhatsApp usando origem da requisição
+        const originHeader = req.headers.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+        const siteUrl = originHeader.replace(/\/$/, ""); // remove trailing slash
         const pdfUrl = `${siteUrl}/api/leads/${leadId}/pdf`;
         const message = `Olá, meu nome é ${data.nome}. Fiz um orçamento no site (ID #${leadId}).\n\n*Medidas:* ${data.largura_parede}m x ${data.altura_parede}m\n*Tecido:* ${data.tecido}\n\n*Veja meu orçamento:* ${pdfUrl}\n\nGostaria de prosseguir com o atendimento.`;
         const encodedMessage = encodeURIComponent(message);
         const waUrl = `https://wa.me/5511992891070?text=${encodedMessage}`;
+
+
 
         return NextResponse.json({
             status: "success",

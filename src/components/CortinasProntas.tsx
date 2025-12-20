@@ -32,7 +32,7 @@ export default function CortinasProntas() {
                         <span className="w-3 h-3 bg-brand-500 rounded-full" /> Diversos tamanhos e cores
                     </li>
                     <li className="flex items-center gap-2">
-                        <span className="w-3 h-3 bg-brand-500 rounded-full" /> Prontas para instalar
+                        <span className="w-3 h-3 bg-brand-500 rounded-full" /> Diversas Opções
                     </li>
                     <li className="flex items-center gap-2">
                         <span className="w-3 h-3 bg-brand-500 rounded-full" /> Entrega rápida

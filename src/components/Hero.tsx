@@ -162,7 +162,7 @@ export default function Hero() {
                     >
                         Transformamos ambientes com cortinas sob medida de alto padrão, cortinas prontas com entrega rápida e uma linha completa de cama, mesa e banho, unindo sofisticação, conforto e praticidade.
                         Especialistas com mais de 20 anos em São Paulo:
-                        Atendimento personalizado, fabricação própria e instalação especializada.
+                        Atendimento personalizado, fabricação própria e entrega rápida.
                     </motion.p>
 
                     <div className="flex flex-wrap gap-4 pt-4">

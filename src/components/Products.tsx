@@ -6,7 +6,7 @@ import { Scissors, Home, Bed, Check } from "lucide-react";
 const products = [
     {
         title: "CORTINAS PRONTAS",
-        description: "Modelos variados em tamanhos padrão, prontos para levar e instalar. Ideal para quem tem pressa e busca qualidade.",
+        description: "Modelos variados em tamanhos padrão, prontos para levar. Ideal para quem tem pressa e busca qualidade.",
         icon: Home,
         features: ["Entrega imediata", "Várias cores", "Modelos variados"],
         delay: 0.1,

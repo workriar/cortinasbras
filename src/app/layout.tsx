@@ -16,13 +16,14 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/static/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/static/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/static/favicon-48x48.png", sizes: "48x48", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-48x48.png", sizes: "48x48", type: "image/png" },
     ],
-    shortcut: "/static/favicon.ico",
-    apple: "/static/apple-touch-icon.png",
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
+
   openGraph: {
     title: "Cortinas Brás — Cortinas Sob Medida, Cortina Wave e Enxoval Premium",
     description: "Cortinas sob medida São Paulo • Cortina wave trilho suíço • Cortinas blackout SP. Fabricação própria, entrega rápida e atendimento personalizado.",

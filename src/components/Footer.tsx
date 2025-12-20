@@ -46,7 +46,7 @@ export default function Footer() {
                             <li><Link href="#contato" className="hover:text-white transition-colors">Cortinas Wave</Link></li>
                             <li><Link href="#contato" className="hover:text-white transition-colors">Blackout SP</Link></li>
                             <li><Link href="#contato" className="hover:text-white transition-colors">Enxovais Prime</Link></li>
-                            <li><Link href="#contato" className="hover:text-white transition-colors">Instalação Express</Link></li>
+                            <li><Link href="#contato" className="hover:text-white transition-colors">Entrega Rápida</Link></li>
                         </ul>
                     </div>
 
