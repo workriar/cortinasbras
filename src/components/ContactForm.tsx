@@ -36,20 +36,23 @@ export default function ContactForm() {
     const onSubmit = async (data: FormData) => {
         setIsSubmitting(true);
         try {
-            const response = await axios.post("/api/leads", data);
+            const response = await axios.post('/api/leads', data);
 
-            if (response.data.status === "success" && response.data.whatsapp_url) {
+            if (response.data?.status === 'success' && response.data.whatsapp_url) {
                 setShowSuccess(true);
                 reset();
                 // Redirect to WhatsApp after alert
                 setTimeout(() => {
-                    window.open(response.data.whatsapp_url, "_blank");
+                    window.open(response.data.whatsapp_url, '_blank');
                     setShowSuccess(false);
                 }, 2000);
+            } else {
+                const msg = response.data?.message || 'Ocorreu um erro ao processar seu pedido. Por favor, tente novamente.';
+                alert(msg);
             }
         } catch (error) {
-            console.error("Erro ao enviar formulário", error);
-            alert("Houve um erro ao enviar sua solicitação. Por favor, tente novamente.");
+            console.error('Erro ao enviar formulário', error);
+            alert('Houve um erro ao enviar sua solicitação. Por favor, tente novamente.');
         } finally {
             setIsSubmitting(false);
         }
