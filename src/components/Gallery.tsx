@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { Instagram } from "lucide-react";
+
 
 const images = [
     { src: "/static/cortina-wave-1.jpg", alt: "Cortina Wave 1", span: "row-span-2" },
@@ -14,21 +16,27 @@ export default function Gallery() {
     return (
         <section className="py-24 bg-brand-50">
             <div className="container mx-auto px-6">
-                <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                <div className="flex flex-row justify-between items-end mb-16 gap-6">
                     <div className="max-w-2xl">
                         <h2 className="text-4xl font-extrabold text-brand-700 mb-6">Ambientes Inspiradores</h2>
                         <p className="text-lg text-brand-700/80">
                             Veja alguns de nossos projetos recentes onde a harmonia entre tecidos e iluminação cria experiências únicas.
                         </p>
                     </div>
-                    <div className="hidden md:block">
+                    <div className="flex items-center gap-2">
                         <motion.a
                             href="https://instagram.com/cortinasbras"
                             target="_blank"
-                            whileHover={{ scale: 1.05 }}
-                            className="px-6 py-3 border border-brand-500 text-brand-500 rounded-full font-bold hover:bg-brand-500 hover:text-white transition-all"
+                            rel="noopener noreferrer"
+                            whileHover={{ scale: 1.02, y: -2 }}
+                            whileTap={{ scale: 0.98 }}
+                            className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 group"
+                            aria-label="Ver mais no Instagram"
                         >
-                            Ver mais no Instagram
+                            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#833AB4] via-[#FD1D1D] to-[#F77737] flex items-center justify-center">
+                                <Instagram size={14} className="text-white" />
+                            </div>
+                            <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">Ver mais no Instagram</span>
                         </motion.a>
                     </div>
                 </div>

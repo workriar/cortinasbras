@@ -66,7 +66,7 @@ export default function ContactForm() {
                     >
                         <h2 className="text-4xl font-extrabold text-brand-700 mb-6">Solicite seu Orçamento Gratuito</h2>
                         <p className="text-lg text-brand-700/70 mb-8">
-                            Preencha os dados abaixo e receba uma estimativa personalizada. Se preferir, entraremos em contato para agendar uma visita sem compromisso.
+                            Preencha os dados abaixo e receba uma estimativa personalizada. Se preferir, entraremos em contato para te atender sem compromisso.
                         </p>
 
                         <div className="space-y-6">
