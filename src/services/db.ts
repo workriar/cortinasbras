@@ -1,20 +1,34 @@
 import sqlite3 from "sqlite3";
 import { open, Database } from "sqlite";
 import path from "path";
+import fs from "fs";
 
 let db: Database | null = null;
 
 export async function getDb() {
-    if (db) return db;
+  if (db) return db;
 
-    const dbPath = path.join(process.cwd(), "leads.db");
+  let dbPath = process.env.DATABASE_URL
+    ? process.env.DATABASE_URL.replace("sqlite:", "")
+    : path.join(process.cwd(), "leads.db");
 
-    db = await open({
-        filename: dbPath,
-        driver: sqlite3.Database,
-    });
+  // Se estiver em produção e o caminho for relativo, tenta colocar na pasta /data
+  if (process.env.NODE_ENV === "production" && !dbPath.startsWith("/") && !dbPath.startsWith("C:")) {
+    dbPath = path.join(process.cwd(), "data", "leads.db");
+  }
 
-    await db.exec(`
+  // Garante que o diretório pai existe
+  const dbDir = path.dirname(dbPath);
+  if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+  }
+
+  db = await open({
+    filename: dbPath,
+    driver: sqlite3.Database,
+  });
+
+  await db.exec(`
     CREATE TABLE IF NOT EXISTS leads (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       nome TEXT,
@@ -28,5 +42,5 @@ export async function getDb() {
     )
   `);
 
-    return db;
+  return db;
 }
