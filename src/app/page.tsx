@@ -78,13 +78,14 @@ export default function Home() {
             exit={{ opacity: 0, x: -20 }}
             className="absolute left-full ml-4 bottom-0 bg-white text-brand-700 p-4 rounded-xl shadow-2xl w-64 pointer-events-auto"
           >
-            <button
+            <div
+              role="button"
               onClick={() => setShowPromoTooltip(false)}
-              className="absolute top-2 right-2 text-brand-400 hover:text-brand-700"
+              className="absolute top-2 right-2 text-brand-400 hover:text-brand-700 cursor-pointer"
               aria-label="Fechar"
             >
               ✕
-            </button>
+            </div>
             <h4 className="font-bold text-lg mb-2">🎉 Oferta Especial!</h4>
             <p className="text-sm mb-3">
               <strong className="text-brand-600">10% OFF</strong> no PIX para primeira compra
