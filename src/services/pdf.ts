@@ -17,11 +17,11 @@ export async function generateOrcamentoPdf(lead: any): Promise<Buffer> {
             doc.on("end", () => resolve(Buffer.concat(chunks)));
             doc.on("error", (err) => reject(err));
 
-            // Colors (RGB format for better compatibility)
-            const COLOR_GOLD = [212, 169, 62];
-            const COLOR_DARK = [139, 92, 42];
-            const COLOR_GRAY = [128, 128, 128];
-            const COLOR_BLACK = [0, 0, 0];
+            // Colors (hex strings for compatibility)
+            const COLOR_GOLD = "#D4A93E";
+            const COLOR_DARK = "#8B5C2A";
+            const COLOR_GRAY = "#808080";
+            const COLOR_BLACK = "#000000";
 
             // Header
             doc.fillColor(COLOR_GOLD)
@@ -91,7 +91,7 @@ export async function generateOrcamentoPdf(lead: any): Promise<Buffer> {
             // Line separator
             doc.moveTo(50, doc.y)
                 .lineTo(545, doc.y)
-                .strokeColor([238, 238, 238])
+                .strokeColor("#EEEEEE")
                 .lineWidth(1)
                 .stroke()
                 .moveDown(1);
