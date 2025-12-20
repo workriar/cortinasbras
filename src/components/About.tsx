@@ -13,14 +13,14 @@ export default function About() {
     return (
         <section id="sobre" className="py-24 bg-brand-700 text-white relative overflow-hidden">
             <div className="container mx-auto px-6 relative z-10">
-                <div className="grid lg:grid-cols-2 gap-16 items-center">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                     <motion.div
                         initial={{ opacity: 0, x: -30 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-4xl font-extrabold mb-8 text-brand-300">Sobre a Cortinas Brás</h2>
-                        <div className="space-y-6 text-brand-100 text-lg leading-relaxed">
+                        <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 sm:mb-8 text-brand-300">Sobre a Cortinas Brás</h2>
+                        <div className="space-y-4 sm:space-y-6 text-brand-100 text-base sm:text-lg leading-relaxed">
                             <p>
                                 Desde 2003, a <strong>Cortinas Brás</strong> é sinônimo de excelência em decoração de ambientes. Fundada como empresa familiar no tradicional bairro do Brás, em São Paulo, crescemos junto com nossos clientes, sempre mantendo nossos valores de qualidade, honestidade e dedicação.
                             </p>

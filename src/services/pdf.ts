@@ -89,7 +89,7 @@ export async function generateOrcamentoPdf(lead: any): Promise<Buffer> {
 
         <div class="footer">
             <p><strong>Cortinas Brás - Tradição e Qualidade desde 2003</strong></p>
-            <p>Rua do Brás, 123 - São Paulo, SP | (11) 99289-1070</p>
+            <p>Av. Celso Garcia, 129 - Brás, São Paulo - SP, 03015-000 | (11) 99289-1070</p>
             <p>Este orçamento é uma estimativa e pode sofrer alterações após visita técnica.</p>
         </div>
     </body>
@@ -208,7 +208,7 @@ export async function generatePremiumOrcamentoPdf(lead: any): Promise<Buffer> {
 
         <div class="footer">
             <p><strong>Cortinas Brás - Tradição e Qualidade desde 2003</strong></p>
-            <p>Rua do Brás, 123 - São Paulo, SP | (11) 99289-1070</p>
+            <p>Av. Celso Garcia, 129 - Brás, São Paulo - SP, 03015-000 | (11) 99289-1070</p>
             <p>Este orçamento é uma estimativa e pode sofrer alterações após visita técnica.</p>
         </div>
     </body>

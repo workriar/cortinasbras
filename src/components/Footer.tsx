@@ -6,7 +6,7 @@ export default function Footer() {
     return (
         <footer className="bg-black text-white pt-20 pb-10 border-t border-white/5">
             <div className="container mx-auto px-6">
-                <div className="grid md:grid-cols-4 gap-12 mb-16">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
                     <div className="col-span-1 md:col-span-1">
                         <Link href="/" className="inline-block mb-8">
                             <Image
@@ -55,7 +55,7 @@ export default function Footer() {
                         <ul className="space-y-6 text-gray-400">
                             <li className="flex gap-3 items-start">
                                 <MapPin className="text-brand-300 shrink-0" size={20} />
-                                <span>Showroom no Brás, São Paulo - SP</span>
+                                <span>Av. Celso Garcia, 129 - Brás<br />São Paulo - SP, 03015-000</span>
                             </li>
                             <li className="flex gap-3 items-center">
                                 <Phone className="text-brand-300 shrink-0" size={20} />
@@ -66,6 +66,18 @@ export default function Footer() {
                                 <span>loja@cortinasbras.com.br</span>
                             </li>
                         </ul>
+                        <div className="mt-8">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.797071598995!2d-46.6137169247409!3d-23.53980006080033!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce58df8c06a2cd%3A0xc9828fe2be527cdc!2sAv.%20Celso%20Garcia%2C%20129%20-%20Br%C3%A1s%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2003015-000!5e0!3m2!1spt-BR!2sbr!4v1766257330906!5m2!1spt-BR!2sbr"
+                                width="100%"
+                                height="200"
+                                style={{ border: 0, borderRadius: '8px' }}
+                                allowFullScreen
+                                loading="lazy"
+                                referrerPolicy="no-referrer-when-downgrade"
+                                className="mt-4"
+                            />
+                        </div>
                     </div>
                 </div>
 

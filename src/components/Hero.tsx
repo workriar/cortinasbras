@@ -123,7 +123,7 @@ export default function Hero() {
                     </motion.div>
 
                     {/* Title with Shimmer Effect */}
-                    <h1 className="text-5xl md:text-7xl font-extrabold text-white leading-tight">
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight">
                         <motion.span
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -158,19 +158,19 @@ export default function Hero() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.6, duration: 1 }}
-                        className="text-xl text-gray-200 max-w-lg leading-relaxed"
+                        className="text-base sm:text-lg md:text-xl text-gray-200 max-w-lg leading-relaxed"
                     >
                         Transformamos ambientes com cortinas sob medida de alto padrão, cortinas prontas com entrega rápida e uma linha completa de cama, mesa e banho, unindo sofisticação, conforto e praticidade.
                         Especialistas com mais de 20 anos em São Paulo:
                         Atendimento personalizado, fabricação própria e entrega rápida.
                     </motion.p>
 
-                    <div className="flex flex-wrap gap-4 pt-4">
+                    <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 pt-4">
                         <motion.a
                             href="#contato"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="btn-primary flex items-center gap-2 px-8 py-4"
+                            className="btn-primary flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base w-full sm:w-auto"
                         >
                             Solicitar Orçamento <ArrowRight size={20} />
                         </motion.a>
@@ -179,7 +179,7 @@ export default function Hero() {
                             disabled={loading}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="btn-secondary flex items-center gap-2 px-8 py-4"
+                            className="btn-secondary flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base w-full sm:w-auto"
                         >
                             {loading ? 'Processando...' : 'Gerar PDF & Email'}
                         </motion.button>
@@ -188,13 +188,13 @@ export default function Hero() {
                             target="_blank"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="btn-whatsapp flex items-center gap-2 px-8 py-4"
+                            className="btn-whatsapp flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base w-full sm:w-auto"
                         >
                             <MessageCircle size={20} /> WhatsApp Direto
                         </motion.a>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-6 pt-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 pt-8">
                         {[
                             "Fabricação própria",
                             "Entrega em até 48h",

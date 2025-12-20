@@ -16,10 +16,10 @@ export default function Gallery() {
     return (
         <section className="py-24 bg-brand-50">
             <div className="container mx-auto px-6">
-                <div className="flex flex-row justify-between items-end mb-16 gap-6">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-16 gap-6">
                     <div className="max-w-2xl">
-                        <h2 className="text-4xl font-extrabold text-brand-700 mb-6">Ambientes Inspiradores</h2>
-                        <p className="text-lg text-brand-700/80">
+                        <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-700 mb-4 md:mb-6">Ambientes Inspiradores</h2>
+                        <p className="text-base sm:text-lg text-brand-700/80">
                             Veja alguns de nossos projetos recentes onde a harmonia entre tecidos e iluminação cria experiências únicas.
                         </p>
                     </div>
@@ -41,7 +41,7 @@ export default function Gallery() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-[800px] md:h-[600px]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-[250px] sm:auto-rows-[300px]">
                     {images.map((img, i) => (
                         <motion.div
                             key={i}
