@@ -4,10 +4,10 @@ import { generateOrcamentoPdf } from "@/services/pdf";
 
 export async function GET(
     req: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        const id = params.id;
+        const { id } = await params;
         const db = await getDb();
         const lead = await db.get("SELECT * FROM leads WHERE id = ?", [id]);
 

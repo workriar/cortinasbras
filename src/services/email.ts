@@ -23,7 +23,7 @@ export async function sendEmailWithPdf(lead: any, pdfBuffer: Buffer) {
 
     const mailOptions = {
         from: process.env.MAIL_DEFAULT_SENDER || process.env.MAIL_USERNAME,
-        to: "loja@cortinasbras.com.br",
+        to: process.env.MAIL_NOTIFICATION_TO || "loja@cortinasbras.com.br",
         subject: `🏠 Novo Orçamento #${lead.id} - ${lead.nome}`,
         text: `Olá, uma nova solicitação de orçamento foi recebida.\n\nNome: ${lead.nome}\nTelefone: ${lead.telefone}\n\nVeja o PDF em anexo para mais detalhes.`,
         html: `
