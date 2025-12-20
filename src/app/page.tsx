@@ -92,6 +92,15 @@ export default function Home() {
             <p className="text-xs text-brand-500 font-mono bg-brand-50 px-2 py-1 rounded">
               Cupom: <strong>CLIENTE10</strong>
             </p>
+            <motion.a
+              href="https://wa.me/5511992891070?text=Quero%20usar%20este%20cupom%20agora"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.05 }}
+              className="inline-flex items-center gap-2 mt-2 px-4 py-2 bg-brand-600 hover:bg-brand-500 rounded-full font-semibold"
+            >
+              Usar cupom no WhatsApp
+            </motion.a>
           </motion.div>
         )}
       </motion.button>
