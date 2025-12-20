@@ -1,14 +1,18 @@
 import PDFDocument from "pdfkit";
 import { Writable } from "stream";
+import fs from "fs";
 // @ts-ignore
 import puppeteer from "puppeteer";
 
 export async function generateOrcamentoPdf(lead: any): Promise<Buffer> {
     return new Promise((resolve, reject) => {
+        const fontPath = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf";
+        const hasFont = fs.existsSync(fontPath);
+
         const doc = new PDFDocument({
             size: "A4",
             margin: 50,
-            font: "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+            font: hasFont ? fontPath : "Helvetica"
         });
 
         const chunks: Buffer[] = [];

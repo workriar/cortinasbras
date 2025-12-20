@@ -13,6 +13,16 @@ export const metadata: Metadata = {
   description: "Cortinas sob medida e cortinas prontas com entrega rápida em São Paulo. Linha completa de cama, mesa e banho. Orçamento gratuito!",
   keywords: ["cortinas sob medida", "cortina pronta", "cortinas decorativas", "São Paulo", "cortinas Brás"],
   authors: [{ name: "Cortinas Brás" }],
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/static/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/static/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/static/favicon-48x48.png", sizes: "48x48", type: "image/png" },
+    ],
+    shortcut: "/static/favicon.ico",
+    apple: "/static/apple-touch-icon.png",
+  },
   openGraph: {
     title: "Cortinas Brás — Cortinas Sob Medida, Cortina Wave e Enxoval Premium",
     description: "Cortinas sob medida São Paulo • Cortina wave trilho suíço • Cortinas blackout SP. Fabricação própria, entrega rápida e atendimento personalizado.",

@@ -52,7 +52,9 @@ export async function POST(req: Request) {
         }
 
         // 4. Gerar Link do WhatsApp
-        const message = `Olá, meu nome é ${data.nome}. Fiz um orçamento no site (ID #${leadId}).\n\n*Medidas:* ${data.largura_parede}m x ${data.altura_parede}m\n*Tecido:* ${data.tecido}\n\nGostaria de prosseguir com o atendimento.`;
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://cortinasbras.com.br";
+        const pdfUrl = `${siteUrl}/api/leads/${leadId}/pdf`;
+        const message = `Olá, meu nome é ${data.nome}. Fiz um orçamento no site (ID #${leadId}).\n\n*Medidas:* ${data.largura_parede}m x ${data.altura_parede}m\n*Tecido:* ${data.tecido}\n\n*Veja meu orçamento:* ${pdfUrl}\n\nGostaria de prosseguir com o atendimento.`;
         const encodedMessage = encodeURIComponent(message);
         const waUrl = `https://wa.me/5511992891070?text=${encodedMessage}`;
 
