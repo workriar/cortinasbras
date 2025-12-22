@@ -47,14 +47,49 @@ if (envContent.includes('NEXT_PUBLIC_SITE_URL=')) {
     // Adicionar no final do arquivo
     envContent += newLine;
 
-    // Salvar
-    fs.writeFileSync(envPath, envContent);
-
     console.log('✅ NEXT_PUBLIC_SITE_URL adicionado ao .env');
     console.log('📍 Valor padrão: http://localhost:3000');
     console.log('');
     console.log('💡 Para produção, altere para: https://cortinasbras.com.br');
 }
+
+// Verificar DATABASE_URL
+console.log('');
+if (envContent.includes('DATABASE_URL=')) {
+    const match = envContent.match(/DATABASE_URL=(.+)/);
+    if (match) {
+        const dbUrl = match[1].trim();
+
+        // Verificar se é um caminho inválido
+        if (dbUrl.includes('////opt/meu-projeto') || dbUrl === 'sqlite:/' || dbUrl === 'sqlite:') {
+            console.log('⚠️  DATABASE_URL com valor inválido detectado');
+            console.log(`📍 Valor atual: ${dbUrl}`);
+            console.log('📝 Corrigindo...');
+
+            // Substituir valor inválido
+            envContent = envContent.replace(/DATABASE_URL=.+/, 'DATABASE_URL=sqlite:./leads.db');
+
+            console.log('✅ DATABASE_URL corrigido');
+            console.log('📍 Novo valor: sqlite:./leads.db');
+        } else {
+            console.log('✅ DATABASE_URL já está configurado corretamente');
+            console.log(`📍 Valor atual: ${dbUrl}`);
+        }
+    }
+} else {
+    console.log('⚠️  DATABASE_URL não encontrado no .env');
+    console.log('📝 Adicionando variável...');
+
+    // Adicionar variável
+    const newLine = '\n# Banco de dados SQLite\nDATABASE_URL=sqlite:./leads.db\n';
+    envContent += newLine;
+
+    console.log('✅ DATABASE_URL adicionado ao .env');
+    console.log('📍 Valor padrão: sqlite:./leads.db');
+}
+
+// Salvar alterações se houve mudanças
+fs.writeFileSync(envPath, envContent);
 
 console.log('');
 console.log('🎉 Configuração concluída!');

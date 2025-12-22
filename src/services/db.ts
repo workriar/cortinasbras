@@ -8,18 +8,36 @@ let db: Database | null = null;
 export async function getDb() {
   if (db) return db;
 
-  let dbPath = process.env.DATABASE_URL
-    ? process.env.DATABASE_URL.replace("sqlite:", "")
-    : path.join(process.cwd(), "leads.db");
+  // Determinar caminho do banco de dados
+  let dbPath: string;
 
-  // Se estiver em produção e o caminho for relativo, tenta colocar na pasta /data
-  if (process.env.NODE_ENV === "production" && !dbPath.startsWith("/") && !dbPath.startsWith("C:")) {
-    dbPath = path.join(process.cwd(), "data", "leads.db");
+  // 1. Tentar usar DATABASE_URL do .env
+  if (process.env.DATABASE_URL) {
+    const urlPath = process.env.DATABASE_URL.replace("sqlite:", "").trim();
+
+    // Validar se o caminho não está vazio ou inválido
+    if (urlPath && urlPath !== "/" && !urlPath.startsWith("////")) {
+      dbPath = urlPath;
+    } else {
+      console.warn(`DATABASE_URL inválido: ${process.env.DATABASE_URL}. Usando caminho padrão.`);
+      dbPath = path.join(process.cwd(), "leads.db");
+    }
+  } else {
+    // 2. Usar caminho padrão
+    dbPath = path.join(process.cwd(), "leads.db");
   }
+
+  // 3. Se o caminho for relativo, resolver a partir do diretório atual
+  if (!path.isAbsolute(dbPath)) {
+    dbPath = path.resolve(process.cwd(), dbPath);
+  }
+
+  console.log(`📁 Usando banco de dados: ${dbPath}`);
 
   // Garante que o diretório pai existe
   const dbDir = path.dirname(dbPath);
   if (!fs.existsSync(dbDir)) {
+    console.log(`📂 Criando diretório: ${dbDir}`);
     fs.mkdirSync(dbDir, { recursive: true });
   }
 
