@@ -26,7 +26,16 @@ description: Configuração completa do ambiente local para o projeto Cortinas B
    ```
    - Esse comando lê o `package.json` e baixa Next.js, React, Tailwind, Framer‑Motion etc.
 
-3. **Criar arquivo de variáveis de ambiente**
+3. **Instalar Chromium para geração de PDF**
+   ```powershell
+   // turbo
+   npx puppeteer browsers install chrome
+   ```
+   - O Puppeteer precisa do Chromium para gerar PDFs dos orçamentos.
+   - Este comando baixa o Chromium em `~/.cache/puppeteer/chrome/`.
+   - **Importante:** Este passo é necessário apenas no ambiente local. No Docker, o Chromium já vem instalado.
+
+4. **Criar arquivo de variáveis de ambiente**
    ```powershell
    // turbo
    copy .env.example .env
@@ -34,14 +43,14 @@ description: Configuração completa do ambiente local para o projeto Cortinas B
    ```
    - Se não precisar enviar e‑mail ainda, deixe os campos vazios.
 
-4. **Rodar o servidor de desenvolvimento**
+5. **Rodar o servidor de desenvolvimento**
    ```powershell
    // turbo
    npm run dev
    ```
    - Abra o navegador em `http://localhost:3000` e verifique o site.
 
-5. **(Opcional) Build de produção**
+6. **(Opcional) Build de produção**
    ```powershell
    // turbo
    npm run build && npm start
@@ -54,6 +63,7 @@ description: Configuração completa do ambiente local para o projeto Cortinas B
 - Use `Ctrl+Shift+P` → *Terminal: New Terminal* no VS Code para abrir o terminal já na pasta correta.
 - Caso o comando `winget` falhe, instale o Node.js manualmente pelo instalador.
 - Se houver erros de lint, rode `npm run lint` para identificar.
+- **Erro de PDF?** Certifique-se de ter executado `npx puppeteer browsers install chrome`.
 
 **⚡️ Pronto!**
 Siga os passos acima e seu ambiente local estará configurado e rodando.

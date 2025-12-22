@@ -8,7 +8,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "verify": "node scripts/verify-production.js",
+    "setup:chromium": "npx puppeteer browsers install chrome",
+    "postinstall": "npm run setup:chromium"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
