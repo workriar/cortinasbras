@@ -1,125 +1,152 @@
-# 🚨 Correção para Produção - DATABASE_URL
+# 🚀 Guia de Deploy em Produção
 
-## Problema
+## Opção 1: Script Automatizado via PowerShell (Windows)
 
-O erro `EACCES: permission denied, mkdir '////opt/meu-projeto'` está ocorrendo em **produção**, mas não localmente.
+### Passo a Passo
 
-## Causa
+1. **Abra o PowerShell** (como Administrador se necessário)
 
-A variável `DATABASE_URL` no servidor de produção está com valor incorreto ou não está configurada.
+2. **Navegue até o diretório do projeto:**
+   ```powershell
+   cd e:\CB\www\cortinas-app
+   ```
 
-## Solução Rápida
+3. **Execute o script de deploy remoto:**
+   ```powershell
+   .\scripts\deploy-remote.ps1
+   ```
 
-### Opção 1: Via SSH (Recomendado)
+4. **Forneça as informações quando solicitado:**
+   - **IP/Domínio do servidor:** (ex: `cortinasbras.com.br` ou `123.456.789.0`)
+   - **Usuário SSH:** (ex: `root`, `ubuntu`, ou seu usuário)
+   - **Confirme o deploy:** Digite `S` e pressione Enter
 
-```bash
-# 1. Conectar ao servidor
-ssh usuario@seu-servidor
+5. **Aguarde o deploy completar** (pode levar alguns minutos)
 
-# 2. Ir para o diretório do projeto
-cd /caminho/para/cortinas-app
-
-# 3. Editar o .env
-nano .env
-
-# 4. Adicionar ou corrigir a linha:
-DATABASE_URL=sqlite:/app/data/leads.db
-
-# 5. Salvar (Ctrl+O, Enter, Ctrl+X)
-
-# 6. Reiniciar o container Docker
-docker-compose restart
-
-# 7. Verificar logs
-docker-compose logs -f
-```
-
-### Opção 2: Via Docker Compose (Se usar .env no docker-compose.yml)
-
-Edite o arquivo `docker-compose.yml` e adicione:
-
-```yaml
-services:
-  web:
-    environment:
-      - DATABASE_URL=sqlite:/app/data/leads.db
-```
-
-Depois:
-
-```bash
-docker-compose down
-docker-compose up -d
-```
-
-### Opção 3: Rebuild Completo
-
-```bash
-# Pull das alterações
-git pull origin main
-
-# Rebuild
-docker-compose down -v
-docker-compose build --no-cache
-docker-compose up -d
-
-# Verificar
-docker-compose logs -f
-```
-
-## Verificação
-
-Após aplicar a correção, você deve ver nos logs:
-
-```
-📁 Usando banco de dados: /app/data/leads.db
-📂 Criando diretório: /app/data
-```
-
-E **NÃO** deve ver mais:
-
-```
-Error: EACCES: permission denied, mkdir '////opt/meu-projeto'
-```
-
-## Comandos Úteis
-
-```bash
-# Ver logs em tempo real
-docker-compose logs -f
-
-# Ver variáveis de ambiente do container
-docker exec cortinas-app env | grep DATABASE
-
-# Entrar no container para debug
-docker exec -it cortinas-app sh
-
-# Verificar se o banco existe
-docker exec cortinas-app ls -la /app/data/
-
-# Testar o formulário
-curl -X POST https://cortinasbras.com.br/api/leads \
-  -H "Content-Type: application/json" \
-  -d '{"nome":"Teste","telefone":"11999999999","largura_parede":"3","altura_parede":"2.5","tecido":"Teste"}'
-```
-
-## Checklist
-
-- [ ] Conectar ao servidor de produção
-- [ ] Verificar/corrigir DATABASE_URL no .env
-- [ ] Reiniciar container ou fazer rebuild
-- [ ] Verificar logs (deve mostrar caminho correto)
-- [ ] Testar formulário
-- [ ] Confirmar que não há mais erro EACCES
-
-## Nota Importante
-
-O código já foi corrigido e está no GitHub. Você só precisa:
-
-1. **Fazer pull** das alterações no servidor
-2. **Configurar** a variável DATABASE_URL corretamente
-3. **Reiniciar** o container
+6. **Verifique se deu certo:**
+   - Acesse: https://cortinasbras.com.br
+   - Teste o formulário
+   - Verifique se não há mais erro `EACCES`
 
 ---
 
-**Última atualização:** 2025-12-22 11:43 AM
+## Opção 2: Deploy Manual via SSH
+
+Se preferir fazer manualmente:
+
+1. **Conecte ao servidor:**
+   ```powershell
+   ssh usuario@cortinasbras.com.br
+   ```
+
+2. **Vá para o diretório do projeto:**
+   ```bash
+   cd /opt/cortinas-app
+   # ou
+   cd /caminho/para/seu/projeto
+   ```
+
+3. **Execute o script de deploy:**
+   ```bash
+   chmod +x scripts/deploy.sh
+   ./scripts/deploy.sh
+   ```
+
+   **OU execute os comandos manualmente:**
+   ```bash
+   git pull origin main
+   docker-compose down
+   docker-compose build --no-cache
+   docker-compose up -d
+   docker-compose logs -f
+   ```
+
+---
+
+## Opção 3: Deploy via Painel de Controle
+
+Se seu servidor tem um painel (como Portainer, cPanel, etc.):
+
+1. Acesse o painel
+2. Vá para a seção de containers/Docker
+3. Pare o container `cortinas-app`
+4. Faça pull da imagem ou rebuild
+5. Inicie o container novamente
+
+---
+
+## ⚠️ Problemas Comuns
+
+### "Permission denied" ao executar script PowerShell
+
+**Solução:**
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+Depois execute o script novamente.
+
+### "SSH não encontrado"
+
+**Solução:**
+- Instale o OpenSSH Client no Windows:
+  - Configurações → Aplicativos → Recursos Opcionais → Adicionar → OpenSSH Client
+
+### "Não consigo conectar ao servidor"
+
+**Verifique:**
+- IP/domínio está correto?
+- Porta SSH está aberta? (padrão: 22)
+- Você tem as credenciais corretas?
+- Firewall não está bloqueando?
+
+---
+
+## ✅ Verificação Pós-Deploy
+
+Após o deploy, verifique:
+
+1. **Site está no ar:**
+   ```powershell
+   curl https://cortinasbras.com.br
+   ```
+
+2. **Formulário funciona:**
+   - Acesse o site
+   - Preencha o formulário
+   - Envie
+   - Deve redirecionar para WhatsApp
+
+3. **Logs não mostram erro:**
+   ```bash
+   docker-compose logs --tail=100 | grep -i error
+   ```
+
+   Não deve aparecer: `EACCES: permission denied, mkdir '////opt/meu-projeto'`
+
+---
+
+## 📞 Precisa de Ajuda?
+
+Se encontrar problemas:
+
+1. **Verifique os logs:**
+   ```bash
+   docker-compose logs -f
+   ```
+
+2. **Verifique o status:**
+   ```bash
+   docker-compose ps
+   ```
+
+3. **Entre no container para debug:**
+   ```bash
+   docker exec -it cortinas-app sh
+   ls -la /app/data/
+   env | grep DATABASE
+   ```
+
+---
+
+**Última atualização:** 2025-12-22 11:51 AM
