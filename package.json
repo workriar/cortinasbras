@@ -37,6 +37,7 @@
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20.19.27",
     "@types/pdfkit": "^0.17.4",
+    "@types/pg": "^8.16.0",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@types/sqlite3": "^5.1.0",
