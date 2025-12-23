@@ -119,10 +119,10 @@ export default function Hero() {
                         transition={{ type: "spring", stiffness: 400, damping: 10 }}
                     >
                         <span className="w-2 h-2 bg-brand-500 rounded-full animate-pulse" />
-                        Tradição com estilo para o seu ambiente
+                        Atendimento em toda São Paulo e região metropolitana
                     </motion.div>
 
-                    {/* Title with Shimmer Effect */}
+                    {/* Title with Shimmer Effect - SEO Optimized H1 */}
                     <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight">
                         <motion.span
                             initial={{ opacity: 0, y: 20 }}
@@ -130,15 +130,15 @@ export default function Hero() {
                             transition={{ delay: 0.2, duration: 0.8 }}
                             className="block"
                         >
-                            Cortinas Sob Medida e Cortinas Prontas em São Paulo
+                            Cortinas Sob Medida em São Paulo
                         </motion.span>
                         <motion.span
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.4, duration: 0.8 }}
-                            className="relative inline-block text-shimmer"
+                            className="relative inline-block text-shimmer text-brand-300"
                         >
-                            Decoração Elegante para Todos os Ambientes
+                            Fabricação Própria no Brás
                             <svg className="absolute -bottom-2 left-0 w-full opacity-40" viewBox="0 0 100 10" preserveAspectRatio="none">
                                 <motion.path
                                     d="M0 5 Q 25 0, 50 5 T 100 5"
@@ -153,16 +153,16 @@ export default function Hero() {
                         </motion.span>
                     </h1>
 
-                    {/* Description with Fade In */}
+                    {/* Description with Fade In - Local SEO Keywords */}
                     <motion.p
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.6, duration: 1 }}
                         className="text-base sm:text-lg md:text-xl text-gray-200 max-w-lg leading-relaxed"
                     >
-                        Transformamos ambientes com cortinas sob medida de alto padrão, cortinas prontas com entrega rápida e uma linha completa de cama, mesa e banho, unindo sofisticação, conforto e praticidade.
-                        Especialistas com mais de 20 anos em São Paulo:
-                        Atendimento personalizado, fabricação própria e entrega rápida.
+                        Especialistas em cortinas sob medida, cortinas prontas e enxovais de luxo com <strong className="text-white">mais de 20 anos de tradição em São Paulo</strong>.
+                        Atendemos toda a <strong className="text-white">capital paulista e região metropolitana</strong> incluindo Zona Leste, Zona Sul, Zona Norte, Zona Oeste, ABC Paulista e Grande São Paulo.
+                        Showroom no Brás com fabricação própria e entrega rápida.
                     </motion.p>
 
                     <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 pt-4">

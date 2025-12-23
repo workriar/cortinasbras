@@ -81,6 +81,31 @@ export default function Footer() {
                     </div>
                 </div>
 
+                {/* SEO Local Section - Localidades Atendidas */}
+                <div className="mb-12 pb-12 border-b border-white/5">
+                    <div className="bg-gradient-to-r from-white/5 to-transparent p-8 rounded-2xl">
+                        <h3 className="text-xl font-bold text-brand-300 mb-4">Cortinas Sob Medida em São Paulo e Região</h3>
+                        <p className="text-gray-400 text-sm leading-relaxed mb-4">
+                            A <strong className="text-white">Cortinas Brás</strong> é especialista em <strong className="text-white">cortinas sob medida em São Paulo</strong>,
+                            oferecendo atendimento completo em toda a <strong className="text-white">capital paulista e região metropolitana</strong>.
+                            Com showroom localizado no tradicional bairro do Brás, atendemos clientes de todas as regiões de São Paulo incluindo
+                            <strong className="text-white"> Zona Leste</strong> (Tatuapé, Mooca, Penha, Vila Matilde, Aricanduva),
+                            <strong className="text-white"> Zona Sul</strong> (Moema, Brooklin, Vila Mariana, Jabaquara, Santo Amaro),
+                            <strong className="text-white"> Zona Norte</strong> (Santana, Tucuruvi, Casa Verde, Vila Guilherme),
+                            <strong className="text-white"> Zona Oeste</strong> (Pinheiros, Vila Madalena, Lapa, Perdizes, Butantã),
+                            além do <strong className="text-white">ABC Paulista</strong> (Santo André, São Bernardo, São Caetano, Diadema) e
+                            <strong className="text-white"> Grande São Paulo</strong> (Guarulhos, Osasco, Barueri, Cotia).
+                        </p>
+                        <p className="text-gray-400 text-sm leading-relaxed">
+                            Oferecemos <strong className="text-white">cortinas sob medida</strong>, <strong className="text-white">cortinas prontas</strong>,
+                            <strong className="text-white"> cortinas blackout</strong>, <strong className="text-white">cortinas wave</strong>,
+                            <strong className="text-white"> persianas</strong> e <strong className="text-white">enxovais de luxo</strong> com
+                            <strong className="text-white"> fabricação própria</strong>, <strong className="text-white">entrega rápida</strong> e
+                            <strong className="text-white"> instalação profissional</strong> em toda São Paulo. Solicite seu orçamento sem compromisso!
+                        </p>
+                    </div>
+                </div>
+
                 <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-gray-500 uppercase tracking-widest">
                     <p>© {new Date().getFullYear()} Cortinas Brás. Todos os direitos reservados.</p>
                     <div className="flex gap-8">

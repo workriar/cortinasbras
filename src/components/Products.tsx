@@ -38,7 +38,7 @@ export default function Products() {
                         viewport={{ once: true }}
                         className="text-4xl font-extrabold text-brand-700 mb-6"
                     >
-                        NOSSOS PRODUTOS
+                        Cortinas e Enxovais em São Paulo
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -47,7 +47,7 @@ export default function Products() {
                         transition={{ delay: 0.1 }}
                         className="text-lg text-brand-700/80"
                     >
-                        Escolha a solução ideal para seu espaço: <br />Tecidos, modelos e acabamentos pensados para você.
+                        Escolha a solução ideal para seu espaço em toda a capital paulista: <br />Cortinas sob medida, cortinas prontas e enxovais de luxo com entrega rápida.
                     </motion.p>
                 </div>
 
