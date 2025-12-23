@@ -67,6 +67,7 @@ export async function generateOrcamentoPdf(lead: any): Promise<Buffer> {
             <div class="grid">
                 <div><span class="label">Nome:</span> <span class="value">${lead.nome}</span></div>
                 <div><span class="label">WhatsApp:</span> <span class="value">${lead.telefone}</span></div>
+                ${lead.cidade_bairro ? `<div><span class="label">Localização:</span> <span class="value">${lead.cidade_bairro}</span></div>` : ''}
             </div>
         </div>
 
@@ -186,6 +187,7 @@ export async function generatePremiumOrcamentoPdf(lead: any): Promise<Buffer> {
             <div class="grid">
                 <div><span class="label">Nome:</span> <span class="value">${lead.nome}</span></div>
                 <div><span class="label">WhatsApp:</span> <span class="value">${lead.telefone}</span></div>
+                ${lead.cidade_bairro ? `<div><span class="label">Localização:</span> <span class="value">${lead.cidade_bairro}</span></div>` : ''}
             </div>
         </div>
 
