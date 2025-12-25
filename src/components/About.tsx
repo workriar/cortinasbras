@@ -19,7 +19,18 @@ export default function About() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 sm:mb-8 text-brand-300">Sobre a Cortinas Brás</h2>
+                        <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 sm:mb-8 text-brand-300">Sobre a BIAESTRELAR</h2>
+                        <div className="space-y-4 sm:space-y-6 text-brand-100 text-base sm:text-lg leading-relaxed">
+                            <p>
+                                Desde 2003, a <strong>BIAESTRELAR</strong> é sinônimo de excelência em decoração de ambientes. Fundada como empresa familiar no tradicional bairro do Brás, em São Paulo, crescemos junto com nossos clientes, sempre mantendo nossos valores de qualidade, honestidade e dedicação.
+                            </p>
+                            <p>
+                                <strong>Endereço:</strong> Avenida Celso Garcia, 129 - Brás, São Paulo - SP, CEP 03015-000<br />
+                                <strong>E‑mail:</strong> loja@cortinasbras.com.br<br />
+                                <strong>WhatsApp:</strong> (11) 99289-1070<br />
+                                <strong>Horário de Atendimento:</strong> Segunda a Sexta, das 8h às 17h | Sábado, das 9h às 18h
+                            </p>
+                        </div>
                         <div className="space-y-4 sm:space-y-6 text-brand-100 text-base sm:text-lg leading-relaxed">
                             <p>
                                 Desde 2003, a <strong>Cortinas Brás</strong> é sinônimo de excelência em decoração de ambientes. Fundada como empresa familiar no tradicional bairro do Brás, em São Paulo, crescemos junto com nossos clientes, sempre mantendo nossos valores de qualidade, honestidade e dedicação.
