@@ -417,7 +417,7 @@ export default function TermosDeUso() {
                                     </div>
                                 </section>
 
-                                <section>
+                                <section className="mb-8">
                                     <h2 className="text-2xl font-semibold text-gray-900 mb-4">
                                         17. Código de Defesa do Consumidor
                                     </h2>
