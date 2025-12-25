@@ -239,16 +239,16 @@ export default function PoliticaPrivacidade() {
                                     <strong>Cortinas Brás</strong>
                                 </p>
                                 <p className="text-gray-700 mb-2">
-                                    <strong>Endereço:</strong> Rua Piratininga, 239 - Brás, São Paulo - SP, CEP 03042-001
+                                    <strong>Endereço:</strong> Avenida Celso Garcia, 129 - Brás, São Paulo - SP, CEP 03015-000
                                 </p>
                                 <p className="text-gray-700 mb-2">
                                     <strong>E-mail:</strong> loja@cortinasbras.com.br
                                 </p>
                                 <p className="text-gray-700 mb-2">
-                                    <strong>WhatsApp:</strong> (11) 2081-1010
+                                    <strong>WhatsApp:</strong> (11) 99289-1070
                                 </p>
                                 <p className="text-gray-700">
-                                    <strong>Horário de Atendimento:</strong> Segunda a Sexta, das 9h às 18h | Sábado, das 9h às 13h
+                                    <strong>Horário de Atendimento:</strong> Segunda a Sexta, das 8h às 17h | Sábado, das 9h às 18h
                                 </p>
                             </div>
                         </section>
