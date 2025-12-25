@@ -19,15 +19,10 @@ export default function About() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 sm:mb-8 text-brand-300">Sobre a BIAESTRELAR</h2>
+                        <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 sm:mb-8 text-brand-300">Sobre a Cortinas Brás</h2>
                         <div className="space-y-4 sm:space-y-6 text-brand-100 text-base sm:text-lg leading-relaxed">
                             <p>
-                                Desde 2003, a <strong>CORTINAS BRÁS</strong> é sinônimo de excelência em decoração de ambientes. Fundada como empresa familiar no tradicional bairro do Brás, em São Paulo, crescemos junto com nossos clientes, sempre mantendo nossos valores de qualidade, honestidade e dedicação.
-                            </p>
-                        </div>
-                        <div className="space-y-4 sm:space-y-6 text-brand-100 text-base sm:text-lg leading-relaxed">
-                            <p>
-                                Sendo,<strong>sinônimo de excelência</strong>em decoração de ambientes. Fundada como empresa familiar no tradicional bairro do Brás, em São Paulo, crescemos junto com nossos clientes, sempre mantendo nossos valores de qualidade, honestidade e dedicação.
+                                Desde 2003, a <strong>Cortinas Brás</strong> é sinônimo de excelência em decoração de ambientes. Fundada como empresa familiar no tradicional bairro do Brás, em São Paulo, crescemos junto com nossos clientes, sempre mantendo nossos valores de qualidade, honestidade e dedicação.
                             </p>
                             <p>
                                 Com produção 100% própria e equipe especializada, transformamos cada projeto em uma experiência única, do primeiro contato até a entrega final.
