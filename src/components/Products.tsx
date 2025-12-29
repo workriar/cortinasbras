@@ -45,7 +45,7 @@ export default function Products() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="text-lg text-brand-700/80"
+                        className="text-lg text-brand-900/80 font-medium"
                     >
                         Escolha a solução ideal para seu espaço em toda a capital paulista: <br />Cortinas sob medida, cortinas prontas e enxovais de luxo com entrega rápida.
                     </motion.p>

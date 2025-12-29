@@ -11,7 +11,7 @@ const stats = [
 
 export default function About() {
     return (
-        <section id="sobre" className="py-24 bg-brand-700 text-white relative overflow-hidden">
+        <section id="sobre" className="py-24 bg-brand-700 text-brand-50 relative overflow-hidden">
             <div className="container mx-auto px-6 relative z-10">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                     <motion.div
@@ -20,21 +20,21 @@ export default function About() {
                         viewport={{ once: true }}
                     >
                         <h2 className="text-3xl sm:text-4xl font-extrabold mb-6 sm:mb-8 text-brand-300">Sobre a Cortinas Brás</h2>
-                        <div className="space-y-4 sm:space-y-6 text-brand-100 text-base sm:text-lg leading-relaxed">
-                            <p>
-                                Desde 2003, a <strong>Cortinas Brás</strong> é sinônimo de excelência em decoração de ambientes. Fundada como empresa familiar no tradicional bairro do Brás, em São Paulo, crescemos junto com nossos clientes, sempre mantendo nossos valores de qualidade, honestidade e dedicação.
+                        <div className="space-y-4 sm:space-y-6 text-brand-50 text-base sm:text-lg leading-relaxed">
+                            <p className="!text-brand-50">
+                                Desde 2003, a <strong className="text-brand-300">Cortinas Brás</strong> é sinônimo de excelência em decoração de ambientes. Fundada como empresa familiar no tradicional bairro do Brás, em São Paulo, crescemos junto com nossos clientes, sempre mantendo nossos valores de qualidade, honestidade e dedicação.
                             </p>
-                            <p>
+                            <p className="!text-brand-50">
                                 Com produção 100% própria e equipe especializada, transformamos cada projeto em uma experiência única, do primeiro contato até a entrega final.
                             </p>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mt-12">
                             {stats.map((stat, i) => (
-                                <div key={i} className="flex flex-col items-center text-center p-4 bg-white/5 rounded-2xl backdrop-blur-sm">
+                                <div key={i} className="flex flex-col items-center text-center p-4 bg-white/5 rounded-2xl backdrop-blur-sm border border-white/10">
                                     <stat.icon className="text-brand-300 mb-4" size={32} />
-                                    <p className="font-bold text-xl mb-1">{stat.label}</p>
-                                    <p className="text-xs text-brand-100/60">{stat.description}</p>
+                                    <p className="font-bold text-xl mb-1 text-white">{stat.label}</p>
+                                    <p className="text-xs text-brand-200 font-bold uppercase tracking-widest">{stat.description}</p>
                                 </div>
                             ))}
                         </div>

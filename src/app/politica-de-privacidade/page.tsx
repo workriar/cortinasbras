@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Política de Privacidade | BIAESTRELAR',
-    description: 'Política de Privacidade da BIAESTRELAR. Saiba como coletamos, usamos e protegemos seus dados pessoais.',
+    title: 'Política de Privacidade | Cortinas Brás',
+    description: 'Política de Privacidade da Cortinas Brás. Saiba como coletamos, usamos e protegemos seus dados pessoais.',
     robots: 'index, follow',
 };
 
@@ -28,7 +28,7 @@ export default function PoliticaPrivacidade() {
                                 1. Introdução
                             </h2>
                             <p className="text-gray-700 leading-relaxed mb-4">
-                                A <strong>BIAESTRELAR</strong>, com sede na AVENIDA CELSO GARCIA, 129 - Brás, São Paulo - SP,
+                                A <strong>Cortinas Brás</strong>, com sede na AVENIDA CELSO GARCIA, 129 - Brás, São Paulo - SP,
                                 CEP 03015-000, está comprometida em proteger a privacidade e os dados pessoais de seus clientes
                                 e visitantes do site <strong>cortinasbras.com.br</strong>.
                             </p>

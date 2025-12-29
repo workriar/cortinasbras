@@ -1,374 +1,139 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-50: #F8F5F1;
-  --color-brand-100: #EAD5C7;
-  --color-brand-300: #D4A93E;
-  --color-brand-500: #D4A93E;
-  --color-brand-700: #8B5C2A;
-  
-  --font-sans: "Inter", system-ui, sans-serif;
-}
+  /* PRODUCTION COLORS - Synchronized with https://cortinasbras.com.br/ */
+  --color-brand-50: #f8f5f1;
+  --color-brand-100: #ead5c7;
+  --color-brand-200: #dcc5b3;
+  --color-brand-300: #d4a93e;
+  --color-brand-400: #c49a35;
+  --color-brand-500: #d4a93e;
+  --color-brand-600: #b48a2e;
+  --color-brand-700: #8b5c2a;
+  --color-brand-800: #6d4821;
+  --color-brand-900: #1a1a1a;
+  --color-brand-950: #0d0d0d;
 
-:root {
-  --background: #F8F5F1;
-  --foreground: #8B5C2A;
-  --accent: #D4A93E;
-}
+  --color-brand-primary: var(--color-brand-500);
+  --color-brand-secondary: var(--color-brand-700);
+  --color-brand-accent: var(--color-brand-300);
+  --color-brand-bg: var(--color-brand-50);
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+  --color-bg-main: var(--color-brand-50);
 
-/* ========================================
-   PREMIUM ANIMATIONS - Delicate & Elegant
-   ======================================== */
+  @keyframes luxury-glow {
 
-/* Subtle Fabric Wave - Simula movimento delicado de tecido */
-@keyframes fabric-wave {
-  0%, 100% {
-    transform: translateY(0) scaleY(1);
-    filter: brightness(1);
-  }
-  25% {
-    transform: translateY(-3px) scaleY(1.01);
-    filter: brightness(1.05);
-  }
-  50% {
-    transform: translateY(-5px) scaleY(1.02);
-    filter: brightness(1.08);
-  }
-  75% {
-    transform: translateY(-3px) scaleY(1.01);
-    filter: brightness(1.05);
+    0%,
+    100% {
+      opacity: 0.5;
+      filter: blur(40px);
+    }
+
+    50% {
+      opacity: 0.8;
+      filter: blur(60px);
+    }
   }
 }
 
-/* Silk Shimmer - Brilho suave como seda */
-@keyframes silk-shimmer {
-  0% {
-    background-position: -200% center;
+@layer base {
+  body {
+    @apply bg-brand-50 text-brand-900 antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
-  100% {
-    background-position: 200% center;
-  }
-}
 
-/* Gentle Float - Flutuação delicada */
-@keyframes gentle-float {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply tracking-tight font-black text-brand-700;
   }
-  33% {
-    transform: translateY(-8px) rotate(0.5deg);
-  }
-  66% {
-    transform: translateY(-4px) rotate(-0.5deg);
+
+  p {
+    @apply leading-relaxed text-brand-900/80;
   }
 }
 
-/* Elegant Fade In Up */
-@keyframes elegant-fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(30px) scale(0.98);
+@layer components {
+  .animate-luxury-glow {
+    animation: luxury-glow 8s ease-in-out infinite;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
 
-/* Luxury Glow Pulse */
-@keyframes luxury-glow {
-  0%, 100% {
-    box-shadow: 
-      0 0 20px rgba(212, 169, 62, 0.15),
-      0 0 40px rgba(212, 169, 62, 0.1),
-      0 0 60px rgba(212, 169, 62, 0.05);
+  .glass-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--color-brand-100);
+    @apply shadow-md;
   }
-  50% {
-    box-shadow: 
-      0 0 30px rgba(212, 169, 62, 0.25),
-      0 0 60px rgba(212, 169, 62, 0.15),
-      0 0 90px rgba(212, 169, 62, 0.1);
-  }
-}
 
-/* Soft Scale Hover */
-@keyframes soft-scale {
-  0% {
-    transform: scale(1);
+  .glass-header {
+    @apply bg-brand-900/90 backdrop-blur-xl border-b border-white/10;
   }
-  50% {
-    transform: scale(1.02);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
 
-/* Delicate Rotate */
-@keyframes delicate-rotate {
-  0% {
-    transform: rotate(0deg);
+  /* Main Button - Production Dorado Gradient */
+  .btn-primary {
+    @apply px-6 py-2.5 bg-gradient-to-r from-brand-500 to-brand-600 text-white font-black uppercase tracking-widest text-[11px] rounded transition-all duration-300;
+    @apply hover:from-brand-600 hover:to-brand-700 shadow-xl active:scale-[0.98] text-center flex items-center justify-center gap-2;
   }
-  100% {
-    transform: rotate(360deg);
-  }
-}
 
-/* Curtain Drape - Efeito de cortina caindo */
-@keyframes curtain-drape {
-  0% {
-    clip-path: inset(0 0 100% 0);
-    opacity: 0;
+  .btn-secondary {
+    @apply px-6 py-2.5 bg-white text-brand-700 font-black uppercase tracking-widest text-[11px] rounded border-2 border-brand-700 transition-all duration-300;
+    @apply hover:bg-brand-700 hover:text-white shadow-md active:scale-[0.98] text-center flex items-center justify-center gap-2;
   }
-  100% {
-    clip-path: inset(0 0 0 0);
-    opacity: 1;
-  }
-}
 
-/* Shimmer Gradient - Para textos premium */
-@keyframes shimmer-text {
-  0% {
-    background-position: -100% center;
+  .btn-whatsapp {
+    @apply px-6 py-2.5 bg-[#25D366] text-white font-black uppercase tracking-widest text-[11px] rounded transition-all duration-300;
+    @apply hover:bg-[#128C7E] shadow-lg active:scale-[0.98] text-center flex items-center justify-center gap-2;
   }
-  100% {
-    background-position: 100% center;
+
+  .input-primary {
+    @apply w-full px-4 py-2.5 border-2 border-brand-100 rounded-lg bg-white text-brand-900 transition-all duration-200 outline-none font-medium;
+    @apply focus:border-brand-500 focus:ring-4 focus:ring-brand-500/5 placeholder:text-brand-100;
+  }
+
+  .hover-lift {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-brand-900/10;
+  }
+
+  .sidebar-active {
+    @apply bg-brand-500 text-white border-l-4 border-brand-700;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-brand-300 rounded-full hover:bg-brand-500 transition-colors;
+  }
+
+  /* Status Badges - Using Production Colors */
+  .badge-new {
+    @apply px-3 py-1 bg-brand-50 text-brand-700 text-[10px] font-black uppercase tracking-widest rounded border-2 border-brand-100;
+  }
+
+  .badge-contacted {
+    @apply px-3 py-1 bg-amber-50 text-amber-900 text-[10px] font-black uppercase tracking-widest rounded border-2 border-amber-100;
+  }
+
+  .badge-won {
+    @apply px-3 py-1 bg-emerald-50 text-emerald-950 text-[10px] font-black uppercase tracking-widest rounded border-2 border-emerald-100;
   }
 }
 
-/* Ripple Effect - Ondulação suave */
-@keyframes ripple {
-  0% {
-    transform: scale(0);
-    opacity: 0.8;
+@layer utilities {
+  .text-shimmer {
+    background: linear-gradient(90deg, var(--color-brand-500) 0%, var(--color-brand-100) 50%, var(--color-brand-500) 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 2s linear infinite;
   }
-  100% {
-    transform: scale(2);
-    opacity: 0;
+
+  @keyframes shimmer {
+    to {
+      background-position: 200% center;
+    }
   }
-}
-
-/* ========================================
-   UTILITY CLASSES
-   ======================================== */
-
-.glass-header {
-  @apply bg-black/80 backdrop-blur-md border-b border-white/10;
-}
-
-.card-hover {
-  @apply transition-all duration-500 ease-out;
-  @apply hover:-translate-y-3 hover:scale-[1.02];
-  @apply hover:shadow-2xl hover:shadow-brand-500/20;
-}
-
-.card-premium {
-  @apply relative overflow-hidden;
-  @apply bg-gradient-to-br from-white via-brand-50/50 to-white;
-  @apply border border-brand-100/50;
-  @apply transition-all duration-700 ease-out;
-}
-
-.card-premium::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    45deg,
-    transparent 30%,
-    rgba(212, 169, 62, 0.1) 50%,
-    transparent 70%
-  );
-  animation: silk-shimmer 3s linear infinite;
-}
-
-.btn-primary {
-  @apply relative overflow-hidden;
-  @apply bg-brand-500 hover:bg-brand-700 text-white font-bold;
-  @apply py-3 px-6 rounded-xl;
-  @apply transition-all duration-300 ease-out;
-  @apply active:scale-95;
-  @apply shadow-lg hover:shadow-2xl hover:shadow-brand-500/40;
-}
-
-.btn-primary::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
-}
-
-.btn-primary:active::after {
-  width: 300px;
-  height: 300px;
-}
-
-.btn-whatsapp {
-  @apply bg-green-600 hover:bg-green-700 text-white font-bold;
-  @apply py-3 px-6 rounded-xl;
-  @apply transition-all duration-300 ease-out;
-  @apply active:scale-95;
-  @apply shadow-lg hover:shadow-2xl hover:shadow-green-600/40;
-}
-
-.btn-secondary {
-  @apply bg-white/10 hover:bg-white/20 text-white font-bold;
-  @apply py-3 px-6 rounded-xl;
-  @apply backdrop-blur-md border border-white/20;
-  @apply transition-all duration-300 ease-out;
-  @apply active:scale-95;
-  @apply shadow-lg hover:shadow-2xl hover:shadow-white/20;
-}
-
-/* Text Effects */
-.text-shimmer {
-  background: linear-gradient(
-    90deg,
-    var(--accent) 0%,
-    #f0d98f 25%,
-    var(--accent) 50%,
-    #f0d98f 75%,
-    var(--accent) 100%
-  );
-  background-size: 200% auto;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: shimmer-text 3s linear infinite;
-}
-
-/* Animation Classes */
-.animate-fabric-wave {
-  animation: fabric-wave 4s ease-in-out infinite;
-}
-
-.animate-gentle-float {
-  animation: gentle-float 6s ease-in-out infinite;
-}
-
-.animate-luxury-glow {
-  animation: luxury-glow 3s ease-in-out infinite;
-}
-
-.animate-elegant-fade-in {
-  animation: elegant-fade-in-up 0.8s ease-out forwards;
-}
-
-.animate-curtain-drape {
-  animation: curtain-drape 1.2s ease-out forwards;
-}
-
-.animate-delicate-rotate {
-  animation: delicate-rotate 20s linear infinite;
-}
-
-/* Progress Bar */
-.progress-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #D4A93E, #8B5C2A);
-  z-index: 9999;
-  transition: width 0.1s ease;
-}
-
-/* Scroll Reveal */
-.scroll-reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-}
-
-.scroll-reveal.revealed {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Hover Lift Effect */
-.hover-lift {
-  @apply transition-all duration-500 ease-out;
-}
-
-.hover-lift:hover {
-  transform: translateY(-12px) scale(1.03);
-  box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.1),
-    0 0 60px rgba(212, 169, 62, 0.15);
-}
-
-/* Parallax Container */
-.parallax-slow {
-  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-/* Gradient Border Animation */
-.gradient-border {
-  position: relative;
-  background: linear-gradient(white, white) padding-box,
-              linear-gradient(135deg, #D4A93E, #8B5C2A, #D4A93E) border-box;
-  border: 2px solid transparent;
-  border-radius: 1rem;
-}
-
-/* Soft Blur Backdrop */
-.soft-blur {
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
-  background-color: rgba(255, 255, 255, 0.7);
-}
-
-/* Premium Card Shadow */
-.shadow-premium {
-  box-shadow: 
-    0 4px 6px -1px rgba(212, 169, 62, 0.1),
-    0 2px 4px -1px rgba(212, 169, 62, 0.06),
-    0 0 0 1px rgba(212, 169, 62, 0.05);
-}
-
-.shadow-premium-lg {
-  box-shadow: 
-    0 20px 25px -5px rgba(212, 169, 62, 0.1),
-    0 10px 10px -5px rgba(212, 169, 62, 0.04),
-    0 0 0 1px rgba(212, 169, 62, 0.05);
-}
-
-/* Smooth Transitions */
-* {
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Focus States */
-*:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-  border-radius: 0.25rem;
-}
-
-/* Selection */
-::selection {
-  background-color: var(--accent);
-  color: white;
-}
-
-::-moz-selection {
-  background-color: var(--accent);
-  color: white;
 }

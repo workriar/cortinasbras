@@ -2,68 +2,44 @@
 description: Configuração completa do ambiente local para o projeto Cortinas Brás (Node.js, dependências, .env e execução)
 ---
 
-# Passos para rodar o site localmente (Windows)
+# Workflow: Configuração Local
 
-1. **Instalar Node.js (inclui npm)**
-   - Abra o PowerShell **como Administrador**.
-   - Execute o comando abaixo para instalar a versão LTS via **winget** (disponível no Windows 10+). Se o `winget` não estiver instalado, siga as instruções do site oficial do Windows Package Manager.
-   ```powershell
-   // turbo
-   winget install -e --id OpenJS.NodeJS.LTS
-   ```
-   - Após a instalação, confirme com:
-   ```powershell
-   node -v
-   npm -v
-   ```
-   - Caso prefira, baixe o instalador direto de https://nodejs.org e marque *Add to PATH*.
+1. **Verificar pré‑requisitos**
+   - Certifique‑se de que o **Node.js (v18 ou superior)** e o **npm** estão instalados.
+   - (Opcional) Instale o **pnpm** se preferir.
 
-2. **Instalar dependências do projeto**
-   ```powershell
-   // turbo
-   cd e:\\CB\\www\\cortinas-app
-   npm install
+2. **Instalar dependências**
+   ```bash
+   npm ci   # instala exatamente as versões listadas em package-lock.json
    ```
-   - Esse comando lê o `package.json` e baixa Next.js, React, Tailwind, Framer‑Motion etc.
 
-3. **Instalar Chromium para geração de PDF**
-   ```powershell
-   // turbo
-   npx puppeteer browsers install chrome
+3. **Configurar variáveis de ambiente**
+   - Copie o arquivo de exemplo:
+   ```bash
+   cp .env.example .env
    ```
-   - O Puppeteer precisa do Chromium para gerar PDFs dos orçamentos.
-   - Este comando baixa o Chromium em `~/.cache/puppeteer/chrome/`.
-   - **Importante:** Este passo é necessário apenas no ambiente local. No Docker, o Chromium já vem instalado.
+   - Edite o `.env` conforme necessário (por exemplo, `NEXT_PUBLIC_SITE_URL`, credenciais do banco, etc.).
 
-4. **Criar arquivo de variáveis de ambiente**
-   ```powershell
-   // turbo
-   copy .env.example .env
-   notepad .env   # edite as variáveis (SMTP, chaves, etc.)
-   ```
-   - Se não precisar enviar e‑mail ainda, deixe os campos vazios.
-
-5. **Rodar o servidor de desenvolvimento**
-   ```powershell
-   // turbo
+4. **Iniciar o servidor de desenvolvimento**
+   ```bash
    npm run dev
    ```
-   - Abra o navegador em `http://localhost:3000` e verifique o site.
+   - O aplicativo será servido em **http://localhost:3000**.
+   - Abra o navegador e navegue até a URL para verificar se a aplicação está rodando.
 
-6. **(Opcional) Build de produção**
-   ```powershell
-   // turbo
-   npm run build && npm start
+5. **Testar login e dashboard**
+   - Acesse `/login`.
+   - Use as credenciais de teste:
+     - **superadmin / admin123**
+     - **vendedor / user123**
+   - Após login, você será redirecionado para `/dashboard` onde a tabela de leads será exibida.
+
+6. **Opcional: Build de produção**
+   ```bash
+   npm run build   # gera o bundle de produção
+   npm start       # inicia o servidor em modo produção
    ```
-   - Disponível na porta 3000 ou na porta configurada.
 
 ---
 
-**Dicas rápidas**
-- Use `Ctrl+Shift+P` → *Terminal: New Terminal* no VS Code para abrir o terminal já na pasta correta.
-- Caso o comando `winget` falhe, instale o Node.js manualmente pelo instalador.
-- Se houver erros de lint, rode `npm run lint` para identificar.
-- **Erro de PDF?** Certifique-se de ter executado `npx puppeteer browsers install chrome`.
-
-**⚡️ Pronto!**
-Siga os passos acima e seu ambiente local estará configurado e rodando.
+*Este workflow pode ser executado usando o comando `/setup_local_development` que lê este arquivo e segue os passos acima.*

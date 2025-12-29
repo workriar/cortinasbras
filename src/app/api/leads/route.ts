@@ -75,7 +75,6 @@ export async function POST(req: Request) {
     }
 }
 
-// GET - Listar leads (para admin)
 export async function GET(req: Request) {
     try {
         const { searchParams } = new URL(req.url);
@@ -84,10 +83,10 @@ export async function GET(req: Request) {
         const status = searchParams.get('status');
 
         let queryText = `
-            SELECT id, nome, telefone, cidade_bairro, largura_parede, altura_parede, 
-                   tecido, observacoes, status, origem, criado_em, atualizado_em
-            FROM leads
-        `;
+      SELECT id, nome, telefone, cidade_bairro, largura_parede, altura_parede,
+             tecido, observacoes, status, origem, criado_em, atualizado_em
+      FROM leads
+    `;
         const params: any[] = [];
 
         if (status) {
@@ -101,8 +100,6 @@ export async function GET(req: Request) {
         }
 
         const result = await query(queryText, params);
-
-        // Contar total
         const countResult = await query(
             status ? `SELECT COUNT(*) FROM leads WHERE status = $1` : `SELECT COUNT(*) FROM leads`,
             status ? [status] : []
@@ -112,13 +109,18 @@ export async function GET(req: Request) {
             leads: result.rows,
             total: parseInt(countResult.rows[0].count),
             limit,
-            offset
+            offset,
         });
     } catch (error: any) {
-        console.error("Erro ao buscar leads:", error);
+        console.error("Erro ao buscar leads (fallback):", error);
+        // Return empty list to avoid breaking UI
         return NextResponse.json({
-            status: "error",
-            message: error.message
-        }, { status: 500 });
+            leads: [],
+            total: 0,
+            limit: 0,
+            offset: 0,
+            fallback: true,
+            message: error.message ?? "Erro ao buscar leads",
+        }, { status: 200 });
     }
 }

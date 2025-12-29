@@ -136,7 +136,7 @@ export default function Hero() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.4, duration: 0.8 }}
-                            className="relative inline-block text-shimmer text-brand-300"
+                            className="relative inline-block text-shimmer text-brand-200 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
                         >
                             Fabricação Própria no Brás
                             <svg className="absolute -bottom-2 left-0 w-full opacity-40" viewBox="0 0 100 10" preserveAspectRatio="none">
@@ -158,10 +158,10 @@ export default function Hero() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.6, duration: 1 }}
-                        className="text-base sm:text-lg md:text-xl text-gray-200 max-w-lg leading-relaxed"
+                        className="text-base sm:text-lg md:text-xl text-white !text-white font-medium max-w-lg leading-relaxed"
                     >
-                        Especialistas em cortinas sob medida, cortinas prontas e enxovais de luxo com <strong className="text-white">mais de 20 anos de tradição em São Paulo</strong>.
-                        Atendemos toda a <strong className="text-white">capital paulista e região metropolitana</strong> incluindo Zona Leste, Zona Sul, Zona Norte, Zona Oeste, ABC Paulista e Grande São Paulo.
+                        Especialistas em cortinas sob medida, cortinas prontas e enxovais de luxo com <strong className="text-brand-300">mais de 20 anos de tradição em São Paulo</strong>.
+                        Atendemos toda a <strong className="text-brand-300">capital paulista e região metropolitana</strong> incluindo Zona Leste, Zona Sul, Zona Norte, Zona Oeste, ABC Paulista e Grande São Paulo.
                         Showroom no Brás com fabricação própria e entrega rápida.
                     </motion.p>
 

@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Usuários do sistema (para autenticação)
+model User {
+  id               Int       @id @default(autoincrement())
+  email            String    @unique
+  name             String?
+  passwordHash     String
+  role             String    @default("USER") // ADMIN ou USER
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  leads            Lead[]    @relation("UserLeads")
+  messagesSent     Message[] @relation("SentMessages")
+  messagesReceived Message[] @relation("ReceivedMessages")
+}
+
+// Leads do CRM
+model Lead {
+  id           Int           @id @default(autoincrement())
+  name         String
+  phone        String
+  email        String?
+  city         String?
+  source       String        @default("SITE") // SITE, WHATSAPP, ADVERTISEMENT, MANUAL
+  status       String        @default("NEW") // NEW, CONTACTED, PROPOSAL, CLOSED_WON, CLOSED_LOST
+  notes        String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  ownerId      Int?
+  owner        User?         @relation("UserLeads", fields: [ownerId], references: [id])
+  interactions Interaction[]
+  messages     Message[]
+
+  @@index([ownerId])
+  @@index([status])
+  @@index([source])
+  @@index([createdAt])
+}
+
+// Histórico de interações com o lead
+model Interaction {
+  id        Int      @id @default(autoincrement())
+  leadId    Int
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  type      String // CALL, EMAIL, MESSAGE, MEETING
+  content   String
+  createdAt DateTime @default(now())
+
+  @@index([leadId])
+}
+
+// Mensagens de chat interno
+model Message {
+  id         Int      @id @default(autoincrement())
+  senderId   Int
+  receiverId Int
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  leadId     Int?
+  lead       Lead?    @relation(fields: [leadId], references: [id])
+  content    String
+  read       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([leadId])
+}
