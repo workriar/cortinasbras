@@ -44,7 +44,7 @@ export default function Products() {
                         viewport={{ once: true }}
                         className="text-4xl font-extrabold text-brand-700 mb-6"
                     >
-                        Cortinas e Enxovais em São Paulo
+                        Diferença entre Cortinas Prontas e Sob Medida
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}

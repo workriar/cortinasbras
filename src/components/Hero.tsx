@@ -138,7 +138,7 @@ export default function Hero() {
                             transition={{ delay: 0.4, duration: 0.8 }}
                             className="relative inline-block text-shimmer text-brand-200 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
                         >
-                            Fabricação Própria no Brás
+                            e Fábrica no Brás
                             <svg className="absolute -bottom-2 left-0 w-full opacity-40" viewBox="0 0 100 10" preserveAspectRatio="none">
                                 <motion.path
                                     d="M0 5 Q 25 0, 50 5 T 100 5"
