@@ -25,6 +25,9 @@ COPY . .
 # Desabilitar telemetria do Next.js
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Gerar Prisma Client
+RUN npx prisma generate
+
 # Build da aplicação
 RUN npm run build
 
