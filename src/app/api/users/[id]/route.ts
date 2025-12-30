@@ -3,13 +3,12 @@ import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) { // No Next 15+ params seria promise, mas aqui ainda deve ser objeto direto ou a way padrão
-    // Em Next 13+ app directory params é objeto direto no second argument da função.
-
-    // UPDATE: Em versões recentes do Next, params pode precisar ser awaited dependendo da versão exata, mas no padrão 14.x é objeto. 
-    // Vamos usar a forma segura.
+export async function DELETE(req: Request, context: any) {
+    // Em versões recentes do Next.js (15+), o segundo argumento (context/params) é uma Promise.
+    // Usamos 'any' e 'await context.params' para compatibilidade garantida.
 
     try {
+        const params = await context.params;
         const id = parseInt(params.id);
         const session = await getServerSession(authOptions);
 
