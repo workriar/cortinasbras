@@ -9,6 +9,8 @@ const products = [
         description: "Modelos variados em tamanhos padrão, prontos para levar. Ideal para quem tem pressa e busca qualidade.",
         icon: Home,
         features: ["Entrega imediata", "Várias cores", "Modelos variados"],
+        ctaLabel: "Confira na loja virtual",
+        ctaLink: "https://loja.relluarte.com.br",
         delay: 0.1,
     },
     {
@@ -16,6 +18,8 @@ const products = [
         description: "Nossa especialidade. Gaze de Linho, Blackout, Voil e mais. Projetos exclusivos para cada janela do seu lar.",
         icon: Scissors,
         features: ["Gaze de Linho", "Blackout", "Voil"],
+        ctaLabel: "Quero um orçamento",
+        ctaLink: "#contato",
         delay: 0.2,
     },
     {
@@ -23,6 +27,8 @@ const products = [
         description: "Enxovais premium que completam a decoração. Jogos de cama com fios egípcios e toalhas de alta absorção.",
         icon: Bed,
         features: ["Lençóis Premium", "Jogos de Cama", "Acessórios Nobres"],
+        ctaLabel: "Falar no WhatsApp",
+        ctaLink: "https://wa.me/5511992891070",
         delay: 0.3,
     },
 ];
@@ -80,11 +86,13 @@ export default function Products() {
                             </ul>
 
                             <motion.a
-                                href="#contato"
+                                href={product.ctaLink}
+                                target={product.ctaLink.startsWith("http") ? "_blank" : undefined}
+                                rel={product.ctaLink.startsWith("http") ? "noopener noreferrer" : undefined}
                                 whileHover={{ gap: "12px" }}
                                 className="flex items-center gap-2 font-bold text-brand-500 py-2 group/link"
                             >
-                                Quero um orçamento
+                                {product.ctaLabel}
                                 <div className="h-0.5 w-8 bg-brand-500 rounded-full transition-all group-hover/link:w-12" />
                             </motion.a>
                         </motion.div>
