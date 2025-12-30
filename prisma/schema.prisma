@@ -23,22 +23,32 @@ model User {
 }
 
 // Leads do CRM
+// Leads do CRM (Mapeado para tabela legada 'leads')
 model Lead {
   id           Int           @id @default(autoincrement())
-  name         String
-  phone        String
-  email        String?
-  city         String?
-  source       String        @default("SITE") // SITE, WHATSAPP, ADVERTISEMENT, MANUAL
-  status       String        @default("NEW") // NEW, CONTACTED, PROPOSAL, CLOSED_WON, CLOSED_LOST
-  notes        String?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  name         String        @map("nome")
+  phone        String        @map("telefone")
+  email        String?       @map("email") // Se existir na tabela antiga
+  city         String?       @map("cidade_bairro")
+  source       String        @default("SITE") @map("origem")
+  status       String        @default("NEW") @map("status")
+  notes        String?       @map("observacoes")
+  
+  // Campos específicos do legado que não estavam no model original
+  width        Float?        @map("largura_parede")
+  height       Float?        @map("altura_parede")
+  fabric       String?       @map("tecido")
+  installation String?       @map("instalacao")
+
+  createdAt    DateTime      @default(now()) @map("criado_em")
+  updatedAt    DateTime      @updatedAt @map("atualizado_em")
+  
   ownerId      Int?
   owner        User?         @relation("UserLeads", fields: [ownerId], references: [id])
   interactions Interaction[]
   messages     Message[]
 
+  @@map("leads") // Mapeia para a tabela existente 'leads'
   @@index([ownerId])
   @@index([status])
   @@index([source])

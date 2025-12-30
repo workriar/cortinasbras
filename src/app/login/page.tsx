@@ -44,7 +44,7 @@ export default function LoginPage() {
                     <div className="flex justify-center mb-8">
                         <div className="relative w-64 h-32">
                             <img
-                                src="/static/logo-login.png"
+                                src="/logo.png"
                                 alt="Cortinas Brás - Sistema de Gestão"
                                 className="w-full h-full object-contain"
                             />

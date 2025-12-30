@@ -18,7 +18,7 @@ export default function Navbar() {
                         <Link href="/dashboard">
                             <div className="relative w-32 h-8">
                                 <img
-                                    src="/static/logo-login.png"
+                                    src="/logo.png"
                                     alt="Cortinas Brás"
                                     className="h-8 w-auto object-contain"
                                 />

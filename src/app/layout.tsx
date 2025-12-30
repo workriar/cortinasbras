@@ -12,8 +12,8 @@ export const metadata: Metadata = {
     title: 'Cortinas Brás',
   },
   icons: {
-    icon: '/static/logo-login.png',
-    apple: '/static/logo-login.png',
+    icon: '/logo.png',
+    apple: '/logo.png',
   },
 };
 
