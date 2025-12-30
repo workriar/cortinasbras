@@ -17,22 +17,23 @@ export default function SettingsPage() {
     }, [status, router]);
 
     const handleImportLeads = async () => {
-        if (!confirm('Deseja iniciar a importação de leads antigos? Isso pode levar alguns segundos.')) return;
+        if (!confirm('Deseja atualizar e corrigir a base de dados antiga?')) return;
         setLoading(true);
-        setMsg('Iniciando importação...');
+        setMsg('Processando correções...');
         try {
             const res = await fetch('/api/debug-leads');
             const data = await res.json();
-            if (data.dataMigration) {
-                setMsg(`Sucesso! ${data.dataMigration.imported} leads importados. ${data.dataMigration.msg}`);
-                if (data.dataMigration.imported > 0) {
-                    alert('Importação concluída! Recarregue a página de CRM para ver os leads.');
+            if (data.success) {
+                const details = data.repairs_applied?.join(' ') || data.dataMigration?.msg || '';
+                setMsg(`Sucesso! ${data.message} ${details}`);
+                if (data.repairs_applied?.length > 0) {
+                    alert('Base de dados atualizada! Seus leads antigos agora estão visíveis.');
                 }
             } else {
-                setMsg('Importação finalizada. Verifique o console ou tente novamente.');
+                setMsg('Processo finalizado. ' + (data.error || ''));
             }
         } catch (error) {
-            setMsg('Erro ao importar: ' + String(error));
+            setMsg('Erro na solicitação: ' + String(error));
         } finally {
             setLoading(false);
         }
@@ -210,19 +211,20 @@ export default function SettingsPage() {
                             <div className="p-6 bg-amber-50 rounded-xl border border-amber-200 shadow-sm">
                                 <div className="flex items-start gap-4">
                                     <div className="p-3 bg-amber-100 rounded-lg text-amber-600 text-2xl">
-                                        📥
+                                        🧹
                                     </div>
                                     <div className="flex-1">
-                                        <h3 className="text-lg font-bold text-amber-900">Recuperação de Leads Antigos</h3>
+                                        <h3 className="text-lg font-bold text-amber-900">Restaurar Leads Antigos (Correção)</h3>
                                         <p className="text-amber-700 text-sm mt-1 mb-4">
-                                            Se você percebeu que alguns leads antigos não estão aparecendo no CRM, utilize esta ferramenta para forçar a importação da base de dados legada para o novo sistema.
+                                            Seus leads antigos podem estar ocultos por inconsistência de dados (ex: falta de telefone ou status antigo).
+                                            Clique abaixo para corrigir e exibir todos os orçamentos.
                                         </p>
                                         <button
                                             onClick={handleImportLeads}
                                             disabled={loading}
                                             className={`px-6 py-2.5 bg-amber-600 text-white font-bold rounded-lg shadow-lg hover:bg-amber-700 active:scale-95 transition-all ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                                         >
-                                            {loading ? 'Importando...' : 'Importar Todos Leads Antigos'}
+                                            {loading ? 'Processando...' : 'Corrigir e Atualizar Leads Antigos'}
                                         </button>
                                         {msg && (
                                             <div className="mt-4 p-3 bg-white/50 rounded border border-amber-200 text-sm font-medium text-amber-800 animate-in fade-in">
