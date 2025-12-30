@@ -105,10 +105,27 @@ export async function GET(req: Request) {
         const offset = parseInt(searchParams.get('offset') || '0');
         const status = searchParams.get('status');
 
+        const normalizeStatus = (s: string | null | undefined) => {
+            if (!s) return 'NEW';
+            const upper = String(s).toUpperCase();
+
+            // Se já for válido, retorna
+            if (['NEW', 'CONTACTED', 'PROPOSAL', 'CLOSED_WON', 'CLOSED_LOST'].includes(upper)) return upper;
+
+            // Mapeamentos Legados
+            if (upper.includes('NOVO') || upper === 'NAV' || upper === '7' || upper === '1') return 'NEW';
+            if (upper.includes('CONTAT') || upper === 'EM_CONTATO') return 'CONTACTED';
+            if (upper.includes('PROPOST') || upper.includes('ORCAMENTO')) return 'PROPOSAL';
+            if (upper.includes('FECHAD') || upper.includes('VEND') || upper === 'GANHO') return 'CLOSED_WON';
+            if (upper.includes('PERDID') || upper.includes('ARQUIV')) return 'CLOSED_LOST';
+
+            return 'NEW'; // Default para desconhecidos
+        };
+
         const whereClause = status ? { status } : {};
 
         console.log(`Buscando leads (Prisma) status=${status || 'todos'}...`);
-        let [leads, total] = await Promise.all([
+        let [leadsRaw, total] = await Promise.all([
             prisma.lead.findMany({
                 where: whereClause,
                 orderBy: { createdAt: 'desc' },
@@ -117,6 +134,11 @@ export async function GET(req: Request) {
             }),
             prisma.lead.count({ where: whereClause })
         ]);
+
+        let leads: any[] = leadsRaw.map(lead => ({
+            ...lead,
+            status: normalizeStatus(lead.status)
+        }));
 
         // FALLBACK: Se o Prisma não retornou nada, vamos tentar SQL direto na tabela 'leads' antiga
         if (total === 0 && offset === 0) { // Só tenta fallback na pág 1 se vazio
