@@ -14,14 +14,11 @@ export async function GET() {
         `);
 
         // 2. CORREÇÃO DE DADOS (SANITIZAÇÃO)
-        // Isso é crucial pois o Prisma e a tabela legada são a MESMA tabela física ('leads'),
-        // mas o Prisma exige campos não-nulos e status em inglês.
-
         const repairs = [];
 
         // 2.1 Telefones Nulos (Obrigatório no schema)
         const phoneFix = await query(`UPDATE leads SET telefone = '0000000000' WHERE telefone IS NULL`);
-        if (phoneFix.rowCount > 0) repairs.push(`Corrigidos ${phoneFix.rowCount} leads sem telefone.`);
+        if ((phoneFix.rowCount || 0) > 0) repairs.push(`Corrigidos ${phoneFix.rowCount} leads sem telefone.`);
 
         // 2.2 Status Normalization (Para Kanban)
         const statusMap = [
@@ -34,19 +31,12 @@ export async function GET() {
 
         let statusUpdatedCount = 0;
         for (const mapping of statusMap) {
-            const placeholders = mapping.from.map((_, i) => `$${i + 1}`).join(',');
-            const res = await query(
-                `UPDATE leads SET status = $${mapping.from.length + 1} WHERE status IN (${placeholders}) OR status LIKE '7'`,
-                [...mapping.from, mapping.to]
-            );
-            // O OR status LIKE '7' é redundante se estiver no array, mas ok.
-            // Simplified Query:
-            const simpleRes = await query(`
+            const res = await query(`
                 UPDATE leads 
                 SET status = '${mapping.to}' 
                 WHERE status IN (${mapping.from.map(s => `'${s}'`).join(',')})
             `);
-            statusUpdatedCount += simpleRes.rowCount;
+            statusUpdatedCount += (res.rowCount || 0);
         }
 
         if (statusUpdatedCount > 0) repairs.push(`Normalizados status de ${statusUpdatedCount} leads.`);
@@ -60,6 +50,7 @@ export async function GET() {
         // 4. Promoção Admin
         const admins = ['vendas@cortinasbras.com.br', 'loja@cortinasbras.com.br', 'admin@cortinasbras.com.br'];
         await query(`UPDATE "User" SET role = 'ADMIN' WHERE email = ANY($1)`, [admins]).catch(() => { });
+        // Fallback for different capitalization
         await query(`UPDATE users SET role = 'ADMIN' WHERE email = ANY($1)`, [admins]).catch(() => { });
 
         return NextResponse.json({
@@ -68,12 +59,13 @@ export async function GET() {
             status_distribution: statusStats.rows,
             message: "Dados antigos atualizados e corrigidos com sucesso. Recarregue o CRM.",
             dataMigration: {
-                imported: repairs.length > 0 ? 1 : 0, // Flag para o frontend exibir sucesso
+                imported: repairs.length > 0 ? 1 : 0,
                 msg: repairs.join(' ') || "Nenhuma correção necessária (dados já estão limpos)."
             }
         });
 
     } catch (error: any) {
+        console.error("DEBUG LEADS ERROR:", error);
         return NextResponse.json({
             error: error.message,
             stack: error.stack
