@@ -42,29 +42,15 @@ export default function LoginPage() {
                 <div className="bg-white rounded-2xl shadow-[0_20px_60px_rgba(212,169,62,0.15)] p-10 border border-brand-100">
                     {/* Logo */}
                     <div className="flex justify-center mb-8">
-                        <div className="text-center">
-                            {/* Logo em Texto - Sempre visível */}
-                            <div className="mb-4">
-                                <h2 className="text-3xl font-black text-brand-700 tracking-tight">
-                                    CORTINAS BRÁS
-                                </h2>
-                                <div className="h-1 w-24 bg-gradient-to-r from-brand-500 to-brand-600 mx-auto mt-2 rounded-full"></div>
-                            </div>
-                            {/* Imagem do Logo - Opcional */}
-                            <div className="relative w-48 h-20 mx-auto hidden sm:block">
-                                <Image
-                                    src="/static/logo-gestao.png"
-                                    alt="Cortinas Brás - Sistema de Gestão"
-                                    fill
-                                    className="object-contain"
-                                    priority
-                                    unoptimized
-                                    onError={(e) => {
-                                        // Esconde a imagem se der erro
-                                        (e.target as HTMLElement).style.display = 'none';
-                                    }}
-                                />
-                            </div>
+                        <div className="relative w-48 h-20">
+                            <Image
+                                src="/static/logo-gestao.png"
+                                alt="Cortinas Brás - Sistema de Gestão"
+                                fill
+                                className="object-contain"
+                                priority
+                                unoptimized
+                            />
                         </div>
                     </div>
 
