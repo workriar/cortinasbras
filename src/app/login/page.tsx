@@ -43,13 +43,10 @@ export default function LoginPage() {
                     {/* Logo */}
                     <div className="flex justify-center mb-8">
                         <div className="relative w-64 h-32">
-                            <Image
+                            <img
                                 src="/static/logo-login.png"
                                 alt="Cortinas Brás - Sistema de Gestão"
-                                fill
-                                className="object-contain"
-                                priority
-                                unoptimized
+                                className="w-full h-full object-contain"
                             />
                         </div>
                     </div>

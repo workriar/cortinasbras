@@ -27,8 +27,8 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
                 <Navbar />
 
                 {/* Page Content */}
-                <main className="p-4 md:p-8 pb-24 md:pb-8"> {/* pb-24 for mobile nav */}
-                    <div className="max-w-7xl mx-auto">
+                <main className="p-2 md:p-6 pb-24 md:pb-8"> {/* Reduced padding for mobile */}
+                    <div className="mx-auto w-full max-w-[1920px]"> {/* Increased max-width */}
                         {children}
                     </div>
                 </main>

@@ -29,7 +29,7 @@ export default function KanbanColumn({ id, title, color, count, leads }: KanbanC
     return (
         <div
             ref={setNodeRef}
-            className={`flex-shrink-0 w-80 bg-gray-50/50 rounded-2xl p-4 transition-all border border-transparent ${isOver ? 'bg-gray-100/80 border-gray-200' : ''
+            className={`flex-shrink-0 w-[85vw] sm:w-80 lg:w-96 bg-gray-50/50 rounded-2xl p-4 transition-all border border-transparent snap-center ${isOver ? 'bg-gray-100/80 border-gray-200' : ''
                 }`}
         >
             {/* Header */}

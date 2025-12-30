@@ -125,7 +125,7 @@ export default function KanbanBoard() {
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
         >
-            <div className="flex gap-6 overflow-x-auto pb-6 custom-scrollbar min-h-[calc(100vh-320px)]">
+            <div className="flex gap-4 md:gap-6 overflow-x-auto pb-4 custom-scrollbar min-h-[calc(100vh-160px)] snap-x snap-mandatory px-0.5">
                 {COLUMNS.map((column) => {
                     const columnLeads = getLeadsByStatus(column.id);
                     return (
