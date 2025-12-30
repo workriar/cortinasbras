@@ -37,9 +37,23 @@
 }
 
 @layer base {
+
+  html,
+  body {
+    overscroll-behavior-y: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   body {
     @apply bg-brand-50 text-brand-900 antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* ... */
+  .input-primary {
+    @apply w-full px-4 py-2.5 border-2 border-brand-100 rounded-lg bg-white text-brand-900 transition-all duration-200 outline-none font-medium text-base;
+    /* text-base prevents iOS zoom */
+    @apply focus:border-brand-500 focus:ring-4 focus:ring-brand-500/5 placeholder:text-brand-100;
   }
 
   h1,
