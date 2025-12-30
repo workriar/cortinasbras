@@ -4,8 +4,31 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+export async function GET(req: Request) {
     try {
+        const { searchParams } = new URL(req.url);
+        const action = searchParams.get('action');
+
+        if (action === 'clean') {
+            const resTest = await query(`
+                DELETE FROM leads 
+                WHERE nome ILIKE '%Teste%' 
+                   OR nome ILIKE '%Test%' 
+                   OR nome ILIKE '%Debug%'
+                   OR email ILIKE '%teste%'
+                   OR observacoes ILIKE '%teste%'
+            `);
+            const resEmpty = await query(`
+                DELETE FROM leads 
+                WHERE (nome = 'Sem Nome' OR telefone = '0000000000')
+                AND criado_em >= CURRENT_DATE
+            `);
+            return NextResponse.json({
+                success: true,
+                message: `Limpeza concluída! Removidos ${resTest.rowCount} leads de teste e ${resEmpty.rowCount} leads inválidos de hoje.`
+            });
+        }
+
         const dbUrl = process.env.DATABASE_URL || "";
         const dbHost = dbUrl.split('@')[1]?.split(':')[0] || "unknown";
 

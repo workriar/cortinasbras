@@ -234,6 +234,39 @@ export default function SettingsPage() {
                                     </div>
                                 </div>
                             </div>
+
+                            <div className="p-6 bg-red-50 rounded-xl border border-red-200 shadow-sm">
+                                <div className="flex items-start gap-4">
+                                    <div className="p-3 bg-red-100 rounded-lg text-red-600 text-2xl">
+                                        🗑️
+                                    </div>
+                                    <div className="flex-1">
+                                        <h3 className="text-lg font-bold text-red-900">Limpeza de Teste (Zona de Perigo)</h3>
+                                        <p className="text-red-700 text-sm mt-1 mb-4">
+                                            Apague leads criados durante testes (com nome 'Teste', 'Debug') e registros vazios de hoje. Use com cautela.
+                                        </p>
+                                        <button
+                                            onClick={async () => {
+                                                if (!confirm('ATENÇÃO: Deseja apagar todos os leads de Teste e leads vazios? Esta ação não pode ser desfeita.')) return;
+                                                setLoading(true);
+                                                try {
+                                                    const res = await fetch('/api/debug-leads?action=clean');
+                                                    const data = await res.json();
+                                                    alert(data.message || 'Limpeza realizada.');
+                                                } catch (error) {
+                                                    alert('Erro ao limpar.');
+                                                } finally {
+                                                    setLoading(false);
+                                                }
+                                            }}
+                                            disabled={loading}
+                                            className="px-6 py-2.5 bg-red-600 text-white font-bold rounded-lg shadow-lg hover:bg-red-700 active:scale-95 transition-all"
+                                        >
+                                            Limpar Leads de Teste
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     )}
                 </div>
