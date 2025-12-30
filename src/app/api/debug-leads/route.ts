@@ -50,6 +50,19 @@ export async function GET() {
                 repairs.push("Schema da tabela 'leads' verificado e corrigido (novas colunas adicionadas).");
             } catch (e: any) {
                 repairs.push(`Erro ao verificar schema: ${e.message}`);
+                repairs.push(`Erro ao verificar schema: ${e.message}`);
+            }
+
+            // CORREÇÃO CRÍTICA: Sincronizar Sequence de IDs
+            // Se a sequence estiver atrasada, INSERTs falham com "duplicate key value violates unique constraint"
+            try {
+                await query(`SELECT setval('leads_id_seq', (SELECT MAX(id) FROM leads) + 1)`);
+                repairs.push("Sequência de IDs sincronizada.");
+            } catch {
+                // Tenta nome alternativo caso o banco tenha criado diferente
+                try {
+                    await query(`SELECT setval('"Lead_id_seq"', (SELECT MAX(id) FROM "Lead") + 1)`);
+                } catch (e) { }
             }
 
             await query(`UPDATE leads SET telefone = '0000000000' WHERE telefone IS NULL`);
