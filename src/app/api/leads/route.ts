@@ -130,115 +130,71 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
     try {
         const { searchParams } = new URL(req.url);
-        const limit = parseInt(searchParams.get('limit') || '50');
+        const limit = parseInt(searchParams.get('limit') || '100');
         const offset = parseInt(searchParams.get('offset') || '0');
         const status = searchParams.get('status');
 
-        const normalizeStatus = (s: string | null | undefined) => {
+        console.log(`Buscando leads (SQL Direto) status=${status || 'todos'}...`);
+
+        let sql = `SELECT * FROM leads`;
+        const params: any[] = [];
+
+        if (status) {
+            sql += ` WHERE status ILIKE $1`;
+            params.push(status);
+        }
+
+        sql += ` ORDER BY criado_em DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
+        params.push(limit, offset);
+
+        const res = await query(sql, params);
+
+        // Count query
+        const countSql = status
+            ? `SELECT count(*) FROM leads WHERE status ILIKE $1`
+            : `SELECT count(*) FROM leads`;
+        const countParams = status ? [status] : [];
+        const countRes = await query(countSql, countParams);
+        const total = parseInt(countRes.rows[0].count);
+
+        const normalizeStatus = (s: string) => {
             if (!s) return 'NEW';
             const upper = String(s).toUpperCase();
-
-            // Se já for válido, retorna
             if (['NEW', 'CONTACTED', 'PROPOSAL', 'CLOSED_WON', 'CLOSED_LOST'].includes(upper)) return upper;
-
-            // Mapeamentos Legados
-            if (upper.includes('NOVO') || upper === 'NAV' || upper === '7' || upper === '1') return 'NEW';
-            if (upper.includes('CONTAT') || upper === 'EM_CONTATO') return 'CONTACTED';
-            if (upper.includes('PROPOST') || upper.includes('ORCAMENTO')) return 'PROPOSAL';
-            if (upper.includes('FECHAD') || upper.includes('VEND') || upper === 'GANHO') return 'CLOSED_WON';
-            if (upper.includes('PERDID') || upper.includes('ARQUIV')) return 'CLOSED_LOST';
-
-            return 'NEW'; // Default para desconhecidos
+            if (upper.includes('NOVO') || upper === '7' || upper === '1') return 'NEW';
+            if (upper.includes('CONTAT')) return 'CONTACTED';
+            if (upper.includes('PROPOST')) return 'PROPOSAL';
+            if (upper.includes('FECHAD') || upper === 'GANHO') return 'CLOSED_WON';
+            return 'NEW';
         };
 
-        const whereClause = status ? { status } : {};
-
-        console.log(`Buscando leads (Prisma) status=${status || 'todos'}...`);
-        let [leadsRaw, total] = await Promise.all([
-            prisma.lead.findMany({
-                where: whereClause,
-                orderBy: { createdAt: 'desc' },
-                take: limit,
-                skip: offset
-            }),
-            prisma.lead.count({ where: whereClause })
-        ]);
-
-        let leads: any[] = leadsRaw.map(lead => ({
-            ...lead,
-            status: normalizeStatus(lead.status)
+        const leads = res.rows.map((row: any) => ({
+            id: row.id,
+            name: row.nome || "Sem Nome",
+            phone: row.telefone || "Sem Telefone",
+            email: row.email || null,
+            city: row.cidade_bairro || "",
+            source: row.origem || "SITE",
+            status: normalizeStatus(row.status),
+            notes: row.observacoes || "",
+            createdAt: row.criado_em,
+            updatedAt: row.atualizado_em,
+            // Campos extras
+            width: row.largura_parede,
+            height: row.altura_parede,
+            fabric: row.tecido,
+            installation: row.instalacao
         }));
-
-        // FALLBACK: Se o Prisma não retornou nada, vamos tentar SQL direto na tabela 'leads' antiga
-        if (total === 0 && offset === 0) { // Só tenta fallback na pág 1 se vazio
-            console.log("Prisma vazio. Tentando Fallback SQL direto...");
-            try {
-                let sql = `SELECT * FROM leads`;
-                const params: any[] = []; // Explícito para evitar erro TS
-
-                if (status) {
-                    sql += ` WHERE status ILIKE $1`;
-                    params.push(status);
-                }
-
-                sql += ` ORDER BY criado_em DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
-                params.push(limit, offset);
-
-                const res = await query(sql, params);
-
-                if (res && res.rows.length > 0) {
-                    const normalizeStatus = (s: string) => {
-                        if (!s) return 'NEW';
-                        const upper = s.toUpperCase();
-                        // Mapeamento Legado -> Novo (Kanban)
-                        if (upper === 'NOVO' || upper === 'NEW') return 'NEW';
-                        if (upper === 'EM_CONTATO' || upper === 'CONTATO' || upper === 'CONTACTED') return 'CONTACTED';
-                        if (upper === 'PROPOSTA' || upper === 'ORCAMENTO' || upper === 'PROPOSAL') return 'PROPOSAL';
-                        if (upper === 'FECHADO' || upper === 'VENDA' || upper === 'CLOSED_WON') return 'CLOSED_WON';
-                        if (upper === 'PERDIDO' || upper === 'ARQUIVADO' || upper === 'CLOSED_LOST') return 'CLOSED_LOST';
-                        return 'NEW'; // Default para qualquer status desconhecido
-                    };
-
-                    leads = res.rows.map((row: any) => ({
-                        id: row.id,
-                        name: row.nome,
-                        phone: row.telefone,
-                        city: row.cidade_bairro,
-                        status: normalizeStatus(row.status),
-                        source: row.origem || 'SITE',
-                        notes: row.observacoes || '',
-                        createdAt: row.criado_em,
-                        updatedAt: row.atualizado_em || row.criado_em,
-                        // Mapeia campos extras para evitar undefined
-                        width: row.largura_parede,
-                        height: row.altura_parede,
-                        fabric: row.tecido,
-                        installation: row.instalacao
-                    })) as any;
-
-                    // Contagem fallback
-                    const countSql = status
-                        ? `SELECT count(*) FROM leads WHERE status ILIKE $1`
-                        : `SELECT count(*) FROM leads`;
-                    const countParams = status ? [status] : [];
-                    const countRes = await query(countSql, countParams);
-                    total = parseInt(countRes.rows[0].count);
-
-                    console.log(`Fallback SQL encontrou ${total} leads!`);
-                }
-            } catch (sqlError) {
-                console.error("Erro no Fallback SQL:", sqlError);
-            }
-        }
 
         return NextResponse.json({
             leads,
             total,
             limit,
-            offset,
+            offset
         });
+
     } catch (error: any) {
-        console.error("Erro ao buscar leads (Prisma):", error);
+        console.error("Erro SQL Leads:", error);
         return NextResponse.json({
             leads: [],
             total: 0,
