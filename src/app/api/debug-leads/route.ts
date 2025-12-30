@@ -38,7 +38,20 @@ export async function GET() {
         const repairs = [];
 
         // 1. Sanitizar tabela LEGADA (leads)
-        if (countLegacy > 0) {
+        if (countLegacy >= 0) { // Executa mesmo se 0 para garantir schema
+            // REPARO DE SCHEMA: Garantir que colunas existam
+            try {
+                await query(`ALTER TABLE leads ADD COLUMN IF NOT EXISTS largura_parede DECIMAL(10,2)`);
+                await query(`ALTER TABLE leads ADD COLUMN IF NOT EXISTS altura_parede DECIMAL(10,2)`);
+                await query(`ALTER TABLE leads ADD COLUMN IF NOT EXISTS tecido VARCHAR(100)`);
+                await query(`ALTER TABLE leads ADD COLUMN IF NOT EXISTS instalacao VARCHAR(100)`);
+                await query(`ALTER TABLE leads ADD COLUMN IF NOT EXISTS email VARCHAR(255)`);
+                await query(`ALTER TABLE leads ADD COLUMN IF NOT EXISTS origem VARCHAR(50) DEFAULT 'SITE'`);
+                repairs.push("Schema da tabela 'leads' verificado e corrigido (novas colunas adicionadas).");
+            } catch (e: any) {
+                repairs.push(`Erro ao verificar schema: ${e.message}`);
+            }
+
             await query(`UPDATE leads SET telefone = '0000000000' WHERE telefone IS NULL`);
             await query(`UPDATE leads SET status = 'NEW' WHERE status IN ('7', '1', 'Novo', 'novo', 'NOVO', 'nav')`);
             repairs.push("Tabela legada 'leads' sanitizada.");
