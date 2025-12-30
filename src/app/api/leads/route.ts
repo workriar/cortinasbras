@@ -19,21 +19,21 @@ export async function POST(req: Request) {
         console.log("Salvando no banco...");
         const lead = await prisma.lead.create({
             data: {
-                name: data.nome || "Sem Nome",
-                phone: data.telefone || "Sem Telefone",
+                name: data.name || data.nome || "Sem Nome",
+                phone: data.phone || data.telefone || "0000000000",
                 email: data.email || null,
-                city: data.cidade_bairro || "Não especificado",
+                city: data.city || data.cidade_bairro || "Não especificado",
                 // @ts-ignore
-                width: parseValue(data.largura_parede),
+                width: parseValue(data.width || data.largura_parede),
                 // @ts-ignore
-                height: parseValue(data.altura_parede),
+                height: parseValue(data.height || data.altura_parede),
                 // @ts-ignore
-                fabric: data.tecido || "Não especificado",
+                fabric: data.fabric || data.tecido || "Não especificado",
                 // @ts-ignore
-                installation: data.instalacao || "Não especificado",
-                notes: data.observacoes || "",
-                source: "SITE",
-                status: "NEW"
+                installation: data.installation || data.instalacao || "Não especificado",
+                notes: data.notes || data.observacoes || "",
+                source: data.source || data.origem || "SITE",
+                status: data.status ? String(data.status).toUpperCase() : "NEW"
             }
         });
 
