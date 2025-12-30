@@ -39,12 +39,12 @@ function CRMContent() {
     }
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-4 md:space-y-8">
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-800 tracking-tight uppercase">CRM - Gestão de Leads</h1>
-                    <p className="text-gray-500 text-sm mt-1">Organize seus orçamentos e acompanhe o fluxo de vendas.</p>
+                    <h1 className="text-xl md:text-2xl font-bold text-gray-800 tracking-tight uppercase">CRM - Gestão de Leads</h1>
+                    <p className="text-gray-500 text-sm mt-1 hidden sm:block">Organize seus orçamentos e acompanhe o fluxo de vendas.</p>
                 </div>
 
                 <div className="flex items-center gap-3">
