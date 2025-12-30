@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Save, RotateCcw } from 'lucide-react';
+import { Save, RotateCcw, Check, MessageCircle } from 'lucide-react';
 
 interface LeadFormProps {
     lead?: any;
@@ -20,6 +20,7 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [successData, setSuccessData] = useState<{ whatsapp_url: string } | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -37,7 +38,12 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
             });
 
             if (res.ok) {
-                onSuccess();
+                const data = await res.json();
+                if (method === 'POST') {
+                    setSuccessData(data); // Mostra modal de sucesso com WhatsApp
+                } else {
+                    onSuccess(); // Edição apenas fecha
+                }
             } else {
                 const data = await res.json();
                 setError(data.error || 'Erro ao processar solicitação');
@@ -48,6 +54,43 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
             setLoading(false);
         }
     };
+
+    if (successData) {
+        return (
+            <div className="flex flex-col items-center justify-center py-8 px-4 text-center space-y-6 animate-in zoom-in-95 duration-300">
+                <div className="w-20 h-20 bg-green-50 text-green-500 rounded-full flex items-center justify-center shadow-sm">
+                    <Check size={40} strokeWidth={3} />
+                </div>
+
+                <div className="space-y-2">
+                    <h3 className="text-2xl font-bold text-gray-800">Cadastro Realizado!</h3>
+                    <p className="text-gray-500 max-w-xs mx-auto text-sm">
+                        O lead foi salvo no sistema com sucesso. Clique abaixo para iniciar o atendimento.
+                    </p>
+                </div>
+
+                <div className="w-full max-w-sm space-y-3 pt-2">
+                    <a
+                        href={successData.whatsapp_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-whatsapp w-full py-4 text-sm shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all"
+                        onClick={() => setTimeout(onSuccess, 2000)} // Fecha o modal após clique (opcional)
+                    >
+                        <MessageCircle size={20} fill="white" />
+                        Abrir WhatsApp do Cliente
+                    </a>
+
+                    <button
+                        onClick={onSuccess}
+                        className="w-full py-3 text-gray-400 hover:text-gray-600 text-xs font-medium uppercase tracking-wider hover:bg-gray-50 rounded-lg transition-colors"
+                    >
+                        Fechar e Voltar
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
