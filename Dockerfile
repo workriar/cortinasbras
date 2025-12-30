@@ -2,7 +2,7 @@
 FROM node:20-alpine AS base
 
 # Instalar dependências do sistema necessárias
-RUN apk add --no-cache libc6-compat chromium
+RUN apk add --no-cache libc6-compat chromium openssl1.1-compat
 
 # Configurar Puppeteer para usar o Chromium instalado
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
