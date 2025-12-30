@@ -14,32 +14,48 @@ export const authOptions = {
                 password: { label: "Senha", type: "password" },
             },
             async authorize(credentials) {
+                console.log('🔐 [NextAuth] Tentativa de login:', credentials?.email);
+
                 if (!credentials?.email || !credentials?.password) {
+                    console.log('❌ [NextAuth] Credenciais vazias');
                     return null;
                 }
 
-                const user = await prisma.user.findUnique({
-                    where: { email: credentials.email },
-                });
+                try {
+                    const user = await prisma.user.findUnique({
+                        where: { email: credentials.email },
+                    });
 
-                if (!user) {
+                    console.log('👤 [NextAuth] Usuário encontrado:', user ? 'SIM' : 'NÃO');
+
+                    if (!user) {
+                        console.log('❌ [NextAuth] Usuário não existe no banco');
+                        return null;
+                    }
+
+                    console.log('🔑 [NextAuth] Testando senha...');
+                    const isValid = await bcrypt.compare(
+                        credentials.password,
+                        user.passwordHash
+                    );
+
+                    console.log('✅ [NextAuth] Senha válida:', isValid);
+
+                    if (!isValid) {
+                        console.log('❌ [NextAuth] Senha incorreta');
+                        return null;
+                    }
+
+                    console.log('🎉 [NextAuth] Login bem-sucedido para:', user.email);
+                    return {
+                        id: user.id.toString(),
+                        name: user.name || "",
+                        email: user.email,
+                    };
+                } catch (error) {
+                    console.error('💥 [NextAuth] Erro no authorize:', error);
                     return null;
                 }
-
-                const isValid = await bcrypt.compare(
-                    credentials.password,
-                    user.passwordHash
-                );
-
-                if (!isValid) {
-                    return null;
-                }
-
-                return {
-                    id: user.id.toString(),
-                    name: user.name || "",
-                    email: user.email,
-                };
             },
         }),
     ],
