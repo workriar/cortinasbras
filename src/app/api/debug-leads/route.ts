@@ -6,66 +6,85 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
     try {
-        // 1. Diagnóstico Inicial
-        const tables = await query(`
-            SELECT table_name 
-            FROM information_schema.tables 
-            WHERE table_schema = 'public'
-        `);
+        const dbUrl = process.env.DATABASE_URL || "";
+        const dbHost = dbUrl.split('@')[1]?.split(':')[0] || "unknown";
 
-        // 2. CORREÇÃO DE DADOS (SANITIZAÇÃO)
+        const tablesInfo = [];
+
+        // Diagnóstico: Contar registros em ambas as tabelas
+        let countLegacy = 0;
+        let countPrisma = 0;
+
+        try {
+            const cLeads = await query(`SELECT count(*) FROM leads`);
+            countLegacy = parseInt(cLeads.rows[0].count);
+            tablesInfo.push({ name: 'leads (legacy)', count: countLegacy });
+        } catch (e) { tablesInfo.push({ name: 'leads (legacy)', error: 'Not Found' }); }
+
+        try {
+            const cLead = await query(`SELECT count(*) FROM "Lead"`);
+            countPrisma = parseInt(cLead.rows[0].count);
+            tablesInfo.push({ name: 'Lead (prisma)', count: countPrisma });
+        } catch (e) { tablesInfo.push({ name: 'Lead (prisma)', error: 'Not Found' }); }
+
+        // MIGRAÇÃO DE EMERGÊNCIA (UNIFICAÇÃO)
+        // Se a tabela 'Lead' existe e tem dados, e a 'leads' também tem, devemos garantir que 'Lead' tenha TUDO.
+        // Se o schema Prisma NÃO tiver @@map("leads"), ele lê de "Lead".
+        // Se o schema Prisma TIVER @@map("leads"), ele lê de "leads".
+
+        // Vamos FORÇAR a cópia de 'leads' (legacy) para 'Lead' (prisma) se 'Lead' existir.
+        // E também vamos corrigir os dados na 'leads' (caso o map esteja ativo).
+
         const repairs = [];
 
-        // 2.1 Telefones Nulos (Obrigatório no schema)
-        const phoneFix = await query(`UPDATE leads SET telefone = '0000000000' WHERE telefone IS NULL`);
-        if ((phoneFix.rowCount || 0) > 0) repairs.push(`Corrigidos ${phoneFix.rowCount} leads sem telefone.`);
-
-        // 2.2 Status Normalization (Para Kanban)
-        const statusMap = [
-            { to: 'NEW', from: ['7', '1', 'Novo', 'novo', 'NOVO', 'nav', 'New'] },
-            { to: 'CONTACTED', from: ['Em Contato', 'em_contato', 'contato', 'Contacted'] },
-            { to: 'PROPOSAL', from: ['Proposta', 'orcamento', 'Proposal'] },
-            { to: 'CLOSED_WON', from: ['Fechado', 'venda', 'ganho', 'Closed Won'] },
-            { to: 'CLOSED_LOST', from: ['Perdido', 'arquivado', 'Closed Lost'] }
-        ];
-
-        let statusUpdatedCount = 0;
-        for (const mapping of statusMap) {
-            const res = await query(`
-                UPDATE leads 
-                SET status = '${mapping.to}' 
-                WHERE status IN (${mapping.from.map(s => `'${s}'`).join(',')})
-            `);
-            statusUpdatedCount += (res.rowCount || 0);
+        // 1. Sanitizar tabela LEGADA (leads)
+        if (countLegacy > 0) {
+            await query(`UPDATE leads SET telefone = '0000000000' WHERE telefone IS NULL`);
+            await query(`UPDATE leads SET status = 'NEW' WHERE status IN ('7', '1', 'Novo', 'novo', 'NOVO', 'nav')`);
+            repairs.push("Tabela legada 'leads' sanitizada.");
         }
 
-        if (statusUpdatedCount > 0) repairs.push(`Normalizados status de ${statusUpdatedCount} leads.`);
-
-        // 2.3 Cidade Nula (Opcional no schema, mas bom limpar)
-        await query(`UPDATE leads SET cidade_bairro = 'Não informado' WHERE cidade_bairro IS NULL`);
-
-        // 3. Stats Finais
-        const statusStats = await query(`SELECT status, count(*) FROM leads GROUP BY status`);
+        // 2. Tentar importar de 'leads' para '"Lead"' (se Lead existir)
+        // Isso cobre o caso onde o Prisma está lendo de 'Lead' e ignorando 'leads'.
+        try {
+            const copyRes = await query(`
+                INSERT INTO "Lead" (name, phone, city, status, source, notes, "createdAt", "updatedAt")
+                SELECT 
+                    nome, 
+                    COALESCE(telefone, '0000000000'), 
+                    COALESCE(cidade_bairro, 'Não informado'),
+                    CASE 
+                         WHEN UPPER(status) IN ('NOVO','NEW','7','1') THEN 'NEW'
+                         ELSE 'NEW' 
+                    END,
+                    COALESCE(origem, 'SITE'),
+                    observacoes,
+                    criado_em,
+                    criado_em
+                FROM leads l
+                WHERE NOT EXISTS (SELECT 1 FROM "Lead" dest WHERE dest.phone = l.telefone)
+            `);
+            if ((copyRes.rowCount || 0) > 0) {
+                repairs.push(`Copiados ${copyRes.rowCount} registros de 'leads' para 'Lead'.`);
+            }
+        } catch (e) {
+            // Tabela "Lead" pode não existir, ok.
+        }
 
         // 4. Promoção Admin
         const admins = ['vendas@cortinasbras.com.br', 'loja@cortinasbras.com.br', 'admin@cortinasbras.com.br'];
         await query(`UPDATE "User" SET role = 'ADMIN' WHERE email = ANY($1)`, [admins]).catch(() => { });
-        // Fallback for different capitalization
         await query(`UPDATE users SET role = 'ADMIN' WHERE email = ANY($1)`, [admins]).catch(() => { });
 
         return NextResponse.json({
             success: true,
+            db_host: dbHost,
+            tables_diagnostic: tablesInfo,
             repairs_applied: repairs,
-            status_distribution: statusStats.rows,
-            message: "Dados antigos atualizados e corrigidos com sucesso. Recarregue o CRM.",
-            dataMigration: {
-                imported: repairs.length > 0 ? 1 : 0,
-                msg: repairs.join(' ') || "Nenhuma correção necessária (dados já estão limpos)."
-            }
+            message: "Diagnóstico e reparos executados. Verifique 'tables_diagnostic' para ver onde estão seus dados."
         });
 
     } catch (error: any) {
-        console.error("DEBUG LEADS ERROR:", error);
         return NextResponse.json({
             error: error.message,
             stack: error.stack
