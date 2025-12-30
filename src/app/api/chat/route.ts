@@ -48,7 +48,7 @@ export async function POST(request: Request) {
         // Por enquanto, enviar para todos (broadcast)
         // TODO: Implementar destinatário específico
         const allUsers = await prisma.user.findMany();
-        const receiverId = allUsers.find(u => u.id !== user.id)?.id || user.id;
+        const receiverId = allUsers.find((u: any) => u.id !== user.id)?.id || user.id;
 
         const message = await prisma.message.create({
             data: {

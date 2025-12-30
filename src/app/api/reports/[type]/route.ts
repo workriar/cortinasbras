@@ -15,7 +15,7 @@ export async function GET(
                 GROUP BY status
             `);
 
-            const data = result.rows.map((item) => ({
+            const data = result.rows.map((item: any) => ({
                 name: item.name === 'novo' || item.name === 'NEW' ? 'Novo' :
                     item.name === 'em_contato' || item.name === 'CONTACTED' ? 'Em Contato' :
                         item.name === 'proposta' || item.name === 'PROPOSAL' ? 'Proposta' :
@@ -33,7 +33,7 @@ export async function GET(
                 GROUP BY origem
             `);
 
-            const data = result.rows.map((item) => ({
+            const data = result.rows.map((item: any) => ({
                 name: item.name === 'site' || item.name === 'SITE' ? 'Site' :
                     item.name === 'WHATSAPP' ? 'WhatsApp' :
                         item.name === 'ADVERTISEMENT' ? 'Anúncio' : 'Manual',
@@ -52,7 +52,7 @@ export async function GET(
                 ORDER BY name ASC
             `);
 
-            const data = result.rows.map(row => ({
+            const data = result.rows.map((row: any) => ({
                 name: new Date(row.name).toLocaleDateString('pt-BR'),
                 value: parseInt(row.value)
             }));

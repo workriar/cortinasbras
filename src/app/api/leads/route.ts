@@ -105,7 +105,7 @@ export async function GET(req: Request) {
             status ? [status] : []
         );
 
-        const mappedLeads = result.rows.map(row => ({
+        const mappedLeads = result.rows.map((row: any) => ({
             ...row,
             name: row.nome,
             phone: row.telefone,
