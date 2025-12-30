@@ -16,11 +16,11 @@ export default function Navbar() {
                     {/* Brand Logo */}
                     <div className="mr-6 shrink-0">
                         <Link href="/dashboard">
-                            <div className="relative w-40 h-10">
+                            <div className="relative w-64 h-16">
                                 <img
                                     src="/logo.png"
                                     alt="Cortinas Brás"
-                                    className="h-10 w-auto object-contain"
+                                    className="h-16 w-auto object-contain"
                                 />
                             </div>
                         </Link>
