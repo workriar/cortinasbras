@@ -31,7 +31,7 @@ export async function GET() {
         // O Kanban espera: 'NEW', 'CONTACTED', 'PROPOSAL', 'CLOSED_WON', 'CLOSED_LOST'
         // Se estiver NULL, '', ou português 'Novo', convertemos para 'NEW'.
 
-        let updateResult = { rowCount: 0 };
+        let updateResult: any = { rowCount: 0 };
         if (tableExists) {
             try {
                 updateResult = await query(`
