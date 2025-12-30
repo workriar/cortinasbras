@@ -1,13 +1,21 @@
 # Dockerfile para Next.js - Cortinas Brás
-FROM node:20-alpine AS base
+# Usando Debian (slim) para melhor compatibilidade com Prisma e Puppeteer
+FROM node:20-slim AS base
 
-# Instalar dependências do sistema necessárias
-RUN apk add --no-cache libc6-compat chromium openssl-dev
+# Instalar dependências do sistema
+# openssl, ca-certificates para Prisma/NextAuth
+# chromium para Puppeteer
+# procps para monitoramento
+RUN apt-get update && apt-get install -y \
+  openssl \
+  ca-certificates \
+  chromium \
+  procps \
+  && rm -rf /var/lib/apt/lists/*
 
-# Configurar Puppeteer para usar o Chromium instalado
+# Configurar Puppeteer
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
-
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 WORKDIR /app
 
@@ -23,29 +31,29 @@ FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Desabilitar telemetria do Next.js
+# Desabilitar telemetria
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Gerar Prisma Client
+# O schema agora tem binaryTargets que vão funcionar com Debian (debian-openssl-3.0.x ou rhel-openssl-1.0.x dependendo da distro, mas o auto-detect do slim funciona bem)
 RUN npx prisma generate
 
 # Build da aplicação
 RUN npm run build
 
-# Runner - Imagem de produção
+# Runner
 FROM base AS runner
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Criar usuário não-root
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN groupadd --system --gid 1001 nodejs
+RUN useradd --system --uid 1001 --gid nodejs nextjs
 
-# Criar diretório para dados persistentes
+# Criar diretório de dados
 RUN mkdir -p /app/data && chown -R nextjs:nodejs /app/data
 
-# Copiar arquivos necessários
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
