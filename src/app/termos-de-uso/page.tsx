@@ -396,51 +396,50 @@ export default function TermosDeUso() {
                                 Para dúvidas, sugestões ou reclamações relacionadas ao uso do site ou aos nossos
                                 serviços, entre em contato conosco:
                             </p>
-                            <div className="bg-gray-50 p-6 rounded-lg">
+                            <div className="bg-gray-50 p-6 rounded-lg mb-8">
                                 <p className="text-gray-700 mb-2">
-                                    <div className="bg-gray-50 p-6 rounded-lg mb-4">
-                                        <p className="text-gray-700 mb-2">
-                                            <strong>Razão Social:</strong> Cortinas Brás
-                                        </p>
-                                        <p className="text-gray-700 mb-2">
-                                            <strong>Endereço:</strong> Avenida Celso Garcia, 129 - Brás, São Paulo - SP, CEP 03015-000
-                                        </p>
-                                        <p className="text-gray-700 mb-2">
-                                            <strong>E-mail:</strong> loja@cortinasbras.com.br
-                                        </p>
-                                        <p className="text-gray-700 mb-2">
-                                            <strong>WhatsApp:</strong> (11) 99289-1070
-                                        </p>
-                                        <p className="text-gray-700">
-                                            <strong>Horário de Atendimento:</strong> Segunda a Sexta, das 8h às 17h | Sábado, das 9h às 18h
-                                        </p>
-                                    </div>
-                                </section>
-
-                                <section className="mb-8">
-                                    <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                                        17. Código de Defesa do Consumidor
-                                    </h2>
-                                    <p className="text-gray-700 leading-relaxed">
-                                        Nada nestes Termos de Uso afeta seus direitos legais como consumidor sob o Código de
-                                        Defesa do Consumidor brasileiro (Lei nº 8.078/1990) ou outras leis de proteção ao
-                                        consumidor aplicáveis.
-                                    </p>
-                                </section>
-                            </div>
-
-                            {/* Footer Note */}
-                            <div className="bg-amber-50 border-l-4 border-amber-500 p-6 rounded-r-lg">
-                                <p className="text-amber-900 font-medium mb-2">
-                                    Ao utilizar este site, você reconhece que leu, compreendeu e concorda em estar vinculado
-                                    a estes Termos de Uso.
+                                    <strong>Razão Social:</strong> Cortinas Brás
                                 </p>
-                                <p className="text-amber-800 text-sm">
-                                    Se você tiver alguma dúvida sobre estes termos, entre em contato conosco antes de usar o site.
+                                <p className="text-gray-700 mb-2">
+                                    <strong>Endereço:</strong> Avenida Celso Garcia, 129 - Brás, São Paulo - SP, CEP 03015-000
+                                </p>
+                                <p className="text-gray-700 mb-2">
+                                    <strong>E-mail:</strong> loja@cortinasbras.com.br
+                                </p>
+                                <p className="text-gray-700 mb-2">
+                                    <strong>WhatsApp:</strong> (11) 99289-1070
+                                </p>
+                                <p className="text-gray-700">
+                                    <strong>Horário de Atendimento:</strong> Segunda a Sexta, das 8h às 17h | Sábado, das 9h às 18h
                                 </p>
                             </div>
+                        </section>
+
+
+                        <section className="mb-8">
+                            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+                                17. Código de Defesa do Consumidor
+                            </h2>
+                            <p className="text-gray-700 leading-relaxed">
+                                Nada nestes Termos de Uso afeta seus direitos legais como consumidor sob o Código de
+                                Defesa do Consumidor brasileiro (Lei nº 8.078/1990) ou outras leis de proteção ao
+                                consumidor aplicáveis.
+                            </p>
+                        </section>
+
+                        {/* Footer Note */}
+                        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 rounded-r-lg">
+                            <p className="text-amber-900 font-medium mb-2">
+                                Ao utilizar este site, você reconhece que leu, compreendeu e concorda em estar vinculado
+                                a estes Termos de Uso.
+                            </p>
+                            <p className="text-amber-800 text-sm">
+                                Se você tiver alguma dúvida sobre estes termos, entre em contato conosco antes de usar o site.
+                            </p>
+                        </div>
                     </div>
                 </div>
-        </main>
+            </div>
+        </main >
     );
 }

@@ -1,72 +1,60 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { query } from '@/services/db';
 
 export async function GET(
     request: Request,
-    { params }: { params: { type: string } }
+    { params }: { params: Promise<{ type: string }> }
 ) {
     try {
-        const { type } = params;
+        const { type } = await params;
 
         if (type === 'status') {
-            const statusData = await prisma.lead.groupBy({
-                by: ['status'],
-                _count: true,
-            });
+            const result = await query(`
+                SELECT status as name, COUNT(*) as value 
+                FROM leads 
+                GROUP BY status
+            `);
 
-            const data = statusData.map((item) => ({
-                name: item.status === 'NEW' ? 'Novo' :
-                    item.status === 'CONTACTED' ? 'Em Contato' :
-                        item.status === 'PROPOSAL' ? 'Proposta' :
-                            item.status === 'CLOSED_WON' ? 'Fechado' : 'Perdido',
-                value: item._count,
+            const data = result.rows.map((item) => ({
+                name: item.name === 'novo' || item.name === 'NEW' ? 'Novo' :
+                    item.name === 'em_contato' || item.name === 'CONTACTED' ? 'Em Contato' :
+                        item.name === 'proposta' || item.name === 'PROPOSAL' ? 'Proposta' :
+                            item.name === 'fechado' || item.name === 'CLOSED_WON' ? 'Fechado' : 'Perdido',
+                value: parseInt(item.value),
             }));
 
             return NextResponse.json({ data });
         }
 
         if (type === 'source') {
-            const sourceData = await prisma.lead.groupBy({
-                by: ['source'],
-                _count: true,
-            });
+            const result = await query(`
+                SELECT origem as name, COUNT(*) as value 
+                FROM leads 
+                GROUP BY origem
+            `);
 
-            const data = sourceData.map((item) => ({
-                name: item.source === 'SITE' ? 'Site' :
-                    item.source === 'WHATSAPP' ? 'WhatsApp' :
-                        item.source === 'ADVERTISEMENT' ? 'Anúncio' : 'Manual',
-                value: item._count,
+            const data = result.rows.map((item) => ({
+                name: item.name === 'site' || item.name === 'SITE' ? 'Site' :
+                    item.name === 'WHATSAPP' ? 'WhatsApp' :
+                        item.name === 'ADVERTISEMENT' ? 'Anúncio' : 'Manual',
+                value: parseInt(item.value),
             }));
 
             return NextResponse.json({ data });
         }
 
         if (type === 'weekly') {
-            // Últimos 7 dias
-            const sevenDaysAgo = new Date();
-            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+            const result = await query(`
+                SELECT DATE(criado_em) as name, COUNT(*) as value 
+                FROM leads 
+                WHERE criado_em >= CURRENT_DATE - INTERVAL '7 days'
+                GROUP BY DATE(criado_em)
+                ORDER BY name ASC
+            `);
 
-            const leads = await prisma.lead.findMany({
-                where: {
-                    createdAt: {
-                        gte: sevenDaysAgo,
-                    },
-                },
-                select: {
-                    createdAt: true,
-                },
-            });
-
-            // Agrupar por dia
-            const grouped = leads.reduce((acc: any, lead) => {
-                const date = new Date(lead.createdAt).toLocaleDateString('pt-BR');
-                acc[date] = (acc[date] || 0) + 1;
-                return acc;
-            }, {});
-
-            const data = Object.entries(grouped).map(([name, value]) => ({
-                name,
-                value,
+            const data = result.rows.map(row => ({
+                name: new Date(row.name).toLocaleDateString('pt-BR'),
+                value: parseInt(row.value)
             }));
 
             return NextResponse.json({ data });

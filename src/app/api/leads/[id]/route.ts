@@ -1,32 +1,30 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { query } from '@/services/db';
 
 export async function GET(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await params;
     try {
-        const lead = await prisma.lead.findUnique({
-            where: { id: parseInt(params.id) },
-            include: {
-                owner: {
-                    select: {
-                        id: true,
-                        name: true,
-                        email: true,
-                    },
-                },
-                interactions: {
-                    orderBy: { createdAt: 'desc' },
-                },
-            },
-        });
+        const result = await query("SELECT * FROM leads WHERE id = $1", [id]);
+        const lead = result.rows[0];
 
         if (!lead) {
             return NextResponse.json({ error: 'Lead não encontrado' }, { status: 404 });
         }
 
-        return NextResponse.json(lead);
+        // Map column names to JS object property names
+        const mappedLead = {
+            ...lead,
+            name: lead.nome,
+            phone: lead.telefone,
+            city: lead.cidade_bairro,
+            createdAt: lead.criado_em,
+            updatedAt: lead.atualizado_em,
+        };
+
+        return NextResponse.json(mappedLead);
     } catch (error) {
         console.error('Erro ao buscar lead:', error);
         return NextResponse.json({ error: 'Erro ao buscar lead' }, { status: 500 });
@@ -35,26 +33,50 @@ export async function GET(
 
 export async function PUT(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await params;
     try {
         const body = await request.json();
         const { name, phone, email, city, source, status, notes } = body;
 
-        const lead = await prisma.lead.update({
-            where: { id: parseInt(params.id) },
-            data: {
-                ...(name && { name }),
-                ...(phone && { phone }),
-                ...(email !== undefined && { email }),
-                ...(city !== undefined && { city }),
-                ...(source && { source }),
-                ...(status && { status }),
-                ...(notes !== undefined && { notes }),
-            },
-        });
+        // Note: Using Portuguese column names for update
+        const updateQuery = `
+            UPDATE leads 
+            SET 
+                nome = COALESCE($1, nome),
+                telefone = COALESCE($2, telefone),
+                cidade_bairro = COALESCE($3, cidade_bairro),
+                status = COALESCE($4, status),
+                observacoes = COALESCE($5, observacoes),
+                origem = COALESCE($6, origem),
+                atualizado_em = CURRENT_TIMESTAMP
+            WHERE id = $7
+            RETURNING *
+        `;
 
-        return NextResponse.json(lead);
+        const result = await query(updateQuery, [
+            name,
+            phone,
+            city,
+            status,
+            notes,
+            source,
+            id
+        ]);
+
+        const updatedLead = result.rows[0];
+
+        const mappedLead = {
+            ...updatedLead,
+            name: updatedLead.nome,
+            phone: updatedLead.telefone,
+            city: updatedLead.cidade_bairro,
+            createdAt: updatedLead.criado_em,
+            updatedAt: updatedLead.atualizado_em,
+        };
+
+        return NextResponse.json(mappedLead);
     } catch (error) {
         console.error('Erro ao atualizar lead:', error);
         return NextResponse.json({ error: 'Erro ao atualizar lead' }, { status: 500 });
@@ -63,13 +85,11 @@ export async function PUT(
 
 export async function DELETE(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await params;
     try {
-        await prisma.lead.delete({
-            where: { id: parseInt(params.id) },
-        });
-
+        await query("DELETE FROM leads WHERE id = $1", [id]);
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error('Erro ao excluir lead:', error);

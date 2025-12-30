@@ -105,8 +105,17 @@ export async function GET(req: Request) {
             status ? [status] : []
         );
 
+        const mappedLeads = result.rows.map(row => ({
+            ...row,
+            name: row.nome,
+            phone: row.telefone,
+            city: row.cidade_bairro,
+            createdAt: row.criado_em,
+            updatedAt: row.atualizado_em,
+        }));
+
         return NextResponse.json({
-            leads: result.rows,
+            leads: mappedLeads,
             total: parseInt(countResult.rows[0].count),
             limit,
             offset,
