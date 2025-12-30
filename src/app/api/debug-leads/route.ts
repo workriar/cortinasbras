@@ -1,81 +1,112 @@
 import { NextResponse } from 'next/server';
-import { query } from '@/services/db-postgres';
+import { query } from '@/services/db-postgres'; // Usando o serviço Postgres
+import { prisma } from "@/lib/prisma";
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
     try {
-        // 1. Diagnóstico das tabelas existentes
+        // 1. Verificar se a tabela 'leads' (legada) existe
         const tables = await query(`
-      SELECT table_name 
-      FROM information_schema.tables 
-      WHERE table_schema = 'public'
-    `, []);
+            SELECT table_name 
+            FROM information_schema.tables 
+            WHERE table_schema = 'public'
+        `);
 
-        // 2. Verificar distribuição de status na tabela legado 'leads'
-        let statusSummary = [];
-        let leadsSample = [];
-        let tableExists = false;
+        const tableExists = tables.rows.some((r: any) => r.table_name === 'leads');
 
-        try {
-            const statusRes = await query(`SELECT status, count(*) FROM leads GROUP BY status`, []);
-            statusSummary = statusRes.rows;
-            tableExists = true;
-
-            const sampleRes = await query(`SELECT id, nome, status, criado_em FROM leads ORDER BY criado_em DESC LIMIT 5`, []);
-            leadsSample = sampleRes.rows;
-
-        } catch (e) {
-            statusSummary = [{ error: "Tabela 'leads' (legada) não encontrada ou erro de acesso" }];
+        if (!tableExists) {
+            return NextResponse.json({
+                error: "Tabela legada 'leads' não encontrada.",
+                tables: tables.rows.map((r: any) => r.table_name)
+            });
         }
 
-        // 3. TENTATIVA DE CORREÇÃO AUTOMÁTICA DE STATUS
-        // O Kanban espera: 'NEW', 'CONTACTED', 'PROPOSAL', 'CLOSED_WON', 'CLOSED_LOST'
-        // Se estiver NULL, '', ou português 'Novo', convertemos para 'NEW'.
+        // 2. Análise de Status
+        const statusStats = await query(`SELECT status, count(*) FROM leads GROUP BY status`);
+        const statusSummary = statusStats.rows;
 
-        let updateResult: any = { rowCount: 0 };
-        if (tableExists) {
-            try {
-                updateResult = await query(`
-                UPDATE leads 
-                SET status = 'NEW' 
-                WHERE status IS NULL 
-                   OR status = '' 
-                   OR status ILIKE 'Novo' 
-                   OR status ILIKE 'Pendente'
-            `, []);
-            } catch (e) { console.error("Erro no update:", e) }
-        }
+        // 3. Auto-Correção dos Status Nulos ou Antigos na Tabela Legada
+        // Isso ajuda o fallback, mas a migração abaixo é mais importante.
+        const updateResult = await query(`
+            UPDATE leads 
+            SET status = 'NEW' 
+            WHERE status IS NULL OR status = '' OR status = 'Novo'
+        `);
 
         // 4. Promoção Automática de Admin (Bootstrap)
         const admins = ['vendas@cortinasbras.com.br', 'loja@cortinasbras.com.br', 'admin@cortinasbras.com.br'];
         let adminPromo = { success: false, msg: "" };
         try {
-            await query(`UPDATE "User" SET role = 'ADMIN' WHERE email = ANY($1)`, [admins]);
-            adminPromo = { success: true, msg: "Promovido na tabela User" };
+            // Tenta tabela User (Prisma padrão)
+            const resUser = await query(`UPDATE "User" SET role = 'ADMIN' WHERE email = ANY($1)`, [admins]);
+            // Tenta tabela users (se existir)
+            try { await query(`UPDATE users SET role = 'ADMIN' WHERE email = ANY($1)`, [admins]); } catch (e) { }
+
+            adminPromo = { success: true, msg: "Tentativa de promoção de admin realizada." };
         } catch (e) {
-            try {
-                // Fallback para tabela minúscula se existir
-                await query(`UPDATE users SET role = 'ADMIN' WHERE email = ANY($1)`, [admins]);
-                adminPromo = { success: true, msg: "Promovido na tabela users" };
-            } catch (e2) {
-                adminPromo = { success: false, msg: "Falha ao promover admins. Verifique se a tabela de usuários existe." };
-            }
+            adminPromo = { success: false, msg: "Erro ao promover admin: " + (e as Error).message };
         }
+
+        // 5. MIGRAÇÃO DE DADOS LEGADOS (IMPORTANTE)
+        let migrationStats = { imported: 0, msg: "" };
+        try {
+            // Importa leads da tabela antiga 'leads' para a nova 'Lead'
+            // Dedup: verifica telefone e data de criação
+            const imported = await prisma.$executeRaw`
+                INSERT INTO "Lead" (name, phone, city, status, source, notes, "createdAt", "updatedAt")
+                SELECT 
+                    nome, 
+                    telefone, 
+                    COALESCE(cidade_bairro, 'Não informado'), 
+                    CASE 
+                        WHEN UPPER(status) LIKE '%NOVO%' THEN 'NEW'
+                        WHEN UPPER(status) LIKE '%NAV%' THEN 'NEW'
+                        WHEN UPPER(status) LIKE '%CONTAT%' THEN 'CONTACTED'
+                        WHEN UPPER(status) LIKE '%PROPOST%' OR UPPER(status) LIKE '%ORCAMENTO%' THEN 'PROPOSAL'
+                        WHEN UPPER(status) LIKE '%FECHAD%' OR UPPER(status) LIKE '%VEND%' THEN 'CLOSED_WON'
+                        WHEN UPPER(status) LIKE '%PERDID%' OR UPPER(status) LIKE '%ARQUIV%' THEN 'CLOSED_LOST'
+                        ELSE 'NEW'
+                    END,
+                    COALESCE(origem, 'SITE'),
+                    observacoes,
+                    criado_em,
+                    criado_em
+                FROM leads l
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM "Lead" new 
+                    WHERE new.phone = l.telefone 
+                    AND new."createdAt" = l.criado_em
+                )
+                AND l.telefone IS NOT NULL
+            `;
+            migrationStats = { imported: Number(imported), msg: "Leads legados importados com sucesso." };
+        } catch (migError: any) {
+            console.error("Erro na migração:", migError);
+            migrationStats = { imported: 0, msg: "Erro: " + migError.message };
+        }
+
+        // 6. Dados para Visualização
+        const leadsSample = await query(`SELECT id, nome, status, criado_em FROM leads ORDER BY criado_em DESC LIMIT 5`);
 
         return NextResponse.json({
             tables: tables.rows.map((r: any) => r.table_name),
             tableLeadsExists: tableExists,
             statusDistribution: statusSummary,
-            last5Leads: leadsSample,
+            last5Leads: leadsSample.rows,
             autoCorrection: {
                 executed: true,
                 recordsUpdated: updateResult.rowCount,
-                explanation: "Status nulos ou 'Novo' foram convertidos para 'NEW' para aparecerem no Kanban."
             },
             adminPromotion: adminPromo,
-            instruction: "Se recordsUpdated > 0, recarregue o CRM. Seus leads devem aparecer."
+            dataMigration: migrationStats, // Novo campo
+            instruction: "Se 'dataMigration.imported' > 0, os leads antigos foram restaurados. Recarregue o CRM."
         });
 
     } catch (error: any) {
-        return NextResponse.json({ error: error.message, stack: error.stack }, { status: 500 });
+        return NextResponse.json({
+            error: error.message,
+            stack: error.stack
+        }, { status: 500 });
     }
 }

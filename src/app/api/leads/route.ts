@@ -136,12 +136,24 @@ export async function GET(req: Request) {
                 const res = await query(sql, params);
 
                 if (res && res.rows.length > 0) {
+                    const normalizeStatus = (s: string) => {
+                        if (!s) return 'NEW';
+                        const upper = s.toUpperCase();
+                        // Mapeamento Legado -> Novo (Kanban)
+                        if (upper === 'NOVO' || upper === 'NEW') return 'NEW';
+                        if (upper === 'EM_CONTATO' || upper === 'CONTATO' || upper === 'CONTACTED') return 'CONTACTED';
+                        if (upper === 'PROPOSTA' || upper === 'ORCAMENTO' || upper === 'PROPOSAL') return 'PROPOSAL';
+                        if (upper === 'FECHADO' || upper === 'VENDA' || upper === 'CLOSED_WON') return 'CLOSED_WON';
+                        if (upper === 'PERDIDO' || upper === 'ARQUIVADO' || upper === 'CLOSED_LOST') return 'CLOSED_LOST';
+                        return 'NEW'; // Default para qualquer status desconhecido
+                    };
+
                     leads = res.rows.map((row: any) => ({
                         id: row.id,
                         name: row.nome,
                         phone: row.telefone,
                         city: row.cidade_bairro,
-                        status: row.status ? row.status.toUpperCase() : 'NEW',
+                        status: normalizeStatus(row.status),
                         source: row.origem || 'SITE',
                         notes: row.observacoes || '',
                         createdAt: row.criado_em,
