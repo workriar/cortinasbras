@@ -31,13 +31,13 @@ export default function Navbar() {
             <div className="px-6 py-3">
                 <div className="flex items-center justify-between">
                     {/* Brand Logo */}
-                    <div className="mr-6 shrink-0">
+                    <div className="mr-2 md:mr-6 shrink-0">
                         <Link href="/dashboard">
-                            <div className="relative w-64 h-16">
+                            <div className="relative w-32 md:w-64 h-10 md:h-16 flex items-center">
                                 <img
                                     src="/logo.png"
                                     alt="Cortinas Brás"
-                                    className="h-16 w-auto object-contain"
+                                    className="h-full w-auto object-contain"
                                 />
                             </div>
                         </Link>
