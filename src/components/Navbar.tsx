@@ -13,19 +13,21 @@ export default function Navbar() {
         <nav className="sticky top-0 z-30 bg-white/70 backdrop-blur-md border-b border-gray-100 shadow-sm">
             <div className="px-6 py-3">
                 <div className="flex items-center justify-between">
-                    {/* Brand Logo - Added as requested */}
+                    {/* Brand Logo */}
                     <div className="mr-6 shrink-0">
                         <Link href="/dashboard">
-                            <img
-                                src="/static/logo-gestao.png"
-                                alt="Cortinas Brás"
-                                className="h-6 w-auto object-contain"
-                            />
+                            <div className="relative w-32 h-8">
+                                <img
+                                    src="/static/logo-login.png"
+                                    alt="Cortinas Brás"
+                                    className="h-8 w-auto object-contain"
+                                />
+                            </div>
                         </Link>
                     </div>
 
-                    {/* Search Bar - Muted and subtle */}
-                    <div className="flex-1 max-w-xl">
+                    {/* Search Bar - Hidden on mobile */}
+                    <div className="flex-1 max-w-xl hidden md:block">
                         <div className="relative group">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <Search size={18} className="text-gray-300 group-focus-within:text-gray-400 transition-colors" />
@@ -33,16 +35,21 @@ export default function Navbar() {
                             <input
                                 type="search"
                                 placeholder="Pesquisar..."
-                                className="block w-full pl-10 pr-3 py-2 border border-gray-100 rounded-lg leading-5 bg-gray-50/50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-1 focus:ring-gray-200 focus:border-gray-200 transition-all sm:text-sm"
+                                className="block w-full pl-10 pr-3 py-2 border border-gray-100 rounded-lg leading-5 bg-stone-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-1 focus:ring-stone-200 focus:border-stone-200 transition-all sm:text-sm"
                             />
                         </div>
                     </div>
 
                     {/* Right Section */}
-                    <div className="flex items-center gap-3 ml-6">
-                        {/* Quick Actions */}
-                        <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-full transition-all">
+                    <div className="flex items-center gap-2 md:gap-3 ml-auto md:ml-6">
+                        {/* Quick Actions (Hidden Mobile) */}
+                        <button className="hidden md:block p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-full transition-all">
                             <Plus size={20} strokeWidth={1.5} />
+                        </button>
+
+                        {/* Search Icon (Visible Mobile) */}
+                        <button className="md:hidden p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-full transition-all">
+                            <Search size={20} strokeWidth={1.5} />
                         </button>
 
                         {/* Notifications */}
@@ -52,11 +59,11 @@ export default function Navbar() {
                                 className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-full transition-all relative"
                             >
                                 <Bell size={20} strokeWidth={1.5} />
-                                <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-brand-primary rounded-full"></span>
+                                <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-red-500 rounded-full"></span>
                             </button>
 
                             {showNotifications && (
-                                <div className="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-2xl border border-gray-100 py-2 ring-1 ring-black/5 animate-in fade-in slide-in-from-top-2">
+                                <div className="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-2xl border border-gray-100 py-2 ring-1 ring-black/5 animate-in fade-in slide-in-from-top-2 z-50">
                                     <div className="px-4 py-3 border-b border-gray-100 flex justify-between items-center">
                                         <h3 className="font-semibold text-sm text-gray-800 uppercase tracking-tight">Notificações</h3>
                                         <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">2 NOVAS</span>
@@ -84,7 +91,7 @@ export default function Navbar() {
                         <div className="relative">
                             <button
                                 onClick={() => setShowProfile(!showProfile)}
-                                className="flex items-center gap-2 p-1.5 hover:bg-gray-50 rounded-lg transition-all border border-transparent hover:border-gray-100"
+                                className="flex items-center gap-2 p-1 md:p-1.5 hover:bg-gray-50 rounded-lg transition-all border border-transparent hover:border-gray-100"
                             >
                                 <div className="w-8 h-8 bg-stone-100 border border-stone-200 rounded-full flex items-center justify-center text-stone-600 font-medium text-xs">
                                     {session?.user?.name?.charAt(0).toUpperCase() || 'A'}
@@ -97,14 +104,14 @@ export default function Navbar() {
                             </button>
 
                             {showProfile && (
-                                <div className="absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-2xl border border-gray-100 py-1 ring-1 ring-black/5 animate-in fade-in slide-in-from-top-2">
+                                <div className="absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-2xl border border-gray-100 py-1 ring-1 ring-black/5 animate-in fade-in slide-in-from-top-2 z-50">
+                                    <div className="md:hidden px-4 py-3 border-b border-stone-100">
+                                        <p className="text-xs font-semibold text-gray-800">{session?.user?.name || 'Administrador'}</p>
+                                        <p className="text-[10px] text-gray-400">{session?.user?.email}</p>
+                                    </div>
                                     <Link href="/dashboard/settings" className="flex items-center gap-2 px-4 py-2.5 text-xs text-gray-600 hover:bg-gray-50 transition-colors">
                                         <User size={14} />
                                         Perfil da Conta
-                                    </Link>
-                                    <Link href="/dashboard/settings" className="flex items-center gap-2 px-4 py-2.5 text-xs text-gray-600 hover:bg-gray-50 transition-colors">
-                                        <Settings size={14} />
-                                        Preferências
                                     </Link>
                                     <div className="h-px bg-gray-100 my-1 mx-2" />
                                     <button

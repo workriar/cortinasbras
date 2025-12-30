@@ -1,27 +1,33 @@
 'use client';
-import { SessionProvider } from 'next-auth/react';
 import Sidebar from '@/components/Sidebar';
 import Navbar from '@/components/Navbar';
 import { SidebarProvider, useSidebar } from '@/components/SidebarContext';
+
+import BottomNav from '@/components/BottomNav';
 
 function DashboardContent({ children }: { children: React.ReactNode }) {
     const { isExpanded } = useSidebar();
 
     return (
-        <div className="flex min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-indigo-50">
-            {/* Sidebar */}
-            <Sidebar />
+        <div className="flex min-h-screen bg-stone-50">
+            {/* Sidebar - Desktop Only */}
+            <div className="hidden md:block">
+                <Sidebar />
+            </div>
+
+            {/* Bottom Navigation - Mobile Only */}
+            <BottomNav />
 
             {/* Main Content */}
             <div
-                className={`flex-1 transition-all duration-300 ${isExpanded ? 'ml-64' : 'ml-20'
+                className={`flex-1 transition-all duration-300 w-full ${isExpanded ? 'md:ml-64' : 'md:ml-20'
                     }`}
             >
                 {/* Navbar */}
                 <Navbar />
 
                 {/* Page Content */}
-                <main className="p-6 lg:p-8">
+                <main className="p-4 md:p-8 pb-24 md:pb-8"> {/* pb-24 for mobile nav */}
                     <div className="max-w-7xl mx-auto">
                         {children}
                     </div>
@@ -33,10 +39,8 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     return (
-        <SessionProvider>
-            <SidebarProvider>
-                <DashboardContent>{children}</DashboardContent>
-            </SidebarProvider>
-        </SessionProvider>
+        <SidebarProvider>
+            <DashboardContent>{children}</DashboardContent>
+        </SidebarProvider>
     );
 }

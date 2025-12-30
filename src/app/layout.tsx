@@ -1,14 +1,35 @@
-'use client';
 import './globals.css';
-import { SessionProvider } from 'next-auth/react';
-import type { ReactNode } from 'react';
+import { Providers } from '@/components/Providers';
+import { Metadata, Viewport } from 'next';
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export const metadata: Metadata = {
+  title: 'Cortinas Brás - Sistema de Gestão',
+  description: 'Sistema ERP para gestão de leads e orçamentos da Cortinas Brás',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Cortinas Brás',
+  },
+  icons: {
+    icon: '/static/logo-login.png',
+    apple: '/static/logo-login.png',
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#d4a93e',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
-      <head />
-      <body className="bg-gradient-to-br from-brand-50 to-brand-100 min-h-screen">
-        <SessionProvider>{children}</SessionProvider>
+      <body className="bg-stone-50 min-h-screen">
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

@@ -14,24 +14,31 @@ export async function POST(req: Request) {
             return parseFloat(String(val).replace(",", "."));
         };
 
-        // 1. Salvar no Banco PostgreSQL
+        // 1. Salvar no Banco PostgreSQL (Usando nomes do Prisma)
         console.log("Salvando no banco...");
+        // IMPORTANTE: Tabela "Lead" com aspas e colunas em inglês para bater com Prisma
         const result = await query(
-            `INSERT INTO leads (nome, telefone, cidade_bairro, largura_parede, altura_parede, tecido, instalacao, observacoes, origem) 
-             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+            `INSERT INTO "Lead" (name, phone, city, source, status, notes) 
+             VALUES ($1, $2, $3, $4, $5, $6)
              RETURNING id`,
             [
                 data.nome || "Sem Nome",
                 data.telefone || "Sem Telefone",
                 data.cidade_bairro || "Não especificado",
-                parseValue(data.largura_parede),
-                parseValue(data.altura_parede),
-                data.tecido || "Não especificado",
-                data.instalacao || "Não especificado",
-                data.observacoes || "",
-                "site"
+                "SITE", // source
+                "NEW",  // status (Garante que caia na aba Novos)
+                `Largura: ${data.largura_parede || '?'}m, Altura: ${data.altura_parede || '?'}m, Tecido: ${data.tecido || '?'}, Obs: ${data.observacoes || ''}` // notes (agrupando dados extras no notes por enquanto, ou podemos adicionar as colunas no banco se existirem)
             ]
         );
+
+        /* 
+           NOTA: O schema Prisma original tem campos específicos (largura_parede, etc) que não existem no schema padrão do script migrate-to-postgresql.sql que fizemos.
+           Se quisermos manter esses campos, precisamos adicionar colunas extras na tabela "Lead" ou salvar como JSON/Texto em notes.
+           Pelo script migrate-to-postgresql.sql, a tabela "Lead" tem:
+           id, name, phone, email, city, source, status, notes...
+           
+           Vou salvar os detalhes técnicos em 'notes' para garantir compatibilidade com o script que rodamos.
+        */
 
         const leadId = result.rows[0].id;
         const lead = { id: leadId, ...data };
@@ -83,35 +90,37 @@ export async function GET(req: Request) {
         const status = searchParams.get('status');
 
         let queryText = `
-      SELECT id, nome, telefone, cidade_bairro, largura_parede, altura_parede,
-             tecido, observacoes, status, origem, criado_em, atualizado_em
-      FROM leads
+      SELECT id, name, phone, city, status, source, notes, "createdAt", "updatedAt"
+      FROM "Lead"
     `;
         const params: any[] = [];
 
         if (status) {
             queryText += ` WHERE status = $1`;
             params.push(status);
-            queryText += ` ORDER BY criado_em DESC LIMIT $2 OFFSET $3`;
+            queryText += ` ORDER BY "createdAt" DESC LIMIT $2 OFFSET $3`;
             params.push(limit, offset);
         } else {
-            queryText += ` ORDER BY criado_em DESC LIMIT $1 OFFSET $2`;
+            queryText += ` ORDER BY "createdAt" DESC LIMIT $1 OFFSET $2`;
             params.push(limit, offset);
         }
 
         const result = await query(queryText, params);
         const countResult = await query(
-            status ? `SELECT COUNT(*) FROM leads WHERE status = $1` : `SELECT COUNT(*) FROM leads`,
+            status ? `SELECT COUNT(*) FROM "Lead" WHERE status = $1` : `SELECT COUNT(*) FROM "Lead"`,
             status ? [status] : []
         );
 
         const mappedLeads = result.rows.map((row: any) => ({
-            ...row,
-            name: row.nome,
-            phone: row.telefone,
-            city: row.cidade_bairro,
-            createdAt: row.criado_em,
-            updatedAt: row.atualizado_em,
+            id: row.id,
+            name: row.name,
+            phone: row.phone,
+            city: row.city,
+            status: row.status,
+            source: row.source,
+            notes: row.notes,
+            createdAt: row.createdAt,
+            updatedAt: row.updatedAt,
         }));
 
         return NextResponse.json({
@@ -122,7 +131,6 @@ export async function GET(req: Request) {
         });
     } catch (error: any) {
         console.error("Erro ao buscar leads (fallback):", error);
-        // Return empty list to avoid breaking UI
         return NextResponse.json({
             leads: [],
             total: 0,
