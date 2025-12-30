@@ -45,6 +45,22 @@ export async function GET() {
             } catch (e) { console.error("Erro no update:", e) }
         }
 
+        // 4. Promoção Automática de Admin (Bootstrap)
+        const admins = ['vendas@cortinasbras.com.br', 'loja@cortinasbras.com.br', 'admin@cortinasbras.com.br'];
+        let adminPromo = { success: false, msg: "" };
+        try {
+            await query(`UPDATE "User" SET role = 'ADMIN' WHERE email = ANY($1)`, [admins]);
+            adminPromo = { success: true, msg: "Promovido na tabela User" };
+        } catch (e) {
+            try {
+                // Fallback para tabela minúscula se existir
+                await query(`UPDATE users SET role = 'ADMIN' WHERE email = ANY($1)`, [admins]);
+                adminPromo = { success: true, msg: "Promovido na tabela users" };
+            } catch (e2) {
+                adminPromo = { success: false, msg: "Falha ao promover admins. Verifique se a tabela de usuários existe." };
+            }
+        }
+
         return NextResponse.json({
             tables: tables.rows.map((r: any) => r.table_name),
             tableLeadsExists: tableExists,
@@ -55,6 +71,7 @@ export async function GET() {
                 recordsUpdated: updateResult.rowCount,
                 explanation: "Status nulos ou 'Novo' foram convertidos para 'NEW' para aparecerem no Kanban."
             },
+            adminPromotion: adminPromo,
             instruction: "Se recordsUpdated > 0, recarregue o CRM. Seus leads devem aparecer."
         });
 

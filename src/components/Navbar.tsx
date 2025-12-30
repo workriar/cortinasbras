@@ -1,13 +1,30 @@
 'use client';
 import { useSession, signOut } from 'next-auth/react';
-import { useState } from 'react';
-import { Search, Bell, Plus, User, Settings, LogOut, ChevronDown } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Search, Bell, Plus, User, Settings, LogOut, ChevronDown, Users as UsersIcon } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Navbar() {
     const { data: session } = useSession();
     const [showProfile, setShowProfile] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
+
+    const notifRef = useRef<HTMLDivElement>(null);
+    const profileRef = useRef<HTMLDivElement>(null);
+
+    // Fechar ao clicar fora
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (notifRef.current && !notifRef.current.contains(event.target as Node)) {
+                setShowNotifications(false);
+            }
+            if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+                setShowProfile(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
     return (
         <nav className="sticky top-0 z-30 bg-white/70 backdrop-blur-md border-b border-gray-100 shadow-sm">
@@ -53,7 +70,7 @@ export default function Navbar() {
                         </button>
 
                         {/* Notifications */}
-                        <div className="relative">
+                        <div className="relative" ref={notifRef}>
                             <button
                                 onClick={() => setShowNotifications(!showNotifications)}
                                 className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-full transition-all relative"
@@ -69,18 +86,19 @@ export default function Navbar() {
                                         <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">2 NOVAS</span>
                                     </div>
                                     <div className="max-h-80 overflow-y-auto">
-                                        <div className="px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors">
-                                            <p className="text-sm text-gray-700">Novo orçamento recebido pelo site</p>
-                                            <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">há 5 minutos</p>
-                                        </div>
-                                        <div className="px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors border-t border-gray-50">
-                                            <p className="text-sm text-gray-700">Interação registrada por Vendedor</p>
-                                            <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">há 1 hora</p>
-                                        </div>
+                                        <Link
+                                            href="/dashboard/crm?status=NEW"
+                                            onClick={() => setShowNotifications(false)}
+                                            className="block px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors"
+                                        >
+                                            <p className="text-sm text-gray-700 font-medium">Novos leads chegaram!</p>
+                                            <p className="text-xs text-gray-500 mt-0.5">Clique para ver os novos orçamentos.</p>
+                                            <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">Recente</p>
+                                        </Link>
                                     </div>
                                     <div className="px-4 py-2 border-t border-gray-100 text-center">
                                         <button className="text-xs text-gray-500 hover:text-gray-800 font-medium transition-colors">
-                                            VER TODO O HISTÓRICO
+                                            LIMPAR TUDO
                                         </button>
                                     </div>
                                 </div>
@@ -88,7 +106,7 @@ export default function Navbar() {
                         </div>
 
                         {/* Profile */}
-                        <div className="relative">
+                        <div className="relative" ref={profileRef}>
                             <button
                                 onClick={() => setShowProfile(!showProfile)}
                                 className="flex items-center gap-2 p-1 md:p-1.5 hover:bg-gray-50 rounded-lg transition-all border border-transparent hover:border-gray-100"
@@ -97,8 +115,8 @@ export default function Navbar() {
                                     {session?.user?.name?.charAt(0).toUpperCase() || 'A'}
                                 </div>
                                 <div className="hidden md:block text-left pr-1">
-                                    <p className="text-xs font-semibold text-gray-800 leading-none mb-0.5">{session?.user?.name || 'Administrador'}</p>
-                                    <p className="text-[10px] text-gray-400 uppercase tracking-wider leading-none">Acesso Admin</p>
+                                    <p className="text-xs font-semibold text-gray-800 leading-none mb-0.5">{session?.user?.name || 'Vendedor'}</p>
+                                    <p className="text-[10px] text-gray-400 uppercase tracking-wider leading-none">Acesso Sistema</p>
                                 </div>
                                 <ChevronDown size={14} className={`text-gray-300 transition-transform ${showProfile ? 'rotate-180' : ''}`} />
                             </button>
@@ -106,13 +124,28 @@ export default function Navbar() {
                             {showProfile && (
                                 <div className="absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-2xl border border-gray-100 py-1 ring-1 ring-black/5 animate-in fade-in slide-in-from-top-2 z-50">
                                     <div className="md:hidden px-4 py-3 border-b border-stone-100">
-                                        <p className="text-xs font-semibold text-gray-800">{session?.user?.name || 'Administrador'}</p>
+                                        <p className="text-xs font-semibold text-gray-800">{session?.user?.name || 'Vendedor'}</p>
                                         <p className="text-[10px] text-gray-400">{session?.user?.email}</p>
                                     </div>
-                                    <Link href="/dashboard/settings" className="flex items-center gap-2 px-4 py-2.5 text-xs text-gray-600 hover:bg-gray-50 transition-colors">
-                                        <User size={14} />
-                                        Perfil da Conta
+
+                                    <Link
+                                        href="/dashboard/users"
+                                        onClick={() => setShowProfile(false)}
+                                        className="flex items-center gap-2 px-4 py-2.5 text-xs text-gray-600 hover:bg-gray-50 transition-colors"
+                                    >
+                                        <UsersIcon size={14} />
+                                        Gerenciar Usuários
                                     </Link>
+
+                                    <Link
+                                        href="/dashboard/settings"
+                                        onClick={() => setShowProfile(false)}
+                                        className="flex items-center gap-2 px-4 py-2.5 text-xs text-gray-600 hover:bg-gray-50 transition-colors"
+                                    >
+                                        <Settings size={14} />
+                                        Preferências
+                                    </Link>
+
                                     <div className="h-px bg-gray-100 my-1 mx-2" />
                                     <button
                                         onClick={() => signOut({ callbackUrl: '/login' })}
