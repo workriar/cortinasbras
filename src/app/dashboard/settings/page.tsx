@@ -7,12 +7,36 @@ export default function SettingsPage() {
     const { data: session, status } = useSession();
     const router = useRouter();
     const [activeTab, setActiveTab] = useState('profile');
+    const [loading, setLoading] = useState(false);
+    const [msg, setMsg] = useState('');
 
     useEffect(() => {
         if (status === 'unauthenticated') {
             router.push('/login');
         }
     }, [status, router]);
+
+    const handleImportLeads = async () => {
+        if (!confirm('Deseja iniciar a importação de leads antigos? Isso pode levar alguns segundos.')) return;
+        setLoading(true);
+        setMsg('Iniciando importação...');
+        try {
+            const res = await fetch('/api/debug-leads');
+            const data = await res.json();
+            if (data.dataMigration) {
+                setMsg(`Sucesso! ${data.dataMigration.imported} leads importados. ${data.dataMigration.msg}`);
+                if (data.dataMigration.imported > 0) {
+                    alert('Importação concluída! Recarregue a página de CRM para ver os leads.');
+                }
+            } else {
+                setMsg('Importação finalizada. Verifique o console ou tente novamente.');
+            }
+        } catch (error) {
+            setMsg('Erro ao importar: ' + String(error));
+        } finally {
+            setLoading(false);
+        }
+    };
 
     if (status === 'loading') {
         return (
@@ -27,6 +51,7 @@ export default function SettingsPage() {
         { id: 'security', name: 'Segurança', icon: '🔒' },
         { id: 'notifications', name: 'Notificações', icon: '🔔' },
         { id: 'integrations', name: 'Integrações', icon: '🔗' },
+        { id: 'system', name: 'Sistema', icon: '⚙️' },
     ];
 
     return (
@@ -40,14 +65,14 @@ export default function SettingsPage() {
             {/* Tabs */}
             <div className="glass-card rounded-xl overflow-hidden">
                 <div className="border-b border-gray-200">
-                    <nav className="flex -mb-px">
+                    <nav className="flex -mb-px overflow-x-auto">
                         {tabs.map((tab) => (
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`flex-1 py-4 px-6 text-center border-b-2 font-medium text-sm transition-colors ${activeTab === tab.id
-                                        ? 'border-purple-600 text-purple-600'
-                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                className={`flex-1 py-4 px-6 text-center border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${activeTab === tab.id
+                                    ? 'border-purple-600 text-purple-600'
+                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                     }`}
                             >
                                 <span className="mr-2">{tab.icon}</span>
@@ -173,6 +198,39 @@ export default function SettingsPage() {
                                         </button>
                                     </div>
                                 ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* System Tab */}
+                    {activeTab === 'system' && (
+                        <div className="space-y-6">
+                            <h2 className="text-xl font-bold text-gray-900">Manutenção do Sistema</h2>
+
+                            <div className="p-6 bg-amber-50 rounded-xl border border-amber-200 shadow-sm">
+                                <div className="flex items-start gap-4">
+                                    <div className="p-3 bg-amber-100 rounded-lg text-amber-600 text-2xl">
+                                        📥
+                                    </div>
+                                    <div className="flex-1">
+                                        <h3 className="text-lg font-bold text-amber-900">Recuperação de Leads Antigos</h3>
+                                        <p className="text-amber-700 text-sm mt-1 mb-4">
+                                            Se você percebeu que alguns leads antigos não estão aparecendo no CRM, utilize esta ferramenta para forçar a importação da base de dados legada para o novo sistema.
+                                        </p>
+                                        <button
+                                            onClick={handleImportLeads}
+                                            disabled={loading}
+                                            className={`px-6 py-2.5 bg-amber-600 text-white font-bold rounded-lg shadow-lg hover:bg-amber-700 active:scale-95 transition-all ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                        >
+                                            {loading ? 'Importando...' : 'Importar Todos Leads Antigos'}
+                                        </button>
+                                        {msg && (
+                                            <div className="mt-4 p-3 bg-white/50 rounded border border-amber-200 text-sm font-medium text-amber-800 animate-in fade-in">
+                                                {msg}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     )}

@@ -57,11 +57,12 @@ export async function GET() {
                 INSERT INTO "Lead" (name, phone, city, status, source, notes, "createdAt", "updatedAt")
                 SELECT 
                     nome, 
-                    telefone, 
+                    COALESCE(telefone, '0000000000'), 
                     COALESCE(cidade_bairro, 'Não informado'), 
                     CASE 
                         WHEN UPPER(status) LIKE '%NOVO%' THEN 'NEW'
                         WHEN UPPER(status) LIKE '%NAV%' THEN 'NEW'
+                        WHEN UPPER(status) LIKE '%1%' OR UPPER(status) = '7' THEN 'NEW'
                         WHEN UPPER(status) LIKE '%CONTAT%' THEN 'CONTACTED'
                         WHEN UPPER(status) LIKE '%PROPOST%' OR UPPER(status) LIKE '%ORCAMENTO%' THEN 'PROPOSAL'
                         WHEN UPPER(status) LIKE '%FECHAD%' OR UPPER(status) LIKE '%VEND%' THEN 'CLOSED_WON'
@@ -75,10 +76,9 @@ export async function GET() {
                 FROM leads l
                 WHERE NOT EXISTS (
                     SELECT 1 FROM "Lead" new 
-                    WHERE new.phone = l.telefone 
+                    WHERE new.phone = COALESCE(l.telefone, '0000000000')
                     AND new."createdAt" = l.criado_em
                 )
-                AND l.telefone IS NOT NULL
             `;
             migrationStats = { imported: Number(imported), msg: "Leads legados importados com sucesso." };
         } catch (migError: any) {
