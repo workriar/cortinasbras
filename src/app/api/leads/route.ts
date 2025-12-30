@@ -17,25 +17,54 @@ export async function POST(req: Request) {
 
         // 1. Salvar no Banco via Prisma (Mapeado automaticamente para 'leads')
         console.log("Salvando no banco...");
-        const lead = await prisma.lead.create({
-            data: {
-                name: data.name || data.nome || "Sem Nome",
-                phone: data.phone || data.telefone || "0000000000",
-                email: data.email || null,
-                city: data.city || data.cidade_bairro || "Não especificado",
-                // @ts-ignore
-                width: parseValue(data.width || data.largura_parede),
-                // @ts-ignore
-                height: parseValue(data.height || data.altura_parede),
-                // @ts-ignore
-                fabric: data.fabric || data.tecido || "Não especificado",
-                // @ts-ignore
-                installation: data.installation || data.instalacao || "Não especificado",
-                notes: data.notes || data.observacoes || "",
-                source: data.source || data.origem || "SITE",
-                status: data.status ? String(data.status).toUpperCase() : "NEW"
-            }
-        });
+        // 1. Salvar no Banco via SQL DIRETO (Mais robusto para banco legado)
+        console.log("Salvando no banco via SQL Direto...");
+
+        const nome = data.name || data.nome || "Sem Nome";
+        const telefone = data.phone || data.telefone || "0000000000";
+        const email = data.email || null;
+        const cidade = data.city || data.cidade_bairro || "Não especificado";
+        const largura = parseValue(data.width || data.largura_parede);
+        const altura = parseValue(data.height || data.altura_parede);
+        const tecido = data.fabric || data.tecido || null;
+        const instalacao = data.installation || data.instalacao || null;
+        const obs = data.notes || data.observacoes || "";
+        const origem = data.source || data.origem || "SITE";
+        const status = data.status ? String(data.status).toUpperCase() : "NEW";
+
+        const insertQuery = `
+            INSERT INTO leads (
+                nome, telefone, email, cidade_bairro, 
+                largura_parede, altura_parede, tecido, instalacao, 
+                observacoes, origem, status, criado_em, atualizado_em
+            ) VALUES (
+                $1, $2, $3, $4, 
+                $5, $6, $7, $8, 
+                $9, $10, $11, NOW(), NOW()
+            )
+            RETURNING id, nome as name, telefone as phone, cidade_bairro as city
+        `;
+
+        const result = await query(insertQuery, [
+            nome, telefone, email, cidade,
+            largura, altura, tecido, instalacao,
+            obs, origem, status
+        ]);
+
+        const lead = {
+            id: result.rows[0].id,
+            name: nome,
+            phone: telefone,
+            email: email,
+            city: cidade,
+            width: largura,
+            height: altura,
+            fabric: tecido,
+            installation: instalacao,
+            notes: obs,
+            source: origem,
+            status: status
+        };
 
         console.log(`Lead #${lead.id} salvo`);
 
