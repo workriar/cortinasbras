@@ -2,11 +2,14 @@
 FROM node:20-alpine AS base
 
 # Instalar dependências do sistema necessárias
-RUN apk add --no-cache libc6-compat chromium openssl1.1-compat
+RUN apk add --no-cache libc6-compat chromium openssl-dev
 
 # Configurar Puppeteer para usar o Chromium instalado
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+
+# Configurar Prisma para usar o binário correto do Alpine
+ENV PRISMA_QUERY_ENGINE_LIBRARY=/app/node_modules/.prisma/client/libquery_engine-linux-musl-openssl-3.0.x.so.node
 
 WORKDIR /app
 
