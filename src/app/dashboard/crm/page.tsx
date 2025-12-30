@@ -1,7 +1,7 @@
 'use client';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import KanbanBoard from '@/components/KanbanBoard';
 import LeadForm from '@/components/LeadForm';
 import { Plus, X, ListFilter } from 'lucide-react';
@@ -9,8 +9,15 @@ import { Plus, X, ListFilter } from 'lucide-react';
 export default function CRMPage() {
     const { data: session, status } = useSession();
     const router = useRouter();
+    const searchParams = useSearchParams();
     const [showForm, setShowForm] = useState(false);
     const [refreshKey, setRefreshKey] = useState(0);
+
+    useEffect(() => {
+        if (searchParams?.get('new') === 'true') {
+            setShowForm(true);
+        }
+    }, [searchParams]);
 
     useEffect(() => {
         if (status === 'unauthenticated') {
