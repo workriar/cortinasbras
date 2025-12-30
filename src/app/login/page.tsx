@@ -42,9 +42,9 @@ export default function LoginPage() {
                 <div className="bg-white rounded-2xl shadow-[0_20px_60px_rgba(212,169,62,0.15)] p-10 border border-brand-100">
                     {/* Logo */}
                     <div className="flex justify-center mb-8">
-                        <div className="relative w-48 h-20">
+                        <div className="relative w-64 h-32">
                             <Image
-                                src="/static/logo-gestao.png"
+                                src="/static/logo-login.png"
                                 alt="Cortinas Brás - Sistema de Gestão"
                                 fill
                                 className="object-contain"
