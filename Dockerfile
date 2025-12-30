@@ -8,8 +8,6 @@ RUN apk add --no-cache libc6-compat chromium openssl-dev
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
-# Configurar Prisma para usar o binário correto do Alpine
-ENV PRISMA_QUERY_ENGINE_LIBRARY=/app/node_modules/.prisma/client/libquery_engine-linux-musl-openssl-3.0.x.so.node
 
 WORKDIR /app
 
