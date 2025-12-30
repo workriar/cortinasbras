@@ -1,12 +1,12 @@
 'use client';
 import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import KanbanBoard from '@/components/KanbanBoard';
 import LeadForm from '@/components/LeadForm';
 import { Plus, X, ListFilter } from 'lucide-react';
 
-export default function CRMPage() {
+function CRMContent() {
     const { data: session, status } = useSession();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -90,5 +90,17 @@ export default function CRMPage() {
                 <KanbanBoard key={refreshKey} />
             </div>
         </div>
+    );
+}
+
+export default function CRMPage() {
+    return (
+        <Suspense fallback={
+            <div className="flex items-center justify-center min-h-[60vh]">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-stone-400"></div>
+            </div>
+        }>
+            <CRMContent />
+        </Suspense>
     );
 }
