@@ -29,11 +29,11 @@ export default function KanbanColumn({ id, title, color, count, leads }: KanbanC
     return (
         <div
             ref={setNodeRef}
-            className={`flex-shrink-0 w-[85vw] sm:w-80 lg:w-96 bg-gray-50/50 rounded-2xl p-4 transition-all border border-transparent snap-center ${isOver ? 'bg-gray-100/80 border-gray-200' : ''
+            className={`flex-shrink-0 w-[85vw] sm:w-80 lg:w-96 bg-gray-50/50 rounded-2xl p-4 transition-all border border-transparent snap-center flex flex-col h-full ${isOver ? 'bg-gray-100/80 border-gray-200' : ''
                 }`}
         >
             {/* Header */}
-            <div className="flex items-center justify-between mb-6 px-1">
+            <div className="flex items-center justify-between mb-2 px-1 shrink-0">
                 <div className="flex items-center gap-2.5">
                     <div className={`w-1.5 h-6 rounded-full ${color}`}></div>
                     <h3 className="font-bold text-xs uppercase tracking-widest text-gray-500">{title}</h3>
@@ -45,7 +45,7 @@ export default function KanbanColumn({ id, title, color, count, leads }: KanbanC
 
             {/* Cards Container */}
             <SortableContext items={leads.map(l => l.id)} strategy={verticalListSortingStrategy}>
-                <div className="space-y-4 min-h-[300px]">
+                <div className="space-y-4 min-h-0 flex-1 overflow-y-auto custom-scrollbar pr-2 pt-2">
                     {leads.map((lead) => (
                         <KanbanCard key={lead.id} lead={lead} />
                     ))}

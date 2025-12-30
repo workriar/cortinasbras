@@ -21,6 +21,8 @@
 
   --color-bg-main: var(--color-brand-50);
 
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
   @keyframes luxury-glow {
 
     0%,

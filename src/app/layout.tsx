@@ -1,6 +1,9 @@
 import './globals.css';
 import { Providers } from '@/components/Providers';
 import { Metadata, Viewport } from 'next';
+import { Inter } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata: Metadata = {
   title: 'Cortinas Brás - Sistema de Gestão',
@@ -28,8 +31,8 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR">
-      <body className="bg-stone-50 min-h-screen">
+    <html lang="pt-BR" className={inter.variable}>
+      <body className="bg-stone-50 min-h-screen font-sans selection:bg-brand-500/30">
         <Providers>{children}</Providers>
       </body>
     </html>

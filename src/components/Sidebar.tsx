@@ -55,7 +55,7 @@ export default function Sidebar() {
 
     return (
         <aside
-            className={`fixed left-0 top-0 h-full bg-slate-900 text-white transition-all duration-300 ease-in-out z-40 shadow-2xl overflow-hidden flex flex-col ${isExpanded ? 'w-64' : 'w-20'
+            className={`fixed left-0 top-0 h-full bg-brand-950 text-brand-50 transition-all duration-300 ease-in-out z-40 shadow-2xl overflow-hidden flex flex-col ${isExpanded ? 'w-64' : 'w-20'
                 }`}
         >
             {/* Header */}
