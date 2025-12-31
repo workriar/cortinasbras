@@ -1,11 +1,13 @@
 'use client';
 import { useSession, signOut } from 'next-auth/react';
+import { usePathname } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
 import { Search, Bell, Plus, User, Settings, LogOut, ChevronDown, Users as UsersIcon } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Navbar() {
     const { data: session } = useSession();
+    const pathname = usePathname();
     const [showProfile, setShowProfile] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
 
@@ -31,9 +33,9 @@ export default function Navbar() {
             <div className="px-6 py-3">
                 <div className="flex items-center justify-between">
                     {/* Brand Logo */}
-                    <div className="mr-2 md:mr-6 shrink-0">
+                    <div className="mr-2 md:mr-6 shrink-0 flex items-center gap-4">
                         <Link href="/dashboard">
-                            <div className="relative w-32 md:w-64 h-10 md:h-16 flex items-center">
+                            <div className="relative w-32 md:w-48 h-10 md:h-12 flex items-center">
                                 <img
                                     src="/logo.png"
                                     alt="Cortinas Brás"
@@ -41,6 +43,24 @@ export default function Navbar() {
                                 />
                             </div>
                         </Link>
+
+                        {/* Breadcrumbs - Desktop Only */}
+                        <div className="hidden lg:flex items-center text-sm text-gray-500 font-medium">
+                            <div className="h-6 w-px bg-gray-200 mx-2"></div>
+                            <span className="text-gray-900">
+                                {(() => {
+                                    // Simple manual mapping for now
+                                    if (pathname === '/dashboard') return 'Visão Geral';
+                                    if (pathname?.startsWith('/dashboard/crm')) return 'CRM';
+                                    if (pathname?.startsWith('/dashboard/kanban')) return 'Kanban';
+                                    if (pathname?.startsWith('/dashboard/chat')) return 'Chat';
+                                    if (pathname?.startsWith('/dashboard/reports')) return 'Relatórios';
+                                    if (pathname?.startsWith('/dashboard/users')) return 'Usuários';
+                                    if (pathname?.startsWith('/dashboard/settings')) return 'Configurações';
+                                    return 'Painel';
+                                })()}
+                            </span>
+                        </div>
                     </div>
 
                     {/* Search Bar - Hidden on mobile */}
