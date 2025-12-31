@@ -114,14 +114,27 @@ export default function KanbanBoard() {
 
         // Atualizar no servidor
         try {
-            await fetch(`/api/leads/${leadId}`, {
+            console.log(`[Kanban] Atualizando lead ${leadId} para status ${newStatus}...`);
+            const res = await fetch(`/api/leads/${leadId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: newStatus }),
             });
+
+            if (!res.ok) {
+                const errData = await res.json();
+                console.error('[Kanban] Falha na resposta da API:', errData);
+                throw new Error(errData.details || 'Falha ao atualizar');
+            }
+
+            const updatedData = await res.json();
+            console.log('[Kanban] Sucesso:', updatedData);
+
         } catch (error) {
-            console.error('Erro ao atualizar lead:', error);
+            console.error('[Kanban] Erro crítico na atualização:', error);
+            // Reverter estado visualmente
             setLeads(previousLeads);
+            alert('Não foi possível salvar a alteração. O lead voltou ao estado anterior.');
         }
     };
 

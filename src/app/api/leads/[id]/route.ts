@@ -29,6 +29,11 @@ export async function PUT(
     const { id } = await params;
     try {
         const body = await request.json();
+        console.log(`[API] Atualizando lead ${id}:`, body);
+
+        if (!body.status) {
+            console.warn(`[API] Tentativa de atualização sem status para lead ${id}`);
+        }
 
         // Mapeamento correto com Prisma
         const updatedLead = await prisma.lead.update({
@@ -39,15 +44,15 @@ export async function PUT(
                 email: body.email || undefined,
                 city: body.city || undefined,
                 source: body.source || undefined,
-                status: body.status || undefined,
+                status: body.status || undefined, // Garante que status está sendo passado
                 notes: body.notes || undefined,
-                // Mantém outros campos (width, etc) inalterados
             }
         });
 
+        console.log(`[API] Lead ${id} atualizado com sucesso. Novo status: ${updatedLead.status}`);
         return NextResponse.json(updatedLead);
     } catch (error: any) {
-        console.error('Erro ao atualizar lead:', error);
+        console.error(`[API] Erro ao atualizar lead ${id}:`, error);
         return NextResponse.json({
             error: 'Erro ao atualizar lead',
             details: error.message
