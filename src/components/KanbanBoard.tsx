@@ -75,7 +75,24 @@ export default function KanbanBoard() {
         }
 
         const leadId = active.id as number;
-        const newStatus = over.id as string;
+        let newStatus = over.id as string;
+
+        // Verify if dropped on a column or another card
+        // We use toString() for robust comparison between numbers and strings
+        const isColumn = COLUMNS.some(col => col.id.toString() === over.id.toString());
+
+        if (!isColumn) {
+            // If not a column, it must be a card
+            const overLead = leads.find(l => l.id.toString() === over.id.toString());
+            if (overLead) {
+                newStatus = overLead.status;
+            } else {
+                // Invalid drop target (neither column nor known lead)
+                console.warn('Alvo de drop inválido:', over.id);
+                setActiveId(null);
+                return;
+            }
+        }
 
         const lead = leads.find(l => l.id === leadId);
         if (!lead || lead.status === newStatus) {
@@ -83,12 +100,17 @@ export default function KanbanBoard() {
             return;
         }
 
-        // Atualizar localmente
+        // Store previous leads for potential revert
+        const previousLeads = [...leads];
+
+        // Atualizar localmente de forma otimista
         setLeads((prevLeads) =>
             prevLeads.map((l) =>
                 l.id === leadId ? { ...l, status: newStatus } : l
             )
         );
+
+        setActiveId(null);
 
         // Atualizar no servidor
         try {
@@ -99,10 +121,8 @@ export default function KanbanBoard() {
             });
         } catch (error) {
             console.error('Erro ao atualizar lead:', error);
-            fetchLeads();
+            setLeads(previousLeads);
         }
-
-        setActiveId(null);
     };
 
     const getLeadsByStatus = (status: string) => {
