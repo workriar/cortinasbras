@@ -14,10 +14,10 @@ export const authOptions = {
                 password: { label: "Senha", type: "password" },
             },
             async authorize(credentials) {
-                console.log('🔐 [NextAuth] Tentativa de login:', credentials?.email);
+                console.log('🔐 [NextAuth DEBUG] Tentativa de login:', credentials?.email);
 
                 if (!credentials?.email || !credentials?.password) {
-                    console.log('❌ [NextAuth] Credenciais vazias');
+                    console.log('❌ [NextAuth DEBUG] Credenciais vazias');
                     return null;
                 }
 
@@ -26,34 +26,35 @@ export const authOptions = {
                         where: { email: credentials.email },
                     });
 
-                    console.log('👤 [NextAuth] Usuário encontrado:', user ? 'SIM' : 'NÃO');
+                    console.log('👤 [NextAuth DEBUG] Usuário encontrado:', user ? `ID: ${user.id} - Role: ${user.role}` : 'NÃO');
 
                     if (!user) {
-                        console.log('❌ [NextAuth] Usuário não existe no banco');
+                        console.log('❌ [NextAuth DEBUG] Usuário não existe no banco');
                         return null;
                     }
 
-                    console.log('🔑 [NextAuth] Testando senha...');
+                    console.log('🔑 [NextAuth DEBUG] Hash no banco:', user.passwordHash.substring(0, 10) + '...');
+
                     const isValid = await bcrypt.compare(
                         credentials.password,
                         user.passwordHash
                     );
 
-                    console.log('✅ [NextAuth] Senha válida:', isValid);
+                    console.log('✅ [NextAuth DEBUG] Senha válida:', isValid);
 
                     if (!isValid) {
-                        console.log('❌ [NextAuth] Senha incorreta');
+                        console.log('❌ [NextAuth DEBUG] Senha incorreta. Senha enviada:', credentials.password);
                         return null;
                     }
 
-                    console.log('🎉 [NextAuth] Login bem-sucedido para:', user.email);
+                    console.log('🎉 [NextAuth DEBUG] Login bem-sucedido para:', user.email);
                     return {
                         id: user.id.toString(),
                         name: user.name || "",
                         email: user.email,
                     };
                 } catch (error) {
-                    console.error('💥 [NextAuth] Erro no authorize:', error);
+                    console.error('💥 [NextAuth DEBUG] Erro no authorize:', error);
                     return null;
                 }
             },
