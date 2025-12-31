@@ -54,10 +54,8 @@ export default function LoginPage() {
                     </div>
 
                     {/* Título */}
-                    <h1 className="text-2xl font-black text-center mb-2 text-brand-700 uppercase tracking-widest">
-                        Acesso Restrito
-                    </h1>
-                    <p className="text-center text-brand-700/80 text-[10px] font-black uppercase tracking-[0.3em] mb-10">
+                    {/* Título */}
+                    <p className="text-center text-brand-700/80 text-[10px] font-black uppercase tracking-[0.3em] mb-10 mt-6">
                         Portal de Gestão Cortinas Brás
                     </p>
 
