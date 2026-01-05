@@ -15,7 +15,7 @@ export async function getDb() {
 
     pool = new Pool({
         connectionString: databaseUrl,
-        ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+        ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
         max: 20, // Máximo de conexões no pool
         idleTimeoutMillis: 30000,
         connectionTimeoutMillis: 2000,
