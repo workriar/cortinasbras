@@ -1,5 +1,5 @@
 'use client';
-import { useSession } from 'next-auth/react';
+// import { useSession } from 'next-auth/react';
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import KanbanBoard from '@/components/KanbanBoard';
@@ -7,11 +7,13 @@ import LeadForm from '@/components/LeadForm';
 import { Plus, X, ListFilter } from 'lucide-react';
 
 function CRMContent() {
-    const { data: session, status } = useSession();
+    // const { data: session, status } = useSession(); // Removido: usando Auth Admin via Cookie
     const router = useRouter();
     const searchParams = useSearchParams();
     const [showForm, setShowForm] = useState(false);
     const [refreshKey, setRefreshKey] = useState(0);
+    // Simular status authenticated para não quebrar lógica visual se houver
+    const status = 'authenticated';
 
     useEffect(() => {
         if (searchParams?.get('new') === 'true') {
@@ -19,17 +21,20 @@ function CRMContent() {
         }
     }, [searchParams]);
 
+    /* Removido redirect do NextAuth - Middleware cuida disso agora
     useEffect(() => {
         if (status === 'unauthenticated') {
             router.push('/login');
         }
     }, [status, router]);
+    */
 
     const handleLeadCreated = () => {
         setShowForm(false);
         setRefreshKey((prev) => prev + 1);
     };
 
+    /* Removido loading state do NextAuth
     if (status === 'loading') {
         return (
             <div className="flex items-center justify-center min-h-[60vh]">
@@ -37,6 +42,7 @@ function CRMContent() {
             </div>
         );
     }
+    */
 
     return (
         <div className="space-y-4 md:space-y-8">

@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-    // Verificar se é uma rota admin (exceto login)
-    if (request.nextUrl.pathname.startsWith('/admin') && !request.nextUrl.pathname.startsWith('/admin/login')) {
+    // Verificar se é uma rota admin ou dashboard (exceto login)
+    if ((request.nextUrl.pathname.startsWith('/admin') || request.nextUrl.pathname.startsWith('/dashboard')) && !request.nextUrl.pathname.startsWith('/admin/login')) {
         const authToken = request.cookies.get('admin-auth-token');
 
         // Se não tiver token, redirecionar para login
@@ -27,5 +27,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/admin/:path*', '/api/admin/:path*'],
+    matcher: ['/admin/:path*', '/api/admin/:path*', '/dashboard/:path*'],
 };

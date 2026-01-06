@@ -1,5 +1,5 @@
 'use client';
-import { useSession } from 'next-auth/react';
+// import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import LeadCard from '@/components/LeadCard';
@@ -27,17 +27,23 @@ interface Stats {
 }
 
 export default function DashboardHome() {
-    const { data: session, status } = useSession();
+    // const { data: session, status } = useSession();
+    // Simular session para não quebrar a renderização do nome
+    const session = { user: { name: 'Admin', email: 'admin@cortinasbras.com.br' } };
+    const status = 'authenticated';
+
     const router = useRouter();
     const [leads, setLeads] = useState<Lead[]>([]);
     const [stats, setStats] = useState<Stats>({ total: 0, new: 0, contacted: 0, proposal: 0, won: 0 });
     const [loading, setLoading] = useState(true);
 
+    /* Removido redirect NextAuth
     useEffect(() => {
         if (status === 'unauthenticated') {
             router.push('/login');
         }
     }, [status, router]);
+    */
 
     useEffect(() => {
         if (status === 'authenticated') {
@@ -61,7 +67,7 @@ export default function DashboardHome() {
         }
     };
 
-    if (status === 'loading' || loading) {
+    if (loading) {
         return (
             <div className="flex items-center justify-center min-h-[60vh]">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-stone-400"></div>
