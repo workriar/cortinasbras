@@ -27,7 +27,7 @@ export default function AdminLogin() {
 
             if (response.data.success) {
                 // Redirecionar para a página solicitada ou dashboard
-                const redirect = searchParams.get("redirect") || "/dashboard/crm";
+                const redirect = searchParams?.get("redirect") || "/dashboard/crm";
                 router.push(redirect);
                 router.refresh();
             }
