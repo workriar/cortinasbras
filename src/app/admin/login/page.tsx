@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Lock, User, LogIn, AlertCircle } from "lucide-react";
 import axios from "axios";
 
-export default function AdminLogin() {
+function LoginForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [username, setUsername] = useState("");
@@ -158,5 +158,17 @@ export default function AdminLogin() {
                 </motion.div>
             </motion.div>
         </div>
+    );
+}
+
+export default function AdminLogin() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-100 flex items-center justify-center">
+                <div className="text-brand-700">Carregando...</div>
+            </div>
+        }>
+            <LoginForm />
+        </Suspense>
     );
 }
