@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+// import { useSession } from 'next-auth/react';
 import { Plus, Trash2, Shield, User as UserIcon, Loader2, AlertCircle } from 'lucide-react';
 
 interface User {
@@ -13,7 +13,7 @@ interface User {
 }
 
 export default function UsersPage() {
-    const { data: session } = useSession();
+    // const { data: session } = useSession();
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
     const [isCreating, setIsCreating] = useState(false);
@@ -140,8 +140,8 @@ export default function UsersPage() {
                                 <td className="px-6 py-4 text-sm text-gray-600">{user.email}</td>
                                 <td className="px-6 py-4">
                                     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${user.role === 'ADMIN'
-                                            ? 'bg-purple-50 text-purple-700 border-purple-100'
-                                            : 'bg-blue-50 text-blue-700 border-blue-100'
+                                        ? 'bg-purple-50 text-purple-700 border-purple-100'
+                                        : 'bg-blue-50 text-blue-700 border-blue-100'
                                         }`}>
                                         {user.role === 'ADMIN' ? <Shield size={12} /> : <UserIcon size={12} />}
                                         {user.role === 'ADMIN' ? 'Administrador' : 'Vendedor'}

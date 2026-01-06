@@ -1,5 +1,5 @@
 'use client';
-import { useSession } from 'next-auth/react';
+// import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -12,25 +12,32 @@ interface Message {
 }
 
 export default function ChatPage() {
-    const { data: session, status } = useSession();
+    // const { data: session, status } = useSession();
     const router = useRouter();
     const [messages, setMessages] = useState<Message[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const [loading, setLoading] = useState(true);
 
+    // Mock session para funcionamento do chat
+    const session = { user: { name: 'Admin', email: 'admin@cortinasbras.com.br' } };
+    const status = 'authenticated';
+
+    /* Removido redirect next-auth
     useEffect(() => {
         if (status === 'unauthenticated') {
             router.push('/login');
         }
     }, [status, router]);
+    */
 
     useEffect(() => {
-        if (status === 'authenticated') {
+        // Simular status authenticated
+        if (true) {
             fetchMessages();
             const interval = setInterval(fetchMessages, 3000); // Poll a cada 3s
             return () => clearInterval(interval);
         }
-    }, [status]);
+    }, []);
 
     const fetchMessages = async () => {
         try {
@@ -61,7 +68,7 @@ export default function ChatPage() {
         }
     };
 
-    if (status === 'loading' || loading) {
+    if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
@@ -94,8 +101,8 @@ export default function ChatPage() {
                             className={`flex ${msg.sender.email === session?.user?.email ? 'justify-end' : 'justify-start'}`}
                         >
                             <div className={`max-w-md px-4 py-3 rounded-lg ${msg.sender.email === session?.user?.email
-                                    ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white'
-                                    : 'bg-white border border-gray-200 text-gray-900'
+                                ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white'
+                                : 'bg-white border border-gray-200 text-gray-900'
                                 }`}>
                                 <p className="text-xs opacity-75 mb-1">{msg.sender.name}</p>
                                 <p>{msg.content}</p>
