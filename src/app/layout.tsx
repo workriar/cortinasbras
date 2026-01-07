@@ -34,18 +34,35 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-BR" className={inter.variable}>
       <body className="bg-stone-50 min-h-screen font-sans selection:bg-brand-500/30">
+        {/* Google tag (gtag.js) - AW-379796222 */}
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=AW-379796222"
+          strategy="afterInteractive"
+        />
+        <Script id="google-tag-379796222" strategy="afterInteractive">
+          {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'AW-379796222');
+        `}
+        </Script>
+
+        {/* Google tag (gtag.js) - AW-17672945118 */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-17672945118"
           strategy="afterInteractive"
         />
         <Script id="google-ads-tag" strategy="afterInteractive">
           {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
 
-            gtag('config', 'AW-17672945118');
-          `}
+          gtag('config', 'AW-17672945118');
+        `}
         </Script>
         <Providers>{children}</Providers>
       </body>
