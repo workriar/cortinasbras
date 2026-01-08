@@ -64,6 +64,34 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           gtag('config', 'AW-17672945118');
         `}
         </Script>
+
+        {/* Google Ads Conversion Events */}
+        <Script id="google-ads-conversion-events" strategy="afterInteractive">
+          {`
+          // Evento de Conversão: Compra
+          function gtagConversionCompra() {
+            gtag('event', 'ads_conversion_Compra_1', {});
+          }
+
+          // Evento de Conversão: Formulário de Orçamento (com delayed navigation)
+          function gtagSendEvent(url) {
+            var callback = function () {
+              if (typeof url === 'string') {
+                window.location = url;
+              }
+            };
+            gtag('event', 'ads_conversion_Formul_rio_de_Or_amento_1', {
+              'event_callback': callback,
+              'event_timeout': 2000,
+            });
+            return false;
+          }
+
+          // Disponibilizar globalmente
+          window.gtagConversionCompra = gtagConversionCompra;
+          window.gtagSendEvent = gtagSendEvent;
+        `}
+        </Script>
         <Providers>{children}</Providers>
       </body>
     </html>
