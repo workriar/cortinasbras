@@ -71,6 +71,58 @@ const handleFormSubmit = async (e: React.FormEvent) => {
 
 ---
 
+### 3. **Evento de Enviar Formulário de Leads** (Conversão ID: `AW-17672945118/1K53CJyU4d4bEN77jutB`)
+
+**Quando usar:** Quando um usuário envia um formulário de leads/contato.
+
+**Como usar:**
+
+```javascript
+// Chamar quando o formulário de leads for enviado
+window.gtagConversionLeads();
+```
+
+**Exemplo em React/Next.js:**
+
+```tsx
+const handleLeadSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  
+  try {
+    // Enviar dados do lead
+    const response = await fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
+
+    if (response.ok) {
+      // Disparar evento de conversão
+      if (typeof window !== 'undefined' && window.gtagConversionLeads) {
+        window.gtagConversionLeads();
+      }
+      
+      // Redirecionar ou mostrar mensagem de sucesso
+      router.push('/obrigado');
+    }
+  } catch (error) {
+    console.error('Erro ao enviar lead:', error);
+  }
+};
+```
+
+**Exemplo em HTML puro:**
+
+```html
+<form onsubmit="window.gtagConversionLeads(); return true;">
+  <input type="text" name="name" placeholder="Nome" required />
+  <input type="email" name="email" placeholder="Email" required />
+  <button type="submit">Enviar</button>
+</form>
+```
+
+---
+
 ## 🔧 Implementação no Código
 
 ### Localização dos Eventos
@@ -94,6 +146,13 @@ window.gtagSendEvent = (url?: string) => {
     'event_timeout': 2000,
   });
   return false;
+};
+
+// Evento de Enviar Formulário de Leads
+window.gtagConversionLeads = () => {
+  gtag('event', 'conversion', {
+    'send_to': 'AW-17672945118/1K53CJyU4d4bEN77jutB'
+  });
 };
 ```
 
@@ -210,8 +269,11 @@ Para verificar se os eventos estão funcionando:
    // Testar evento de compra
    window.gtagConversionCompra();
    
-   // Testar evento de formulário
+   // Testar evento de formulário de orçamento
    window.gtagSendEvent();
+   
+   // Testar evento de leads
+   window.gtagConversionLeads();
    ```
 3. Verifique no **Google Ads** se as conversões foram registradas
 

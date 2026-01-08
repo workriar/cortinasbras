@@ -87,9 +87,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             return false;
           }
 
+          // Evento de Conversão: Enviar formulário de leads
+          function gtagConversionLeads() {
+            gtag('event', 'conversion', {
+              'send_to': 'AW-17672945118/1K53CJyU4d4bEN77jutB'
+            });
+          }
+
           // Disponibilizar globalmente
           window.gtagConversionCompra = gtagConversionCompra;
           window.gtagSendEvent = gtagSendEvent;
+          window.gtagConversionLeads = gtagConversionLeads;
         `}
         </Script>
         <Providers>{children}</Providers>
