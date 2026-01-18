@@ -33,10 +33,15 @@ const COLUMNS = [
     { id: 'CLOSED_LOST', title: 'Arquivados', color: 'bg-gray-300' },
 ];
 
-export default function KanbanBoard() {
+interface KanbanBoardProps {
+    filter?: string;
+}
+
+export default function KanbanBoard({ filter = 'all' }: KanbanBoardProps) {
     const [leads, setLeads] = useState<Lead[]>([]);
     const [activeId, setActiveId] = useState<number | null>(null);
     const [loading, setLoading] = useState(true);
+    const [filteredLeads, setFilteredLeads] = useState<Lead[]>([]);
 
     // Optimized sensors for better mobile experience
     const sensors = useSensors(
@@ -56,6 +61,40 @@ export default function KanbanBoard() {
     useEffect(() => {
         fetchLeads();
     }, []);
+
+    useEffect(() => {
+        applyFilter();
+    }, [leads, filter]);
+
+    const applyFilter = () => {
+        if (filter === 'all') {
+            setFilteredLeads(leads);
+            return;
+        }
+
+        const now = new Date();
+        const filtered = leads.filter(lead => {
+            const leadDate = new Date(lead.createdAt);
+
+            if (filter === 'today') {
+                return leadDate.toDateString() === now.toDateString();
+            }
+
+            if (filter === 'week') {
+                const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                return leadDate >= weekAgo;
+            }
+
+            if (filter === 'month') {
+                return leadDate.getMonth() === now.getMonth() &&
+                    leadDate.getFullYear() === now.getFullYear();
+            }
+
+            return true;
+        });
+
+        setFilteredLeads(filtered);
+    };
 
     const fetchLeads = async () => {
         try {
@@ -147,10 +186,10 @@ export default function KanbanBoard() {
     };
 
     const getLeadsByStatus = (status: string) => {
-        return leads.filter((lead) => lead.status === status);
+        return filteredLeads.filter((lead) => lead.status === status);
     };
 
-    const activeLead = leads.find((lead) => lead.id === activeId);
+    const activeLead = filteredLeads.find((lead) => lead.id === activeId);
 
     if (loading) {
         return (
