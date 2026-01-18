@@ -1,0 +1,65 @@
+import sqlite3 from "sqlite3";
+import { open, Database } from "sqlite";
+import path from "path";
+import fs from "fs";
+
+let db: Database | null = null;
+
+export async function getDb() {
+  if (db) return db;
+
+  // Determinar caminho do banco de dados
+  let dbPath: string;
+
+  // 1. Tentar usar DATABASE_URL do .env
+  if (process.env.DATABASE_URL) {
+    const urlPath = process.env.DATABASE_URL.replace("sqlite:", "").trim();
+
+    // Validar se o caminho não está vazio ou inválido
+    if (urlPath && urlPath !== "/" && !urlPath.startsWith("////")) {
+      dbPath = urlPath;
+    } else {
+      console.warn(`DATABASE_URL inválido: ${process.env.DATABASE_URL}. Usando caminho padrão.`);
+      dbPath = path.join(process.cwd(), "leads.db");
+    }
+  } else {
+    // 2. Usar caminho padrão
+    dbPath = path.join(process.cwd(), "leads.db");
+  }
+
+  // 3. Se o caminho for relativo, resolver a partir do diretório atual
+  if (!path.isAbsolute(dbPath)) {
+    dbPath = path.resolve(process.cwd(), dbPath);
+  }
+
+  console.log(`📁 Usando banco de dados: ${dbPath}`);
+
+  // Garante que o diretório pai existe
+  const dbDir = path.dirname(dbPath);
+  if (!fs.existsSync(dbDir)) {
+    console.log(`📂 Criando diretório: ${dbDir}`);
+    fs.mkdirSync(dbDir, { recursive: true });
+  }
+
+  db = await open({
+    filename: dbPath,
+    driver: sqlite3.Database,
+  });
+
+  await db.exec(`
+    CREATE TABLE IF NOT EXISTS leads (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      nome TEXT,
+      telefone TEXT,
+      cidade_bairro TEXT,
+      largura_parede REAL,
+      altura_parede REAL,
+      tecido TEXT,
+      instalacao TEXT,
+      observacoes TEXT,
+      criado_em DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  return db;
+}

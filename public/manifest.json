@@ -1,0 +1,16 @@
+{
+    "name": "Cortinas Brás CRM",
+    "short_name": "Cortinas Brás",
+    "start_url": "/dashboard",
+    "display": "standalone",
+    "background_color": "#f8f5f1",
+    "theme_color": "#d4a93e",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "/logo.png",
+            "sizes": "any",
+            "type": "image/png"
+        }
+    ]
+}

@@ -1,0 +1,134 @@
+
+# Dependencies
+node_modules
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Next.js
+/.next/
+/build
+
+# Production
+/dist
+
+# Environment variables
+# .env
+# .env*.local
+# .env.production
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local development
+.vercel
+.turbo
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+/data
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# OS
+.DS_Store
+*.pem
+Thumbs.db
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Python (legacy - can be removed if fully migrated)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Legacy Flask files (archived)
+flask-legacy/
+templates/
+static/
+backups/
+orcamentos/
+public_html/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# PDFs generated
+*.pdf
+!public/static/*.pdf
+
+# Misc
+.lesshst
+foo.tmp
+server
+.amp
+.continue
+.gemini
+get-docker.sh
+node_modules
+
+# Large files
+*.tar.gz
+*.zip
+snap/
+oracleJdk-25/
+
+# System and IDE files
+.antigravity-server/
+.vscode-server/
+.cache/
+.npm/
+.gradle/
+.java/
+.dotnet/
+.ollama/
+.pm2/
+.git.backup/
+.bash_history
+.wget-hsts
+.gitconfig
+.ssh/
+
+# Development tools
+Cline/
+Sixth/
+.codegpt/
+.codex/
+.cline/
+
+# Project-specific excludes
+projects/bresser/
+dev_bras/
+frontend-react/
+next-app/
+nome_do_venv/

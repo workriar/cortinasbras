@@ -1,0 +1,197 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------
+// MODELOS DE USUÁRIO E ACESSO
+// ---------------------------------------------------------
+
+model User {
+  id               Int       @id @default(autoincrement())
+  email            String    @unique
+  name             String?
+  passwordHash     String
+  // Role: ADMIN, SUPER_ADMIN, MANAGER, SALES, VIEWER
+  role             String    @default("USER") 
+  avatar           String?
+  isActive         Boolean   @default(true)
+  lastSeen         DateTime? 
+  
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  leads            Lead[]    @relation("UserLeads")
+  messagesSent     Message[] @relation("SentMessages")
+  messagesReceived Message[] @relation("ReceivedMessages")
+  notifications    Notification[]
+  activities       Activity[] // Logs de atividades do usuário
+}
+
+// ---------------------------------------------------------
+// CORE DO CRM (LEADS)
+// ---------------------------------------------------------
+
+model Lead {
+  id           Int           @id @default(autoincrement())
+  
+  // Dados Pessoais
+  name         String        @map("nome")
+  phone        String        @map("telefone")
+  email        String?       @map("email")
+  city         String?       @map("cidade_bairro")
+  address      String?       @map("endereco")
+  
+  // Classificação
+  // Sources: SITE, WHATSAPP, REFERRAL, INSTAGRAM, GOOGLE, OTHER
+  source       String        @default("SITE") @map("origem")
+  // Status: NEW, CONTACTED, PROPOSAL, NEGOTIATION, WON, LOST
+  status       String        @default("NEW") @map("status")
+  estimatedValue Decimal?    @db.Decimal(10, 2) @map("valor_estimado")
+
+  // Detalhes do Pedido
+  type         String?       @map("tipo_cortina")
+  width        Float?        @map("largura_parede")
+  height       Float?        @map("altura_parede")
+  fabric       String?       @map("tecido")
+  installation String?       @map("instalacao")
+  space        String?       @map("espaco_cortina")
+  translucency String?       @map("translucidez")
+  lining       String?       @map("forro")
+  notes        String?       @map("observacoes")
+
+  // Metadados
+  createdAt    DateTime      @default(now()) @map("criado_em")
+  updatedAt    DateTime      @updatedAt @map("atualizado_em")
+  convertedAt  DateTime?     @map("convertido_em")
+  
+  // Relacionamentos
+  ownerId      Int?
+  owner        User?         @relation("UserLeads", fields: [ownerId], references: [id])
+  
+  interactions Interaction[] // Compatibilidade legado
+  activities   Activity[]    // Nova estrutura de logs
+  messages     Message[]
+  items        LeadItem[]    // Produtos vinculados
+
+  @@map("leads")
+  @@index([ownerId])
+  @@index([status])
+  @@index([source])
+  @@index([createdAt])
+}
+
+// ---------------------------------------------------------
+// COMUNICAÇÃO E ATIVIDADES
+// ---------------------------------------------------------
+
+// Histórico legado (manter para não perder dados antigos)
+model Interaction {
+  id        Int      @id @default(autoincrement())
+  leadId    Int
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  type      String // CALL, EMAIL, MESSAGE, MEETING
+  content   String
+  createdAt DateTime @default(now())
+
+  @@index([leadId])
+}
+
+// Nova estrutura unificada de atividades (Substitui Interaction futuramente)
+model Activity {
+  id          Int      @id @default(autoincrement())
+  type        String   // CREATED, STATUS_CHANGED, ASSIGNED, NOTE, EMAIL, WHATSAPP, CALL
+  description String
+  metadata    Json?    // Detalhes extras em JSON
+  
+  leadId      Int
+  lead        Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  
+  userId      Int?
+  user        User?    @relation(fields: [userId], references: [id])
+
+  createdAt   DateTime @default(now())
+
+  @@index([leadId])
+  @@index([userId])
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  content    String
+  // Type: INTERNAL, WHATSAPP, EMAIL
+  type       String   @default("INTERNAL")
+  
+  senderId   Int?     // Opcional pois pode ser sistema ou cliente externo (WhatsApp)
+  sender     User?    @relation("SentMessages", fields: [senderId], references: [id])
+  
+  receiverId Int?     // Opcional
+  receiver   User?    @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  
+  leadId     Int?
+  lead       Lead?    @relation(fields: [leadId], references: [id])
+  
+  whatsappId String?  @unique
+  read       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([leadId])
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  title     String
+  message   String
+  type      String   // INFO, WARNING, SUCCESS, ALERT
+  isRead    Boolean  @default(false)
+  
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  
+  @@index([userId, isRead])
+}
+
+// ---------------------------------------------------------
+// PRODUTOS E ORÇAMENTOS
+// ---------------------------------------------------------
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  category    String
+  description String?
+  price       Decimal  @db.Decimal(10, 2)
+  cost        Decimal? @db.Decimal(10, 2)
+  stock       Int      @default(0)
+  imageUrl    String?
+  isActive    Boolean  @default(true)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  leadItems   LeadItem[]
+}
+
+model LeadItem {
+  id        Int      @id @default(autoincrement())
+  leadId    Int
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+  
+  quantity  Int      @default(1)
+  unitPrice Decimal  @db.Decimal(10, 2)
+  total     Decimal  @db.Decimal(10, 2)
+
+  @@index([leadId])
+}

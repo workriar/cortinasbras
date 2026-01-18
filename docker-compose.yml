@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - NEXT_PUBLIC_SITE_URL=https://cortinasbras.com.br
+
+      # Email Configuration (Hostinger)
+      - MAIL_SERVER=${MAIL_SERVER:-smtp.hostinger.com}
+      - MAIL_PORT=${MAIL_PORT:-587}
+      - MAIL_USE_TLS=true
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - MAIL_DEFAULT_SENDER=${MAIL_DEFAULT_SENDER:-loja@cortinasbras.com.br}
+
+      # Database
+      - DATABASE_URL=sqlite:/app/data/leads.db
+
+      # Puppeteer
+      - PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+      - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+
+    labels:
+      # Traefik configuration for reverse proxy
+      - "traefik.enable=true"
+      - "traefik.http.routers.cortinasbras.rule=Host(`cortinasbras.com.br`) || Host(`www.cortinasbras.com.br`)"
+      - "traefik.http.routers.cortinasbras.entrypoints=websecure"
+      - "traefik.http.routers.cortinasbras.tls.certresolver=letsencrypt"
+      - "traefik.http.services.cortinasbras.loadbalancer.server.port=3000"
+
+      # HTTP to HTTPS redirect
+      - "traefik.http.routers.cortinasbras-http.rule=Host(`cortinasbras.com.br`) || Host(`www.cortinasbras.com.br`)"
+      - "traefik.http.routers.cortinasbras-http.entrypoints=web"
+      - "traefik.http.routers.cortinasbras-http.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true"
+
+    healthcheck:
+      test: [ "CMD", "node", "-e", "require('http').get('http://localhost:3000', (r) => process.exit(r.statusCode === 200 ? 0 : 1))" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+networks:
+  default:
+    name: cortinas-network

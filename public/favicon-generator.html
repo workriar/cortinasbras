@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favicon Generator - Cortinas Brás</title>
+    <style>
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #F8F5F1;
+            color: #8B5C2A;
+        }
+        h1 {
+            color: #D4A93E;
+            text-align: center;
+        }
+        .preview {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: center;
+            margin: 40px 0;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .preview-item {
+            text-align: center;
+        }
+        .preview-item img {
+            display: block;
+            margin: 10px auto;
+            border: 2px solid #D4A93E;
+            border-radius: 8px;
+            padding: 10px;
+            background: white;
+        }
+        canvas {
+            display: none;
+        }
+        .instructions {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #D4A93E;
+            margin: 20px 0;
+        }
+        .download-btn {
+            background: #D4A93E;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+        .download-btn:hover {
+            background: #8B5C2A;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .buttons {
+            text-align: center;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 Gerador de Favicon - Cortinas Brás</h1>
+    
+    <div class="instructions">
+        <h3>📋 Instruções:</h3>
+        <ol>
+            <li>Clique nos botões abaixo para baixar cada tamanho de favicon</li>
+            <li>Salve os arquivos na pasta <code>public/static/</code></li>
+            <li>Os favicons serão automaticamente aplicados ao site</li>
+        </ol>
+    </div>
+
+    <div class="preview">
+        <div class="preview-item">
+            <h4>16x16</h4>
+            <img id="preview16" alt="16x16 preview">
+        </div>
+        <div class="preview-item">
+            <h4>32x32</h4>
+            <img id="preview32" alt="32x32 preview">
+        </div>
+        <div class="preview-item">
+            <h4>48x48</h4>
+            <img id="preview48" alt="48x48 preview">
+        </div>
+        <div class="preview-item">
+            <h4>Apple Touch</h4>
+            <img id="previewApple" alt="180x180 preview" style="width: 48px; height: 48px;">
+        </div>
+    </div>
+
+    <div class="buttons">
+        <button class="download-btn" onclick="downloadFavicon(16)">⬇️ Baixar 16x16</button>
+        <button class="download-btn" onclick="downloadFavicon(32)">⬇️ Baixar 32x32</button>
+        <button class="download-btn" onclick="downloadFavicon(48)">⬇️ Baixar 48x48</button>
+        <button class="download-btn" onclick="downloadFavicon(180)">⬇️ Baixar Apple Touch (180x180)</button>
+    </div>
+
+    <canvas id="canvas16" width="16" height="16"></canvas>
+    <canvas id="canvas32" width="32" height="32"></canvas>
+    <canvas id="canvas48" width="48" height="48"></canvas>
+    <canvas id="canvas180" width="180" height="180"></canvas>
+
+    <script>
+        const svgString = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="curtainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4A93E;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B5C2A;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <circle cx="50" cy="50" r="48" fill="#F8F5F1" stroke="url(#curtainGradient)" stroke-width="2"/>
+  
+  <path d="M 25 30 Q 30 25, 35 30 T 45 30 Q 50 25, 55 30 T 65 30 Q 70 25, 75 30 L 75 70 Q 70 75, 65 70 T 55 70 Q 50 75, 45 70 T 35 70 Q 30 75, 25 70 Z" 
+        fill="url(#curtainGradient)" 
+        opacity="0.9"/>
+  
+  <rect x="20" y="22" width="60" height="3" rx="1.5" fill="#8B5C2A"/>
+  
+  <circle cx="20" cy="23.5" r="3" fill="#D4A93E"/>
+  <circle cx="80" cy="23.5" r="3" fill="#D4A93E"/>
+</svg>`;
+
+        function renderFavicon(size) {
+            const canvas = document.getElementById(`canvas${size}`);
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            const blob = new Blob([svgString], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0, size, size);
+                URL.revokeObjectURL(url);
+                
+                // Update preview
+                const preview = document.getElementById(`preview${size === 180 ? 'Apple' : size}`);
+                preview.src = canvas.toDataURL('image/png');
+            };
+            
+            img.src = url;
+        }
+
+        function downloadFavicon(size) {
+            const canvas = document.getElementById(`canvas${size}`);
+            const link = document.createElement('a');
+            
+            if (size === 180) {
+                link.download = 'apple-touch-icon.png';
+            } else {
+                link.download = `favicon-${size}x${size}.png`;
+            }
+            
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        // Render all sizes on page load
+        window.onload = function() {
+            renderFavicon(16);
+            renderFavicon(32);
+            renderFavicon(48);
+            renderFavicon(180);
+        };
+    </script>
+</body>
+</html>

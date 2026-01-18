@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="curtainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4A93E;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B5C2A;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="48" fill="#F8F5F1" stroke="url(#curtainGradient)" stroke-width="2"/>
+  
+  <!-- Stylized curtain wave - elegant flowing curves -->
+  <path d="M 25 30 Q 30 25, 35 30 T 45 30 Q 50 25, 55 30 T 65 30 Q 70 25, 75 30 L 75 70 Q 70 75, 65 70 T 55 70 Q 50 75, 45 70 T 35 70 Q 30 75, 25 70 Z" 
+        fill="url(#curtainGradient)" 
+        opacity="0.9"/>
+  
+  <!-- Curtain rod -->
+  <rect x="20" y="22" width="60" height="3" rx="1.5" fill="#8B5C2A"/>
+  
+  <!-- Decorative finials -->
+  <circle cx="20" cy="23.5" r="3" fill="#D4A93E"/>
+  <circle cx="80" cy="23.5" r="3" fill="#D4A93E"/>
+</svg>
