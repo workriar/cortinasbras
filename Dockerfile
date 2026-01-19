@@ -57,16 +57,21 @@ RUN mkdir -p /app/data && chown -R nextjs:nodejs /app/data
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --chown=nextjs:nodejs leads.db /app/leads.db.seed
+COPY --chown=nextjs:nodejs scripts/start-production.sh /app/scripts/start-production.sh
 
+USER root
+RUN chmod +x /app/scripts/start-production.sh
 USER nextjs
 
 EXPOSE 3000
 
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
+ENV DATABASE_URL="file:/app/data/leads.db"
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
   CMD node -e "require('http').get('http://localhost:3000', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"
 
-CMD ["node", "server.js"]
+CMD ["/app/scripts/start-production.sh"]
