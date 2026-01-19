@@ -10,7 +10,7 @@ import { whatsAppService } from '@/services/whatsapp.service';
  */
 export async function GET(
     req: NextRequest,
-    { params }: { params: { leadId: string } }
+    context: { params: Promise<{ leadId: string }> }
 ) {
     try {
         const session = await getServerSession(authOptions);
@@ -18,7 +18,8 @@ export async function GET(
             return NextResponse.json({ error: 'Não autenticado' }, { status: 401 });
         }
 
-        const leadId = parseInt(params.leadId);
+        const { leadId: leadIdStr } = await context.params;
+        const leadId = parseInt(leadIdStr);
 
         if (isNaN(leadId)) {
             return NextResponse.json({ error: 'ID inválido' }, { status: 400 });
@@ -97,7 +98,7 @@ export async function GET(
  */
 export async function POST(
     req: NextRequest,
-    { params }: { params: { leadId: string } }
+    context: { params: Promise<{ leadId: string }> }
 ) {
     try {
         const session = await getServerSession(authOptions);
@@ -105,7 +106,8 @@ export async function POST(
             return NextResponse.json({ error: 'Não autenticado' }, { status: 401 });
         }
 
-        const leadId = parseInt(params.leadId);
+        const { leadId: leadIdStr } = await context.params;
+        const leadId = parseInt(leadIdStr);
         const { content } = await req.json();
 
         if (isNaN(leadId) || !content?.trim()) {
