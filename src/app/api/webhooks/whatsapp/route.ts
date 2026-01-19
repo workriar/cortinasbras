@@ -83,10 +83,10 @@ export async function POST(req: NextRequest) {
                     type: 'CREATED',
                     description: 'Lead criado automaticamente via WhatsApp',
                     leadId: lead.id,
-                    metadata: {
+                    metadata: JSON.stringify({
                         source: 'whatsapp_webhook',
                         phone: phoneClean
-                    }
+                    })
                 }
             });
         }
@@ -150,11 +150,11 @@ export async function POST(req: NextRequest) {
                 type: 'WHATSAPP_SENT',
                 description: 'Mensagem recebida via WhatsApp',
                 leadId: lead.id,
-                metadata: {
+                metadata: JSON.stringify({
                     messageId: savedMessage.id,
                     preview: content.substring(0, 100),
                     hasMedia: !!mediaUrl
-                }
+                })
             }
         });
 

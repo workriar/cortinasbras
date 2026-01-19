@@ -168,9 +168,9 @@ export async function POST(
                 description: `Mensagem enviada via WhatsApp`,
                 leadId: leadId,
                 userId: user.id,
-                metadata: {
+                metadata: JSON.stringify({
                     preview: content.substring(0, 100)
-                }
+                })
             }
         });
 

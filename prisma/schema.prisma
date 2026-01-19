@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -52,7 +52,7 @@ model Lead {
   source       String        @default("SITE") @map("origem")
   // Status: NEW, CONTACTED, PROPOSAL, NEGOTIATION, WON, LOST
   status       String        @default("NEW") @map("status")
-  estimatedValue Decimal?    @db.Decimal(10, 2) @map("valor_estimado")
+  estimatedValue Decimal?    @map("valor_estimado")
 
   // Detalhes do Pedido
   type         String?       @map("tipo_cortina")
@@ -107,7 +107,7 @@ model Activity {
   id          Int      @id @default(autoincrement())
   type        String   // CREATED, STATUS_CHANGED, ASSIGNED, NOTE, EMAIL, WHATSAPP, CALL
   description String
-  metadata    Json?    // Detalhes extras em JSON
+  metadata    String?    // Detalhes extras em JSON (SQLite compat)
   
   leadId      Int
   lead        Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
@@ -169,8 +169,8 @@ model Product {
   name        String
   category    String
   description String?
-  price       Decimal  @db.Decimal(10, 2)
-  cost        Decimal? @db.Decimal(10, 2)
+  price       Decimal 
+  cost        Decimal?
   stock       Int      @default(0)
   imageUrl    String?
   isActive    Boolean  @default(true)
@@ -190,8 +190,8 @@ model LeadItem {
   product   Product  @relation(fields: [productId], references: [id])
   
   quantity  Int      @default(1)
-  unitPrice Decimal  @db.Decimal(10, 2)
-  total     Decimal  @db.Decimal(10, 2)
+  unitPrice Decimal
+  total     Decimal
 
   @@index([leadId])
 }
