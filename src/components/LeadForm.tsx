@@ -40,6 +40,10 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
             if (res.ok) {
                 const data = await res.json();
                 if (method === 'POST') {
+                    // Dispara evento de conversão do Google Ads para novos leads
+                    if (typeof window !== 'undefined' && (window as any).gtagConversionLeads) {
+                        (window as any).gtagConversionLeads();
+                    }
                     setSuccessData(data); // Mostra modal de sucesso com WhatsApp
                 } else {
                     onSuccess(); // Edição apenas fecha

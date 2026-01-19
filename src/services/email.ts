@@ -7,8 +7,27 @@ function createTransporter() {
     const pass = process.env.MAIL_PASSWORD || process.env.SMTP_PASS;
     const useSSL = process.env.MAIL_USE_SSL === 'true' || process.env.MAIL_USE_SSL === '1' || port === 465;
 
+    // If credentials are missing, fall back to a Nodemailer test account (Ethereal)
     if (!user || !pass) {
-        console.warn("⚠️ Avisos de E-mail: Credenciais SMTP não configuradas corretamente.");
+        console.warn("⚠️ Avisos de E-mail: Credenciais SMTP não configuradas. Usando conta de teste Ethereal.");
+        // Create a test account synchronously (returns a promise). We'll use a cached promise.
+        const testAccountPromise = nodemailer.createTestAccount();
+        // Return a transport that resolves the test account when used.
+        return { // Mimic nodemailer's transporter interface
+            sendMail: async (mailOptions: any) => {
+                const testAccount = await testAccountPromise;
+                const transporter = nodemailer.createTransport({
+                    host: testAccount.smtp.host,
+                    port: testAccount.smtp.port,
+                    secure: testAccount.smtp.secure,
+                    auth: {
+                        user: testAccount.user,
+                        pass: testAccount.pass,
+                    },
+                });
+                return transporter.sendMail(mailOptions);
+            }
+        } as any;
     }
 
     return nodemailer.createTransport({
@@ -109,8 +128,9 @@ export async function sendEmailWithPdf(lead: any, pdfBuffer: Buffer) {
         console.log(`[Email] Enviado para ${mailOptions.to}. ID: ${info.messageId}`);
         return info;
     } catch (error) {
-        console.error("[Email] Erro ao enviar:", error);
-        throw error;
+        console.error('[Email] Erro ao enviar:', error);
+        // Propagate a friendly error message for the API layer
+        throw new Error(error instanceof Error ? error.message : 'Erro ao enviar e‑mail');
     }
 }
 

@@ -60,6 +60,11 @@ export default function ContactForm() {
             const response = await axios.post('/api/leads', data);
 
             if (response.data?.status === 'success' && response.data.whatsapp_url) {
+                // Disparar evento de conversão do Google Ads
+                if (typeof window !== 'undefined' && (window as any).gtagConversionLeads) {
+                    (window as any).gtagConversionLeads();
+                }
+
                 setShowSuccess(true);
                 reset();
                 setCurrentStep(1);
@@ -72,9 +77,10 @@ export default function ContactForm() {
                 const msg = response.data?.message || 'Ocorreu um erro ao processar seu pedido. Por favor, tente novamente.';
                 alert(msg);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Erro ao enviar formulário', error);
-            alert('Houve um erro ao enviar sua solicitação. Por favor, tente novamente.');
+            const msg = error?.response?.data?.message || error?.message || 'Houve um erro ao enviar sua solicitação. Por favor, tente novamente.';
+            alert(msg);
         } finally {
             setIsSubmitting(false);
         }

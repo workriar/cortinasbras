@@ -148,13 +148,24 @@ window.gtagSendEvent = (url?: string) => {
   return false;
 };
 
-// Evento de Enviar Formulário de Leads
+// Evento de Enviar Formulário de Leads (✅ JÁ IMPLEMENTADO)
 window.gtagConversionLeads = () => {
   gtag('event', 'conversion', {
     'send_to': 'AW-17672945118/1K53CJyU4d4bEN77jutB'
   });
 };
 ```
+
+### ✅ Status de Implementação
+
+- **Evento de Leads (`gtagConversionLeads`)**: ✅ **IMPLEMENTADO**
+  - Disparado automaticamente em `/src/components/ContactForm.tsx` (formulário público)
+  - Disparado automaticamente em `/src/components/LeadForm.tsx` (formulário do dashboard)
+  - Rastreia conversões quando um lead é criado com sucesso
+
+- **Evento de Compra (`gtagConversionCompra`)**: ⚠️ Disponível, mas não implementado
+- **Evento de Formulário (`gtagSendEvent`)**: ⚠️ Disponível, mas não implementado
+
 
 ---
 
@@ -301,4 +312,6 @@ O EasyPanel fará o deploy automaticamente.
 
 ---
 
-**Última atualização:** 2026-01-08
+**Última atualização:** 2026-01-19
+**Status:** ✅ Evento de Leads totalmente implementado e funcional
+
