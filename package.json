@@ -6,12 +6,12 @@
   "private": true,
   "scripts": {
     "dev": "ts-node --project tsconfig.server.json server.ts",
-    "build": "next build && tsc --project tsconfig.server.json",
+    "build": "npx prisma generate && next build && tsc --project tsconfig.server.json",
     "start": "NODE_ENV=production node dist/server.js",
     "lint": "eslint",
     "verify": "node scripts/verify-production.js",
     "setup:chromium": "npx puppeteer browsers install chrome",
-    "postinstall": "npm run setup:chromium",
+    "postinstall": "npx prisma generate && npm run setup:chromium",
     "fix:env": "node scripts/fix-env.js"
   },
   "dependencies": {
