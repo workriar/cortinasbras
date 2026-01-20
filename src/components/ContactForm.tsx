@@ -56,29 +56,65 @@ export default function ContactForm() {
 
     const onSubmit = async (data: FormData) => {
         setIsSubmitting(true);
+        console.log('📝 Enviando formulário:', data);
+
         try {
             const response = await axios.post('/api/leads', data);
+            console.log('✅ Resposta da API:', response.data);
 
-            if (response.data?.status === 'success' && response.data.whatsapp_url) {
+            if (response.data?.status === 'success') {
                 // Disparar evento de conversão do Google Ads
                 if (typeof window !== 'undefined' && (window as any).gtagConversionLeads) {
+                    console.log('📊 Disparando conversão Google Ads');
                     (window as any).gtagConversionLeads();
                 }
 
                 setShowSuccess(true);
                 reset();
                 setCurrentStep(1);
-                // Redirect to WhatsApp after alert
-                setTimeout(() => {
-                    window.open(response.data.whatsapp_url, '_blank');
-                    setShowSuccess(false);
-                }, 2000);
+
+                // Verificar se temos URL do WhatsApp
+                if (response.data.whatsapp_url) {
+                    console.log('📱 Abrindo WhatsApp:', response.data.whatsapp_url);
+
+                    // Tentar abrir imediatamente (melhor chance de não ser bloqueado)
+                    const whatsappWindow = window.open(response.data.whatsapp_url, '_blank');
+
+                    // Se foi bloqueado, criar um link clicável
+                    if (!whatsappWindow || whatsappWindow.closed || typeof whatsappWindow.closed === 'undefined') {
+                        console.warn('⚠️ Popup bloqueado. Criando link alternativo.');
+                        // Criar link clicável como fallback
+                        const link = document.createElement('a');
+                        link.href = response.data.whatsapp_url;
+                        link.target = '_blank';
+                        link.rel = 'noopener noreferrer';
+                        link.click();
+                    }
+
+                    // Resetar mensagem de sucesso após 3 segundos
+                    setTimeout(() => {
+                        setShowSuccess(false);
+                    }, 3000);
+                } else {
+                    console.warn('⚠️ URL do WhatsApp não foi retornada');
+                    alert('Orçamento enviado com sucesso! Em breve entraremos em contato.');
+                    setTimeout(() => {
+                        setShowSuccess(false);
+                    }, 2000);
+                }
             } else {
+                console.error('❌ Resposta de erro:', response.data);
                 const msg = response.data?.message || 'Ocorreu um erro ao processar seu pedido. Por favor, tente novamente.';
                 alert(msg);
             }
         } catch (error: any) {
-            console.error('Erro ao enviar formulário', error);
+            console.error('❌ Erro ao enviar formulário:', error);
+            console.error('Detalhes do erro:', {
+                message: error?.message,
+                response: error?.response?.data,
+                status: error?.response?.status
+            });
+
             const msg = error?.response?.data?.message || error?.message || 'Houve um erro ao enviar sua solicitação. Por favor, tente novamente.';
             alert(msg);
         } finally {

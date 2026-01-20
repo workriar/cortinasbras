@@ -4,9 +4,10 @@ import { leadService } from "@/services/lead.service";
 export async function POST(req: Request) {
     try {
         const data = await req.json();
-        console.log("Recebendo lead (Service Layer):", data);
+        console.log("📥 Recebendo lead (Service Layer):", data);
 
         const { lead } = await leadService.createLead(data);
+        console.log("✅ Lead criado com sucesso:", { id: lead.id, name: lead.name });
 
         // 4. Gerar Link do WhatsApp (Isso poderia ir para um WhatsAppService)
         const originHeader = req.headers.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
@@ -14,9 +15,11 @@ export async function POST(req: Request) {
         const pdfUrl = `${siteUrl}/api/leads/${lead.id}/pdf`;
 
         // Lógica de mensagem WA (simplificada, idealmente templates)
-        const message = `Olá, meu nome é ${lead.name}. Fiz um orçamento no site (ID #${lead.id}).\n\n*Localização:* ${lead.city}\n*Medidas:* ${lead.width || 'N/A'}m x ${lead.height || 'N/A'}m\n*Tecido:* ${lead.fabric || 'N/A'}\n*Modelo:* ${lead.type || 'N/A'}\n*Translucidez/Forro:* ${lead.translucency || lead.lining || 'N/A'}\n*Onde:* ${lead.space || 'N/A'}\n*Instalação:* ${lead.installation || 'N/A'}\n\n*Veja meu orçamento:* ${pdfUrl}\n\nGostaria de prosseguir com o atendimento.`;
+        const message = `Olá, meu nome é ${lead.name}. Fiz um orçamento no site (ID #${lead.id}).\\n\\n*Localização:* ${lead.city}\\n*Medidas:* ${lead.width || 'N/A'}m x ${lead.height || 'N/A'}m\\n*Tecido:* ${lead.fabric || 'N/A'}\\n*Modelo:* ${lead.type || 'N/A'}\\n*Translucidez/Forro:* ${lead.translucency || lead.lining || 'N/A'}\\n*Onde:* ${lead.space || 'N/A'}\\n*Instalação:* ${lead.installation || 'N/A'}\\n\\n*Veja meu orçamento:* ${pdfUrl}\\n\\nGostaria de prosseguir com o atendimento.`;
         const encodedMessage = encodeURIComponent(message);
         const waUrl = `https://wa.me/5511992891070?text=${encodedMessage}`;
+
+        console.log("📱 URL do WhatsApp gerada:", waUrl.substring(0, 100) + "...");
 
         return NextResponse.json({
             status: "success",
@@ -25,7 +28,8 @@ export async function POST(req: Request) {
         });
 
     } catch (error: any) {
-        console.error("EXCEÇÃO NA API DE LEADS:", error);
+        console.error("❌ EXCEÇÃO NA API DE LEADS:", error);
+        console.error("Stack trace:", error.stack);
         return NextResponse.json({
             status: "error",
             message: error.message,
