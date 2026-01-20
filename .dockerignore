@@ -70,7 +70,7 @@ ENV
 # Legacy Flask files
 flask-legacy
 templates
-static
+# static (removed to avoid conflict with public/static)
 backups
 orcamentos
 public_html

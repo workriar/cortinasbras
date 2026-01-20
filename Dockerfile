@@ -41,6 +41,8 @@ ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 # Build da aplicação
 RUN npm run build
+RUN ls -la /app/.next || echo ".next not found"
+RUN ls -la /app/public || echo "public not found"
 
 # Runner
 FROM base AS runner
