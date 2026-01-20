@@ -47,7 +47,7 @@ MAIL_SERVER=smtp.hostinger.com
 MAIL_PORT=465
 MAIL_USE_SSL=true
 MAIL_USERNAME=loja@cortinasbras.com.br
-MAIL_PASSWORD=SUA_SENHA_AQUI
+MAIL_PASSWORD=4LuZr4hrFqeTsrZ@
 MAIL_DEFAULT_SENDER=loja@cortinasbras.com.br
 MAIL_NOTIFICATION_TO=cortinasbras@gmail.com
 ```

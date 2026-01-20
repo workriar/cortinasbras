@@ -1,10 +1,9 @@
 'use client';
-// import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import AdminGuard from '@/components/AdminGuard';
 
-export default function SettingsPage() {
-    // const { data: session, status } = useSession(); // Removido
+function SettingsPageContent() {
     const router = useRouter();
     const [activeTab, setActiveTab] = useState('profile');
     const [loading, setLoading] = useState(false);
@@ -13,14 +12,6 @@ export default function SettingsPage() {
     // Mock session
     const session = { user: { name: 'Admin', email: 'admin@cortinasbras.com.br' } };
     const status = 'authenticated';
-
-    /* Removido redirect next-auth
-    useEffect(() => {
-        if (status === 'unauthenticated') {
-            router.push('/login');
-        }
-    }, [status, router]);
-    */
 
     const handleImportLeads = async () => {
         if (!confirm('Deseja atualizar e corrigir a base de dados antiga?')) return;
@@ -44,8 +35,6 @@ export default function SettingsPage() {
             setLoading(false);
         }
     };
-
-    // Verificação de loading inicial removida pois status é estático
 
     const tabs = [
         { id: 'profile', name: 'Perfil', icon: '👤' },
@@ -272,5 +261,13 @@ export default function SettingsPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function SettingsPage() {
+    return (
+        <AdminGuard>
+            <SettingsPageContent />
+        </AdminGuard>
     );
 }

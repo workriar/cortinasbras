@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { Plus, Trash2, Shield, User as UserIcon, Loader2, AlertCircle } from 'lucide-react';
+import AdminGuard from '@/components/AdminGuard';
 
 interface User {
     id: number;
@@ -12,7 +13,7 @@ interface User {
     createdAt: string;
 }
 
-export default function UsersPage() {
+function UsersPageContent() {
     const { data: session } = useSession();
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
@@ -244,5 +245,13 @@ export default function UsersPage() {
                 </div>
             )}
         </div>
+    );
+}
+
+export default function UsersPage() {
+    return (
+        <AdminGuard>
+            <UsersPageContent />
+        </AdminGuard>
     );
 }

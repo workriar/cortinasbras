@@ -74,7 +74,17 @@ export const authOptions = {
         async jwt({ token, user }: any) {
             if (user) {
                 token.sub = user.id;
-                token.role = user.role;
+                // Fetch user role from database
+                try {
+                    const dbUser = await prisma.user.findUnique({
+                        where: { id: parseInt(user.id) },
+                        select: { role: true }
+                    });
+                    token.role = dbUser?.role || 'USER';
+                } catch (error) {
+                    console.error('Error fetching user role:', error);
+                    token.role = 'USER';
+                }
             }
             return token;
         },

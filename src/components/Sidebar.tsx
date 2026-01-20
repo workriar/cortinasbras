@@ -14,50 +14,64 @@ import {
     KanbanSquare,
     MessageCircle
 } from 'lucide-react';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
 export default function Sidebar() {
     const { isExpanded, toggleSidebar } = useSidebar();
     const pathname = usePathname();
+    const { data: session } = useSession();
 
-    const menuItems = [
+    const userRole = (session?.user as any)?.role;
+    const isAdmin = userRole === 'ADMIN' || userRole === 'SUPER_ADMIN';
+
+    const allMenuItems = [
         {
             name: 'Dashboard',
             icon: <LayoutDashboard size={22} strokeWidth={1.5} />,
             path: '/dashboard',
+            adminOnly: false,
         },
         {
             name: 'CRM',
             icon: <KanbanSquare size={22} strokeWidth={1.5} />,
             path: '/dashboard/crm',
             badge: '3',
+            adminOnly: false,
         },
         {
             name: 'Chat',
             icon: <MessageSquare size={22} strokeWidth={1.5} />,
             path: '/dashboard/chat',
+            adminOnly: false,
         },
         {
             name: 'WhatsApp',
             icon: <MessageCircle size={22} strokeWidth={1.5} />,
             path: '/dashboard/whatsapp',
+            adminOnly: false,
         },
         {
             name: 'Relatórios',
             icon: <BarChart3 size={22} strokeWidth={1.5} />,
             path: '/dashboard/reports',
+            adminOnly: false,
         },
         {
             name: 'Usuários',
             icon: <Users size={22} strokeWidth={1.5} />,
             path: '/dashboard/users',
+            adminOnly: true, // Admin only
         },
         {
             name: 'Configurações',
             icon: <Settings size={22} strokeWidth={1.5} />,
             path: '/dashboard/settings',
+            adminOnly: true, // Admin only
         },
     ];
+
+    // Filter menu items based on user role
+    const menuItems = allMenuItems.filter(item => !item.adminOnly || isAdmin);
 
     return (
         <aside
