@@ -52,7 +52,6 @@ model Lead {
   source       String        @default("SITE") @map("origem")
   // Status: NEW, CONTACTED, PROPOSAL, NEGOTIATION, WON, LOST
   status       String        @default("NEW") @map("status")
-  estimatedValue Decimal?    @map("valor_estimado")
 
   // Detalhes do Pedido
   type         String?       @map("tipo_cortina")
