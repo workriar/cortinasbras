@@ -11,7 +11,7 @@
     "lint": "eslint",
     "verify": "node scripts/verify-production.js",
     "setup:chromium": "npx puppeteer browsers install chrome",
-    "postinstall": "npx prisma generate && npm run setup:chromium",
+    "postinstall": "npm run setup:chromium",
     "fix:env": "node scripts/fix-env.js"
   },
   "dependencies": {
