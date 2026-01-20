@@ -35,7 +35,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Otimização de memória para o build
-ENV NODE_OPTIONS="--max-old-space-size=4096"
+ENV NODE_OPTIONS="--max-old-space-size=2048"
 
 # Build da aplicação (o script build já inclui prisma generate)
 
