@@ -100,7 +100,6 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
         <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Nome Completo</label>
                     <input
                         type="text"
                         required
@@ -108,6 +107,7 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         className="input-primary"
                         placeholder="Ex: João Silva"
+                        autocomplete="name"
                     />
                 </div>
 
