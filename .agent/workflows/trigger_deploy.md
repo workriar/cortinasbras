@@ -13,7 +13,7 @@ This workflow automates the deployment trigger by sending an HTTP request to the
 
 2. **Execute the curl command**
    ```bash
-   curl -X POST "http://31.97.247.205:3000/api/deploy/e92f59e147a5ea18038547a3e9499c8c8d3bc6f0b2879b9a"
+   curl -X POST "http://31.97.247.205:3000/api/deploy/cffa328835753f240095ebe216c6548b5edd9133e8e2561a"
    ```
    - The command triggers the deployment immediately.
 

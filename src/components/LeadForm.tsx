@@ -116,6 +116,7 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
                     <input
                         type="tel"
                         required
+                        autocomplete="tel"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         className="input-primary"
@@ -127,6 +128,7 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
                     <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">E-mail</label>
                     <input
                         type="email"
+                        autocomplete="email"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         className="input-primary"
@@ -138,6 +140,7 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
                     <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Cidade / Região</label>
                     <input
                         type="text"
+                        autocomplete="address-level2"
                         value={formData.city}
                         onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                         className="input-primary"
