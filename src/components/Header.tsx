@@ -34,7 +34,7 @@ export default function Header() {
                     className={`relative transition-all duration-300 origin-left ${isScrolled ? 'scale-75' : 'scale-100'}`}
                 >
                     <Image
-                        src="/static/logo.png"
+                        src="/logo.png"
                         alt="Cortinas Brás - Cortinas sob medida em São Paulo"
                         width={120}
                         height={26}

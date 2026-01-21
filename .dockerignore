@@ -89,3 +89,18 @@ docker-compose*
 screens
 dev_bras
 next-app
+*.tar.gz
+*.zip
+*.rar
+
+# Hidden heavy directories
+.npm
+.cache
+.pm2
+.ollama
+.codex
+.agent
+.gemini
+.java
+.gradle
+.dotnet

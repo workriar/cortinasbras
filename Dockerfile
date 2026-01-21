@@ -9,9 +9,11 @@ FROM node:20-slim AS base
 RUN apt-get update && apt-get install -y \
   openssl \
   ca-certificates \
-  chromium \
   procps \
   && rm -rf /var/lib/apt/lists/*
+
+# Install Chromium separately (heavy)
+RUN apt-get update && apt-get install -y chromium && rm -rf /var/lib/apt/lists/*
 
 # Configurar Puppeteer
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true

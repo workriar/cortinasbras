@@ -48,7 +48,7 @@ export default function PromoPopup() {
 
                         <div className="relative aspect-video">
                             <img
-                                src="/static/promo2.jpg"
+                                src="/promo2.jpg"
                                 alt="Promoção Especial"
                                 className="w-full h-full object-cover"
                             />

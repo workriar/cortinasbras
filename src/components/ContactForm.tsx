@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Phone, User, MessageSquare, Ruler, Loader2, MapPin, Camera, ArrowRight, ArrowLeft } from "lucide-react";
+import { Send, Phone, User, MessageSquare, Ruler, Loader2, MapPin, Camera, ArrowRight, ArrowLeft, CheckCircle } from "lucide-react";
 import axios from "axios";
 
 const formSchema = z.object({
@@ -28,6 +28,8 @@ type FormData = z.infer<typeof formSchema>;
 export default function ContactForm() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
+    const [showWhatsAppModal, setShowWhatsAppModal] = useState(false);
+    const [whatsappUrl, setWhatsappUrl] = useState("");
     const [currentStep, setCurrentStep] = useState(1);
 
     const {
@@ -75,26 +77,8 @@ export default function ContactForm() {
 
                 // Verificar se temos URL do WhatsApp
                 if (response.data.whatsapp_url) {
-                    console.log('📱 Abrindo WhatsApp:', response.data.whatsapp_url);
-
-                    // Tentar abrir imediatamente (melhor chance de não ser bloqueado)
-                    const whatsappWindow = window.open(response.data.whatsapp_url, '_blank');
-
-                    // Se foi bloqueado, criar um link clicável
-                    if (!whatsappWindow || whatsappWindow.closed || typeof whatsappWindow.closed === 'undefined') {
-                        console.warn('⚠️ Popup bloqueado. Criando link alternativo.');
-                        // Criar link clicável como fallback
-                        const link = document.createElement('a');
-                        link.href = response.data.whatsapp_url;
-                        link.target = '_blank';
-                        link.rel = 'noopener noreferrer';
-                        link.click();
-                    }
-
-                    // Resetar mensagem de sucesso após 3 segundos
-                    setTimeout(() => {
-                        setShowSuccess(false);
-                    }, 3000);
+                    setWhatsappUrl(response.data.whatsapp_url);
+                    setShowWhatsAppModal(true);
                 } else {
                     console.warn('⚠️ URL do WhatsApp não foi retornada');
                     alert('Orçamento enviado com sucesso! Em breve entraremos em contato.');
@@ -124,8 +108,61 @@ export default function ContactForm() {
 
     const whatsappPhotoLink = `https://wa.me/5511992891070?text=${encodeURIComponent('Olá! Gostaria de enviar uma foto do ambiente para orçamento de cortinas.')}`;
 
+    const handleOpenWhatsapp = () => {
+        if (whatsappUrl) {
+            window.open(whatsappUrl, '_blank');
+            setShowWhatsAppModal(false);
+            setShowSuccess(false);
+        }
+    };
+
     return (
-        <section id="contato" className="py-24 bg-white">
+        <section id="contato" className="py-24 bg-white relative">
+            {/* WhatsApp Confirmation Modal */}
+            <AnimatePresence>
+                {showWhatsAppModal && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                            onClick={() => setShowWhatsAppModal(false)}
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            className="relative bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl text-center"
+                        >
+                            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-green-600">
+                                <CheckCircle size={40} />
+                            </div>
+
+                            <h3 className="text-2xl font-bold text-gray-800 mb-4">Orçamento Enviado!</h3>
+                            <p className="text-gray-600 mb-8 leading-relaxed">
+                                Recebemos seus dados com sucesso. Para agilizar seu atendimento, clique abaixo para enviar a mensagem pré-formatada em nosso WhatsApp.
+                            </p>
+
+                            <button
+                                onClick={handleOpenWhatsapp}
+                                className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-green-200 hover:-translate-y-1"
+                            >
+                                <MessageSquare size={24} />
+                                Abrir WhatsApp Agora
+                            </button>
+
+                            <button
+                                onClick={() => setShowWhatsAppModal(false)}
+                                className="mt-4 text-sm text-gray-400 hover:text-gray-600 underline"
+                            >
+                                Fechar e voltar ao site
+                            </button>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
             <div className="container mx-auto px-6">
                 <div className="grid lg:grid-cols-2 gap-16">
                     <motion.div
