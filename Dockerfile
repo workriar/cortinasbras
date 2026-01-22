@@ -1,82 +1,23 @@
-# Dockerfile para Next.js - Cortinas Brás
-# Usando Debian (slim) para melhor compatibilidade com Prisma e Puppeteer
-FROM node:20-slim AS base
+# For more information, please refer to https://aka.ms/vscode-docker-python
+FROM python:3-slim
 
-# Instalar dependências do sistema
-# openssl, ca-certificates para Prisma/NextAuth
-# chromium para Puppeteer
-# procps para monitoramento
-RUN apt-get update && apt-get install -y \
-  openssl \
-  ca-certificates \
-  procps \
-  && rm -rf /var/lib/apt/lists/*
+# Keeps Python from generating .pyc files in the container
+ENV PYTHONDONTWRITEBYTECODE=1
 
-# Install Chromium separately (heavy)
-RUN apt-get update && apt-get install -y chromium && rm -rf /var/lib/apt/lists/*
+# Turns off buffering for easier container logging
+ENV PYTHONUNBUFFERED=1
 
-# Configurar Puppeteer
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+# Install pip requirements
+COPY requirements.txt .
+RUN python -m pip install -r requirements.txt
 
 WORKDIR /app
+COPY . /app
 
-# Copiar arquivos de dependências
-COPY package*.json ./
+# Creates a non-root user with an explicit UID and adds permission to access the /app folder
+# For more info, please refer to https://aka.ms/vscode-docker-python-configure-containers
+RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
+USER appuser
 
-# Instalar dependências
-FROM base AS deps
-RUN npm ci
-
-# Builder
-FROM base AS builder
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-
-# Desabilitar telemetria
-ENV NEXT_TELEMETRY_DISABLED=1
-
-# Otimização de memória para o build
-ENV NODE_OPTIONS="--max-old-space-size=2048"
-
-# Build da aplicação (o script build já inclui prisma generate)
-
-# Build da aplicação
-RUN npm run build
-RUN ls -la /app/.next || echo ".next not found"
-RUN ls -la /app/public || echo "public not found"
-
-# Runner
-FROM base AS runner
-
-ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
-
-# Criar usuário não-root
-RUN groupadd --system --gid 1001 nodejs
-RUN useradd --system --uid 1001 --gid nodejs nextjs
-
-# Criar diretório de dados
-RUN mkdir -p /app/data && chown -R nextjs:nodejs /app/data
-
-COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --chown=nextjs:nodejs leads.db /app/leads.db.seed
-COPY --chown=nextjs:nodejs scripts/start-production.sh /app/scripts/start-production.sh
-
-USER root
-RUN chmod +x /app/scripts/start-production.sh
-USER nextjs
-
-EXPOSE 3000
-
-ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
-ENV DATABASE_URL="file:/app/data/leads.db"
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:3000', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"
-
-CMD ["/app/scripts/start-production.sh"]
+# During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
+CMD ["python", "next-app/node_modules/node-gyp/gyp/setup.py"]

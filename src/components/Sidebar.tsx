@@ -21,7 +21,7 @@ export default function Sidebar() {
     const pathname = usePathname();
     const { data: session } = useSession();
 
-    const userRole = (session?.user as any)?.role;
+    const userRole = session?.user?.role;
     const isAdmin = userRole === 'ADMIN' || userRole === 'SUPER_ADMIN';
 
     const allMenuItems = [

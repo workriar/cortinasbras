@@ -22,7 +22,7 @@ export default function AdminGuard({ children, fallback }: AdminGuardProps) {
         }
 
         // Check if user is admin
-        const userRole = (session?.user as any)?.role;
+        const userRole = session?.user?.role;
         if (userRole !== 'ADMIN' && userRole !== 'SUPER_ADMIN') {
             router.push('/dashboard');
         }
@@ -36,7 +36,7 @@ export default function AdminGuard({ children, fallback }: AdminGuardProps) {
         );
     }
 
-    const userRole = (session?.user as any)?.role;
+    const userRole = session?.user?.role;
     if (userRole !== 'ADMIN' && userRole !== 'SUPER_ADMIN') {
         return fallback || (
             <div className="min-h-screen flex items-center justify-center bg-stone-50">

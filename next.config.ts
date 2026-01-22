@@ -4,12 +4,9 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
   output: 'standalone',
-  // Otimizações para build em servidor com pouca memória (EasyPanel)
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+  // Validações de TypeScript habilitadas
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   productionBrowserSourceMaps: false,
   // Reduzir cache de build

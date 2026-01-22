@@ -26,30 +26,30 @@ export default function Header() {
     ];
 
     return (
-        <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'py-1 bg-brand-900/95 shadow-2xl backdrop-blur-xl' : 'py-2 bg-brand-900/80 backdrop-blur-md'}`}>
+        <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'py-3 bg-brand-900/95 shadow-2xl backdrop-blur-xl' : 'py-4 bg-brand-900/80 backdrop-blur-md'}`}>
             <div className="container mx-auto px-6 flex items-center justify-between">
                 {/* Logo - Smooth Resize */}
                 <Link
                     href="/"
-                    className={`relative transition-all duration-300 origin-left ${isScrolled ? 'scale-75' : 'scale-100'}`}
+                    className={`relative transition-all duration-300 origin-left ${isScrolled ? 'scale-90' : 'scale-100'}`}
                 >
                     <Image
                         src="/logo.png"
                         alt="Cortinas Brás - Cortinas sob medida em São Paulo"
-                        width={120}
-                        height={26}
+                        width={140}
+                        height={30}
                         className="h-auto w-auto"
                         priority
                     />
                 </Link>
 
                 {/* Desktop Nav */}
-                <nav className="hidden md:flex items-center gap-6">
+                <nav className="hidden md:flex items-center gap-8">
                     {navLinks.map((link) => (
                         <Link
                             key={link.name}
                             href={link.href}
-                            className="text-xs font-medium text-white/90 hover:text-brand-300 transition-colors relative group"
+                            className="text-sm font-medium text-white/90 hover:text-brand-300 transition-colors relative group"
                         >
                             {link.name}
                             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-300 transition-all group-hover:w-full"></span>
@@ -57,7 +57,7 @@ export default function Header() {
                     ))}
                     <Link
                         href="#contato"
-                        className="bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white px-5 py-1.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-all hover:shadow-lg hover:shadow-brand-500/50 hover:scale-105"
+                        className="bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white px-6 py-2.5 rounded-full text-sm font-bold uppercase tracking-wide transition-all hover:shadow-lg hover:shadow-brand-500/50 hover:scale-105"
                     >
                         Orçamento Grátis
                     </Link>
