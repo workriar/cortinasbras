@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { query } from "@/services/db";
+import { getDb } from "@/services/db";
 import { generateOrcamentoPdf } from "@/services/pdf";
 
 export async function GET(
@@ -8,8 +8,8 @@ export async function GET(
 ) {
     try {
         const { id } = await params;
-        const result = await query("SELECT * FROM leads WHERE id = $1", [id]);
-        const lead = result.rows[0];
+        const db = await getDb();
+        const lead = await db.get("SELECT * FROM leads WHERE id = ?", [id]);
 
         if (!lead) {
             return new NextResponse("Orçamento não encontrado", { status: 404 });

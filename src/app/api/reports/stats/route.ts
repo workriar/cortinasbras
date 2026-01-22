@@ -1,25 +1,25 @@
 import { NextResponse } from 'next/server';
-import { query } from '@/services/db';
+import { getDb } from '@/services/db';
 
 export async function GET() {
     try {
+        const db = await getDb();
         const statsQuery = `
             SELECT 
                 COUNT(*) as total,
-                COUNT(*) FILTER (WHERE status = 'novo') as new,
-                COUNT(*) FILTER (WHERE status = 'em_contato' OR status = 'CONTACTED') as contacted,
-                COUNT(*) FILTER (WHERE status = 'proposta' OR status = 'PROPOSAL') as proposal,
-                COUNT(*) FILTER (WHERE status = 'fechado' OR status = 'CLOSED_WON') as won,
-                COUNT(*) FILTER (WHERE status = 'perdido' OR status = 'CLOSED_LOST') as lost
+                SUM(CASE WHEN status = 'novo' THEN 1 ELSE 0 END) as new,
+                SUM(CASE WHEN status = 'em_contato' OR status = 'CONTACTED' THEN 1 ELSE 0 END) as contacted,
+                SUM(CASE WHEN status = 'proposta' OR status = 'PROPOSAL' THEN 1 ELSE 0 END) as proposal,
+                SUM(CASE WHEN status = 'fechado' OR status = 'CLOSED_WON' THEN 1 ELSE 0 END) as won,
+                SUM(CASE WHEN status = 'perdido' OR status = 'CLOSED_LOST' THEN 1 ELSE 0 END) as lost
             FROM leads
         `;
 
-        const result = await query(statsQuery);
-        const row = result.rows[0];
+        const row = await db.get(statsQuery);
 
         return NextResponse.json({
-            total: parseInt(row.total || '0'),
-            new: parseInt(row.new || '0'),
+            total: parseInt(row?.total || '0'),
+            new: parseInt(row?.new || '0'),
             contacted: parseInt(row.contacted || '0'),
             proposal: parseInt(row.proposal || '0'),
             won: parseInt(row.won || '0'),
