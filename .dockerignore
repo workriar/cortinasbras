@@ -75,9 +75,9 @@ orcamentos
 public_html
 
 # Docker
-Dockerfile*
-docker-compose*
-.dockerignore
+# Dockerfile*
+# docker-compose*
+# .dockerignore
 
 # CI/CD
 .github
