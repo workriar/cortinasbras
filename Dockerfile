@@ -11,6 +11,10 @@ RUN apt-get update && apt-get install -y \
   ca-certificates \
   chromium \
   procps \
+  python3 \
+  make \
+  g++ \
+  build-essential \
   && rm -rf /var/lib/apt/lists/*
 
 # Configurar Puppeteer
