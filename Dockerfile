@@ -28,7 +28,7 @@ COPY package*.json ./
 
 # Instalar dependências
 FROM base AS deps
-RUN npm ci
+RUN npm install
 
 # Builder
 FROM base AS builder
