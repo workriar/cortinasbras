@@ -28,6 +28,7 @@ COPY package*.json ./
 
 # Instalar dependências
 FROM base AS deps
+COPY prisma ./prisma
 RUN npm install
 
 # Builder
