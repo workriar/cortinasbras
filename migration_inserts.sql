@@ -1,4 +1,0 @@
--- Inserção de leads migrados do SQLite
-INSERT INTO leads (nome, telefone, largura_parede, altura_parede, tecido, instalacao, observacoes, criado_em, status, origem) VALUES ('KLEBER ', '11963630180', 4.5, 5, 'Blackout', 'Varão', 'teste', '2025-12-11 17:56:50.350312'::timestamp, 'novo', 'migracao');
-INSERT INTO leads (nome, telefone, largura_parede, altura_parede, tecido, instalacao, observacoes, criado_em, status, origem) VALUES ('KLEBER ', '11963630180', 4.5, 5, 'Blackout', 'Trilho', 'teser', '2025-12-11 17:57:27.674304'::timestamp, 'novo', 'migracao');
-INSERT INTO leads (nome, telefone, largura_parede, altura_parede, tecido, instalacao, observacoes, criado_em, status, origem) VALUES ('Teste Curl', '11999999999', 3, 2.6, 'Voil', 'Trilho', 'Teste via curl', '2025-12-11 18:24:18.666184'::timestamp, 'novo', 'migracao');

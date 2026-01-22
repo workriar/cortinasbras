@@ -5,91 +5,57 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
 }
 
-// ---------------------------------------------------------
-// MODELOS DE USUÁRIO E ACESSO
-// ---------------------------------------------------------
-
+// Usuários do sistema (para autenticação)
 model User {
   id               Int       @id @default(autoincrement())
   email            String    @unique
   name             String?
   passwordHash     String
-  // Role: ADMIN, SUPER_ADMIN, MANAGER, SALES, VIEWER
-  role             String    @default("USER") 
-  avatar           String?
-  isActive         Boolean   @default(true)
-  lastSeen         DateTime? 
-  
+  role             String    @default("USER") // ADMIN ou USER
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
-
   leads            Lead[]    @relation("UserLeads")
   messagesSent     Message[] @relation("SentMessages")
   messagesReceived Message[] @relation("ReceivedMessages")
-  notifications    Notification[]
-  activities       Activity[] // Logs de atividades do usuário
 }
 
-// ---------------------------------------------------------
-// CORE DO CRM (LEADS)
-// ---------------------------------------------------------
-
+// Leads do CRM
+// Leads do CRM (Mapeado para tabela legada 'leads')
 model Lead {
   id           Int           @id @default(autoincrement())
-  
-  // Dados Pessoais
   name         String        @map("nome")
   phone        String        @map("telefone")
-  email        String?       @map("email")
+  email        String?       @map("email") // Se existir na tabela antiga
   city         String?       @map("cidade_bairro")
-  address      String?       @map("endereco")
-  
-  // Classificação
-  // Sources: SITE, WHATSAPP, REFERRAL, INSTAGRAM, GOOGLE, OTHER
   source       String        @default("SITE") @map("origem")
-  // Status: NEW, CONTACTED, PROPOSAL, NEGOTIATION, WON, LOST
   status       String        @default("NEW") @map("status")
-
-  // Detalhes do Pedido
-  type         String?       @map("tipo_cortina")
+  notes        String?       @map("observacoes")
+  
+  // Campos específicos do legado que não estavam no model original
   width        Float?        @map("largura_parede")
   height       Float?        @map("altura_parede")
   fabric       String?       @map("tecido")
   installation String?       @map("instalacao")
-  space        String?       @map("espaco_cortina")
-  translucency String?       @map("translucidez")
-  lining       String?       @map("forro")
-  notes        String?       @map("observacoes")
 
-  // Metadados
   createdAt    DateTime      @default(now()) @map("criado_em")
   updatedAt    DateTime      @updatedAt @map("atualizado_em")
-
   
-  // Relacionamentos
   ownerId      Int?
   owner        User?         @relation("UserLeads", fields: [ownerId], references: [id])
-  
-  interactions Interaction[] // Compatibilidade legado
-  activities   Activity[]    // Nova estrutura de logs
+  interactions Interaction[]
   messages     Message[]
-  items        LeadItem[]    // Produtos vinculados
 
-  @@map("leads")
+  @@map("leads") // Mapeia para a tabela existente 'leads'
   @@index([ownerId])
   @@index([status])
   @@index([source])
   @@index([createdAt])
 }
 
-// ---------------------------------------------------------
-// COMUNICAÇÃO E ATIVIDADES
-// ---------------------------------------------------------
-
-// Histórico legado (manter para não perder dados antigos)
+// Histórico de interações com o lead
 model Interaction {
   id        Int      @id @default(autoincrement())
   leadId    Int
@@ -101,96 +67,20 @@ model Interaction {
   @@index([leadId])
 }
 
-// Nova estrutura unificada de atividades (Substitui Interaction futuramente)
-model Activity {
-  id          Int      @id @default(autoincrement())
-  type        String   // CREATED, STATUS_CHANGED, ASSIGNED, NOTE, EMAIL, WHATSAPP, CALL
-  description String
-  metadata    String?    // Detalhes extras em JSON (SQLite compat)
-  
-  leadId      Int
-  lead        Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
-  
-  userId      Int?
-  user        User?    @relation(fields: [userId], references: [id])
-
-  createdAt   DateTime @default(now())
-
-  @@index([leadId])
-  @@index([userId])
-}
-
+// Mensagens de chat interno
 model Message {
   id         Int      @id @default(autoincrement())
-  content    String
-  // Type: INTERNAL, WHATSAPP, EMAIL
-  type       String   @default("INTERNAL")
-  
-  senderId   Int?     // Opcional pois pode ser sistema ou cliente externo (WhatsApp)
-  sender     User?    @relation("SentMessages", fields: [senderId], references: [id])
-  
-  receiverId Int?     // Opcional
-  receiver   User?    @relation("ReceivedMessages", fields: [receiverId], references: [id])
-  
+  senderId   Int
+  receiverId Int
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
   leadId     Int?
   lead       Lead?    @relation(fields: [leadId], references: [id])
-  
-  whatsappId String?  @unique
+  content    String
   read       Boolean  @default(false)
   createdAt  DateTime @default(now())
 
   @@index([senderId])
   @@index([receiverId])
-  @@index([leadId])
-}
-
-model Notification {
-  id        Int      @id @default(autoincrement())
-  title     String
-  message   String
-  type      String   // INFO, WARNING, SUCCESS, ALERT
-  isRead    Boolean  @default(false)
-  
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  createdAt DateTime @default(now())
-  
-  @@index([userId, isRead])
-}
-
-// ---------------------------------------------------------
-// PRODUTOS E ORÇAMENTOS
-// ---------------------------------------------------------
-
-model Product {
-  id          Int      @id @default(autoincrement())
-  name        String
-  category    String
-  description String?
-  price       Decimal 
-  cost        Decimal?
-  stock       Int      @default(0)
-  imageUrl    String?
-  isActive    Boolean  @default(true)
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  leadItems   LeadItem[]
-}
-
-model LeadItem {
-  id        Int      @id @default(autoincrement())
-  leadId    Int
-  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
-  
-  productId Int
-  product   Product  @relation(fields: [productId], references: [id])
-  
-  quantity  Int      @default(1)
-  unitPrice Decimal
-  total     Decimal
-
   @@index([leadId])
 }

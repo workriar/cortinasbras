@@ -1,28 +1,26 @@
 'use client';
-// import { useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ChartCard from '@/components/ChartCard';
 
 export default function ReportsPage() {
-    // const { data: session, status } = useSession(); // Removido
-    // const status = 'authenticated'; // Não é necessário aqui
-
+    const { data: session, status } = useSession();
     const router = useRouter();
     const [stats, setStats] = useState({ total: 0, new: 0, contacted: 0, proposal: 0, won: 0, lost: 0 });
     const [loading, setLoading] = useState(true);
 
-    /* Removido redirect next-auth
     useEffect(() => {
         if (status === 'unauthenticated') {
             router.push('/login');
         }
     }, [status, router]);
-    */
 
     useEffect(() => {
-        fetchStats();
-    }, []);
+        if (status === 'authenticated') {
+            fetchStats();
+        }
+    }, [status]);
 
     const fetchStats = async () => {
         try {
@@ -36,7 +34,7 @@ export default function ReportsPage() {
         }
     };
 
-    if (loading) {
+    if (status === 'loading' || loading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>

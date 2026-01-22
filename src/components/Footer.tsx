@@ -10,7 +10,7 @@ export default function Footer() {
                     <div className="col-span-1 md:col-span-1">
                         <Link href="/" className="inline-block mb-8">
                             <Image
-                                src="/logo.png"
+                                src="/static/logo.png"
                                 alt="Cortinas Brás"
                                 width={45}
                                 height={19}

@@ -25,25 +25,22 @@ export default function PromoPopup() {
     return (
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-6" onClick={close}>
-                    {/* Background overlay – click closes */}
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
+                        onClick={close}
                         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
                     />
-                    {/* Modal content – stop click propagation */}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
                         className="relative bg-white rounded-3xl overflow-hidden max-w-lg w-full shadow-2xl"
-                        onClick={(e) => e.stopPropagation()}
                     >
                         <button
-                            // close button inside modal – stop propagation
-                            onClick={(e) => { e.stopPropagation(); close(); }}
+                            onClick={close}
                             className="absolute top-4 right-4 z-10 p-2 bg-white/80 backdrop-blur-md rounded-full text-brand-700 hover:bg-brand-500 hover:text-white transition-colors"
                         >
                             <X size={20} />
@@ -51,7 +48,7 @@ export default function PromoPopup() {
 
                         <div className="relative aspect-video">
                             <img
-                                src="/promo2.jpg"
+                                src="/static/promo2.jpg"
                                 alt="Promoção Especial"
                                 className="w-full h-full object-cover"
                             />

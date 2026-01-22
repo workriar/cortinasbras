@@ -6,10 +6,10 @@ import { Instagram } from "lucide-react";
 
 
 const images = [
-    { src: "/cortina-wave-1.jpg", alt: "Cortina Wave 1", span: "row-span-2" },
-    { src: "/cortina-wave-2.jpg", alt: "Cortina Wave 2", span: "" },
-    { src: "/enxoval-cama.jpg", alt: "Enxoval Premium", span: "col-span-1" },
-    { src: "/hero-bg-2.jpg", alt: "Showroom", span: "col-span-2" },
+    { src: "/static/cortina-wave-1.jpg", alt: "Cortina Wave 1", span: "row-span-2" },
+    { src: "/static/cortina-wave-2.jpg", alt: "Cortina Wave 2", span: "" },
+    { src: "/static/enxoval-cama.jpg", alt: "Enxoval Premium", span: "col-span-1" },
+    { src: "/static/hero-bg-2.jpg", alt: "Showroom", span: "col-span-2" },
 ];
 
 export default function Gallery() {

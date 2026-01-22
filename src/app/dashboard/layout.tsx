@@ -5,24 +5,8 @@ import { SidebarProvider, useSidebar } from '@/components/SidebarContext';
 
 import BottomNav from '@/components/BottomNav';
 
-import { useSession } from 'next-auth/react';
-import LoginForm from '@/components/LoginForm';
-
 function DashboardContent({ children }: { children: React.ReactNode }) {
     const { isExpanded } = useSidebar();
-    const { status } = useSession();
-
-    if (status === 'loading') {
-        return (
-            <div className="min-h-screen flex items-center justify-center bg-stone-50">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500"></div>
-            </div>
-        );
-    }
-
-    if (status === 'unauthenticated') {
-        return <LoginForm />;
-    }
 
     return (
         <div className="flex min-h-screen bg-stone-50">
@@ -53,14 +37,10 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
     );
 }
 
-import { SocketProvider } from '@/components/providers/socket-provider';
-
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     return (
-        <SocketProvider>
-            <SidebarProvider>
-                <DashboardContent>{children}</DashboardContent>
-            </SidebarProvider>
-        </SocketProvider>
+        <SidebarProvider>
+            <DashboardContent>{children}</DashboardContent>
+        </SidebarProvider>
     );
 }

@@ -1,168 +1,221 @@
-# 🏠 Cortinas Brás - Sistema de Gestão & Orçamentos
+# 🏠 Cortinas Brás - Sistema de Orçamentos
 
-Sistema web completo para gestão de leads, orçamentos e CRM da Cortinas Brás. Desenvolvido com **Next.js 16**, **React 19** e **PostgreSQL**, oferecendo uma interface moderna para clientes e um painel administrativo poderoso para gestão interna.
+Sistema web moderno para geração de orçamentos de cortinas sob medida, desenvolvido com **Next.js 16** e **React 19**.
 
----
+## 🚀 Tecnologias
 
-## 🚀 Tecnologias Integradas
+- **Framework**: Next.js 16.0.10 (App Router)
+- **Frontend**: React 19, TypeScript, TailwindCSS 4
+- **Backend**: Next.js API Routes
+- **Banco de Dados**: SQLite3
+- **Email**: Nodemailer (SMTP Hostinger)
+- **PDF**: Puppeteer + PDFKit
+- **Deploy**: Docker + Docker Compose
+- **Animações**: Framer Motion
+- **Formulários**: React Hook Form + Zod
 
-### Core
-- **Framework:** [Next.js 16](https://nextjs.org/) (App Router)
-- **Frontend:** React 19, TypeScript, TailwindCSS 4
-- **Animações:** Framer Motion, Lucide React
-- **Estado/Forms:** React Hook Form, Zod
+## 📋 Pré-requisitos
 
-### Backend & Dados
-- **Database:** PostgreSQL (Hospedado via EasyPanel/Docker)
-- **ORM:** Prisma (v5.22)
-- **Auth:** NextAuth.js v4 (Credentials Provider com Role-Based Access)
-- **API:** Next.js Route Handlers
+- Node.js 20+ 
+- npm ou yarn
+- Docker (para deploy)
 
-### Serviços
-- **E-mails:** Nodemailer (SMTP Hostinger)
-- **PDFs:** Puppeteer (Geração dinâmica de orçamentos)
-- **Deploy:** Docker, Docker Compose, EasyPanel
+## 🛠️ Instalação Local
 
----
-
-## 🛠️ Configuração Inicial
-
-### Pré-requisitos
-- Node.js 20+
-- Docker & Docker Compose (para ambiente local completo)
-- PostgreSQL (ou usar container docker incluso)
-
-### 1. Clonar e Instalar
 ```bash
-git clone https://github.com/workriar/cortinasbras.git
-cd cortinasbras
+# Clone o repositório
+git clone https://github.com/seu-usuario/cortinas-app.git
+cd cortinas-app
+
+# Instale as dependências
 npm install
-```
 
-### 2. Configurar Variáveis de Ambiente
-Crie um arquivo `.env` na raiz do projeto com as chaves necessárias (baseado em `.env.example`):
+# Configure as variáveis de ambiente
+cp .env.example .env.local
+# Edite .env.local com suas credenciais
 
-```env
-# Banco de Dados
-DATABASE_URL="postgresql://user:password@localhost:5432/cortinas_leads"
-
-# Autenticação
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="sua_chave_secreta_aqui"
-
-# Email (SMTP Hostinger)
-MAIL_SERVER=smtp.hostinger.com
-MAIL_PORT=465
-MAIL_USERNAME=loja@cortinasbras.com.br
-MAIL_PASSWORD=sua_senha
-MAIL_USE_SSL=true
-
-# Config Gerais
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-```
-
-### 3. Banco de Dados
-Gere o cliente Prisma e execute as migrações (ou `db push` para dev):
-
-```bash
-npx prisma generate
-npx prisma db push
-```
-
-### 4. Rodar a Aplicação
-```bash
+# Execute em desenvolvimento
 npm run dev
 ```
+
 Acesse: [http://localhost:3000](http://localhost:3000)
 
----
+## 🔧 Variáveis de Ambiente
 
-## 🔒 Painel Administrativo (/dashboard)
+Crie um arquivo `.env.local` baseado no `.env.example`:
 
-O sistema possui um painel completo para gestão do negócio.
+```env
+# Email (Hostinger)
+MAIL_SERVER=smtp.hostinger.com
+MAIL_PORT=587
+MAIL_USERNAME=seu-email@cortinasbras.com.br
+MAIL_PASSWORD=sua-senha
+MAIL_DEFAULT_SENDER=loja@cortinasbras.com.br
 
-### Acesso
-- **URL:** `/dashboard`
-- **Login:** Redireciona automaticamente se não autenticado.
-- **Credenciais Padrão:**
-  - Email: `admin@cortinasbras.com.br`
-  - Senha: `admin123` *(Recomenda-se alterar após o primeiro acesso)*
+# Database
+DATABASE_URL=sqlite:./data/leads.db
 
-### Funcionalidades do Dashboard
-1.  **Visão Geral:** KPIs de vendas, leads recentes e gráficos de conversão.
-2.  **CRM (Kanban):**
-    - Quadro interativo (Drag & Drop) para mover leads entre status (Novos, Em Contato, Proposta, Fechados).
-    - Edição rápida de leads e link direto para WhatsApp.
-    - Filtros por data, status e origem.
-3.  **Gestão de Usuários:** Cadastro de novos vendedores ou administradores (Apenas role ADMIN).
+# Site
+NEXT_PUBLIC_SITE_URL=https://cortinasbras.com.br
+```
 
----
+## 📦 Scripts Disponíveis
 
-## 🗄️ Estrutura do Banco de Dados (Prisma)
-
-Principais modelos definidos em `prisma/schema.prisma`:
-
-- **User:** Usuários do sistema (Vendedores/Admins). Campos: `role` (ADMIN/USER), `passwordHash`, `email`.
-- **Lead:** Clientes e orçamentos. Campos principais: `status` (Funil de vendas), `tipo` (Modelo da cortina), `medidas`, etc.
-
----
-
-## 🐳 Deploy e Produção
-
-O projeto é otimizado para deploy em containers (Docker).
-
-### Comandos Docker
 ```bash
-# Build e Subir Containers
-docker-compose up -d --build
+npm run dev      # Desenvolvimento (localhost:3000)
+npm run build    # Build de produção
+npm run start    # Servidor de produção
+npm run lint     # Linter ESLint
+```
 
-# Ver Logs
-docker-compose logs -f web
+## 🐳 Deploy com Docker
 
-# Parar
+### Build e Run Local
+
+```bash
+# Build da imagem
+docker build -t cortinas-app .
+
+# Run container
+docker run -p 3000:3000 --env-file .env cortinas-app
+```
+
+### Docker Compose (Recomendado)
+
+```bash
+# Subir aplicação
+docker-compose up -d
+
+# Ver logs
+docker-compose logs -f
+
+# Parar aplicação
 docker-compose down
 ```
 
-### EasyPanel / VPS
-O projeto contém configurações específicas para rodar em EasyPanel:
-1.  Conecte o repositório GitHub.
-2.  Nas configurações de "Build", defina o dockerfile como `Dockerfile`.
-3.  Insira as variáveis de ambiente de produção.
-4.  O script de start `npm start` cuidará de iniciar o servidor Next.js.
+## 🌐 Deploy em Produção
 
-### Manutenção de Schema em Produção
-Se houver alterações no schema do banco, certifique-se de rebuildar o container ou rodar `npx prisma migrate deploy` no ambiente produtivo.
+### EasyPanel (VPS Hostinger)
 
----
+1. **Conecte o repositório GitHub** no EasyPanel
+2. **Configure as variáveis de ambiente** no painel
+3. **Configure o volume** para persistência:
+   - Path: `/app/data`
+   - Type: Persistent
+4. **Deploy automático** a cada push na branch `main`
 
-## 📁 Estrutura de Pastas
+### Configuração DNS
 
 ```
-/src
-  /app
-    /api           # Endpoints da API (Leads, Auth, Reports)
-    /dashboard     # Páginas protegidas do Admin/CRM
-    /public        # Imagens estáticas
-  /components
-    /KanbanBoard   # Lógica do quadro CRM
-    /Sidebar       # Navegação do Dashboard
-    /LeadForm      # Formulários de Cadastro
-  /services
-    email.ts       # Envio de e-mails transacionais
-    pdf.ts         # Geração de orçamentos em PDF
-  /middleware.ts   # Proteção de rotas e redirecionamentos
-/prisma            # Schema e Migrations do DB
-/scripts           # Scripts utilitários (Reset senha, check DB)
+Tipo: A
+Nome: @ (ou www)
+Valor: [IP do VPS]
+TTL: 3600
 ```
 
+### SSL/HTTPS
+
+O Traefik (configurado no docker-compose) gerencia automaticamente os certificados SSL via Let's Encrypt.
+
+## 📁 Estrutura do Projeto
+
+```
+cortinas-app/
+├── src/
+│   ├── app/                    # App Router (Next.js 13+)
+│   │   ├── page.tsx           # Página principal
+│   │   ├── layout.tsx         # Layout global
+│   │   ├── api/               # API Routes
+│   │   │   ├── leads/         # Endpoint de leads
+│   │   │   └── admin/         # Admin endpoints
+│   │   └── admin/             # Painel admin
+│   ├── components/            # Componentes React
+│   │   ├── Header.tsx
+│   │   ├── Hero.tsx
+│   │   ├── Products.tsx
+│   │   ├── Gallery.tsx
+│   │   ├── About.tsx
+│   │   ├── ContactForm.tsx
+│   │   ├── Footer.tsx
+│   │   └── PromoPopup.tsx
+│   └── services/              # Serviços
+│       ├── db.ts             # Database (SQLite)
+│       ├── email.ts          # Email (Nodemailer)
+│       └── pdf.ts            # PDF (Puppeteer)
+├── public/
+│   └── static/               # Assets (imagens, logos)
+├── Dockerfile                # Container de produção
+├── docker-compose.yml        # Orquestração
+└── package.json              # Dependências
+
+```
+
+## 🎨 Funcionalidades
+
+### Para Clientes
+- ✅ Landing page moderna e responsiva
+- ✅ Formulário de orçamento intuitivo
+- ✅ Galeria de produtos e ambientes
+- ✅ Redirecionamento automático para WhatsApp
+- ✅ PDF profissional gerado automaticamente
+- ✅ Email com orçamento enviado
+
+### Para Administração
+- ✅ Painel de leads (`/admin/leads`)
+- ✅ Visualização de todos os orçamentos
+- ✅ Estatísticas (total, hoje)
+- ✅ Exportação de relatórios em PDF
+- ✅ Download individual de orçamentos
+
+## 🔒 Segurança
+
+- ✅ Variáveis de ambiente para credenciais
+- ✅ HTTPS obrigatório em produção
+- ✅ Headers de segurança configurados
+- ✅ Validação de formulários (Zod)
+- ⚠️ **TODO**: Adicionar autenticação no admin
+
+## 📊 SEO
+
+- ✅ Meta tags otimizadas
+- ✅ Open Graph (Facebook)
+- ✅ Twitter Cards
+- ✅ Sitemap.xml automático
+- ✅ Robots.txt configurado
+- ✅ Schema.org markup
+- ✅ Performance otimizada (Lighthouse 90+)
+
+## 🧪 Testes
+
+```bash
+# TODO: Implementar testes
+npm test
+```
+
+## 📈 Analytics
+
+- ✅ Google Tag Manager integrado
+- ✅ Meta Pixel (Facebook) integrado
+- ✅ Eventos de conversão configurados
+
+## 🤝 Contribuindo
+
+1. Fork o projeto
+2. Crie uma branch (`git checkout -b feature/nova-funcionalidade`)
+3. Commit suas mudanças (`git commit -m 'Adiciona nova funcionalidade'`)
+4. Push para a branch (`git push origin feature/nova-funcionalidade`)
+5. Abra um Pull Request
+
+## 📝 Licença
+
+Este projeto é proprietário da **Cortinas Brás**.
+
+## 📞 Suporte
+
+- **Website**: [cortinasbras.com.br](https://cortinasbras.com.br)
+- **WhatsApp**: (11) 99289-1070
+- **Email**: loja@cortinasbras.com.br
+
 ---
 
-## 📄 Scripts Úteis
-
-- `node scripts/reset-admin-password.js`: Reseta a senha do admin localmente.
-- `node scripts/check-users.js`: Lista usuários cadastrados no banco.
-- `npx prisma studio`: Abre interface visual para gerenciar o banco de dados.
-
----
-
-&copy; 2026 Cortinas Brás. Todos os direitos reservados.
+**Desenvolvido com ❤️ para Cortinas Brás**

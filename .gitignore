@@ -1,4 +1,3 @@
-
 # Dependencies
 node_modules
 /.pnp
@@ -14,7 +13,7 @@ node_modules
 # Production
 /dist
 
-# Environment variables
+# Environment variables17: 
 # .env
 # .env*.local
 # .env.production
@@ -35,7 +34,6 @@ next-env.d.ts
 # Database
 *.db
 *.sqlite
-!leads.db
 *.sqlite3
 /data
 
@@ -96,40 +94,3 @@ server
 .continue
 .gemini
 get-docker.sh
-node_modules
-
-# Large files
-*.tar.gz
-*.zip
-snap/
-oracleJdk-25/
-
-# System and IDE files
-.antigravity-server/
-.vscode-server/
-.cache/
-.npm/
-.gradle/
-.java/
-.dotnet/
-.ollama/
-.pm2/
-.git.backup/
-.bash_history
-.wget-hsts
-.gitconfig
-.ssh/
-
-# Development tools
-Cline/
-Sixth/
-.codegpt/
-.codex/
-.cline/
-
-# Project-specific excludes
-projects/bresser/
-dev_bras/
-frontend-react/
-next-app/
-nome_do_venv/

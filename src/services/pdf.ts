@@ -98,14 +98,8 @@ export async function generateOrcamentoPdf(lead: any): Promise<Buffer> {
     `;
 
     const browser = await puppeteer.launch({
-        args: [
-            "--no-sandbox",
-            "--disable-setuid-sandbox",
-            "--disable-dev-shm-usage",
-            "--disable-gpu"
-        ],
-        headless: true,
-        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
+        headless: true
     });
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: "networkidle0" });
@@ -119,15 +113,7 @@ export async function generateOrcamentoPdf(lead: any): Promise<Buffer> {
 }
 
 export async function generatePdf(html: string): Promise<Buffer> {
-    const browser = await puppeteer.launch({
-        args: [
-            "--no-sandbox",
-            "--disable-setuid-sandbox",
-            "--disable-dev-shm-usage",
-            "--disable-gpu"
-        ],
-        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined
-    });
+    const browser = await puppeteer.launch({ args: ["--no-sandbox", "--disable-setuid-sandbox"] });
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: "networkidle0" });
     const pdfBuffer = await page.pdf({ format: "A4", printBackground: true });
@@ -232,14 +218,8 @@ export async function generatePremiumOrcamentoPdf(lead: any): Promise<Buffer> {
     `;
 
     const browser = await puppeteer.launch({
-        args: [
-            "--no-sandbox",
-            "--disable-setuid-sandbox",
-            "--disable-dev-shm-usage",
-            "--disable-gpu"
-        ],
-        headless: true,
-        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
+        headless: true
     });
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: "networkidle0" });

@@ -1,105 +1,65 @@
-import { Pool } from 'pg';
+import sqlite3 from 'sqlite3';
+import { open, Database } from 'sqlite';
+import path from 'path';
 
-let pool: Pool | null = null;
+// O banco de dados será salvo na raiz do projeto em dev
+// e no volume persistente em produção
+const DB_PATH = process.env.DATABASE_FILE || path.join(process.cwd(), 'data', 'leads.db');
+
+let db: Database | null = null;
 
 export async function getDb() {
-    if (pool) return pool;
+    if (db) return db;
 
-    const databaseUrl = process.env.DATABASE_URL;
-
-    if (!databaseUrl) {
-        throw new Error('DATABASE_URL não configurado no .env');
+    // Garantir que o diretório data existe
+    const fs = require('fs');
+    const dir = path.dirname(DB_PATH);
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
     }
 
-    console.log(`📁 Conectando ao PostgreSQL...`);
-
-    pool = new Pool({
-        connectionString: databaseUrl,
-        ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
-        max: 20, // Máximo de conexões no pool
-        idleTimeoutMillis: 30000,
-        connectionTimeoutMillis: 2000,
+    db = await open({
+        filename: DB_PATH,
+        driver: sqlite3.Database
     });
 
-    // Testar conexão
-    try {
-        const client = await pool.connect();
-        console.log('✅ PostgreSQL conectado com sucesso');
-        client.release();
-    } catch (error) {
-        console.error('❌ Erro ao conectar PostgreSQL:', error);
-        throw error;
-    }
-
-    // Criar tabela se não existir
     await initializeDatabase();
 
-    return pool;
+    return db;
 }
 
 async function initializeDatabase() {
-    if (!pool) return;
+    if (!db) return;
 
-    const createTableQuery = `
+    // Tabela de Leads
+    await db.exec(`
     CREATE TABLE IF NOT EXISTS leads (
-      id SERIAL PRIMARY KEY,
-      nome VARCHAR(255) NOT NULL,
-      telefone VARCHAR(20) NOT NULL,
-      cidade_bairro VARCHAR(255),
-      largura_parede DECIMAL(10,2),
-      altura_parede DECIMAL(10,2),
-      tecido VARCHAR(100),
-      instalacao VARCHAR(100),
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      nome TEXT NOT NULL,
+      telefone TEXT NOT NULL,
+      cidade_bairro TEXT,
+      largura_parede REAL,
+      altura_parede REAL,
+      tecido TEXT,
+      instalacao TEXT,
       observacoes TEXT,
-      criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      status VARCHAR(50) DEFAULT 'novo',
-      origem VARCHAR(50) DEFAULT 'site'
+      criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+      atualizado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+      status TEXT DEFAULT 'novo',
+      origem TEXT DEFAULT 'site'
     );
+  `);
 
-    CREATE INDEX IF NOT EXISTS idx_leads_telefone ON leads(telefone);
-    CREATE INDEX IF NOT EXISTS idx_leads_criado_em ON leads(criado_em DESC);
-    CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status);
-    CREATE INDEX IF NOT EXISTS idx_leads_cidade_bairro ON leads(cidade_bairro);
-  `;
-
-    try {
-        await pool.query(createTableQuery);
-        console.log('✅ Tabela leads verificada/criada');
-    } catch (error) {
-        console.error('❌ Erro ao criar tabela:', error);
-        throw error;
-    }
+    // Indices para melhorar performance
+    await db.exec(`CREATE INDEX IF NOT EXISTS idx_leads_telefone ON leads(telefone)`);
+    await db.exec(`CREATE INDEX IF NOT EXISTS idx_leads_criado_em ON leads(criado_em DESC)`);
+    await db.exec(`CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status)`);
 }
 
-// Helper para executar queries
-export async function query(text: string, params?: any[]) {
-    const db = await getDb();
-    return db.query(text, params);
-}
-
-// Helper para transações
-export async function transaction(callback: (client: any) => Promise<void>) {
-    const db = await getDb();
-    const client = await db.connect();
-
-    try {
-        await client.query('BEGIN');
-        await callback(client);
-        await client.query('COMMIT');
-    } catch (error) {
-        await client.query('ROLLBACK');
-        throw error;
-    } finally {
-        client.release();
-    }
-}
-
-// Fechar pool (útil para testes)
+// Helper para testes e scripts
 export async function closeDb() {
-    if (pool) {
-        await pool.end();
-        pool = null;
-        console.log('🔒 Pool PostgreSQL fechado');
+    if (db) {
+        await db.close();
+        db = null;
     }
 }

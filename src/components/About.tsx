@@ -49,7 +49,7 @@ export default function About() {
                         <div className="aspect-square bg-brand-500/20 rounded-full blur-3xl absolute inset-0 animate-pulse" />
                         <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl border border-white/10 group">
                             <img
-                                src="/hero-bg-3.jpg"
+                                src="/static/hero-bg-3.jpg"
                                 alt="Equipe Cortinas Brás"
                                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                             />

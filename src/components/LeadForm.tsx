@@ -40,10 +40,6 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
             if (res.ok) {
                 const data = await res.json();
                 if (method === 'POST') {
-                    // Dispara evento de conversão do Google Ads para novos leads
-                    if (typeof window !== 'undefined' && (window as any).gtagConversionLeads) {
-                        (window as any).gtagConversionLeads();
-                    }
                     setSuccessData(data); // Mostra modal de sucesso com WhatsApp
                 } else {
                     onSuccess(); // Edição apenas fecha
@@ -100,6 +96,7 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
         <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
+                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Nome Completo</label>
                     <input
                         type="text"
                         required
@@ -107,7 +104,6 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         className="input-primary"
                         placeholder="Ex: João Silva"
-                        autocomplete="name"
                     />
                 </div>
 
@@ -116,7 +112,6 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
                     <input
                         type="tel"
                         required
-                        autocomplete="tel"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         className="input-primary"
@@ -128,7 +123,6 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
                     <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">E-mail</label>
                     <input
                         type="email"
-                        autocomplete="email"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         className="input-primary"
@@ -140,7 +134,6 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
                     <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Cidade / Região</label>
                     <input
                         type="text"
-                        autocomplete="address-level2"
                         value={formData.city}
                         onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                         className="input-primary"

@@ -34,6 +34,12 @@ export default function DashboardHome() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        if (status === 'unauthenticated') {
+            router.push('/login');
+        }
+    }, [status, router]);
+
+    useEffect(() => {
         if (status === 'authenticated') {
             fetchDashboardData();
         }
@@ -55,8 +61,7 @@ export default function DashboardHome() {
         }
     };
 
-    // Layout handles loading/auth states now, so we just render content or a local loading state for data
-    if (loading && status === 'authenticated') {
+    if (status === 'loading' || loading) {
         return (
             <div className="flex items-center justify-center min-h-[60vh]">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-stone-400"></div>
@@ -67,20 +72,9 @@ export default function DashboardHome() {
     return (
         <div className="space-y-8">
             {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h1 className="text-2xl font-black text-brand-700 tracking-tight uppercase">Dashboard</h1>
-                    <p className="text-brand-900/60 text-sm mt-1">Bem-vindo, <span className="text-brand-900 font-bold">{session?.user?.name || session?.user?.email}</span>. Aqui está o resumo operacional.</p>
-                </div>
-                {session?.user?.role === 'ADMIN' && (
-                    <Link
-                        href="/dashboard/users"
-                        className="flex items-center gap-2 bg-brand-700 hover:bg-brand-800 text-white px-4 py-2.5 rounded-xl transition-all shadow-sm shadow-brand-200 text-xs font-bold uppercase tracking-wide"
-                    >
-                        <Users size={16} strokeWidth={2} />
-                        Gerenciar Usuários
-                    </Link>
-                )}
+            <div>
+                <h1 className="text-2xl font-black text-brand-700 tracking-tight uppercase">Dashboard</h1>
+                <p className="text-brand-900/60 text-sm mt-1">Bem-vindo, <span className="text-brand-900 font-bold">{session?.user?.name || session?.user?.email}</span>. Aqui está o resumo operacional.</p>
             </div>
 
             {/* Stats Cards - Refined and Subtle */}

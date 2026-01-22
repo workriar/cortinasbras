@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Phone, User, MessageSquare, Ruler, Loader2, MapPin, Camera, ArrowRight, ArrowLeft, CheckCircle } from "lucide-react";
+import { Send, Phone, User, MessageSquare, Ruler, Loader2, MapPin, Camera, ArrowRight, ArrowLeft } from "lucide-react";
 import axios from "axios";
 
 const formSchema = z.object({
@@ -16,10 +16,6 @@ const formSchema = z.object({
     altura_parede: z.string().optional(),
     tecido: z.string().optional(),
     instalacao: z.string().optional(),
-    tipo_cortina: z.string().optional(),
-    espaco_cortina: z.string().optional(),
-    translucidez: z.string().optional(),
-    forro: z.string().optional(),
     observacoes: z.string().optional(),
 });
 
@@ -28,8 +24,6 @@ type FormData = z.infer<typeof formSchema>;
 export default function ContactForm() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
-    const [showWhatsAppModal, setShowWhatsAppModal] = useState(false);
-    const [whatsappUrl, setWhatsappUrl] = useState("");
     const [currentStep, setCurrentStep] = useState(1);
 
     const {
@@ -58,49 +52,25 @@ export default function ContactForm() {
 
     const onSubmit = async (data: FormData) => {
         setIsSubmitting(true);
-        console.log('📝 Enviando formulário:', data);
-
         try {
             const response = await axios.post('/api/leads', data);
-            console.log('✅ Resposta da API:', response.data);
 
-            if (response.data?.status === 'success') {
-                // Disparar evento de conversão do Google Ads
-                if (typeof window !== 'undefined' && (window as any).gtagConversionLeads) {
-                    console.log('📊 Disparando conversão Google Ads');
-                    (window as any).gtagConversionLeads();
-                }
-
+            if (response.data?.status === 'success' && response.data.whatsapp_url) {
                 setShowSuccess(true);
                 reset();
                 setCurrentStep(1);
-
-                // Verificar se temos URL do WhatsApp
-                if (response.data.whatsapp_url) {
-                    setWhatsappUrl(response.data.whatsapp_url);
-                    setShowWhatsAppModal(true);
-                } else {
-                    console.warn('⚠️ URL do WhatsApp não foi retornada');
-                    alert('Orçamento enviado com sucesso! Em breve entraremos em contato.');
-                    setTimeout(() => {
-                        setShowSuccess(false);
-                    }, 2000);
-                }
+                // Redirect to WhatsApp after alert
+                setTimeout(() => {
+                    window.open(response.data.whatsapp_url, '_blank');
+                    setShowSuccess(false);
+                }, 2000);
             } else {
-                console.error('❌ Resposta de erro:', response.data);
                 const msg = response.data?.message || 'Ocorreu um erro ao processar seu pedido. Por favor, tente novamente.';
                 alert(msg);
             }
-        } catch (error: any) {
-            console.error('❌ Erro ao enviar formulário:', error);
-            console.error('Detalhes do erro:', {
-                message: error?.message,
-                response: error?.response?.data,
-                status: error?.response?.status
-            });
-
-            const msg = error?.response?.data?.message || error?.message || 'Houve um erro ao enviar sua solicitação. Por favor, tente novamente.';
-            alert(msg);
+        } catch (error) {
+            console.error('Erro ao enviar formulário', error);
+            alert('Houve um erro ao enviar sua solicitação. Por favor, tente novamente.');
         } finally {
             setIsSubmitting(false);
         }
@@ -108,61 +78,8 @@ export default function ContactForm() {
 
     const whatsappPhotoLink = `https://wa.me/5511992891070?text=${encodeURIComponent('Olá! Gostaria de enviar uma foto do ambiente para orçamento de cortinas.')}`;
 
-    const handleOpenWhatsapp = () => {
-        if (whatsappUrl) {
-            window.open(whatsappUrl, '_blank');
-            setShowWhatsAppModal(false);
-            setShowSuccess(false);
-        }
-    };
-
     return (
-        <section id="contato" className="py-24 bg-white relative">
-            {/* WhatsApp Confirmation Modal */}
-            <AnimatePresence>
-                {showWhatsAppModal && (
-                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-                            onClick={() => setShowWhatsAppModal(false)}
-                        />
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="relative bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl text-center"
-                        >
-                            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-green-600">
-                                <CheckCircle size={40} />
-                            </div>
-
-                            <h3 className="text-2xl font-bold text-gray-800 mb-4">Orçamento Enviado!</h3>
-                            <p className="text-gray-600 mb-8 leading-relaxed">
-                                Recebemos seus dados com sucesso. Para agilizar seu atendimento, clique abaixo para enviar a mensagem pré-formatada em nosso WhatsApp.
-                            </p>
-
-                            <button
-                                onClick={handleOpenWhatsapp}
-                                className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-green-200 hover:-translate-y-1"
-                            >
-                                <MessageSquare size={24} />
-                                Abrir WhatsApp Agora
-                            </button>
-
-                            <button
-                                onClick={() => setShowWhatsAppModal(false)}
-                                className="mt-4 text-sm text-gray-400 hover:text-gray-600 underline"
-                            >
-                                Fechar e voltar ao site
-                            </button>
-                        </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
-
+        <section id="contato" className="py-24 bg-white">
             <div className="container mx-auto px-6">
                 <div className="grid lg:grid-cols-2 gap-16">
                     <motion.div
@@ -363,63 +280,6 @@ export default function ContactForm() {
                                                         <option value="Voil">Voil (Leve e transparente)</option>
                                                         <option value="Veludo">Veludo (Sofisticação clássica)</option>
                                                     </select>
-                                                </div>
-
-                                                <div className="grid md:grid-cols-2 gap-6">
-                                                    <div className="space-y-2">
-                                                        <label className="text-sm font-bold text-brand-700">Modelo (Prega)</label>
-                                                        <select
-                                                            {...register("tipo_cortina")}
-                                                            className="w-full bg-white px-4 py-3 rounded-xl border-2 border-brand-100 focus:border-brand-500 outline-none transition-all appearance-none"
-                                                        >
-                                                            <option value="">Selecione...</option>
-                                                            <option value="Wave (Ondas Perfeitas)">Wave (Ondas Perfeitas)</option>
-                                                            <option value="Prega Macho">Prega Macho</option>
-                                                            <option value="Prega Americana">Prega Americana</option>
-                                                            <option value="Ilhós">Ilhós</option>
-                                                        </select>
-                                                    </div>
-
-                                                    <div className="space-y-2">
-                                                        <label className="text-sm font-bold text-brand-700">Onde será instalado?</label>
-                                                        <select
-                                                            {...register("espaco_cortina")}
-                                                            className="w-full bg-white px-4 py-3 rounded-xl border-2 border-brand-100 focus:border-brand-500 outline-none transition-all appearance-none"
-                                                        >
-                                                            <option value="">Selecione...</option>
-                                                            <option value="Trilho Suíço (Teto/Gesso)">Trilho Suíço (Teto/Gesso)</option>
-                                                            <option value="Varão">Varão (Parede)</option>
-                                                            <option value="Cortineiro">Dentro de Cortineiro</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div className="grid md:grid-cols-2 gap-6">
-                                                    <div className="space-y-2">
-                                                        <label className="text-sm font-bold text-brand-700">Luminosidade (Forro)</label>
-                                                        <select
-                                                            {...register("translucidez")}
-                                                            className="w-full bg-white px-4 py-3 rounded-xl border-2 border-brand-100 focus:border-brand-500 outline-none transition-all appearance-none"
-                                                        >
-                                                            <option value="">Selecione...</option>
-                                                            <option value="Sem Forro (Translúcido)">Sem Forro (Translúcido)</option>
-                                                            <option value="Forro Microfibra">Forro Microfibra (Filtrada)</option>
-                                                            <option value="Blackout 70%">Blackout 70% (Veda Luz)</option>
-                                                            <option value="Blackout 100%">Blackout 100% (Total)</option>
-                                                        </select>
-                                                    </div>
-
-                                                    <div className="space-y-2">
-                                                        <label className="text-sm font-bold text-brand-700">Precisa de Instalação?</label>
-                                                        <select
-                                                            {...register("instalacao")}
-                                                            className="w-full bg-white px-4 py-3 rounded-xl border-2 border-brand-100 focus:border-brand-500 outline-none transition-all appearance-none"
-                                                        >
-                                                            <option value="">Selecione...</option>
-                                                            <option value="Sim, quero instalação">Sim, quero instalação</option>
-                                                            <option value="Não, apenas entrega">Não, apenas entrega</option>
-                                                        </select>
-                                                    </div>
                                                 </div>
 
                                                 <div className="space-y-2">

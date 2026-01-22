@@ -7,15 +7,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, MessageCircle } from "lucide-react";
 
 const slides = [
-    "/hero-bg-1.jpg",
-    "/hero-bg-2.jpg",
-    "/hero-bg-3.jpg",
+    "/static/hero-bg-1.jpg",
+    "/static/hero-bg-2.jpg",
+    "/static/hero-bg-3.jpg",
 ];
 
 const promos = [
-    "/promo2.jpg",
-    "/promo1.jpg",
-    "/promo3.jpg",
+    "/static/promo2.jpg",
+    "/static/promo1.jpg",
+    "/static/promo3.jpg",
 ];
 
 export default function Hero() {

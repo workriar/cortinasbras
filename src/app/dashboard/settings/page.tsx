@@ -1,17 +1,20 @@
 'use client';
+import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import AdminGuard from '@/components/AdminGuard';
 
-function SettingsPageContent() {
+export default function SettingsPage() {
+    const { data: session, status } = useSession();
     const router = useRouter();
     const [activeTab, setActiveTab] = useState('profile');
     const [loading, setLoading] = useState(false);
     const [msg, setMsg] = useState('');
 
-    // Mock session
-    const session = { user: { name: 'Admin', email: 'admin@cortinasbras.com.br' } };
-    const status = 'authenticated';
+    useEffect(() => {
+        if (status === 'unauthenticated') {
+            router.push('/login');
+        }
+    }, [status, router]);
 
     const handleImportLeads = async () => {
         if (!confirm('Deseja atualizar e corrigir a base de dados antiga?')) return;
@@ -35,6 +38,14 @@ function SettingsPageContent() {
             setLoading(false);
         }
     };
+
+    if (status === 'loading') {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+            </div>
+        );
+    }
 
     const tabs = [
         { id: 'profile', name: 'Perfil', icon: '👤' },
@@ -261,13 +272,5 @@ function SettingsPageContent() {
                 </div>
             </div>
         </div>
-    );
-}
-
-export default function SettingsPage() {
-    return (
-        <AdminGuard>
-            <SettingsPageContent />
-        </AdminGuard>
     );
 }
