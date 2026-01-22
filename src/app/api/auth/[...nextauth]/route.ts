@@ -90,7 +90,7 @@ export const authOptions = {
         },
     },
     pages: {
-        // signIn: "/login",
+        signIn: "/admin/login",
     },
     secret: process.env.NEXTAUTH_SECRET,
 };

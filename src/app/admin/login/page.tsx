@@ -2,14 +2,14 @@
 
 import { useState, FormEvent, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { motion } from "framer-motion";
-import { Lock, User, LogIn, AlertCircle } from "lucide-react";
-import axios from "axios";
+import { Lock, Mail, LogIn, AlertCircle } from "lucide-react";
 
 function LoginForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
@@ -20,19 +20,22 @@ function LoginForm() {
         setLoading(true);
 
         try {
-            const response = await axios.post("/api/admin/auth/login", {
-                username,
+            const result = await signIn("credentials", {
+                email,
                 password,
+                redirect: false,
             });
 
-            if (response.data.success) {
+            if (result?.error) {
+                setError("Credenciais inválidas. Verifique seu email e senha.");
+            } else if (result?.ok) {
                 // Redirecionar para a página solicitada ou dashboard
                 const redirect = searchParams?.get("redirect") || "/dashboard/crm";
                 router.push(redirect);
                 router.refresh();
             }
         } catch (err: any) {
-            setError(err.response?.data?.message || "Erro ao fazer login");
+            setError("Erro ao fazer login. Tente novamente.");
         } finally {
             setLoading(false);
         }
@@ -82,18 +85,19 @@ function LoginForm() {
                             </motion.div>
                         )}
 
-                        {/* Username */}
+                        {/* Email */}
                         <div className="space-y-2">
                             <label className="text-sm font-bold text-brand-700 flex items-center gap-2">
-                                <User size={16} />
-                                Usuário
+                                <Mail size={16} />
+                                E-mail
                             </label>
                             <input
-                                type="text"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                placeholder="Digite seu usuário"
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="Digite seu e-mail"
                                 required
+                                autoComplete="email"
                                 className="w-full bg-brand-50 px-4 py-3 rounded-xl border-2 border-brand-100 focus:border-brand-500 outline-none transition-all"
                             />
                         </div>
@@ -110,6 +114,7 @@ function LoginForm() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Digite sua senha"
                                 required
+                                autoComplete="current-password"
                                 className="w-full bg-brand-50 px-4 py-3 rounded-xl border-2 border-brand-100 focus:border-brand-500 outline-none transition-all"
                             />
                         </div>
