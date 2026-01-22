@@ -28,11 +28,13 @@ COPY package*.json ./
 
 # Instalar dependências
 FROM base AS deps
+WORKDIR /app
 COPY prisma ./prisma
 RUN npm install
 
 # Builder
 FROM base AS builder
+WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
