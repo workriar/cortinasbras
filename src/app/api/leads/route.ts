@@ -46,56 +46,69 @@ export async function POST(req: Request) {
 
         console.log(`Lead #${lead.id} salvo`);
 
-        // 2. Gerar PDF e resto do fluxo...
-        console.log("Gerando PDF...");
 
-        const leadForPdf = {
-            id: lead.id,
-            nome: lead.name,
-            telefone: lead.phone,
-            cidade_bairro: lead.city,
-            largura_parede: lead.width,
-            altura_parede: lead.height,
-            tecido: lead.fabric,
-            instalacao: lead.installation,
-            observacoes: lead.notes,
-            ...data
-        };
+        // 2. Gerar PDF e resto do fluxo (Tratamento de erro robusto)
+        let pdfBuffer: Buffer | null = null;
+        let pdfUrl = "";
 
-        const pdfBuffer = await generateOrcamentoPdf(leadForPdf);
-        console.log("PDF Gerado");
-
-        // 3. Enviar E-mail (Async)
-        try {
-            console.log("Enviando e-mail...");
-            await sendEmailWithPdf(leadForPdf, pdfBuffer);
-            console.log("E-mail enviado");
-        } catch (mailError) {
-            console.error("Erro ao enviar e-mail:", mailError);
-        }
-
-        // 4. Gerar Link do WhatsApp
+        // Gerar Link do WhatsApp SEMPRE (Prioridade 1)
         const originHeader = req.headers.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || "https://cortinasbras.com.br";
         const siteUrl = originHeader.replace(/\/$/, "");
-        const pdfUrl = `${siteUrl}/api/leads/${lead.id}/pdf`;
+        pdfUrl = `${siteUrl}/api/leads/${lead.id}/pdf`;
 
         const message = `👋 Olá! Acabei de solicitar um orçamento no site.\n\n📋 *Resumo do Pedido*\n*Cliente:* ${lead.name}\n*Região:* ${lead.city}\n\n📐 *Medidas Aproximadas*\n*Largura:* ${lead.width ? lead.width + 'm' : 'A definir'}\n*Altura:* ${lead.height ? lead.height + 'm' : 'A definir'}\n*Tecido:* ${lead.fabric || 'A definir'}\n\n📄 *Baixar Orçamento (PDF)*\n${pdfUrl}\n\nGostaria de saber os próximos passos!`;
         const encodedMessage = encodeURIComponent(message);
         const waUrl = `https://wa.me/5511992891070?text=${encodedMessage}`;
 
+        try {
+            console.log("Gerando PDF...");
+            const leadForPdf = {
+                id: lead.id,
+                nome: lead.name,
+                telefone: lead.phone,
+                cidade_bairro: lead.city,
+                largura_parede: lead.width,
+                altura_parede: lead.height,
+                tecido: lead.fabric,
+                instalacao: lead.installation,
+                observacoes: lead.notes,
+                ...data
+            };
+
+            pdfBuffer = await generateOrcamentoPdf(leadForPdf);
+            console.log("PDF Gerado");
+
+            // 3. Enviar E-mail (Somente se PDF gerou)
+            if (pdfBuffer) {
+                try {
+                    console.log("Enviando e-mail...");
+                    await sendEmailWithPdf(leadForPdf, pdfBuffer);
+                    console.log("E-mail enviado com sucesso");
+                } catch (mailError: any) {
+                    console.error("ERRO [EMAIL]:", mailError.message);
+                    // Não lança erro para não bloquear retorno
+                }
+            }
+
+        } catch (pdfError: any) {
+            console.error("ERRO [PDF]:", pdfError.message);
+            // PDF falhou, mas URL do PDF ainda pode ser acessada dps se corrigir
+        }
+
+        // Retorna sucesso SEMPRE que salvar no banco
         return NextResponse.json({
             status: "success",
             lead_id: lead.id,
             whatsapp_url: waUrl,
+            message: "Lead salvo com sucesso. (Email/PDF processado em segundo plano)"
         });
 
     } catch (error: any) {
-        console.error("EXCEÇÃO NA API DE LEADS:", error);
+        console.error("EXCEÇÃO FATAL NA API DE LEADS (PRISMA):", error);
         return NextResponse.json({
             status: "error",
-            message: error.message,
-            name: error.name,
-            stack: error.stack
+            message: "Erro ao salvar dados no sistema. Tente contato direto.",
+            error_details: error.message
         }, { status: 500 });
     }
 }
