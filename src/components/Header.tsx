@@ -26,17 +26,17 @@ export default function Header() {
     ];
 
     return (
-        <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'py-1 bg-brand-900/95 shadow-2xl backdrop-blur-xl' : 'py-1.5 bg-brand-900/80 backdrop-blur-md'}`}>
+        <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'py-1 bg-brand-900/95 shadow-2xl backdrop-blur-xl' : 'py-2 bg-brand-900/80 backdrop-blur-md'}`}>
             <div className="container mx-auto px-6 flex items-center justify-between h-full">
                 {/* Logo - Smooth Resize */}
                 <Link
                     href="/"
-                    className={`relative flex items-center transition-all duration-300 origin-left ${isScrolled ? 'scale-75' : 'scale-100'}`}
+                    className={`relative flex items-center transition-all duration-300 origin-left ${isScrolled ? 'scale-90' : 'scale-100'}`}
                 >
                     <Image
                         src="/static/logo.png"
                         alt="Cortinas Brás - Cortinas sob medida em São Paulo"
-                        width={90}
+                        width={80}
                         height={20}
                         className="h-auto w-auto object-contain"
                         priority

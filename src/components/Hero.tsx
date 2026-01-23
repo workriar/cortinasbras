@@ -98,7 +98,7 @@ export default function Hero() {
                 </div>
             </div>
 
-            <div className="container mx-auto px-6 pt-24 pb-12 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
+            <div className="container mx-auto px-6 pt-32 pb-12 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
                 {/* Text Content */}
                 <motion.div
                     initial={{ opacity: 0, x: -50 }}

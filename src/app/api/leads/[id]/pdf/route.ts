@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getDb } from "@/services/db";
+import { prisma } from "@/lib/prisma";
 import { generateOrcamentoPdf } from "@/services/pdf";
 
 export async function GET(
@@ -8,14 +8,28 @@ export async function GET(
 ) {
     try {
         const { id } = await params;
-        const db = await getDb();
-        const lead = await db.get("SELECT * FROM leads WHERE id = ?", [id]);
+        const lead = await prisma.lead.findUnique({
+            where: { id: Number(id) }
+        });
 
         if (!lead) {
             return new NextResponse("Orçamento não encontrado", { status: 404 });
         }
 
-        const pdfBuffer = await generateOrcamentoPdf(lead);
+        // Mapear campos do Prisma para o formato esperado pelo gerador de PDF (legado)
+        const leadForPdf = {
+            id: lead.id,
+            nome: lead.name,
+            telefone: lead.phone,
+            cidade_bairro: lead.city,
+            largura_parede: lead.width,
+            altura_parede: lead.height,
+            tecido: lead.fabric,
+            instalacao: lead.installation,
+            observacoes: lead.notes,
+        };
+
+        const pdfBuffer = await generateOrcamentoPdf(leadForPdf);
 
         return new NextResponse(new Uint8Array(pdfBuffer), {
             headers: {
