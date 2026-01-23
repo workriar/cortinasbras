@@ -45,22 +45,25 @@ export default function Gallery() {
                     {images.map((img, i) => (
                         <motion.div
                             key={i}
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ delay: i * 0.1 }}
-                            className={`relative overflow-hidden rounded-3xl group cursor-pointer ${img.span}`}
+                            transition={{ delay: i * 0.15, duration: 0.6 }}
+                            className={`relative overflow-hidden rounded-3xl group cursor-pointer ${img.span} shadow-lg hover:shadow-2xl hover:shadow-brand-500/20 transition-all duration-500`}
                         >
                             <Image
                                 src={img.src}
                                 alt={img.alt}
                                 fill
-                                className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                className="object-cover transition-transform duration-1000 group-hover:scale-110"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-8">
-                                <div className="text-white">
-                                    <p className="text-sm font-medium uppercase tracking-wider mb-1">Projeto</p>
-                                    <p className="text-xl font-bold">{img.alt}</p>
+                            {/* Gold Border Reveal */}
+                            <div className="absolute inset-0 border-2 border-brand-300/0 group-hover:border-brand-300/100 transition-colors duration-500 rounded-3xl z-20 pointer-events-none" />
+
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-8">
+                                <div className="text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand-300 mb-2">Projeto Exclusivo</p>
+                                    <p className="text-2xl font-serif italic">{img.alt}</p>
                                 </div>
                             </div>
                         </motion.div>

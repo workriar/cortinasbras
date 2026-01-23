@@ -21,6 +21,7 @@
 
   --color-bg-main: var(--color-brand-50);
 
+  --font-serif: var(--font-playfair), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
   @keyframes luxury-glow {
@@ -61,11 +62,35 @@
   h2,
   h3,
   h4 {
-    @apply tracking-tight font-black text-brand-700;
+    @apply tracking-tight font-black text-brand-700 font-serif;
   }
 
   p {
     @apply leading-relaxed text-brand-900/80;
+  }
+}
+
+@layer utilities {
+  .text-gradient-gold {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-300 via-brand-500 to-brand-700;
+  }
+
+  .bg-texture-luxury {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4a93e' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .text-shimmer {
+    background: linear-gradient(90deg, var(--color-brand-500) 0%, var(--color-brand-100) 50%, var(--color-brand-500) 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 2s linear infinite;
+  }
+
+  @keyframes shimmer {
+    to {
+      background-position: 200% center;
+    }
   }
 }
 
@@ -134,21 +159,5 @@
 
   .badge-won {
     @apply px-3 py-1 bg-emerald-50 text-emerald-950 text-[10px] font-black uppercase tracking-widest rounded border-2 border-emerald-100;
-  }
-}
-
-@layer utilities {
-  .text-shimmer {
-    background: linear-gradient(90deg, var(--color-brand-500) 0%, var(--color-brand-100) 50%, var(--color-brand-500) 100%);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: shimmer 2s linear infinite;
-  }
-
-  @keyframes shimmer {
-    to {
-      background-position: 200% center;
-    }
   }
 }

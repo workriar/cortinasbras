@@ -2,9 +2,10 @@ import './globals.css';
 import Script from 'next/script';
 import { Providers } from '@/components/Providers';
 import { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
+import { Inter, Playfair_Display } from 'next/font/google';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' });
 
 export const metadata: Metadata = {
   title: 'Cortinas Brás - Sistema de Gestão',
@@ -32,7 +33,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className={inter.variable}>
+    <html lang="pt-BR" className={`${inter.variable} ${playfair.variable}`}>
       <body className="bg-stone-50 min-h-screen font-sans selection:bg-brand-500/30">
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-17672945118"

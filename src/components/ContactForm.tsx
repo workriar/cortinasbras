@@ -205,8 +205,7 @@ export default function ContactForm() {
                                                     <input
                                                         {...register("nome")}
                                                         placeholder="Ex: Maria Silva"
-                                                        className={`w-full bg-white px-4 py-3 rounded-xl border-2 focus:border-brand-500 outline-none transition-all ${errors.nome ? "border-red-400" : "border-brand-100"
-                                                            }`}
+                                                        className={`input-primary ${errors.nome ? "!border-red-400" : ""}`}
                                                     />
                                                     {errors.nome && <p className="text-red-500 text-xs">{errors.nome.message}</p>}
                                                 </div>
@@ -218,8 +217,7 @@ export default function ContactForm() {
                                                     <input
                                                         {...register("telefone")}
                                                         placeholder="(11) 99999-9999"
-                                                        className={`w-full bg-white px-4 py-3 rounded-xl border-2 focus:border-brand-500 outline-none transition-all ${errors.telefone ? "border-red-400" : "border-brand-100"
-                                                            }`}
+                                                        className={`input-primary ${errors.telefone ? "!border-red-400" : ""}`}
                                                     />
                                                     {errors.telefone && <p className="text-red-500 text-xs">{errors.telefone.message}</p>}
                                                 </div>
@@ -231,8 +229,7 @@ export default function ContactForm() {
                                                     <input
                                                         {...register("cidade_bairro")}
                                                         placeholder="Ex: Brás, São Paulo"
-                                                        className={`w-full bg-white px-4 py-3 rounded-xl border-2 focus:border-brand-500 outline-none transition-all ${errors.cidade_bairro ? "border-red-400" : "border-brand-100"
-                                                            }`}
+                                                        className={`input-primary ${errors.cidade_bairro ? "!border-red-400" : ""}`}
                                                     />
                                                     {errors.cidade_bairro && <p className="text-red-500 text-xs">{errors.cidade_bairro.message}</p>}
                                                 </div>
@@ -262,7 +259,7 @@ export default function ContactForm() {
                                                         <input
                                                             {...register("largura_parede")}
                                                             placeholder="Ex: 3,50"
-                                                            className="w-full bg-white px-4 py-3 rounded-xl border-2 border-brand-100 focus:border-brand-500 outline-none transition-all"
+                                                            className="input-primary"
                                                         />
                                                     </div>
                                                     <div className="space-y-2">
@@ -272,7 +269,7 @@ export default function ContactForm() {
                                                         <input
                                                             {...register("altura_parede")}
                                                             placeholder="Ex: 2,75"
-                                                            className="w-full bg-white px-4 py-3 rounded-xl border-2 border-brand-100 focus:border-brand-500 outline-none transition-all"
+                                                            className="input-primary"
                                                         />
                                                     </div>
                                                 </div>
@@ -285,7 +282,7 @@ export default function ContactForm() {
                                                     <label className="text-sm font-bold text-brand-700">Tecido Desejado</label>
                                                     <select
                                                         {...register("tecido")}
-                                                        className="w-full bg-white px-4 py-3 rounded-xl border-2 border-brand-100 focus:border-brand-500 outline-none transition-all appearance-none"
+                                                        className="input-primary appearance-none"
                                                     >
                                                         <option value="">Não tenho certeza (me ajude a escolher)</option>
                                                         <option value="Gaze de Linho">Gaze de Linho (Mais pedido)</option>
@@ -301,7 +298,7 @@ export default function ContactForm() {
                                                         {...register("observacoes")}
                                                         rows={3}
                                                         placeholder="Conte-nos um pouco sobre seu projeto..."
-                                                        className="w-full bg-white px-4 py-3 rounded-xl border-2 border-brand-100 focus:border-brand-500 outline-none transition-all resize-none"
+                                                        className="input-primary resize-none h-auto"
                                                     />
                                                 </div>
 
