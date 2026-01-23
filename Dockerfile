@@ -61,7 +61,7 @@ RUN useradd --system --uid 1001 --gid nodejs nextjs
 # Criar diretório de dados
 RUN mkdir -p /app/data && chown -R nextjs:nodejs /app/data
 
-COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
