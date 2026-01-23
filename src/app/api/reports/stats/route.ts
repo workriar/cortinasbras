@@ -1,29 +1,49 @@
 import { NextResponse } from 'next/server';
-import { getDb } from '@/services/db';
+import { prisma } from '@/lib/prisma';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
     try {
-        const db = await getDb();
-        const statsQuery = `
-            SELECT 
-                COUNT(*) as total,
-                SUM(CASE WHEN status = 'novo' THEN 1 ELSE 0 END) as new,
-                SUM(CASE WHEN status = 'em_contato' OR status = 'CONTACTED' THEN 1 ELSE 0 END) as contacted,
-                SUM(CASE WHEN status = 'proposta' OR status = 'PROPOSAL' THEN 1 ELSE 0 END) as proposal,
-                SUM(CASE WHEN status = 'fechado' OR status = 'CLOSED_WON' THEN 1 ELSE 0 END) as won,
-                SUM(CASE WHEN status = 'perdido' OR status = 'CLOSED_LOST' THEN 1 ELSE 0 END) as lost
-            FROM leads
-        `;
+        const stats = await prisma.lead.groupBy({
+            by: ['status'],
+            _count: {
+                _all: true,
+            },
+        });
 
-        const row = await db.get(statsQuery);
+        const total = await prisma.lead.count();
+
+        let newLeads = 0;
+        let contacted = 0;
+        let proposal = 0;
+        let won = 0;
+        let lost = 0;
+
+        stats.forEach((group) => {
+            const status = group.status?.toUpperCase() || '';
+            const count = group._count._all;
+
+            if (status === 'NOVO' || status === 'NEW' || status === '1') {
+                newLeads += count;
+            } else if (status === 'EM_CONTATO' || status === 'CONTACTED') {
+                contacted += count;
+            } else if (status === 'PROPOSTA' || status === 'PROPOSAL') {
+                proposal += count;
+            } else if (status === 'FECHADO' || status === 'CLOSED_WON') {
+                won += count;
+            } else if (status === 'PERDIDO' || status === 'CLOSED_LOST') {
+                lost += count;
+            }
+        });
 
         return NextResponse.json({
-            total: parseInt(row?.total || '0'),
-            new: parseInt(row?.new || '0'),
-            contacted: parseInt(row.contacted || '0'),
-            proposal: parseInt(row.proposal || '0'),
-            won: parseInt(row.won || '0'),
-            lost: parseInt(row.lost || '0'),
+            total,
+            new: newLeads,
+            contacted,
+            proposal,
+            won,
+            lost,
         });
     } catch (error) {
         console.error('Erro ao buscar estatísticas:', error);
