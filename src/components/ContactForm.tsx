@@ -53,25 +53,39 @@ export default function ContactForm() {
 
     const onSubmit = async (data: FormData) => {
         setIsSubmitting(true);
+
+        // Generate WhatsApp Link immediately
+        const message = `*Novo Orçamento (Site)*
+--------------------------------
+*Nome:* ${data.nome}
+*Telefone:* ${data.telefone}
+*Cidade:* ${data.cidade_bairro}
+--------------------------------
+*Medidas:* ${data.largura_parede || '?'} x ${data.altura_parede || '?'}
+*Tecido:* ${data.tecido || 'A definir'}
+*Obs:* ${data.observacoes || 'Sem observações'}`;
+
+        const fallbackUrl = `https://wa.me/5511992891070?text=${encodeURIComponent(message)}`;
+        setWhatsappUrl(fallbackUrl);
+
         try {
+            // Try to save to database
             const response = await axios.post('/api/leads', data);
 
-            if (response.data?.status === 'success' && response.data.whatsapp_url) {
+            if (response.data?.whatsapp_url) {
                 setWhatsappUrl(response.data.whatsapp_url);
-                setShowSuccess(true);
-                reset();
-                setCurrentStep(1);
-                // Optional: Auto-open if desired, but button is safer
-                // window.open(response.data.whatsapp_url, '_blank');
-            } else {
-                const msg = response.data?.message || 'Ocorreu um erro ao processar seu pedido. Por favor, tente novamente.';
-                alert(msg);
             }
         } catch (error) {
-            console.error('Erro ao enviar formulário', error);
-            alert('Houve um erro ao enviar sua solicitação. Por favor, tente novamente.');
+            console.error('Erro ao salvar lead (fallback ativado):', error);
+            // Non-blocking error: User still moves to WhatsApp
         } finally {
             setIsSubmitting(false);
+            setShowSuccess(true);
+            setCurrentStep(1);
+            reset();
+
+            // Auto-open WhatsApp as requested
+            window.open(fallbackUrl, '_blank');
         }
     };
 
