@@ -40,6 +40,10 @@
 
 @layer base {
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   html,
   body {
     overscroll-behavior-y: none;
