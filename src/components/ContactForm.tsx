@@ -24,6 +24,7 @@ type FormData = z.infer<typeof formSchema>;
 export default function ContactForm() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
+    const [whatsappUrl, setWhatsappUrl] = useState<string | null>(null);
     const [currentStep, setCurrentStep] = useState(1);
 
     const {
@@ -56,14 +57,12 @@ export default function ContactForm() {
             const response = await axios.post('/api/leads', data);
 
             if (response.data?.status === 'success' && response.data.whatsapp_url) {
+                setWhatsappUrl(response.data.whatsapp_url);
                 setShowSuccess(true);
                 reset();
                 setCurrentStep(1);
-                // Redirect to WhatsApp after alert
-                setTimeout(() => {
-                    window.open(response.data.whatsapp_url, '_blank');
-                    setShowSuccess(false);
-                }, 2000);
+                // Optional: Auto-open if desired, but button is safer
+                // window.open(response.data.whatsapp_url, '_blank');
             } else {
                 const msg = response.data?.message || 'Ocorreu um erro ao processar seu pedido. Por favor, tente novamente.';
                 alert(msg);
@@ -146,11 +145,25 @@ export default function ContactForm() {
                     >
                         {showSuccess ? (
                             <div className="h-full flex flex-col items-center justify-center text-center space-y-4 py-20">
-                                <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center text-white scale-110 animate-bounce">
+                                <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center text-white scale-110 mb-4">
                                     <Send size={40} />
                                 </div>
-                                <h3 className="text-2xl font-bold text-brand-700">Orçamento Recebido!</h3>
-                                <p className="text-brand-700/60">Abrindo seu WhatsApp para finalizar o atendimento...</p>
+                                <h3 className="text-2xl font-bold text-brand-700">Orçamento Confirmado!</h3>
+                                <p className="text-brand-700/60 max-w-xs mx-auto mb-6">Estamos prontos para te atender. Clique abaixo para enviar as informações pelo WhatsApp:</p>
+
+                                {whatsappUrl && (
+                                    <a
+                                        href={whatsappUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="btn-whatsapp py-4 px-8 text-sm flex items-center gap-3 animate-pulse hover:animate-none scale-110"
+                                    >
+                                        <MessageSquare size={20} />
+                                        Abrir WhatsApp Agora
+                                    </a>
+                                )}
+
+                                <p className="text-xs text-brand-700/40 mt-4">Ou aguarde, entraremos em contato em breve.</p>
                             </div>
                         ) : (
                             <>
@@ -324,7 +337,7 @@ export default function ContactForm() {
                         )}
                     </motion.div>
                 </div>
-            </div>
-        </section>
+            </div >
+        </section >
     );
 }

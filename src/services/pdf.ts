@@ -1,5 +1,7 @@
 // @ts-ignore
 import puppeteer from "puppeteer";
+import fs from "fs";
+import path from "path";
 
 export async function generateOrcamentoPdf(lead: any): Promise<Buffer> {
     const html = `
@@ -101,7 +103,7 @@ export async function generateOrcamentoPdf(lead: any): Promise<Buffer> {
     <body>
         <div class="container">
             <div class="header">
-                <img src="https://cortinasbras.com.br/static/logo.png" class="logo-img" alt="Cortinas Brás" />
+                <img src="data:image/png;base64,${fs.readFileSync(path.join(process.cwd(), 'public/static/logo.png')).toString('base64')}" class="logo-img" alt="Cortinas Brás" />
                 <h1 class="title">Orçamento Exclusivo</h1>
                 <p class="subtitle">Proposta #${lead.id} • ${new Date().toLocaleDateString('pt-BR')}</p>
             </div>

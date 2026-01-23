@@ -70,7 +70,7 @@ export default function Sidebar() {
                             className="flex items-center gap-3 overflow-hidden whitespace-nowrap"
                         >
                             <img
-                                src="/logo.png"
+                                src="/static/logo.png"
                                 alt="Cortinas Brás"
                                 className="h-10 w-auto object-contain"
                             />
@@ -84,7 +84,7 @@ export default function Sidebar() {
                             className="mx-auto"
                         >
                             <img
-                                src="/logo.png"
+                                src="/static/logo.png"
                                 alt="CB"
                                 className="w-8 h-auto object-contain"
                             />

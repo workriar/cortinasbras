@@ -3,20 +3,18 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import heroBg1 from "../../public/static/hero-bg-1.jpg";
+import heroBg2 from "../../public/static/hero-bg-2.jpg";
+import heroBg3 from "../../public/static/hero-bg-3.jpg";
+import promo1 from "../../public/static/promo1.jpg";
+import promo2 from "../../public/static/promo2.jpg";
+import promo3 from "../../public/static/promo3.jpg";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, MessageCircle } from "lucide-react";
 
-const slides = [
-    "/static/hero-bg-1.jpg",
-    "/static/hero-bg-2.jpg",
-    "/static/hero-bg-3.jpg",
-];
+const slides = [heroBg1, heroBg2, heroBg3];
 
-const promos = [
-    "/static/promo2.jpg",
-    "/static/promo1.jpg",
-    "/static/promo3.jpg",
-];
+const promos = [promo2, promo1, promo3];
 
 export default function Hero() {
     const [loading, setLoading] = useState(false);
@@ -83,7 +81,7 @@ export default function Hero() {
                             ease: [0.43, 0.13, 0.23, 0.96]
                         }}
                         className="absolute inset-0 bg-cover bg-center"
-                        style={{ backgroundImage: `url(${slides[currentSlide]})` }}
+                        style={{ backgroundImage: `url('${slides[currentSlide].src}')` }}
                     />
                 </AnimatePresence>
                 {/* Gradient Overlay with Shimmer */}
@@ -247,7 +245,7 @@ export default function Hero() {
                                 className="relative h-full w-full"
                             >
                                 <Image
-                                    src={promos[currentPromo]}
+                                    src={promos[currentPromo].src}
                                     alt="Oferta Especial"
                                     fill
                                     className="object-cover rounded-2xl shadow-2xl"
