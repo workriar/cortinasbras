@@ -75,11 +75,11 @@ export async function POST(req: Request) {
         }
 
         // 4. Gerar Link do WhatsApp
-        const originHeader = req.headers.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+        const originHeader = req.headers.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || "https://cortinasbras.com.br";
         const siteUrl = originHeader.replace(/\/$/, "");
         const pdfUrl = `${siteUrl}/api/leads/${lead.id}/pdf`;
 
-        const message = `Olá, meu nome é ${lead.name}. Fiz um orçamento no site (ID #${lead.id}).\n\n*Localização:* ${lead.city}\n*Medidas:* ${lead.width || 'N/A'}m x ${lead.height || 'N/A'}m\n*Tecido:* ${lead.fabric}\n\n*Veja meu orçamento:* ${pdfUrl}\n\nGostaria de prosseguir com o atendimento.`;
+        const message = `👋 Olá! Acabei de solicitar um orçamento no site.\n\n📋 *Resumo do Pedido*\n*Cliente:* ${lead.name}\n*Região:* ${lead.city}\n\n📐 *Medidas Aproximadas*\n*Largura:* ${lead.width ? lead.width + 'm' : 'A definir'}\n*Altura:* ${lead.height ? lead.height + 'm' : 'A definir'}\n*Tecido:* ${lead.fabric || 'A definir'}\n\n📄 *Baixar Orçamento (PDF)*\n${pdfUrl}\n\nGostaria de saber os próximos passos!`;
         const encodedMessage = encodeURIComponent(message);
         const waUrl = `https://wa.me/5511992891070?text=${encodedMessage}`;
 
