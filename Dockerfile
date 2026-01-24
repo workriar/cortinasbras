@@ -64,8 +64,14 @@ RUN mkdir -p /app/data && chown -R nextjs:nodejs /app/data
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-# Explicitly copy prisma schema for runtime needs (if any)
+# Copy prisma and scripts
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+COPY --from=builder --chown=nextjs:nodejs /app/scripts ./scripts
+# Copy node_modules for CLI tools (optional but helpful for db push)
+COPY --from=deps --chown=nextjs:nodejs /app/node_modules ./node_modules
+
+# Fix npx/npm permissions
+ENV NPM_CONFIG_CACHE=/tmp/.npm
 
 USER nextjs
 
