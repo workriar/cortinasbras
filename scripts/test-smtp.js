@@ -1,7 +1,8 @@
 const nodemailer = require('nodemailer');
 
 // Obtém credenciais dos argumentos ou variáveis de ambiente
-const host = process.env.MAIL_SERVER || 'smtp.hostinger.com';
+// Permite passar host como 5º argumento (node script user pass port host)
+const host = process.argv[5] || process.env.MAIL_SERVER || 'smtp.hostinger.com';
 // Permite passar porta como 4º argumento (node script user pass port)
 const port = Number(process.argv[4]) || Number(process.env.MAIL_PORT) || 465;
 const user = process.env.MAIL_USERNAME || process.argv[2];
