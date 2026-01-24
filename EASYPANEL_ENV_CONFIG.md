@@ -7,8 +7,10 @@ NEXTAUTH_URL=https://cortinasbras.com.br
 NEXTAUTH_SECRET=4c78de7a94d188748cac0944853f044a0fc446d9d4e0ea36fad85acda979c3ca
 PORT=3000
 
-# Banco de Dados (Prisma/SQLite)
-DATABASE_URL=sqlite:////app/data/leads.db
+# Banco de Dados (PostgreSQL)
+# Copie a "URL de Conexão Interna" do serviço Postgres (começa com postgres://)
+DATABASE_URL=postgres://admin:SENHA@host:5432/nome_db
+
 
 # Configurações de Email (Hostinger/Cronos)
 MAIL_SERVER=mail.cronos-painel.com
