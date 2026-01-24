@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p 3001",
+    "start": "next start",
     "lint": "eslint",
     "verify": "node scripts/verify-production.js",
     "setup:chromium": "npx puppeteer browsers install chrome",
