@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { History, Award, Users } from "lucide-react";
 
@@ -48,9 +49,11 @@ export default function About() {
                     >
                         <div className="aspect-square bg-brand-500/20 rounded-full blur-3xl absolute inset-0 animate-pulse" />
                         <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl border border-white/10 group">
-                            <img
+                            <Image
                                 src="/static/hero-bg-3.jpg"
                                 alt="Equipe Cortinas Brás"
+                                width={600}
+                                height={600}
                                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                             />
                             <div className="absolute inset-0 bg-brand-500/20 mix-blend-overlay" />

@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useSidebar } from './SidebarContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -69,9 +70,11 @@ export default function Sidebar() {
                             exit={{ opacity: 0, x: -10 }}
                             className="flex items-center gap-3 overflow-hidden whitespace-nowrap"
                         >
-                            <img
+                            <Image
                                 src="/static/logo.png"
                                 alt="Cortinas Brás"
+                                width={40}
+                                height={40}
                                 className="h-10 w-auto object-contain"
                             />
                         </motion.div>
@@ -83,9 +86,11 @@ export default function Sidebar() {
                             exit={{ opacity: 0, scale: 0.8 }}
                             className="mx-auto"
                         >
-                            <img
+                            <Image
                                 src="/static/logo.png"
                                 alt="CB"
+                                width={32}
+                                height={32}
                                 className="w-8 h-auto object-contain"
                             />
                         </motion.div>

@@ -2,6 +2,7 @@
 import { useSession, signOut } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import { Search, Bell, Plus, Settings, LogOut, ChevronDown, Users as UsersIcon } from 'lucide-react';
 import Link from 'next/link';
 
@@ -36,10 +37,13 @@ export default function Navbar() {
                     <div className="mr-2 md:mr-6 shrink-0 flex items-center gap-4">
                         <Link href="/dashboard">
                             <div className="relative w-32 md:w-48 h-10 md:h-12 flex items-center">
-                                <img
+                                <Image
                                     src="/logo.png"
                                     alt="Cortinas Brás"
+                                    width={192}
+                                    height={48}
                                     className="h-full w-auto object-contain"
+                                    priority
                                 />
                             </div>
                         </Link>
