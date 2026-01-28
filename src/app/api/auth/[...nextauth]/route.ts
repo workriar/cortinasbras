@@ -19,7 +19,7 @@ if (!process.env.NEXTAUTH_SECRET) {
     console.warn('[NextAuth] NEXTAUTH_SECRET was not set. Generated a temporary secret — set NEXTAUTH_SECRET in production env for security.');
 }
 
-export const authOptions = {
+export const authOptions: any = {
     adapter: PrismaAdapter(prisma),
     providers: [
         CredentialsProvider({
