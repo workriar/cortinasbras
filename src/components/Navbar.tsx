@@ -2,7 +2,7 @@
 import { useSession, signOut } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
-import { Search, Bell, Plus, User, Settings, LogOut, ChevronDown, Users as UsersIcon } from 'lucide-react';
+import { Search, Bell, Plus, Settings, LogOut, ChevronDown, Users as UsersIcon } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Navbar() {

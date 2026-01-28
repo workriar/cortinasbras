@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Users, MessageSquare, PieChart, Settings, Plus } from 'lucide-react';
+import { LayoutDashboard, Users, PieChart, Settings, Plus } from 'lucide-react';
 
 export default function BottomNav() {
     const pathname = usePathname();

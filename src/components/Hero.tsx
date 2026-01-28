@@ -20,7 +20,6 @@ const promos = [
 
 export default function Hero() {
     const [loading, setLoading] = useState(false);
-    const router = useRouter();
 
     const handleGeneratePdf = async () => {
         setLoading(true);

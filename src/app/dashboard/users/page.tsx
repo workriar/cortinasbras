@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { Plus, Trash2, Shield, User as UserIcon, Loader2, AlertCircle } from 'lucide-react';
+import { Plus, Trash2, Shield, User as UserIcon, Loader2 } from 'lucide-react';
 
 interface User {
     id: number;
@@ -74,7 +74,7 @@ export default function UsersPage() {
                 const data = await res.json();
                 alert(data.error || 'Erro ao criar usuário');
             }
-        } catch (error) {
+        } catch (_error) {
             alert('Erro de conexão');
         } finally {
             setIsCreating(false);
@@ -93,7 +93,7 @@ export default function UsersPage() {
                 const data = await res.json();
                 alert(data.error || 'Erro ao excluir');
             }
-        } catch (error) {
+        } catch (_error) {
             alert('Erro ao excluir');
         }
     };

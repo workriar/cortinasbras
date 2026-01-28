@@ -2,7 +2,6 @@
 import Sidebar from '@/components/Sidebar';
 import Navbar from '@/components/Navbar';
 import { SidebarProvider, useSidebar } from '@/components/SidebarContext';
-
 import BottomNav from '@/components/BottomNav';
 
 function DashboardContent({ children }: { children: React.ReactNode }) {

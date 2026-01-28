@@ -2,7 +2,6 @@
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import LeadCard from '@/components/LeadCard';
 import ChartCard from '@/components/ChartCard';
 import { Users, UserPlus, PhoneCall, FileText, CheckCircle2, ArrowRight } from 'lucide-react';
 import Link from 'next/link';

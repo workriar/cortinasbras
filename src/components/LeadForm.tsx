@@ -48,7 +48,7 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
                 const data = await res.json();
                 setError(data.error || 'Erro ao processar solicitação');
             }
-        } catch (err) {
+        } catch (_err) {
             setError('Falha na comunicação com o servidor');
         } finally {
             setLoading(false);
