@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth-config';
 
 export async function DELETE(req: Request, context: any) {
     // Em versões recentes do Next.js (15+), o segundo argumento (context/params) é uma Promise.
