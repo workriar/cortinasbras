@@ -82,12 +82,16 @@ export const authOptions: NextAuthOptions = {
         async session({ session, token }) {
             if (session?.user && token?.sub) {
                 session.user.id = token.sub;
+                // @ts-expect-error - role será tipado quando o user vem do BD
+                session.user.role = token.role;
             }
             return session;
         },
         async jwt({ token, user }) {
             if (user) {
                 token.sub = user.id;
+                // @ts-expect-error - role será armazenado do user
+                token.role = user.role;
             }
             return token;
         },
