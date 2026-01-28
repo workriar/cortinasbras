@@ -1,3 +1,4 @@
+import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
@@ -18,7 +19,7 @@ if (!process.env.NEXTAUTH_SECRET) {
     console.warn('[NextAuth] NEXTAUTH_SECRET was not set. Generated a temporary secret — set NEXTAUTH_SECRET in production env for security.');
 }
 
-export const authOptions: any = {
+export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
     providers: [
         CredentialsProvider({
@@ -78,13 +79,13 @@ export const authOptions: any = {
         strategy: "jwt" as const,
     },
     callbacks: {
-        async session({ session, token }: any) {
+        async session({ session, token }) {
             if (session?.user && token?.sub) {
                 session.user.id = token.sub;
             }
             return session;
         },
-        async jwt({ token, user }: any) {
+        async jwt({ token, user }) {
             if (user) {
                 token.sub = user.id;
             }
