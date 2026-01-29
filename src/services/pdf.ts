@@ -1,4 +1,3 @@
-// @ts-expect-error - Puppeteer has incomplete type definitions
 import puppeteer from "puppeteer";
 import fs from "fs";
 import path from "path";
