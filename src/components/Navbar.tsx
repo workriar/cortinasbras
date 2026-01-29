@@ -38,7 +38,7 @@ export default function Navbar() {
                         <Link href="/dashboard">
                             <div className="relative w-32 md:w-48 h-10 md:h-12 flex items-center">
                                 <Image
-                                    src="/logo.png"
+                                    src="/static/logo.png"
                                     alt="Cortinas Brás"
                                     width={192}
                                     height={48}

@@ -44,7 +44,7 @@ export default function LoginPage() {
                         <div className="relative w-64 h-32 hover:scale-105 transition-transform duration-300">
                             <a href="/" aria-label="Voltar para o site">
                                 <img
-                                    src="/logo.png"
+                                    src="/static/logo.png"
                                     alt="Cortinas Brás - Sistema de Gestão"
                                     className="w-full h-full object-contain"
                                 />
