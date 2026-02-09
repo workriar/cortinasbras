@@ -18,6 +18,25 @@ export default function Header() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+        e.preventDefault();
+        setIsMobileMenuOpen(false);
+
+        const targetId = href.replace('#', '');
+        const targetElement = document.getElementById(targetId);
+
+        if (targetElement) {
+            const headerOffset = 80; // Altura do header fixo
+            const elementPosition = targetElement.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+        }
+    };
+
     const navLinks = [
         { name: "Início", href: "#inicio" },
         { name: "Produtos", href: "#produtos" },
@@ -49,6 +68,7 @@ export default function Header() {
                         <Link
                             key={link.name}
                             href={link.href}
+                            onClick={(e) => handleSmoothScroll(e, link.href)}
                             className="text-xs font-medium text-white/90 hover:text-brand-300 transition-colors relative group"
                         >
                             {link.name}
@@ -57,6 +77,7 @@ export default function Header() {
                     ))}
                     <Link
                         href="#contato"
+                        onClick={(e) => handleSmoothScroll(e, '#contato')}
                         className="bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white px-5 py-1.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-all hover:shadow-lg hover:shadow-brand-500/50 hover:scale-105"
                     >
                         Orçamento Grátis
@@ -88,7 +109,7 @@ export default function Header() {
                                     key={link.name}
                                     href={link.href}
                                     className="text-lg font-medium text-white/90 hover:text-brand-300 py-2 border-b border-white/5 transition-colors"
-                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    onClick={(e) => handleSmoothScroll(e, link.href)}
                                 >
                                     {link.name}
                                 </Link>
@@ -96,7 +117,7 @@ export default function Header() {
                             <Link
                                 href="#contato"
                                 className="bg-gradient-to-r from-brand-500 to-brand-600 text-white text-center py-4 rounded-xl font-bold mt-2 hover:scale-105 transition-transform"
-                                onClick={() => setIsMobileMenuOpen(false)}
+                                onClick={(e) => handleSmoothScroll(e, '#contato')}
                             >
                                 Solicitar Orçamento
                             </Link>

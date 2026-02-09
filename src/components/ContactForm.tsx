@@ -7,6 +7,7 @@ import * as z from "zod";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Phone, User, MessageSquare, Ruler, Loader2, MapPin, Camera, ArrowRight, ArrowLeft } from "lucide-react";
 import axios from "axios";
+import { trackLeadConversion } from "@/lib/gtag";
 
 const formSchema = z.object({
     nome: z.string().min(3, "Nome deve ter pelo menos 3 caracteres"),
@@ -79,6 +80,9 @@ export default function ContactForm() {
             console.error('Erro ao salvar lead (fallback ativado):', error);
             // Non-blocking error: User still moves to WhatsApp
         } finally {
+            // Track conversion in Google Ads
+            trackLeadConversion();
+
             setIsSubmitting(false);
             setShowSuccess(true);
             setCurrentStep(1);

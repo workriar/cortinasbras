@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { Save, RotateCcw, Check, MessageCircle } from 'lucide-react';
+import { trackLeadConversion } from '@/lib/gtag';
 
 interface LeadFormProps {
     lead?: any;
@@ -40,6 +41,8 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
             if (res.ok) {
                 const data = await res.json();
                 if (method === 'POST') {
+                    // Track conversion in Google Ads for new leads only
+                    trackLeadConversion();
                     setSuccessData(data); // Mostra modal de sucesso com WhatsApp
                 } else {
                     onSuccess(); // Edição apenas fecha
