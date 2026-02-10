@@ -6,9 +6,13 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
+// ... imports ...
+import { usePathname } from "next/navigation";
+
 export default function Header() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+    const pathname = usePathname();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -19,27 +23,29 @@ export default function Header() {
     }, []);
 
     const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-        e.preventDefault();
         setIsMobileMenuOpen(false);
 
-        const targetId = href.replace('#', '');
-        if (!targetId) return;
+        // Only handle smooth scroll if we are on the home page and the link is an anchor
+        if (pathname === '/' && href.startsWith('/#')) {
+            const targetId = href.replace('/#', '');
+            const targetElement = document.getElementById(targetId);
 
-        const targetElement = document.getElementById(targetId);
-
-        if (targetElement) {
-            targetElement.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
+            if (targetElement) {
+                e.preventDefault();
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
         }
+        // If not on home page, let the Link component handle the navigation to /#id
     };
 
     const navLinks = [
-        { name: "Início", href: "#inicio" },
-        { name: "Produtos", href: "#produtos" },
-        { name: "Sobre", href: "#sobre" },
-        { name: "Contato", href: "#contato" },
+        { name: "Início", href: "/#inicio" },
+        { name: "Produtos", href: "/#produtos" },
+        { name: "Sobre", href: "/#sobre" },
+        { name: "Contato", href: "/#contato" },
     ];
 
     return (
@@ -74,8 +80,8 @@ export default function Header() {
                         </Link>
                     ))}
                     <Link
-                        href="#contato"
-                        onClick={(e) => handleSmoothScroll(e, '#contato')}
+                        href="/#contato"
+                        onClick={(e) => handleSmoothScroll(e, '/#contato')}
                         className="bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white px-5 py-1.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-all hover:shadow-lg hover:shadow-brand-500/50 hover:scale-105"
                     >
                         Orçamento Grátis
@@ -113,9 +119,9 @@ export default function Header() {
                                 </Link>
                             ))}
                             <Link
-                                href="#contato"
+                                href="/#contato"
                                 className="bg-gradient-to-r from-brand-500 to-brand-600 text-white text-center py-4 rounded-xl font-bold mt-2 hover:scale-105 transition-transform"
-                                onClick={(e) => handleSmoothScroll(e, '#contato')}
+                                onClick={(e) => handleSmoothScroll(e, '/#contato')}
                             >
                                 Solicitar Orçamento
                             </Link>
