@@ -23,16 +23,14 @@ export default function Header() {
         setIsMobileMenuOpen(false);
 
         const targetId = href.replace('#', '');
+        if (!targetId) return;
+
         const targetElement = document.getElementById(targetId);
 
         if (targetElement) {
-            const headerOffset = 80; // Altura do header fixo
-            const elementPosition = targetElement.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
+            targetElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
             });
         }
     };
