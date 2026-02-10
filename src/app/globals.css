@@ -46,16 +46,13 @@
     scroll-padding-top: 100px;
     /* Offset for fixed header */
     overflow-x: clip;
-    /* Prevent horizontal scroll on html if needed */
+    /* Prevent horizontal scroll */
   }
 
   body {
     -webkit-tap-highlight-color: transparent;
     overflow-x: hidden;
     max-width: 100vw;
-  }
-
-  body {
     @apply bg-brand-50 text-brand-900 antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }

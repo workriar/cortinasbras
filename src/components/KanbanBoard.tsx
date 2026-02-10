@@ -53,10 +53,11 @@ export default function KanbanBoard() {
         try {
             const res = await fetch('/api/leads');
             const data = await res.json();
-            console.log('Leads carregados:', data);
             setLeads(data.leads || data || []);
         } catch (error) {
-            console.error('Erro ao carregar leads:', error);
+            if (process.env.NODE_ENV === 'development') {
+                console.error('Erro ao carregar leads:', error);
+            }
         } finally {
             setLoading(false);
         }
@@ -88,7 +89,6 @@ export default function KanbanBoard() {
                 newStatus = overLead.status;
             } else {
                 // Invalid drop target (neither column nor known lead)
-                console.warn('Alvo de drop inválido:', over.id);
                 setActiveId(null);
                 return;
             }
@@ -114,7 +114,6 @@ export default function KanbanBoard() {
 
         // Atualizar no servidor
         try {
-            console.log(`[Kanban] Atualizando lead ${leadId} para status ${newStatus}...`);
             const res = await fetch(`/api/leads/${leadId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -123,15 +122,13 @@ export default function KanbanBoard() {
 
             if (!res.ok) {
                 const errData = await res.json();
-                console.error('[Kanban] Falha na resposta da API:', errData);
                 throw new Error(errData.details || 'Falha ao atualizar');
             }
 
-            const updatedData = await res.json();
-            console.log('[Kanban] Sucesso:', updatedData);
-
         } catch (error) {
-            console.error('[Kanban] Erro crítico na atualização:', error);
+            if (process.env.NODE_ENV === 'development') {
+                console.error('[Kanban] Erro na atualização:', error);
+            }
             // Reverter estado visualmente
             setLeads(previousLeads);
             alert('Não foi possível salvar a alteração. O lead voltou ao estado anterior.');

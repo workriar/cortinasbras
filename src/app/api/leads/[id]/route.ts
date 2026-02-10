@@ -17,7 +17,9 @@ export async function GET(
 
         return NextResponse.json(lead);
     } catch (error) {
-        console.error('Erro ao buscar lead:', error);
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao buscar lead:', error);
+        }
         return NextResponse.json({ error: 'Erro ao buscar lead' }, { status: 500 });
     }
 }
@@ -29,9 +31,8 @@ export async function PUT(
     const { id } = await params;
     try {
         const body = await request.json();
-        console.log(`[API] Atualizando lead ${id}:`, body);
 
-        if (!body.status) {
+        if (!body.status && process.env.NODE_ENV === 'development') {
             console.warn(`[API] Tentativa de atualização sem status para lead ${id}`);
         }
 
@@ -49,10 +50,11 @@ export async function PUT(
             }
         });
 
-        console.log(`[API] Lead ${id} atualizado com sucesso. Novo status: ${updatedLead.status}`);
         return NextResponse.json(updatedLead);
     } catch (error: any) {
-        console.error(`[API] Erro ao atualizar lead ${id}:`, error);
+        if (process.env.NODE_ENV === 'development') {
+            console.error(`[API] Erro ao atualizar lead ${id}:`, error);
+        }
         return NextResponse.json({
             error: 'Erro ao atualizar lead',
             details: error.message
@@ -71,7 +73,9 @@ export async function DELETE(
         });
         return NextResponse.json({ success: true });
     } catch (error) {
-        console.error('Erro ao excluir lead:', error);
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Erro ao excluir lead:', error);
+        }
         return NextResponse.json({ error: 'Erro ao excluir lead' }, { status: 500 });
     }
 }

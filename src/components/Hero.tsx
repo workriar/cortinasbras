@@ -41,12 +41,14 @@ export default function Hero() {
             });
             if (!res.ok) {
                 const errorData = await res.json().catch(() => ({}));
-                console.error(`Failed to generate PDF: ${res.status} ${res.statusText}`, errorData);
-            } else {
-                console.log('PDF generated and email sent');
+                if (process.env.NODE_ENV === 'development') {
+                    console.error(`Failed to generate PDF: ${res.status} ${res.statusText}`, errorData);
+                }
             }
         } catch (e) {
-            console.error(e);
+            if (process.env.NODE_ENV === 'development') {
+                console.error(e);
+            }
         }
         setLoading(false);
     };

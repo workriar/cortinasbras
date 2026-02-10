@@ -29,9 +29,11 @@ export function trackLeadConversion() {
         window.gtag('event', 'conversion', {
             'send_to': 'AW-17672945118/1K53CJyU4d4bEN77jutB'
         });
-        
-        console.log('📊 Google Ads Conversion tracked: AW-17672945118/1K53CJyU4d4bEN77jutB');
-    } else {
+
+        if (process.env.NODE_ENV === 'development') {
+            console.log('📊 Google Ads Conversion tracked: AW-17672945118/1K53CJyU4d4bEN77jutB');
+        }
+    } else if (process.env.NODE_ENV === 'development') {
         console.warn('⚠️ gtag not available - conversion tracking skipped');
     }
 }

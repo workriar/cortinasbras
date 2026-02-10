@@ -29,10 +29,7 @@ export const authOptions: NextAuthOptions = {
                 password: { label: "Senha", type: "password" },
             },
             async authorize(credentials) {
-                console.log('🔐 [NextAuth DEBUG] Tentativa de login:', credentials?.email);
-
                 if (!credentials?.email || !credentials?.password) {
-                    console.log('❌ [NextAuth DEBUG] Credenciais vazias');
                     return null;
                 }
 
@@ -41,35 +38,28 @@ export const authOptions: NextAuthOptions = {
                         where: { email: credentials.email },
                     });
 
-                    console.log('👤 [NextAuth DEBUG] Usuário encontrado:', user ? `ID: ${user.id} - Role: ${user.role}` : 'NÃO');
-
                     if (!user) {
-                        console.log('❌ [NextAuth DEBUG] Usuário não existe no banco');
                         return null;
                     }
-
-                    console.log('🔑 [NextAuth DEBUG] Hash no banco:', user.passwordHash.substring(0, 10) + '...');
 
                     const isValid = await bcrypt.compare(
                         credentials.password,
                         user.passwordHash
                     );
 
-                    console.log('✅ [NextAuth DEBUG] Senha válida:', isValid);
-
                     if (!isValid) {
-                        console.log('❌ [NextAuth DEBUG] Senha incorreta. Senha enviada:', credentials.password);
                         return null;
                     }
 
-                    console.log('🎉 [NextAuth DEBUG] Login bem-sucedido para:', user.email);
                     return {
                         id: user.id.toString(),
                         name: user.name || "",
                         email: user.email,
                     };
                 } catch (error) {
-                    console.error('💥 [NextAuth DEBUG] Erro no authorize:', error);
+                    if (process.env.NODE_ENV === 'development') {
+                        console.error('💥 [NextAuth DEBUG] Erro no authorize:', error);
+                    }
                     return null;
                 }
             },

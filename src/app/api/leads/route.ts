@@ -29,12 +29,13 @@ const leadSchema = z.object({
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        console.log("⬇️ [API] Recebendo lead (Payload bruto):", JSON.stringify(body, null, 2));
 
         // 1. Validation
         const validation = leadSchema.safeParse(body);
         if (!validation.success) {
-            console.error("❌ [API] Erro de Validação:", validation.error.format());
+            if (process.env.NODE_ENV === 'development') {
+                console.error("❌ [API] Erro de Validação:", validation.error.format());
+            }
             return NextResponse.json({
                 status: "error",
                 message: "Dados inválidos",
@@ -62,8 +63,6 @@ export async function POST(req: Request) {
         const origem = data.source || "SITE";
         const status = data.status ? String(data.status).toUpperCase() : "NEW";
 
-        console.log("✅ [API] Dados normalizados, salvando no Prisma...");
-
         // 3. Database Operation
         const lead = await prisma.lead.create({
             data: {
@@ -80,8 +79,6 @@ export async function POST(req: Request) {
             }
         });
 
-        console.log(`🎉 [API] Lead #${lead.id} criado com sucesso!`);
-
         // 4. Async Side Effects (PDF/Email/WhatsApp) -> Handle safely without blocking response if possible
         const originHeader = req.headers.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || "https://cortinasbras.com.br";
         const siteUrl = originHeader.replace(/\/$/, "");
@@ -92,17 +89,18 @@ export async function POST(req: Request) {
 
         // Generate PDF in background (or await but catch errors)
         try {
-            console.log("📄 [API] Gerando PDF do lead...");
             const leadForPdf = { ...lead, nome: lead.name, telefone: lead.phone, cidade_bairro: lead.city, largura_parede: lead.width, altura_parede: lead.height, tecido: lead.fabric, instalacao: lead.installation, observacoes: lead.notes };
 
             const pdfBuffer = await generateOrcamentoPdf(leadForPdf);
 
             if (pdfBuffer) {
-                console.log("✉️ [API] Enviando e-mail...");
-                await sendEmailWithPdf(leadForPdf, pdfBuffer).catch(e => console.error("⚠️ [API] Erro envio email:", e.message));
+                await sendEmailWithPdf(leadForPdf, pdfBuffer).catch(e => {
+                    if (process.env.NODE_ENV === 'development') {
+                        console.error("⚠️ [API] Erro envio email:", e.message);
+                    }
+                });
             }
         } catch (error: any) {
-            console.error("⚠️ [API] Erro não-critico (PDF/Email):", error.message);
             // PDF generation might fail due to logo missing, path issues, or missing chromium
             // BUT we still return SUCCESS because the Lead was saved.
         }
@@ -115,7 +113,9 @@ export async function POST(req: Request) {
         }, { status: 201 });
 
     } catch (error: any) {
-        console.error("🔥 [API] ERRO FATAL (500):", error);
+        if (process.env.NODE_ENV === 'development') {
+            console.error("🔥 [API] ERRO FATAL (500):", error);
+        }
         return NextResponse.json({
             status: "error",
             message: "Erro interno no servidor ao processar lead.",
@@ -130,8 +130,6 @@ export async function GET(req: Request) {
         const limit = parseInt(searchParams.get('limit') || '100');
         const offset = parseInt(searchParams.get('offset') || '0');
         const status = searchParams.get('status');
-
-        console.log(`Buscando leads (Prisma) status=${status || 'todos'}...`);
 
         const where: any = {};
         if (status) {
@@ -183,7 +181,9 @@ export async function GET(req: Request) {
         });
 
     } catch (error: any) {
-        console.error("Erro Prisma Leads:", error);
+        if (process.env.NODE_ENV === 'development') {
+            console.error("Erro Prisma Leads:", error);
+        }
         return NextResponse.json({
             leads: [],
             total: 0,
