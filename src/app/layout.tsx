@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' });
 
 export const metadata: Metadata = {
-  title: 'Cortinas Brás - Sistema de Gestão',
+  title: 'Cortinas Brás - Fabricação Própria',
   description: 'Sistema ERP para gestão de leads e orçamentos da Cortinas Brás',
   manifest: '/manifest.json',
   appleWebApp: {
