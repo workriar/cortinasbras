@@ -70,6 +70,27 @@ export default function ContactForm() {
         setWhatsappUrl(fallbackUrl);
 
         try {
+            // Send email via FormSubmit
+            await fetch("https://formsubmit.co/ajax/loja@cortinasbras.com.br", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    _subject: `Novo Lead: ${data.nome}`,
+                    _template: "table",
+                    Nome: data.nome,
+                    Telefone: data.telefone,
+                    Cidade: data.cidade_bairro,
+                    Largura: data.largura_parede || 'Não informada',
+                    Altura: data.altura_parede || 'Não informada',
+                    Tecido: data.tecido || 'Não informado',
+                    Observacoes: data.observacoes || 'Nenhuma',
+                    _captcha: "false"
+                })
+            });
+
             // Try to save to database
             const response = await axios.post('/api/leads', data);
 
