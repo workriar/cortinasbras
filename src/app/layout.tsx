@@ -45,10 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
 
-            gtag('config', 'AW-17672945118', {
-              'allow_ad_personalization_signals': false,
-              'send_page_view': false
-            });
+            gtag('config', 'AW-17672945118');
           `}
         </Script>
         <Providers>{children}</Providers>
