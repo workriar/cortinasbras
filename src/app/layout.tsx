@@ -1,6 +1,7 @@
 import './globals.css';
 import Script from 'next/script';
 import { Providers } from '@/components/Providers';
+import ScrollToTop from '@/components/ScrollToTop';
 import { Metadata, Viewport } from 'next';
 import { Inter, Playfair_Display } from 'next/font/google';
 
@@ -48,6 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             gtag('config', 'AW-17672945118');
           `}
         </Script>
+        <ScrollToTop />
         <Providers>{children}</Providers>
       </body>
     </html>

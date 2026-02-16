@@ -48,6 +48,7 @@ export default function LeadCard({ lead }: LeadCardProps) {
                     </span>
                     <Link
                         href={`/dashboard/crm`}
+                        scroll={false}
                         className="w-8 h-8 rounded-full flex items-center justify-center text-brand-300 group-hover:bg-brand-50 group-hover:text-brand-900 transition-all"
                     >
                         <ChevronRight size={18} />

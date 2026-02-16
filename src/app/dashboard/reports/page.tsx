@@ -12,7 +12,7 @@ export default function ReportsPage() {
 
     useEffect(() => {
         if (status === 'unauthenticated') {
-            router.push('/login');
+            router.push('/login', { scroll: false });
         }
     }, [status, router]);
 

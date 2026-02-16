@@ -34,7 +34,7 @@ export default function DashboardHome() {
 
     useEffect(() => {
         if (status === 'unauthenticated') {
-            router.push('/login');
+            router.push('/login', { scroll: false });
         }
     }, [status, router]);
 
@@ -149,7 +149,7 @@ export default function DashboardHome() {
             <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-base font-bold text-gray-800 uppercase tracking-widest">Leads Recentes</h2>
-                    <Link href="/dashboard/crm" className="group flex items-center gap-1.5 text-[10px] font-bold text-stone-500 hover:text-stone-800 uppercase tracking-widest transition-colors">
+                    <Link href="/dashboard/crm" scroll={false} className="group flex items-center gap-1.5 text-[10px] font-bold text-stone-500 hover:text-stone-800 uppercase tracking-widest transition-colors">
                         Ver tudo
                         <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
                     </Link>

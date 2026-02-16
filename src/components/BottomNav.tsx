@@ -12,6 +12,7 @@ export default function BottomNav() {
         <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-stone-200 px-6 py-3 flex justify-between items-center z-50 text-xs font-medium text-stone-500 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] safe-area-bottom">
             <Link
                 href="/dashboard"
+                scroll={false}
                 className={`flex flex-col items-center gap-1 transition-colors ${isActive('/dashboard') ? 'text-brand-600' : 'hover:text-stone-800'
                     }`}
             >
@@ -21,6 +22,7 @@ export default function BottomNav() {
 
             <Link
                 href="/dashboard/crm"
+                scroll={false}
                 className={`flex flex-col items-center gap-1 transition-colors ${isActive('/dashboard/crm') ? 'text-brand-600' : 'hover:text-stone-800'
                     }`}
             >
@@ -31,6 +33,7 @@ export default function BottomNav() {
             <div className="relative -top-6">
                 <Link
                     href="/dashboard/crm?new=true"
+                    scroll={false}
                     className="flex flex-col items-center justify-center w-14 h-14 bg-gradient-to-br from-brand-500 to-brand-600 rounded-full text-white shadow-lg hover:shadow-brand-500/30 transition-shadow"
                 >
                     <Plus size={28} />
@@ -39,6 +42,7 @@ export default function BottomNav() {
 
             <Link
                 href="/dashboard/reports"
+                scroll={false}
                 className={`flex flex-col items-center gap-1 transition-colors ${isActive('/dashboard/reports') ? 'text-brand-600' : 'hover:text-stone-800'
                     }`}
             >
@@ -48,6 +52,7 @@ export default function BottomNav() {
 
             <Link
                 href="/dashboard/settings"
+                scroll={false}
                 className={`flex flex-col items-center gap-1 transition-colors ${isActive('/dashboard/settings') ? 'text-brand-600' : 'hover:text-stone-800'
                     }`}
             >

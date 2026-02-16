@@ -20,7 +20,7 @@ export default function ChatPage() {
 
     useEffect(() => {
         if (status === 'unauthenticated') {
-            router.push('/login');
+            router.push('/login', { scroll: false });
         }
     }, [status, router]);
 
@@ -94,8 +94,8 @@ export default function ChatPage() {
                             className={`flex ${msg.sender.email === session?.user?.email ? 'justify-end' : 'justify-start'}`}
                         >
                             <div className={`max-w-md px-4 py-3 rounded-lg ${msg.sender.email === session?.user?.email
-                                    ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white'
-                                    : 'bg-white border border-gray-200 text-gray-900'
+                                ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white'
+                                : 'bg-white border border-gray-200 text-gray-900'
                                 }`}>
                                 <p className="text-xs opacity-75 mb-1">{msg.sender.name}</p>
                                 <p>{msg.content}</p>

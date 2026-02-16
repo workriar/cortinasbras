@@ -35,7 +35,7 @@ export default function Navbar() {
                 <div className="flex items-center justify-between">
                     {/* Brand Logo */}
                     <div className="mr-2 md:mr-6 shrink-0 flex items-center gap-4">
-                        <Link href="/dashboard">
+                        <Link href="/dashboard" scroll={false}>
                             <div className="relative w-32 md:w-48 h-10 md:h-12 flex items-center">
                                 <Image
                                     src="/static/logo.png"
@@ -112,6 +112,7 @@ export default function Navbar() {
                                     <div className="max-h-80 overflow-y-auto">
                                         <Link
                                             href="/dashboard/crm?status=NEW"
+                                            scroll={false}
                                             onClick={() => setShowNotifications(false)}
                                             className="block px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors"
                                         >
@@ -154,6 +155,7 @@ export default function Navbar() {
 
                                     <Link
                                         href="/dashboard/users"
+                                        scroll={false}
                                         onClick={() => setShowProfile(false)}
                                         className="flex items-center gap-2 px-4 py-2.5 text-xs text-gray-600 hover:bg-gray-50 transition-colors"
                                     >
@@ -163,6 +165,7 @@ export default function Navbar() {
 
                                     <Link
                                         href="/dashboard/settings"
+                                        scroll={false}
                                         onClick={() => setShowProfile(false)}
                                         className="flex items-center gap-2 px-4 py-2.5 text-xs text-gray-600 hover:bg-gray-50 transition-colors"
                                     >

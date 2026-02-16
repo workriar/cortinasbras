@@ -8,7 +8,7 @@ export default function Footer() {
             <div className="container mx-auto px-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
                     <div className="col-span-1 md:col-span-1">
-                        <Link href="/" className="inline-block mb-8">
+                        <Link href="/" scroll={false} className="inline-block mb-8">
                             <Image
                                 src="/static/logo.png"
                                 alt="Cortinas Brás"
@@ -33,20 +33,20 @@ export default function Footer() {
                     <div>
                         <h4 className="font-bold text-lg mb-8 uppercase tracking-widest text-brand-300">Navegação</h4>
                         <ul className="space-y-4 text-gray-400">
-                            <li><Link href="#inicio" className="hover:text-white transition-colors">Início</Link></li>
-                            <li><Link href="#produtos" className="hover:text-white transition-colors">Produtos</Link></li>
-                            <li><Link href="#sobre" className="hover:text-white transition-colors">Sobre Nós</Link></li>
-                            <li><Link href="#contato" className="hover:text-white transition-colors">Orçamentos</Link></li>
+                            <li><Link href="#inicio" scroll={false} className="hover:text-white transition-colors">Início</Link></li>
+                            <li><Link href="#produtos" scroll={false} className="hover:text-white transition-colors">Produtos</Link></li>
+                            <li><Link href="#sobre" scroll={false} className="hover:text-white transition-colors">Sobre Nós</Link></li>
+                            <li><Link href="#contato" scroll={false} className="hover:text-white transition-colors">Orçamentos</Link></li>
                         </ul>
                     </div>
 
                     <div>
                         <h4 className="font-bold text-lg mb-8 uppercase tracking-widest text-brand-300">Produtos</h4>
                         <ul className="space-y-4 text-gray-400">
-                            <li><Link href="#contato" className="hover:text-white transition-colors">Cortinas Wave</Link></li>
-                            <li><Link href="#contato" className="hover:text-white transition-colors">Blackout SP</Link></li>
-                            <li><Link href="#contato" className="hover:text-white transition-colors">Enxovais Prime</Link></li>
-                            <li><Link href="#contato" className="hover:text-white transition-colors">Entrega Rápida</Link></li>
+                            <li><Link href="#contato" scroll={false} className="hover:text-white transition-colors">Cortinas Wave</Link></li>
+                            <li><Link href="#contato" scroll={false} className="hover:text-white transition-colors">Blackout SP</Link></li>
+                            <li><Link href="#contato" scroll={false} className="hover:text-white transition-colors">Enxovais Prime</Link></li>
+                            <li><Link href="#contato" scroll={false} className="hover:text-white transition-colors">Entrega Rápida</Link></li>
                         </ul>
                     </div>
 
@@ -109,8 +109,8 @@ export default function Footer() {
                 <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-gray-500 uppercase tracking-widest">
                     <p>© {new Date().getFullYear()} Cortinas Brás. Todos os direitos reservados.</p>
                     <div className="flex gap-8">
-                        <Link href="/politica-de-privacidade" className="hover:text-white">Privacidade</Link>
-                        <Link href="/termos-de-uso" className="hover:text-white">Termos</Link>
+                        <Link href="/politica-de-privacidade" scroll={false} className="hover:text-white">Privacidade</Link>
+                        <Link href="/termos-de-uso" scroll={false} className="hover:text-white">Termos</Link>
                     </div>
                 </div>
             </div>

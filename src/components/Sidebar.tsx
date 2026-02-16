@@ -127,6 +127,7 @@ export default function Sidebar() {
                         <Link
                             key={item.path}
                             href={item.path}
+                            scroll={false}
                             className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 group relative ${isActive
                                 ? 'bg-white/10 text-white'
                                 : 'text-gray-400 hover:bg-white/5 hover:text-gray-200'
