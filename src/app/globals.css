@@ -43,8 +43,8 @@
 
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 100px;
-    /* Offset for fixed header */
+    scroll-padding-top: 80px;
+    /* Offset para o header fixo */
     overflow-x: clip;
     /* Prevent horizontal scroll */
   }
@@ -55,6 +55,19 @@
     max-width: 100vw;
     @apply bg-brand-50 text-brand-900 antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    /* Scrollbar fina para Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-brand-300) transparent;
+  }
+
+  /* Respeitar preferência de acessibilidade por menos animações */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 
   h1,
@@ -158,5 +171,18 @@
 
   .badge-won {
     @apply px-3 py-1 bg-emerald-50 text-emerald-950 text-[10px] font-black uppercase tracking-widest rounded border-2 border-emerald-100;
+  }
+
+  /* Safe Area para iPhone com notch / Dynamic Island */
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 12px);
+  }
+
+  /* Ajuste de touch target mínimo para mobile (WCAG 2.5.8) */
+  .btn-primary,
+  .btn-secondary,
+  .btn-whatsapp {
+    min-height: 44px;
+    min-width: 44px;
   }
 }

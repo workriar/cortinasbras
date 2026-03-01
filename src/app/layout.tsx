@@ -9,13 +9,26 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' });
 
 export const metadata: Metadata = {
-  title: 'Cortinas Brás - Fabricação Própria',
-  description: 'Sistema ERP para gestão de leads e orçamentos da Cortinas Brás',
+  title: 'Cortinas Brás - Cortinas Sob Medida e Fábrica no Brás, São Paulo',
+  description: 'Especialistas em cortinas sob medida, persianas e enxovais de luxo. Fábrica própria no Brás, São Paulo. Atendemos toda a capital e região metropolitana. Orçamento grátis!',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
     title: 'Cortinas Brás',
+  },
+  openGraph: {
+    title: 'Cortinas Brás - Fábrica de Cortinas no Brás, SP',
+    description: 'Cortinas sob medida com fabricação própria. Mais de 20 anos de tradição em São Paulo.',
+    url: 'https://cortinasbras.com.br',
+    siteName: 'Cortinas Brás',
+    locale: 'pt_BR',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Cortinas Brás - Fábrica no Brás, SP',
+    description: 'Cortinas sob medida com fabricação própria. Orçamento grátis!',
   },
   icons: {
     icon: '/logo.png',
@@ -27,8 +40,7 @@ export const viewport: Viewport = {
   themeColor: '#d4a93e',
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  // Permitir zoom: melhor acessibilidade e Lighthouse score
   viewportFit: 'cover',
 };
 

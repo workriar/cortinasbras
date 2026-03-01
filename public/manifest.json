@@ -1,16 +1,42 @@
 {
     "name": "Cortinas Brás CRM",
     "short_name": "Cortinas Brás",
+    "description": "Sistema de gestão de leads e orçamentos da Cortinas Brás",
     "start_url": "/dashboard",
+    "scope": "/",
     "display": "standalone",
     "background_color": "#f8f5f1",
     "theme_color": "#d4a93e",
-    "orientation": "portrait",
+    "orientation": "portrait-primary",
+    "lang": "pt-BR",
     "icons": [
         {
             "src": "/logo.png",
-            "sizes": "any",
-            "type": "image/png"
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/logo.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Novo Lead",
+            "short_name": "Lead",
+            "description": "Cadastrar novo lead",
+            "url": "/dashboard/crm?new=true",
+            "icons": [{ "src": "/logo.png", "sizes": "192x192" }]
+        },
+        {
+            "name": "CRM",
+            "short_name": "CRM",
+            "description": "Ver todos os leads",
+            "url": "/dashboard/crm",
+            "icons": [{ "src": "/logo.png", "sizes": "192x192" }]
         }
     ]
 }
