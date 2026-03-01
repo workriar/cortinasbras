@@ -23,20 +23,17 @@ export default function Header() {
     const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
         setIsMobileMenuOpen(false);
 
-        // Only handle smooth scroll if we are on the home page and the link is an anchor
+        // Se já estamos na homepage, rolar suavemente sem recarregar
         if (pathname === '/' && href.startsWith('/#')) {
+            e.preventDefault();
             const targetId = href.replace('/#', '');
             const targetElement = document.getElementById(targetId);
-
             if (targetElement) {
-                e.preventDefault();
-                targetElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+                targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
-        // If not on home page, let the Link component handle the navigation to /#id
+        // Se estiver em outra página, deixa o Next.js navegar normalmente para /#section
+        // O scroll={false} NÃO deve ser usado nesses links para permitir a rolagem da âncora
     };
 
     const navLinks = [
@@ -71,7 +68,6 @@ export default function Header() {
                         <Link
                             key={link.name}
                             href={link.href}
-                            scroll={false}
                             onClick={(e) => handleSmoothScroll(e, link.href)}
                             className="text-xs font-medium text-white/90 hover:text-brand-300 transition-colors relative group"
                         >
@@ -81,7 +77,6 @@ export default function Header() {
                     ))}
                     <Link
                         href="/#contato"
-                        scroll={false}
                         onClick={(e) => handleSmoothScroll(e, '/#contato')}
                         className="bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white px-5 py-1.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-all hover:shadow-lg hover:shadow-brand-500/50 hover:scale-105"
                     >
@@ -113,7 +108,6 @@ export default function Header() {
                                 <Link
                                     key={link.name}
                                     href={link.href}
-                                    scroll={false}
                                     className="text-lg font-medium text-white/90 hover:text-brand-300 py-2 border-b border-white/5 transition-colors"
                                     onClick={(e) => handleSmoothScroll(e, link.href)}
                                 >
@@ -122,7 +116,6 @@ export default function Header() {
                             ))}
                             <Link
                                 href="/#contato"
-                                scroll={false}
                                 className="bg-gradient-to-r from-brand-500 to-brand-600 text-white text-center py-4 rounded-xl font-bold mt-2 hover:scale-105 transition-transform"
                                 onClick={(e) => handleSmoothScroll(e, '/#contato')}
                             >

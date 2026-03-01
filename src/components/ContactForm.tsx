@@ -238,10 +238,11 @@ export default function ContactForm() {
                                                 className="space-y-6"
                                             >
                                                 <div className="space-y-2">
-                                                    <label className="text-sm font-bold text-brand-700 flex items-center gap-2">
+                                                    <label htmlFor="cf-nome" className="text-sm font-bold text-brand-700 flex items-center gap-2">
                                                         <User size={16} /> Nome Completo
                                                     </label>
                                                     <input
+                                                        id="cf-nome"
                                                         {...register("nome")}
                                                         placeholder="Ex: Maria Silva"
                                                         className={`input-primary ${errors.nome ? "!border-red-400" : ""}`}
@@ -250,10 +251,11 @@ export default function ContactForm() {
                                                 </div>
 
                                                 <div className="space-y-2">
-                                                    <label className="text-sm font-bold text-brand-700 flex items-center gap-2">
+                                                    <label htmlFor="cf-telefone" className="text-sm font-bold text-brand-700 flex items-center gap-2">
                                                         <Phone size={16} /> WhatsApp
                                                     </label>
                                                     <input
+                                                        id="cf-telefone"
                                                         {...register("telefone")}
                                                         placeholder="(11) 99999-9999"
                                                         className={`input-primary ${errors.telefone ? "!border-red-400" : ""}`}
@@ -262,10 +264,11 @@ export default function ContactForm() {
                                                 </div>
 
                                                 <div className="space-y-2">
-                                                    <label className="text-sm font-bold text-brand-700 flex items-center gap-2">
+                                                    <label htmlFor="cf-cidade" className="text-sm font-bold text-brand-700 flex items-center gap-2">
                                                         <MapPin size={16} /> Cidade / Bairro
                                                     </label>
                                                     <input
+                                                        id="cf-cidade"
                                                         {...register("cidade_bairro")}
                                                         placeholder="Ex: Brás, São Paulo"
                                                         className={`input-primary ${errors.cidade_bairro ? "!border-red-400" : ""}`}
@@ -292,20 +295,22 @@ export default function ContactForm() {
                                             >
                                                 <div className="grid md:grid-cols-2 gap-6">
                                                     <div className="space-y-2">
-                                                        <label className="text-sm font-bold text-brand-700 flex items-center gap-2">
+                                                        <label htmlFor="cf-largura" className="text-sm font-bold text-brand-700 flex items-center gap-2">
                                                             <Ruler size={16} /> Largura (m)
                                                         </label>
                                                         <input
+                                                            id="cf-largura"
                                                             {...register("largura_parede")}
                                                             placeholder="Ex: 3,50"
                                                             className="input-primary"
                                                         />
                                                     </div>
                                                     <div className="space-y-2">
-                                                        <label className="text-sm font-bold text-brand-700 flex items-center gap-2">
+                                                        <label htmlFor="cf-altura" className="text-sm font-bold text-brand-700 flex items-center gap-2">
                                                             <Ruler size={16} /> Altura (m)
                                                         </label>
                                                         <input
+                                                            id="cf-altura"
                                                             {...register("altura_parede")}
                                                             placeholder="Ex: 2,75"
                                                             className="input-primary"
@@ -318,8 +323,9 @@ export default function ContactForm() {
                                                 </p>
 
                                                 <div className="space-y-2">
-                                                    <label className="text-sm font-bold text-brand-700">Tecido Desejado</label>
+                                                    <label htmlFor="cf-tecido" className="text-sm font-bold text-brand-700">Tecido Desejado</label>
                                                     <select
+                                                        id="cf-tecido"
                                                         {...register("tecido")}
                                                         className="input-primary appearance-none"
                                                     >
@@ -332,8 +338,9 @@ export default function ContactForm() {
                                                 </div>
 
                                                 <div className="space-y-2">
-                                                    <label className="text-sm font-bold text-brand-700">Mensagem / Observações</label>
+                                                    <label htmlFor="cf-observacoes" className="text-sm font-bold text-brand-700">Mensagem / Observações</label>
                                                     <textarea
+                                                        id="cf-observacoes"
                                                         {...register("observacoes")}
                                                         rows={3}
                                                         placeholder="Conte-nos um pouco sobre seu projeto..."

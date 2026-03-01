@@ -140,8 +140,8 @@ export default function UsersPage() {
                                 <td className="px-6 py-4 text-sm text-gray-600">{user.email}</td>
                                 <td className="px-6 py-4">
                                     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${user.role === 'ADMIN'
-                                            ? 'bg-purple-50 text-purple-700 border-purple-100'
-                                            : 'bg-blue-50 text-blue-700 border-blue-100'
+                                        ? 'bg-purple-50 text-purple-700 border-purple-100'
+                                        : 'bg-blue-50 text-blue-700 border-blue-100'
                                         }`}>
                                         {user.role === 'ADMIN' ? <Shield size={12} /> : <UserIcon size={12} />}
                                         {user.role === 'ADMIN' ? 'Administrador' : 'Vendedor'}
@@ -173,8 +173,9 @@ export default function UsersPage() {
 
                         <form onSubmit={handleCreateUser} className="p-6 space-y-4">
                             <div>
-                                <label className="block text-xs font-medium text-gray-700 mb-1.5">Nome Completo</label>
+                                <label htmlFor="user-name" className="block text-xs font-medium text-gray-700 mb-1.5">Nome Completo</label>
                                 <input
+                                    id="user-name"
                                     type="text"
                                     required
                                     className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-500/20 focus:border-stone-500 transition-all text-sm"
@@ -185,8 +186,9 @@ export default function UsersPage() {
                             </div>
 
                             <div>
-                                <label className="block text-xs font-medium text-gray-700 mb-1.5">E-mail de Acesso</label>
+                                <label htmlFor="user-email" className="block text-xs font-medium text-gray-700 mb-1.5">E-mail de Acesso</label>
                                 <input
+                                    id="user-email"
                                     type="email"
                                     required
                                     className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-500/20 focus:border-stone-500 transition-all text-sm"
@@ -197,8 +199,9 @@ export default function UsersPage() {
                             </div>
 
                             <div>
-                                <label className="block text-xs font-medium text-gray-700 mb-1.5">Senha Inicial</label>
+                                <label htmlFor="user-password" className="block text-xs font-medium text-gray-700 mb-1.5">Senha Inicial</label>
                                 <input
+                                    id="user-password"
                                     type="password"
                                     required
                                     className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-500/20 focus:border-stone-500 transition-all text-sm"
@@ -209,7 +212,7 @@ export default function UsersPage() {
                             </div>
 
                             <div>
-                                <label className="block text-xs font-medium text-gray-700 mb-1.5">Nível de Acesso</label>
+                                <p className="block text-xs font-medium text-gray-700 mb-1.5">Nível de Acesso</p>
                                 <div className="grid grid-cols-2 gap-3">
                                     <button
                                         type="button"

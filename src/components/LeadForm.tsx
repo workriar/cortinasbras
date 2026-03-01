@@ -99,8 +99,9 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
         <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Nome Completo</label>
+                    <label htmlFor="lead-name" className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Nome Completo</label>
                     <input
+                        id="lead-name"
                         type="text"
                         required
                         value={formData.name}
@@ -111,8 +112,9 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
                 </div>
 
                 <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">WhatsApp / Telefone</label>
+                    <label htmlFor="lead-phone" className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">WhatsApp / Telefone</label>
                     <input
+                        id="lead-phone"
                         type="tel"
                         required
                         value={formData.phone}
@@ -123,8 +125,9 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
                 </div>
 
                 <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">E-mail</label>
+                    <label htmlFor="lead-email" className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">E-mail</label>
                     <input
+                        id="lead-email"
                         type="email"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -134,8 +137,9 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
                 </div>
 
                 <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Cidade / Região</label>
+                    <label htmlFor="lead-city" className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Cidade / Região</label>
                     <input
+                        id="lead-city"
                         type="text"
                         value={formData.city}
                         onChange={(e) => setFormData({ ...formData, city: e.target.value })}
@@ -145,8 +149,9 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
                 </div>
 
                 <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Origem do Lead</label>
+                    <label htmlFor="lead-source" className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Origem do Lead</label>
                     <select
+                        id="lead-source"
                         value={formData.source}
                         onChange={(e) => setFormData({ ...formData, source: e.target.value })}
                         className="input-primary appearance-none cursor-pointer"
@@ -159,8 +164,9 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
                 </div>
 
                 <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Status Interno</label>
+                    <label htmlFor="lead-status" className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Status Interno</label>
                     <select
+                        id="lead-status"
                         value={formData.status}
                         onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                         className="input-primary appearance-none cursor-pointer"
@@ -175,8 +181,9 @@ export default function LeadForm({ lead, onSuccess, onCancel }: LeadFormProps) {
             </div>
 
             <div>
-                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Observações e Requisitos</label>
+                <label htmlFor="lead-notes" className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Observações e Requisitos</label>
                 <textarea
+                    id="lead-notes"
                     rows={3}
                     value={formData.notes}
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
