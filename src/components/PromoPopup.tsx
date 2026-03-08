@@ -65,7 +65,7 @@ export default function PromoPopup() {
 
                         <div className="p-8">
                             <p className="text-brand-700/70 mb-6">
-                                Aproveite nossa condição especial para cortinas sob medida. 10% na primeira compra com pagamento no PIX!
+                                Aproveite nossa condição especial para cortinas sob medida. 10% de desconto com pagamento no PIX!
                             </p>
                             <button
                                 onClick={close}

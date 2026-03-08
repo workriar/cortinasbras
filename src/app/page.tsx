@@ -90,7 +90,7 @@ export default function Home() {
             </div>
             <h4 className="font-bold text-lg mb-2">🎉 Oferta Especial!</h4>
             <p className="text-sm mb-3">
-              <strong className="text-brand-600">10% OFF</strong> no PIX para primeira compra
+              <strong className="text-brand-600">10% OFF</strong> no PIX com pagamento à vista
             </p>
             <p className="text-xs text-brand-500 font-mono bg-brand-50 px-2 py-1 rounded">
               Cupom: <strong>CLIENTE10</strong>

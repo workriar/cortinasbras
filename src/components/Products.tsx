@@ -9,8 +9,8 @@ const products = [
         description: "Modelos variados em tamanhos padrão, prontos para levar. Ideal para quem tem pressa e busca qualidade.",
         icon: Home,
         features: ["Entrega imediata", "Várias cores", "Modelos variados"],
-        ctaLabel: "Confira na loja virtual",
-        ctaLink: "https://loja.relluarte.com.br",
+        ctaLabel: "Solicitar Orçamento",
+        ctaLink: "#contato",
         delay: 0.1,
     },
     {
@@ -53,7 +53,7 @@ export default function Products() {
                         transition={{ delay: 0.1 }}
                         className="text-lg text-brand-900/80 font-medium"
                     >
-                        Escolha a solução ideal para seu espaço em toda a capital paulista: <br />Cortinas sob medida, cortinas prontas e enxovais de luxo com entrega rápida.
+                        Escolha a solução ideal para seu espaço: <br />Cortinas sob medida, cortinas prontas e enxovais de luxo com entrega rápida.
                     </motion.p>
                 </div>
 

@@ -88,13 +88,7 @@ export default function Footer() {
                         <p className="text-gray-400 text-sm leading-relaxed mb-4">
                             A <strong className="text-white">Cortinas Brás</strong> é especialista em <strong className="text-white">cortinas sob medida em São Paulo</strong>,
                             oferecendo atendimento completo em toda a <strong className="text-white">capital paulista e região metropolitana</strong>.
-                            Com showroom localizado no tradicional bairro do Brás, atendemos clientes de todas as regiões de São Paulo incluindo
-                            <strong className="text-white"> Zona Leste</strong> (Tatuapé, Mooca, Penha, Vila Matilde, Aricanduva),
-                            <strong className="text-white"> Zona Sul</strong> (Moema, Brooklin, Vila Mariana, Jabaquara, Santo Amaro),
-                            <strong className="text-white"> Zona Norte</strong> (Santana, Tucuruvi, Casa Verde, Vila Guilherme),
-                            <strong className="text-white"> Zona Oeste</strong> (Pinheiros, Vila Madalena, Lapa, Perdizes, Butantã),
-                            além do <strong className="text-white">ABC Paulista</strong> (Santo André, São Bernardo, São Caetano, Diadema) e
-                            <strong className="text-white"> Grande São Paulo</strong> (Guarulhos, Osasco, Barueri, Cotia).
+                            Com showroom localizado no tradicional bairro do Brás, atendemos clientes em toda a cidade com qualidade e pontualidade.
                         </p>
                         <p className="text-gray-400 text-sm leading-relaxed">
                             Oferecemos <strong className="text-white">cortinas sob medida</strong>, <strong className="text-white">cortinas prontas</strong>,

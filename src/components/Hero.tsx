@@ -170,7 +170,6 @@ export default function Hero() {
                         className="text-base sm:text-lg md:text-xl text-white !text-white font-medium max-w-lg leading-relaxed"
                     >
                         Especialistas em cortinas sob medida, cortinas prontas e enxovais de luxo com <strong className="text-brand-300">mais de 20 anos de tradição em São Paulo</strong>.
-                        Atendemos toda a <strong className="text-brand-300">capital paulista e região metropolitana</strong> incluindo Zona Leste, Zona Sul, Zona Norte, Zona Oeste, ABC Paulista e Grande São Paulo.
                         Showroom no Brás com fabricação própria e entrega rápida.
                     </motion.p>
 
