@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
+import { SessionProvider } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
@@ -35,6 +36,7 @@ export default function LoginPage() {
     };
 
     return (
+        <SessionProvider>
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-brand-50 to-brand-100 p-4">
             <div className="w-full max-w-md">
                 {/* Card de Login */}
@@ -133,5 +135,6 @@ export default function LoginPage() {
                 </div>
             </div>
         </div>
+        </SessionProvider>
     );
 }

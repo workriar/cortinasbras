@@ -3,6 +3,7 @@ import Sidebar from '@/components/Sidebar';
 import Navbar from '@/components/Navbar';
 import { SidebarProvider, useSidebar } from '@/components/SidebarContext';
 import BottomNav from '@/components/BottomNav';
+import { SessionProvider } from 'next-auth/react';
 
 function DashboardContent({ children }: { children: React.ReactNode }) {
     const { isExpanded } = useSidebar();
@@ -38,8 +39,10 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     return (
-        <SidebarProvider>
-            <DashboardContent>{children}</DashboardContent>
-        </SidebarProvider>
+        <SessionProvider>
+            <SidebarProvider>
+                <DashboardContent>{children}</DashboardContent>
+            </SidebarProvider>
+        </SessionProvider>
     );
 }
