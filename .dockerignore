@@ -38,9 +38,7 @@ Thumbs.db
 .gitattributes
 
 # Documentation
-README.md
-*.md
-!next-app/README.md
+# (mantendo .md no build context para não bloquear nada)
 
 # Logs
 logs
@@ -66,13 +64,13 @@ venv
 env
 ENV
 
-# Legacy Flask files
-flask-legacy
-templates
-static
-backups
-orcamentos
-public_html
+# Legacy Flask files (apenas na raiz do projeto)
+/flask-legacy
+/templates
+/static
+/backups
+/orcamentos
+/public_html
 
 # Docker
 # Dockerfile*
