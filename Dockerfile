@@ -3,9 +3,6 @@
 FROM node:20-slim AS base
 
 # Instalar dependências do sistema
-# openssl, ca-certificates para Prisma/NextAuth
-# chromium para Puppeteer
-# procps para monitoramento
 RUN apt-get update && apt-get install -y \
   openssl \
   ca-certificates \
@@ -23,38 +20,37 @@ ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 WORKDIR /app
 
-# Copiar arquivos de dependências
-COPY package*.json ./
-
-# Instalar dependências
+# ─── Instalar dependências ───────────────────────────────────────────────────
 FROM base AS deps
 WORKDIR /app
+COPY package*.json ./
 COPY prisma ./prisma
 RUN npm install
 
-# Builder
+# ─── Build da aplicação ──────────────────────────────────────────────────────
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Desabilitar telemetria
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Gerar Prisma Client
-# O schema agora tem binaryTargets que vão funcionar com Debian (debian-openssl-3.0.x ou rhel-openssl-1.0.x dependendo da distro, mas o auto-detect do slim funciona bem)
 RUN npx prisma generate
 
-# Cache bust para forçar rebuild dos assets estáticos
+# Cache bust para forçar rebuild dos assets
 ARG CACHE_BUST=1
-# Build da aplicação
+
+# Build Next.js (gera .next/ com todos os assets estáticos)
 RUN npm run build
 
-# Runner
+# ─── Runner (produção) ───────────────────────────────────────────────────────
 FROM base AS runner
+WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NPM_CONFIG_CACHE=/tmp/.npm
 
 # Criar usuário não-root
 RUN groupadd --system --gid 1001 nodejs
@@ -63,17 +59,13 @@ RUN useradd --system --uid 1001 --gid nodejs nextjs
 # Criar diretório de dados
 RUN mkdir -p /app/data && chown -R nextjs:nodejs /app/data
 
+# Copiar tudo necessário para produção
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-# Copy prisma and scripts
+COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
+COPY --from=deps    --chown=nextjs:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 COPY --from=builder --chown=nextjs:nodejs /app/scripts ./scripts
-# Copy node_modules for CLI tools (optional but helpful for db push)
-COPY --from=deps --chown=nextjs:nodejs /app/node_modules ./node_modules
-
-# Fix npx/npm permissions
-ENV NPM_CONFIG_CACHE=/tmp/.npm
 
 USER nextjs
 
@@ -86,4 +78,5 @@ ENV HOSTNAME="0.0.0.0"
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
   CMD node -e "require('http').get('http://localhost:3000', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"
 
-CMD ["node", "server.js"]
+# next start serve tanto HTML quanto /_next/static/ e /public/
+CMD ["node_modules/.bin/next", "start"]
