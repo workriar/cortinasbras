@@ -45,6 +45,8 @@ ENV NEXT_TELEMETRY_DISABLED=1
 # O schema agora tem binaryTargets que vão funcionar com Debian (debian-openssl-3.0.x ou rhel-openssl-1.0.x dependendo da distro, mas o auto-detect do slim funciona bem)
 RUN npx prisma generate
 
+# Cache bust para forçar rebuild dos assets estáticos
+ARG CACHE_BUST=1
 # Build da aplicação
 RUN npm run build
 
