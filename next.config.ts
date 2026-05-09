@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
   compress: true,
   images: {
     // Otimização ativa: Next.js converte automaticamente para WebP/AVIF
