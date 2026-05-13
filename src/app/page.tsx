@@ -4,6 +4,7 @@ import { useState } from "react";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Products from "@/components/Products";
+import FabricCatalog from "@/components/FabricCatalog";
 import Enxovais from "@/components/Enxovais";
 import Gallery from "@/components/Gallery";
 import About from "@/components/About";
@@ -33,6 +34,7 @@ export default function Home() {
       <Header />
       <Hero />
       <Products />
+      <FabricCatalog />
       <Enxovais />
       <Gallery />
       <About />

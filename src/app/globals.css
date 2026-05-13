@@ -104,6 +104,52 @@
       background-position: 200% center;
     }
   }
+
+  /* === Global Luxury Theme Alignment === */
+
+  /* Seção padrão com espaçamento generoso */
+  .section-luxury {
+    @apply py-24 relative overflow-hidden;
+  }
+
+  /* Título de seção premium */
+  .section-title {
+    @apply text-4xl md:text-5xl font-extrabold text-brand-800 tracking-tight;
+  }
+
+  /* Subtítulo de seção */
+  .section-subtitle {
+    @apply text-lg text-slate-600 font-medium leading-relaxed;
+  }
+
+  /* Badge de categoria/rótulo */
+  .badge-category {
+    @apply inline-flex items-center gap-2 px-4 py-1.5 rounded-full
+           bg-brand-100 text-brand-600 text-xs font-bold
+           uppercase tracking-widest border border-brand-200;
+  }
+
+  /* Linha decorativa dourada */
+  .divider-gold {
+    @apply w-12 h-0.5 bg-gradient-to-r from-brand-400 to-brand-600 rounded-full;
+  }
+
+  /* Card flutuante premium */
+  .card-luxury {
+    @apply bg-white rounded-3xl border border-slate-100
+           shadow-sm hover:shadow-2xl hover:shadow-brand-500/10
+           transition-all duration-500;
+  }
+
+  /* Fundo suave alternado para seções */
+  .bg-section-alt {
+    @apply bg-slate-50;
+  }
+
+  /* Fundo escuro para seções de destaque */
+  .bg-section-dark {
+    @apply bg-brand-800 text-white;
+  }
 }
 
 @layer components {

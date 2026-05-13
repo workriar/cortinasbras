@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -23,7 +23,6 @@ export default function Header() {
     const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
         setIsMobileMenuOpen(false);
 
-        // Se já estamos na homepage, rolar suavemente sem recarregar
         if (pathname === '/' && href.startsWith('/#')) {
             e.preventDefault();
             const targetId = href.replace('/#', '');
@@ -32,95 +31,90 @@ export default function Header() {
                 targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
-        // Se estiver em outra página, deixa o Next.js navegar normalmente para /#section
-        // O scroll={false} NÃO deve ser usado nesses links para permitir a rolagem da âncora
     };
 
     const navLinks = [
         { name: "Início", href: "/#inicio" },
         { name: "Produtos", href: "/#produtos" },
+        { name: "Catálogo", href: "/#catalogo" },
         { name: "Sobre", href: "/#sobre" },
         { name: "Contato", href: "/#contato" },
     ];
 
     return (
-        <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'py-2 bg-brand-900/95 shadow-2xl backdrop-blur-xl' : 'py-3 bg-brand-900/80 backdrop-blur-md'}`}>
+        <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${isScrolled ? 'py-3 bg-white/90 shadow-lg backdrop-blur-md' : 'py-5 bg-transparent'}`}>
             <div className="container mx-auto px-6 flex items-center justify-between h-full">
-                {/* Logo - Smooth Resize */}
-                <Link
-                    href="/"
-                    scroll={false}
-                    className={`relative flex items-center transition-all duration-300 origin-left ${isScrolled ? 'scale-90' : 'scale-100'}`}
-                >
+                <div className={`relative flex items-center transition-all duration-500 ${isScrolled ? 'scale-90' : 'scale-100'}`}>
                     <Image
                         src="/static/logo.png"
-                        alt="Cortinas Brás - Cortinas sob medida em São Paulo"
+                        alt="Cortinas Brás"
                         width={80}
                         height={25}
-                        className="h-auto w-20 object-contain"
+                        className={`h-auto w-20 object-contain transition-all ${isScrolled ? 'brightness-110' : ''}`}
                         priority
                     />
-                </Link>
+                </div>
 
-                {/* Desktop Nav */}
-                <nav className="hidden md:flex items-center gap-6">
+                <nav className="hidden md:flex items-center gap-8">
                     {navLinks.map((link) => (
-                        <Link
+                        <a
                             key={link.name}
                             href={link.href}
                             onClick={(e) => handleSmoothScroll(e, link.href)}
-                            className="text-xs font-medium text-white/90 hover:text-brand-300 transition-colors relative group"
+                            className={`text-xs font-bold uppercase tracking-widest transition-all duration-300 relative group ${isScrolled ? 'text-slate-700 hover:text-brand-600' : 'text-white hover:text-brand-300'}`}
                         >
                             {link.name}
-                            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-300 transition-all group-hover:w-full"></span>
-                        </Link>
+                            <span className={`absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full ${isScrolled ? 'bg-brand-600' : 'bg-brand-300'}`}></span>
+                        </a>
                     ))}
-                    <Link
+                    <a
                         href="/#contato"
                         onClick={(e) => handleSmoothScroll(e, '/#contato')}
-                        className="bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white px-5 py-1.5 rounded-full text-[11px] font-black uppercase tracking-widest transition-all hover:shadow-lg hover:shadow-brand-500/50 hover:scale-105"
+                        className={`px-6 py-2 rounded-full text-[11px] font-black uppercase tracking-widest transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg ${
+                            isScrolled
+                            ? 'bg-brand-600 text-white hover:bg-brand-700 shadow-brand-600/30'
+                            : 'bg-white text-brand-800 hover:bg-brand-50 shadow-white/20'
+                        }`}
                     >
                         Orçamento Grátis
-                    </Link>
+                    </a>
                 </nav>
 
-                {/* Mobile Menu Toggle */}
                 <button
-                    className="md:hidden text-brand-300 p-2"
+                    className={`md:hidden p-2 transition-colors ${isScrolled ? 'text-brand-800' : 'text-white'}`}
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    aria-label="Menu de navegação"
+                    aria-label="Menu"
                 >
                     {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
                 </button>
             </div>
 
-            {/* Mobile Menu */}
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="md:hidden bg-black/95 backdrop-blur-xl border-b border-white/10"
+                        className="md:hidden bg-white border-b border-slate-200 overflow-hidden"
                     >
-                        <nav className="flex flex-col p-6 gap-4">
+                        <nav className="flex flex-col p-8 gap-6">
                             {navLinks.map((link) => (
-                                <Link
+                                <a
                                     key={link.name}
                                     href={link.href}
-                                    className="text-lg font-medium text-white/90 hover:text-brand-300 py-2 border-b border-white/5 transition-colors"
+                                    className="text-lg font-bold text-slate-800 hover:text-brand-600 transition-colors border-b border-slate-100 pb-4"
                                     onClick={(e) => handleSmoothScroll(e, link.href)}
                                 >
                                     {link.name}
-                                </Link>
+                                </a>
                             ))}
-                            <Link
+                            <a
                                 href="/#contato"
-                                className="bg-gradient-to-r from-brand-500 to-brand-600 text-white text-center py-4 rounded-xl font-bold mt-2 hover:scale-105 transition-transform"
+                                className="bg-brand-600 text-white text-center py-4 rounded-2xl font-bold shadow-lg shadow-brand-500/30 hover:bg-brand-700 transition-all"
                                 onClick={(e) => handleSmoothScroll(e, '/#contato')}
                             >
                                 Solicitar Orçamento
-                            </Link>
+                            </a>
                         </nav>
                     </motion.div>
                 )}

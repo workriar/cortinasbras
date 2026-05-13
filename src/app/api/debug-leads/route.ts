@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth-config';
+import { getSqliteConnection } from '@/lib/sqlite';
+import fs from 'fs';
+import path from 'path';
 
 export async function GET(req: Request) {
     try {
@@ -14,13 +17,12 @@ export async function GET(req: Request) {
         const action = searchParams.get('action');
 
         if (action === 'clean') {
-            // Limpar leads de teste
             const deleted = await prisma.lead.deleteMany({
                 where: {
                     OR: [
                         { name: { contains: 'Teste', mode: 'insensitive' } },
                         { name: { contains: 'Debug', mode: 'insensitive' } },
-                        { status: 'NEW', phone: '', email: null } // Leads vazios
+                        { status: 'NEW', phone: '', email: null }
                     ]
                 }
             });
@@ -30,35 +32,86 @@ export async function GET(req: Request) {
             });
         }
 
-        // Ação padrão: Verificar/Reparar
-        // No Postgres com Prisma, a consistência é garantida pelo schema, 
-        // mas podemos verificar se há leads sem Owner e atribuir ao admin.
+        // REAL RESTORATION LOGIC
+        const dbPath = process.env.NODE_ENV === 'production'
+            ? '/app/data/leads.db'
+            : path.join(process.cwd(), 'data', 'leads.db');
 
-        const admin = await prisma.user.findFirst({ where: { role: 'ADMIN' } });
-        let repairs = [];
-
-        if (admin) {
-            const orphanLeads = await prisma.lead.updateMany({
-                where: { ownerId: null },
-                data: { ownerId: admin.id }
-            });
-            if (orphanLeads.count > 0) {
-                repairs.push(`${orphanLeads.count} leads órfãos atribuídos ao admin.`);
-            }
+        if (!fs.existsSync(dbPath)) {
+            return NextResponse.json({
+                success: false,
+                error: `Arquivo de backup não encontrado em: ${dbPath}`
+            }, { status: 404 });
         }
 
-        // Exemplo de outra correção: normalizar status se necessário
-        // (Aqui assumimos que o banco está saudável pois é novo)
+        let db;
+        try {
+            db = await getSqliteConnection(dbPath);
+            const legacyLeads = await db.all('SELECT * FROM leads');
 
-        const totalLeads = await prisma.lead.count();
+            let importedCount = 0;
+            let skippedCount = 0;
+            const repairs = [];
 
-        return NextResponse.json({
-            success: true,
-            message: `Diagnóstico concluído. Total de leads: ${totalLeads}.`,
-            repairs_applied: repairs
-        });
+            const admin = await prisma.user.findFirst({ where: { role: 'ADMIN' } });
 
-    } catch (error) {
+            for (const legacy of legacyLeads) {
+                const existing = await prisma.lead.findFirst({
+                    where: { phone: legacy.telefone }
+                });
+
+                if (existing) {
+                    skippedCount++;
+                    continue;
+                }
+
+                await prisma.lead.create({
+                    data: {
+                        name: legacy.nome || 'Desconhecido',
+                        phone: legacy.telefone || 'Não informado',
+                        email: legacy.email || null,
+                        city: legacy.cidade_bairro || null,
+                        width: legacy.largura_parede ? parseFloat(legacy.largura_parede) : null,
+                        height: legacy.altura_parede ? parseFloat(legacy.altura_parede) : null,
+                        fabric: legacy.tecido || null,
+                        installation: legacy.instalacao || null,
+                        notes: legacy.observacoes || null,
+                        source: (legacy.origem || 'SITE').toUpperCase(),
+                        status: (legacy.status || 'NEW').toUpperCase(),
+                        createdAt: legacy.criado_em ? new Date(legacy.criado_em) : new Date(),
+                        ownerId: admin?.id || null
+                    }
+                });
+                importedCount++;
+            }
+
+            if (importedCount > 0) {
+                repairs.push(`Importação concluída: ${importedCount} leads restaurados do backup SQLite.`);
+            } else if (skippedCount > 0) {
+                repairs.push(`Nenhum lead novo encontrado. ${skippedCount} leads já existiam no sistema.`);
+            }
+
+            return NextResponse.json({
+                success: true,
+                message: `Restauração finalizada. ${importedCount} novos leads importados.`,
+                repairs_applied: repairs,
+                details: {
+                    imported: importedCount,
+                    skipped: skippedCount
+                }
+            });
+
+        } catch (sqliteError: any) {
+            console.error('[DEBUG-LEADS] SQLite Error:', sqliteError);
+            return NextResponse.json({
+                success: false,
+                error: `Erro ao ler banco de dados antigo: ${sqliteError.message}`
+            }, { status: 500 });
+        } finally {
+            if (db) await db.close();
+        }
+
+    } catch (error: any) {
         console.error('[DEBUG-LEADS] Error:', error);
         return NextResponse.json({
             success: false,

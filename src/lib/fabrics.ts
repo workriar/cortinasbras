@@ -1,0 +1,215 @@
+export type FabricCategory = 'Linho' | 'Voil' | 'Blackout' | 'Oxford' | 'Forro';
+
+export interface Fabric {
+    id: string;
+    name: string;
+    category: FabricCategory;
+    description: string;
+    colors: string[];
+    benefits: string[];
+    exclusive?: boolean;
+    placeholderImage: string;
+    images?: string[];
+}
+
+export const fabrics: Fabric[] = [
+    // Linho
+    {
+        id: 'slub-linho-30',
+        name: 'Slub Linho 30%',
+        category: 'Linho',
+        description: 'Trama slub que imita o linho natural, com a vantagem de não encolher.',
+        colors: ['Várias Cores'],
+        benefits: ['Não encolhe', 'Aparência natural'],
+        placeholderImage: '/images/tecidos/slub-linho-1.jpg',
+        images: [
+            '/images/tecidos/slub-linho-1.jpg',
+            '/images/tecidos/slub-linho-2.jpg',
+            '/images/tecidos/slub-linho-3.jpg',
+            '/images/tecidos/slub-linho-4.jpg',
+        ],
+    },
+    {
+        id: 'linho-cru-premium',
+        name: 'Linho Cru Premium',
+        category: 'Linho',
+        description: 'Linho puro em tom cru, com alta densidade para um caimento impecável.',
+        colors: ['Cru'],
+        benefits: ['Alta densidade', 'Fibra natural'],
+        exclusive: true,
+        placeholderImage: '/images/tecidos/linho-cru-1.jpg',
+        images: [
+            '/images/tecidos/linho-cru-1.jpg',
+            '/images/tecidos/linho-cru-2.jpg',
+            '/images/tecidos/linho-cru-3.jpg',
+            '/images/tecidos/linho-cru-4.jpg',
+        ],
+    },
+    {
+        id: 'botone',
+        name: 'Botonê',
+        category: 'Linho',
+        description: 'Tecido com textura 3D sofisticada que agrega volume e elegância ao ambiente.',
+        colors: ['Caqui', 'Off White', 'Branco', 'Cinza'],
+        benefits: ['Textura 3D', 'Sofisticação'],
+        placeholderImage: '/images/tecidos/botone-caqui-1.jpg',
+        images: [
+            '/images/tecidos/botone-caqui-1.jpg',
+            '/images/tecidos/botone-caqui-2.jpg',
+            '/images/tecidos/botone-caqui-3.jpg',
+            '/images/tecidos/botone-off-1.jpg',
+            '/images/tecidos/botone-off-2.jpg',
+            '/images/tecidos/botone-branco-1.jpg',
+            '/images/tecidos/botone-cinza-1.jpg',
+            '/images/tecidos/botone-cinza-2.jpg',
+        ],
+    },
+    {
+        id: 'linho-flame-natural',
+        name: 'Linho Flamê Natural',
+        category: 'Linho',
+        description: 'Trama irregular característica do flamê, proporcionando um visual orgânico.',
+        colors: ['Cinza', 'Palha'],
+        benefits: ['Visual orgânico', 'Trama irregular'],
+        placeholderImage: '/images/tecidos/linho-flame-cinza-1.jpeg',
+        images: [
+            '/images/tecidos/linho-flame-cinza-1.jpeg',
+            '/images/tecidos/linho-flame-palha-1.jpeg',
+        ],
+    },
+    {
+        id: 'gaze-de-linho',
+        name: 'Gaze de Linho',
+        category: 'Linho',
+        description: 'Trama aberta e leve, ideal para quem busca luminosidade e leveza.',
+        colors: ['Bege', 'Branco', 'Caqui', 'Cinza', 'Marrom', 'Off White', 'Rosa'],
+        benefits: ['Leveza', 'Transparência suave'],
+        placeholderImage: '/images/tecidos/gaze-de-linho-branco.jpeg',
+        images: [
+            '/images/tecidos/gaze-de-linho-branco.jpeg',
+            '/images/tecidos/gaze-de-linho-offwhite.jpeg',
+            '/images/tecidos/gaze-de-linho-bege.jpeg',
+            '/images/tecidos/gaze-de-linho-caqui.jpeg',
+            '/images/tecidos/gaze-de-linho-cinza.jpeg',
+            '/images/tecidos/gaze-de-linho-marrom.jpeg',
+            '/images/tecidos/gaze-de-linho-rosa.jpeg',
+        ],
+    },
+    {
+        id: 'linhao',
+        name: 'Linhão',
+        category: 'Linho',
+        description: 'Versão mais encorpada do linho, com boa opacidade e excelente estrutura.',
+        colors: ['Branco', 'Caqui', 'Cinza', 'Creme'],
+        benefits: ['Boa opacidade', 'Estrutura firme'],
+        placeholderImage: '/images/tecidos/linhao-branco-1.jpg',
+        images: [
+            '/images/tecidos/linhao-branco-1.jpg',
+            '/images/tecidos/linhao-caqui-1.jpg',
+            '/images/tecidos/linhao-cinza-1.jpg',
+            '/images/tecidos/linhao-creme-1.jpg',
+        ],
+    },
+    {
+        id: 'paraty-linho',
+        name: 'Paraty Linho',
+        category: 'Linho',
+        description: 'Tecido exclusivo com toque sofisticado e cor singular.',
+        colors: ['Cor Exclusiva'],
+        benefits: ['Exclusividade', 'Toque premium'],
+        exclusive: true,
+        placeholderImage: '/images/tecidos/placeholder.png',
+    },
+    {
+        id: 'morea',
+        name: 'Morea',
+        category: 'Linho',
+        description: 'Tecido de alta sofisticação, ideal para projetos de luxo.',
+        colors: ['Cor Exclusiva'],
+        benefits: ['Alta sofisticação', 'Acabamento de luxo'],
+        exclusive: true,
+        placeholderImage: '/images/tecidos/placeholder.png',
+    },
+    {
+        id: 'linho-bora',
+        name: 'Linho Borá',
+        category: 'Linho',
+        description: 'Caimento fluido e elegante, combinando a rusticidade do linho com a leveza.',
+        colors: ['Cor Exclusiva'],
+        benefits: ['Caimento fluido', 'Elegância'],
+        exclusive: true,
+        placeholderImage: '/images/tecidos/placeholder.png',
+    },
+    // Voil
+    {
+        id: 'voil-premium',
+        name: 'Voil Premium',
+        category: 'Voil',
+        description: 'Toque sedoso com alta transparência, perfeito para combinar com blackout ou linho.',
+        colors: ['Branco', 'Off White'],
+        benefits: ['Toque sedoso', 'Alta transparência'],
+        placeholderImage: '/images/tecidos/voil-premium-1.jpeg',
+        images: ['/images/tecidos/voil-premium-1.jpeg'],
+    },
+    {
+        id: 'voil-risca-de-giz',
+        name: 'Voil Risca de Giz',
+        category: 'Voil',
+        description: 'Detalhes delicados em risca de giz que trazem um charme clássico.',
+        colors: ['Branco', 'Off White'],
+        benefits: ['Detalhes clássicos', 'Visual delicado'],
+        placeholderImage: '/images/tecidos/voil-risca-de-giz-1.jpeg',
+        images: ['/images/tecidos/voil-risca-de-giz-1.jpeg'],
+    },
+    {
+        id: 'voil-cristal',
+        name: 'Voil Cristal',
+        category: 'Voil',
+        description: 'Brilho sutil que ilumina o ambiente com delicadeza.',
+        colors: ['Off White'],
+        benefits: ['Brilho sutil', 'Iluminação suave'],
+        placeholderImage: '/images/tecidos/voil-cristal-off-white-1.jpeg',
+        images: ['/images/tecidos/voil-cristal-off-white-1.jpeg'],
+    },
+    {
+        id: 'voil-liso',
+        name: 'Voil Liso',
+        category: 'Voil',
+        description: 'A escolha clássica e versátil para qualquer ambiente.',
+        colors: ['Branco', 'Off White'],
+        benefits: ['Versatilidade', 'Estilo clássico'],
+        placeholderImage: '/images/tecidos/placeholder.png',
+    },
+    // Blackout
+    {
+        id: 'blackout-100',
+        name: 'Blackout 100%',
+        category: 'Blackout',
+        description: 'Bloqueio total de luz, proporcionando escuridão completa, conforto térmico e acústico.',
+        colors: ['Cinza'],
+        benefits: ['Bloqueio 100% da luz', 'Isolamento térmico', 'Isolamento acústico'],
+        placeholderImage: '/images/tecidos/blackout-100-cinza-1.jpg',
+        images: ['/images/tecidos/blackout-100-cinza-1.jpg'],
+    },
+    // Oxford
+    {
+        id: 'tecido-oxford',
+        name: 'Tecido Oxford',
+        category: 'Oxford',
+        description: 'Tecido estruturado com excelente caimento, ideal para cortinas encorpadas.',
+        colors: ['Branco', 'Off White'],
+        benefits: ['Estrutura firme', 'Alta durabilidade'],
+        placeholderImage: '/images/tecidos/placeholder.png',
+    },
+    // Forro
+    {
+        id: 'forro-microfibra',
+        name: 'Forro Microfibra',
+        category: 'Forro',
+        description: 'Forro de alta opacidade para garantir a privacidade e a proteção do tecido principal.',
+        colors: ['Branco'],
+        benefits: ['Alta opacidade', 'Proteção solar'],
+        placeholderImage: '/images/tecidos/forro-microfibra-branco-1.jpeg',
+        images: ['/images/tecidos/forro-microfibra-branco-1.jpeg'],
+    },
+];
