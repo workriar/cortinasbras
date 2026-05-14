@@ -169,8 +169,18 @@ export default function Hero() {
                             Solicitar Orçamento <ArrowRight size={18} />
                         </motion.a>
                         <motion.a
+                            href="/catalog.pdf"
+                            download="catalogo-cortinas-bras.pdf"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-8 py-4 rounded-2xl font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-white/20 transition-all"
+                        >
+                            <Sparkles size={18} /> Baixar Catálogo
+                        </motion.a>
+                        <motion.a
                             href="https://wa.me/5511992891070"
                             target="_blank"
+                            rel="noopener noreferrer"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-8 py-4 rounded-2xl font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-white/20 transition-all"
@@ -236,7 +246,7 @@ export default function Hero() {
                                     className={`h-1.5 transition-all duration-500 rounded-full ${i === currentPromo ? "w-8 bg-brand-400" : "w-1.5 bg-white/30 hover:bg-white/60"}`}
                                 />
                             ))}
-                        </div>
+                        </div
                     </div>
                 </motion.div>
             </div>

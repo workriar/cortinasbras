@@ -6,30 +6,33 @@ import { Scissors, Home, Bed, Check, ArrowRight } from "lucide-react";
 const products = [
     {
         title: "CORTINAS PRONTAS",
-        description: "Modelos selecionados com dimensões padrão, unindo agilidade e a qualidade inquestionável da nossa fábrica. A solução perfeita para quem busca elegância imediata.",
+        description: "Soluções de elegância imediata. Modelos selecionados com dimensões padrão que unem a agilidade da entrega com a qualidade inquestionável de nossa fabricação própria.",
         icon: Home,
         image: "https://images.unsplash.com/photo-1513694203237-462467AspNetCore-dfdf788689?q=80&w=600&auto=format&fit=crop",
-        features: ["Entrega imediata", "Curadoria de cores", "Tamanhos padrão"],
+        alt: "Cortinas prontas de luxo para sala e quarto - Cortinas Brás",
+        features: ["Entrega imediata", "Curadoria de cores exclusivas", "Tamanhos padrão de alta qualidade"],
         ctaLabel: "Ver Modelos",
         ctaLink: "#catalogo",
         delay: 0.1,
     },
     {
         title: "CORTINAS SOB MEDIDA",
-        description: "Nossa obra-prima. Projetos milimetricamente planejados para cada janela, utilizando os tecidos mais nobres do mundo para transformar seu ambiente.",
+        description: "A nossa maior especialidade. Projetos milimetricamente planejados para cada janela, utilizando os tecidos mais nobres do mundo para transformar seu ambiente em um refúgio de luxo.",
         icon: Scissors,
         image: "https://images.unsplash.com/photo-1617103233985-160a32 la-fdfdf788689?q=80&w=600&auto=format&fit=crop",
-        features: ["Projetos Exclusivos", "Tecidos Premium", "Instalação Especializada"],
+        alt: "Cortinas sob medida de alto padrão em São Paulo - Cortinas Brás",
+        features: ["Projetos Exclusivos e Personalizados", "Tecidos Premium Importados", "Instalação Especializada e Impecável"],
         ctaLabel: "Solicitar Projeto",
         ctaLink: "#contato",
         delay: 0.2,
     },
     {
         title: "CAMA • MESA • BANHO",
-        description: "Enxovais de luxo que elevam a experiência do lar. Algodão egípcio e tramas nobres que proporcionam o máximo de conforto e sofisticação.",
+        description: "Enxovais de luxo que elevam a experiência do lar. Algodão egípcio e tramas nobres que proporcionam o máximo de conforto, durabilidade e sofisticação.",
         icon: Bed,
         image: "https://images.unsplash.com/photo-1522771739773-599c5a5fL-fdfdf788689?q=80&w=600&auto=format&fit=crop",
-        features: ["Fios Egípcios", "Toque de Seda", "Acabamento Nobre"],
+        alt: "Enxovais de luxo algodão egípcio cama mesa e banho - Cortinas Brás",
+        features: ["Fios Egípcios Autênticos", "Toque de Seda Natural", "Acabamento Nobre e Duradouro"],
         ctaLabel: "Explorar Linha",
         ctaLink: "https://wa.me/5511992891070",
         delay: 0.3,
@@ -89,7 +92,7 @@ export default function Products() {
                             <div className="relative aspect-[16/10] overflow-hidden">
                                 <img
                                     src={product.image}
-                                    alt={product.title}
+                                    alt={product.alt}
                                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60" />

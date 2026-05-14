@@ -1,120 +1,206 @@
-import PDFDocument from 'pdfkit';
-import fs from 'fs';
-import path from 'path';
+import puppeteer from 'puppeteer';
+
+export async function generatePdf(html: string): Promise<Buffer> {
+    let browser;
+    try {
+        browser = await puppeteer.launch({
+            args: ["--no-sandbox", "--disable-setuid-sandbox"],
+            headless: true,
+        });
+        const page = await browser.newPage();
+        await page.setContent(html, { waitUntil: "networkidle0", timeout: 30000 });
+
+        const pdfBuffer = await page.pdf({
+            format: "A4",
+            printBackground: true,
+            margin: { top: '0px', right: '0px', bottom: '0px', left: '0px' },
+            preferCSSPageSize: true
+        });
+
+        return Buffer.from(pdfBuffer);
+    } finally {
+        if (browser) await browser.close();
+    }
+}
 
 export async function generateOrcamentoPdf(lead: any): Promise<Buffer> {
-    return new Promise((resolve, reject) => {
-        const doc = new PDFDocument({
-            size: 'A4',
-            margins: { top: 50, bottom: 50, left: 50, right: 50 },
-            bufferPages: true
-        });
-        const buffers: any[] = [];
+    const html = `
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            body {
+                font-family: 'Helvetica', 'Arial', sans-serif;
+                color: #1a1a1a;
+                margin: 0;
+                padding: 0;
+                background-color: #f8f5f1;
+            }
+            .page {
+                padding: 40px;
+                background-color: #f8f5f1;
+                min-height: 100vh;
+            }
+            .header {
+                text-align: center;
+                margin-bottom: 40px;
+                border-bottom: 2px solid #D4A93E;
+                padding-bottom: 20px;
+            }
+            .logo {
+                width: 200px;
+                margin-bottom: 20px;
+            }
+            .title {
+                color: #D4A93E;
+                font-size: 28px;
+                font-weight: bold;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                margin: 0;
+            }
+            .subtitle {
+                color: #8B5C2A;
+                font-size: 14px;
+                margin-top: 5px;
+            }
+            .section {
+                margin-bottom: 30px;
+            }
+            .section-title {
+                font-size: 16px;
+                font-weight: bold;
+                color: #1a1a1a;
+                text-transform: uppercase;
+                border-bottom: 1px solid #ddd;
+                padding-bottom: 5px;
+                margin-bottom: 15px;
+            }
+            .info-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+            .info-item {
+                font-size: 14px;
+            }
+            .label {
+                color: #666;
+                font-weight: bold;
+                display: block;
+                font-size: 12px;
+                text-transform: uppercase;
+            }
+            .value {
+                color: #1a1a1a;
+                font-size: 15px;
+            }
+            .highlight-box {
+                background-color: white;
+                border: 1px solid #D4A93E;
+                padding: 20px;
+                border-radius: 12px;
+                margin: 20px 0;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            }
+            .highlight-item {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 10px;
+                font-size: 15px;
+            }
+            .highlight-label {
+                color: #666;
+            }
+            .highlight-value {
+                font-weight: bold;
+                color: #D4A93E;
+            }
+            .footer {
+                position: fixed;
+                bottom: 40px;
+                left: 0;
+                right: 0;
+                text-align: center;
+                font-size: 12px;
+                color: #999;
+                border-top: 1px solid #eee;
+                padding-top: 20px;
+            }
+            .footer-brand {
+                color: #D4A93E;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="page">
+            <div class="header">
+                <img src="https://cortinasbras.com.br/static/logo.png" class="logo" alt="Cortinas Brás" />
+                <h1 class="title">Orçamento Exclusivo</h1>
+                <p class="subtitle">Proposta #${lead.id} • ${new Date().toLocaleDateString('pt-BR')}</p>
+            </div>
 
-        doc.on('data', buffers.push.bind(buffers));
-        doc.on('end', () => resolve(Buffer.concat(buffers)));
-        doc.on('error', reject);
+            <div class="section">
+                <div class="section-title">Dados do Cliente</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="label">Nome Completo</span>
+                        <span class="value">${lead.nome}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">WhatsApp</span>
+                        <span class="value">${lead.telefone}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Localização</span>
+                        <span class="value">${lead.cidade_bairro || 'Não informada'}</span>
+                    </div>
+                </div>
+            </div>
 
-        // --- Styles & Colors ---
-        const colors = {
-            brandGold: '#D4A93E',
-            brandBrown: '#8B5C2A',
-            textDark: '#1a1a1a',
-            textGray: '#666666',
-            lightBg: '#f8f5f1'
-        };
+            <div class="section">
+                <div class="section-title">Especificações do Projeto</div>
+                <div class="highlight-box">
+                    <div class="highlight-item">
+                        <span class="highlight-label">Largura do Vão:</span>
+                        <span class="highlight-value">${lead.largura_parede || 'A verificar'}m</span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="highlight-label">Altura do Pé-direito:</span>
+                        <span class="highlight-value">${lead.altura_parede || 'A verificar'}m</span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="highlight-label">Tecido Sugerido:</span>
+                        <span class="highlight-value">${lead.tecido || 'Sob Consultoria'}</span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="highlight-label">Instalação Especializada:</span>
+                        <span class="highlight-value">${lead.instalacao || 'Sim'}</span>
+                    </div>
+                </div>
+            </div>
 
-        // Background Frame
-        doc.rect(20, 20, 555, 801).fill(colors.lightBg);
+            ${lead.observacoes ? `
+            <div class="section">
+                <div class="section-title">Observações Adicionais</div>
+                <p style="font-size: 14px; color: #555; line-height: 1.6;">${lead.observacoes}</p>
+            </div>
+            ` : ''}
 
-        // Logo
-        const logoPath = path.join(process.cwd(), 'public/static/logo.png');
-        if (fs.existsSync(logoPath)) {
-            doc.image(logoPath, {
-                fit: [200, 100],
-                align: 'center',
-                valign: 'center'
-            });
-            doc.moveUp();
-        }
-
-        // Header
-        doc.moveDown(2);
-        doc.font('Helvetica-Bold').fontSize(22)
-           .fillColor(colors.brandGold)
-           .text('ORÇAMENTO EXCLUSIVO', { align: 'center' });
-
-        doc.font('Helvetica').fontSize(10)
-           .fillColor(colors.brandBrown)
-           .text(`Proposta #${lead.id} • ${new Date().toLocaleDateString('pt-BR')}`, { align: 'center' });
-
-        // Divider
-        doc.moveDown();
-        doc.strokeColor(colors.brandGold).lineWidth(1).moveTo(200, doc.y).lineTo(350, doc.y).stroke();
-
-        // Section: Cliente
-        doc.moveDown(2);
-        doc.font('Helvetica-Bold').fontSize(14).fillColor(colors.textDark).text('CLIENTE', { underline: true });
-        doc.moveDown(0.5);
-
-        const clientData = [
-            { label: 'Nome Completo:', value: lead.nome },
-            { label: 'Contato (WhatsApp):', value: lead.telefone },
-            { label: 'Região:', value: lead.cidade_bairro || 'Não informada' },
-        ];
-
-        clientData.forEach((item: any) => {
-            doc.font('Helvetica-Bold').fontSize(11).fillColor(colors.textGray).text(item.label);
-            doc.font('Helvetica').fontSize(11).fillColor(colors.textDark).text(item.value, { continued: true, indent: 10 });
-            doc.moveDown(0.5);
-        });
-
-        // Section: Projeto (Highlight Box)
-        doc.moveDown(1);
-        doc.rect(50, doc.y, 500, 120).fill(colors.lightBg);
-        doc.font('Helvetica-Bold').fontSize(14).fillColor(colors.textDark).text('DETALHES DO PROJETO', 60, doc.y + 10);
-
-        let currentY = doc.y + 30;
-        const projectData = [
-            { label: 'Largura do Vão:', value: `${lead.largura_parede || 'A verificar'} metros` },
-            { label: 'Altura do Pé-direito:', value: `${lead.altura_parede || 'A verificar'} metros` },
-            { label: 'Tecido Sugerido:', value: lead.tecido || 'Sob Consultoria', isGold: true },
-            { label: 'Inclui Instalação?', value: lead.instalacao || 'Sim (Especializada)' },
-        ];
-
-        projectData.forEach((item: any) => {
-            doc.font('Helvetica-Bold').fontSize(11).fillColor(colors.textGray).text(item.label, 60, currentY);
-            doc.font('Helvetica').fontSize(11).fillColor(item.isGold ? colors.brandGold : colors.textDark).text(item.value, 160, currentY);
-            currentY += 20;
-        });
-
-        // Observações
-        if (lead.observacoes) {
-            doc.moveDown(3);
-            doc.font('Helvetica-Bold').fontSize(14).fillColor(colors.textDark).text('NOTAS DO PEDIDO');
-            doc.moveDown(0.5);
-            doc.font('Helvetica').fontSize(11).fillColor('#555').text(lead.observacoes, { align: 'justify' });
-        }
-
-        // Footer
-        const footerY = 750;
-        doc.moveTo(50, footerY).lineTo(540, footerY).strokeColor('#eee').stroke();
-        doc.moveDown(1);
-        doc.font('Helvetica-Bold').fontSize(10).fillColor('#999').text('CORTINAS BRÁS • Fábrica & Showroom', { align: 'center' });
-        doc.font('Helvetica').fontSize(9).fillColor('#999').text('Av. Celso Garcia, 129 - Brás, São Paulo - SP', { align: 'center' });
-        doc.font('Helvetica-Bold').fontSize(10).fillColor(colors.brandGold).text('www.cortinasbras.com.br', { align: 'center' });
-
-        doc.end();
-    });
+            <div class="footer">
+                <p>CORTINAS BRÁS • Fábrica & Showroom</p>
+                <p>Av. Celso Garcia, 129 - Brás, São Paulo - SP</p>
+                <p class="footer-brand">www.cortinasbras.com.br</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    `;
+    return generatePdf(html);
 }
 
 export async function generatePremiumOrcamentoPdf(lead: any): Promise<Buffer> {
-    // Reutiliza a lógica do generateOrcamentoPdf para consistência e economia de recursos
     return generateOrcamentoPdf(lead);
-}
-
-export async function generatePdf(html: string): Promise<Buffer> {
-    // Nota: A conversão direta de HTML para PDF sem navegador (Puppeteer) é limitada.
-    // Para manter a VPS leve, recomendamos que todas as funções usem o padrão PDFKit acima.
-    throw new Error("A função generatePdf (HTML) foi desativada para economizar recursos da VPS. Use generateOrcamentoPdf.");
 }

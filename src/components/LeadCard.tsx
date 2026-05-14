@@ -11,6 +11,10 @@ interface Lead {
     status: string;
     source: string;
     createdAt: string;
+    width?: number;
+    height?: number;
+    fabric?: string;
+    installation?: string;
 }
 
 interface LeadCardProps {
@@ -32,9 +36,14 @@ export default function LeadCard({ lead }: LeadCardProps) {
                 <div className="w-10 h-10 bg-brand-50 border border-brand-100 rounded-full flex items-center justify-center text-brand-400 group-hover:text-brand-primary transition-colors">
                     <User size={18} />
                 </div>
-                <div>
+                <div className="flex flex-col">
                     <h3 className="text-sm font-black text-brand-900 uppercase tracking-tight leading-none mb-1">{lead.name}</h3>
                     <p className="text-[11px] text-brand-800 font-bold leading-none">{lead.phone}</p>
+                    {(lead.width || lead.fabric) && (
+                        <span className="mt-1.5 text-[9px] font-bold text-brand-500 bg-brand-50/50 px-1.5 py-0.5 rounded border border-brand-100/50 inline-block">
+                            {lead.width ? `${lead.width}m x ${lead.height || '?'}m` : ''} {lead.fabric ? `• ${lead.fabric}` : ''}
+                        </span>
+                    )}
                 </div>
             </div>
 

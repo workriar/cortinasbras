@@ -14,7 +14,7 @@ export default function Enxovais() {
                         viewport={{ once: true }}
                         className="text-4xl font-extrabold text-brand-700 mb-6"
                     >
-                        Enxovais Premium (Cama, Mesa e Banho)
+                        Enxovais de Luxo <span className="text-brand-500">(Cama, Mesa e Banho)</span>
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -23,8 +23,9 @@ export default function Enxovais() {
                         transition={{ delay: 0.1 }}
                         className="text-lg text-brand-900/80 font-medium"
                     >
-                        Transforme sua casa com enxovais de alta qualidade. Lençóis com fios egípcios,
-                        toalhas de banho premium e jogos de cama que unem conforto e sofisticação.
+                        Transforme cada momento em seu lar em uma experiência de hotel 5 estrelas.
+                        Nossos enxovais unem a pureza do algodão egípcio com o design sofisticado,
+                        proporcionando um conforto inigualável e durabilidade eterna.
                     </motion.p>
                 </div>
 
@@ -32,21 +33,21 @@ export default function Enxovais() {
                     {[
                         {
                             icon: Bed,
-                            title: "Jogos de Cama",
-                            description: "Lençóis com fios egípcios de alta contagem, proporcionando maciez e durabilidade incomparáveis.",
-                            features: ["Fios Egípcios", "Alta Durabilidade", "Cores Variadas"]
+                            title: "Jogos de Cama Premium",
+                            description: "Lençóis com fios egípcios de altíssima contagem, garantindo uma maciez extraordinária e frescor incomparável para noites de sono perfeitas.",
+                            features: ["Algodão Egípcio Autêntico", "Toque de Seda Natural", "Durabilidade de Alta Performance"]
                         },
                         {
                             icon: Sparkles,
-                            title: "Toalhas Premium",
-                            description: "Toalhas de banho com alta absorção e toque aveludado, perfeitas para o seu conforto diário.",
-                            features: ["Alta Absorção", "Toque Macio", "Secagem Rápida"]
+                            title: "Toalhas de Banho Nobres",
+                            description: "Toalhas com altíssima gramatura e absorção superior, proporcionando um toque aveludado que transforma seu banho em um ritual de spa.",
+                            features: ["Ultra Absorção", "Toque Aveludado", "Secagem Inteligente e Rápida"]
                         },
                         {
                             icon: Heart,
-                            title: "Mesa Posta",
-                            description: "Toalhas de mesa e guardanapos que elevam a elegância das suas refeições especiais.",
-                            features: ["Design Exclusivo", "Tecidos Nobres", "Acabamento Perfeito"]
+                            title: "Mesa Posta Sofisticada",
+                            description: "Toalhas de mesa e guardanapos em tramas nobres que elevam a elegância de suas refeições, transformando cada encontro em um evento especial.",
+                            features: ["Design Exclusivo de Luxo", "Tecidos de Alta Nobreza", "Acabamento Artesanal Impecável"]
                         }
                     ].map((item, i) => (
                         <motion.div
@@ -83,17 +84,17 @@ export default function Enxovais() {
                                 whileHover={{ gap: "12px" }}
                                 className="flex items-center gap-2 font-bold text-brand-500 py-2 group/link"
                             >
-                                Falar no WhatsApp
+                                Consultar Disponibilidade
                                 <div className="h-0.5 w-8 bg-brand-500 rounded-full transition-all group-hover/link:w-12" />
                             </motion.a>
                         </motion.div>
                     ))}
                 </div>
-            </div>
 
-            {/* Background Decorative Elements */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-brand-100/30 rounded-full blur-3xl -mr-48 -mt-48" />
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-brand-50 rounded-full blur-3xl -ml-48 -mb-48" />
+                {/* Background Decorative Elements */}
+                <div className="absolute top-0 right-0 w-96 h-96 bg-brand-100/30 rounded-full blur-3xl -mr-48 -mt-48" />
+                <div className="absolute bottom-0 left-0 w-96 h-96 bg-brand-50 rounded-full blur-3xl -ml-48 -mb-48" />
+            </div>
         </section>
     );
 }
