@@ -4,9 +4,17 @@ export async function generatePdf(html: string): Promise<Buffer> {
     let browser;
     try {
         browser = await puppeteer.launch({
-            args: ["--no-sandbox", "--disable-setuid-sandbox"],
+            args: [
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",   // evita crash em /dev/shm pequeno no Docker
+                "--disable-gpu",             // sem GPU em container headless
+                "--no-first-run",
+                "--no-zygote",
+                "--single-process",          // mais estável em containers com pouca RAM
+            ],
             headless: true,
-            executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
+            executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || process.env.CHROMIUM_PATH || undefined,
         });
         const page = await browser.newPage();
         await page.setContent(html, { waitUntil: "networkidle0", timeout: 30000 });

@@ -7,6 +7,23 @@ RUN apt-get update && apt-get install -y \
   openssl \
   ca-certificates \
   chromium \
+  chromium-common \
+  fonts-liberation \
+  fonts-noto-color-emoji \
+  libatk-bridge2.0-0 \
+  libatk1.0-0 \
+  libcups2 \
+  libdbus-1-3 \
+  libdrm2 \
+  libgbm1 \
+  libgtk-3-0 \
+  libnspr4 \
+  libnss3 \
+  libxcomposite1 \
+  libxdamage1 \
+  libxfixes3 \
+  libxkbcommon0 \
+  libxrandr2 \
   procps \
   python3 \
   make \
@@ -14,9 +31,10 @@ RUN apt-get update && apt-get install -y \
   build-essential \
   && rm -rf /var/lib/apt/lists/*
 
-# Configurar Puppeteer
+# Configurar Puppeteer para usar o Chromium do sistema
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+ENV CHROMIUM_PATH=/usr/bin/chromium
 
 WORKDIR /app
 
@@ -56,8 +74,12 @@ ENV NPM_CONFIG_CACHE=/tmp/.npm
 RUN groupadd --system --gid 1001 nodejs
 RUN useradd --system --uid 1001 --gid nodejs nextjs
 
-# Criar diretório de dados
+# Criar diretório de dados e cache do Puppeteer
 RUN mkdir -p /app/data && chown -R nextjs:nodejs /app/data
+RUN mkdir -p /home/nextjs/.cache && chown -R nextjs:nodejs /home/nextjs
+
+# Dar permissão ao chromium para rodar sem sandbox (necessário em containers)
+RUN chmod 4755 /usr/bin/chromium || true
 
 # Copiar tudo necessário para produção
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next

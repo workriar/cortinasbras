@@ -55,6 +55,20 @@ model Lead {
   @@index([createdAt])
 }
 
+model Fabric {
+  id              Int      @id @default(autoincrement())
+  name            String
+  category        String
+  description     String
+  altText         String
+  colors          String
+  benefits        String
+  exclusive       Boolean  @default(false)
+  placeholderImage String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
 // Histórico de interações com o lead
 model Interaction {
   id        Int      @id @default(autoincrement())

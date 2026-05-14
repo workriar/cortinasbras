@@ -127,8 +127,8 @@ export default function Hero() {
                             Solicitar Orçamento <ArrowRight size={18} />
                         </motion.a>
                         <motion.a
-                            href="/catalog.pdf"
-                            download="catalogo-cortinas-bras.pdf"
+                            href="/api/catalog"
+                            target="_blank"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-8 py-4 rounded-2xl font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-white/20 transition-all"

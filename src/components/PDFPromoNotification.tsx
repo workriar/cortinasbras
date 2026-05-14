@@ -62,8 +62,8 @@ export default function PDFPromoNotification() {
                                         Descubra nossa coleção completa de tecidos premium e modelos de luxo.
                                     </p>
                                     <a
-                                        href="/catalog.pdf"
-                                        download="catalogo-cortinas-bras.pdf"
+                                        href="/api/catalog"
+                                        target="_blank"
                                         className="inline-flex items-center gap-2 px-5 py-3 bg-brand-600 text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-brand-700 transition-all shadow-lg shadow-brand-500/20 active:scale-95"
                                     >
                                         <Download size={14} /> Baixar Agora
