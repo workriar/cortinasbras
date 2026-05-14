@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, MessageCircle, Sparkles } from "lucide-react";
@@ -19,41 +18,8 @@ const promos = [
 ];
 
 export default function Hero() {
-    const [loading, setLoading] = useState(false);
     const [currentSlide, setCurrentSlide] = useState(0);
     const [currentPromo, setCurrentPromo] = useState(0);
-
-    const handleGeneratePdf = async () => {
-        setLoading(true);
-        const lead = {
-            nome: "Teste",
-            telefone: "11999999999",
-            id: 123,
-            largura_parede: 2,
-            altura_parede: 2.5,
-            tecido: "Algodão",
-            instalacao: "Sim",
-            observacoes: "Nenhuma",
-        };
-        try {
-            const res = await fetch('/api/generate-pdf', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(lead),
-            });
-            if (!res.ok) {
-                const errorData = await res.json().catch(() => ({}));
-                if (process.env.NODE_ENV === 'development') {
-                    console.error(`Failed to generate PDF: ${res.status} ${res.statusText}`, errorData);
-                }
-            }
-        } catch (e) {
-            if (process.env.NODE_ENV === 'development') {
-                console.error(e);
-            }
-        }
-        setLoading(false);
-    };
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -71,7 +37,6 @@ export default function Hero() {
 
     return (
         <section id="inicio" className="relative min-h-screen flex items-center overflow-hidden pt-20">
-            {/* Background Carousel with Luxury Parallax */}
             <div className="absolute inset-0 z-0">
                 <AnimatePresence mode="wait">
                     <motion.div
@@ -95,11 +60,8 @@ export default function Hero() {
                         />
                     </motion.div>
                 </AnimatePresence>
-                {/* High-End Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-
-                {/* Subtile Fabric Texture Overlay */}
                 <div className="absolute inset-0 opacity-20 mix-blend-overlay pointer-events-none"
                     style={{
                         backgroundImage: 'url("https://www.transparenttextures.com/patterns/linen.png")',
@@ -109,7 +71,6 @@ export default function Hero() {
             </div>
 
             <div className="container mx-auto px-6 pt-20 pb-12 relative z-10 grid lg:grid-cols-2 gap-16 items-center">
-                {/* Text Content */}
                 <motion.div
                     initial={{ opacity: 0, x: -30 }}
                     whileInView={{ opacity: 1, x: 0 }}
@@ -120,7 +81,6 @@ export default function Hero() {
                     }}
                     className="space-y-10"
                 >
-                    {/* Premium Badge */}
                     <motion.div
                         className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/10 backdrop-blur-xl text-brand-300 text-xs font-bold uppercase tracking-widest border border-white/20 shadow-2xl animate-gentle-float"
                         whileHover={{ scale: 1.05 }}
@@ -129,7 +89,6 @@ export default function Hero() {
                         Referência em Luxo e Sofisticação
                     </motion.div>
 
-                    {/* Typography Masterpiece */}
                     <div className="space-y-4">
                         <motion.h1
                             initial={{ opacity: 0, y: 20 }}
@@ -140,7 +99,6 @@ export default function Hero() {
                             Cortinas <span className="text-brand-400">Sob Medida</span> <br />
                             <span className="text-white/70 font-light italic">em São Paulo</span>
                         </motion.h1>
-
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -203,7 +161,6 @@ export default function Hero() {
                     </div>
                 </motion.div>
 
-                {/* Promo Gallery - Curated Look */}
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9, y: 30 }}
                     whileInView={{ opacity: 1, scale: 1, y: 0 }}
@@ -216,7 +173,6 @@ export default function Hero() {
                 >
                     <div className="absolute -inset-4 bg-brand-500/10 blur-3xl rounded-full" />
                     <div className="absolute -inset-1 border border-brand-400/30 rounded-[2.5rem] animate-pulse" />
-
                     <div className="relative h-full bg-slate-900 p-3 rounded-[2.5rem] border border-white/10 overflow-hidden shadow-2xl">
                         <AnimatePresence mode="wait">
                             <motion.div
@@ -237,7 +193,6 @@ export default function Hero() {
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                             </motion.div>
                         </AnimatePresence>
-
                         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-10">
                             {promos.map((_, i) => (
                                 <button
@@ -246,7 +201,7 @@ export default function Hero() {
                                     className={`h-1.5 transition-all duration-500 rounded-full ${i === currentPromo ? "w-8 bg-brand-400" : "w-1.5 bg-white/30 hover:bg-white/60"}`}
                                 />
                             ))}
-                        </div
+                        </div>
                     </div>
                 </motion.div>
             </div>
