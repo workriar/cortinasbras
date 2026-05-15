@@ -89,7 +89,7 @@ export async function POST(req: Request) {
 
         // Generate PDF in background (or await but catch errors)
         try {
-            const leadForPdf = { ...lead, nome: lead.name, telefone: lead.phone, cidade_bairro: lead.city, largura_parede: lead.width, altura_parede: lead.height, tecido: lead.fabric, instalacao: lead.installation, observacoes: lead.notes };
+            const leadForPdf = { id: lead.id, nome: lead.name, telefone: lead.phone, cidade_bairro: lead.city ?? undefined, largura_parede: lead.width ?? undefined, altura_parede: lead.height ?? undefined, tecido: lead.fabric ?? undefined, instalacao: lead.installation ?? undefined, observacoes: lead.notes ?? undefined };
 
             const pdfBuffer = await generateOrcamentoPdf(leadForPdf);
 

@@ -76,12 +76,12 @@ export default function PDFPromoNotification() {
                                  animation: 'shrink 10s linear forwards'
                              }}
                         />
-                        <style jsx>{`
+                        <style dangerouslySetInnerHTML={{ __html: `
                             @keyframes shrink {
                                 from { width: 100%; }
                                 to { width: 0%; }
                             }
-                        `}</style>
+                        ` }} />
                     </div>
                 </motion.div>
             )}

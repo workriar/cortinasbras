@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { fabrics } from './src/lib/fabrics';
+import { fabrics } from '../src/lib/fabrics';
 
 const prisma = new PrismaClient();
 

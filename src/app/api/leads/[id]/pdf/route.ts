@@ -16,17 +16,18 @@ export async function GET(
             return new NextResponse("Orçamento não encontrado", { status: 404 });
         }
 
-        // Mapear campos do Prisma para o formato esperado pelo gerador de PDF (legado)
+        // Mapear campos do Prisma para o formato esperado pelo gerador de PDF
+        // null → undefined para compatibilidade de tipos
         const leadForPdf = {
             id: lead.id,
             nome: lead.name,
             telefone: lead.phone,
-            cidade_bairro: lead.city,
-            largura_parede: lead.width,
-            altura_parede: lead.height,
-            tecido: lead.fabric,
-            instalacao: lead.installation,
-            observacoes: lead.notes,
+            cidade_bairro: lead.city ?? undefined,
+            largura_parede: lead.width ?? undefined,
+            altura_parede: lead.height ?? undefined,
+            tecido: lead.fabric ?? undefined,
+            instalacao: lead.installation ?? undefined,
+            observacoes: lead.notes ?? undefined,
         };
 
         const pdfBuffer = await generateOrcamentoPdf(leadForPdf);
