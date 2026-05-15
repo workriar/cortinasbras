@@ -274,7 +274,6 @@ export default function CatalogPage() {
                             </form>
                         </motion.div>
                     </div>
-                </motion la-fdfdf788689>
             </AnimatePresence>
         </div>
     );
