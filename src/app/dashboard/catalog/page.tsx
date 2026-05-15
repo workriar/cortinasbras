@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Pencil, Trash2, Package, X, Save } from "lucide-react";
 
 interface Fabric {
@@ -274,6 +274,7 @@ export default function CatalogPage() {
                             </form>
                         </motion.div>
                     </div>
+                )}
             </AnimatePresence>
         </div>
     );

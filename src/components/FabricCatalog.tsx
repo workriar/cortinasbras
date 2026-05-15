@@ -178,7 +178,7 @@ export default function FabricCatalog() {
                             ))}
                         </AnimatePresence>
                     </motion.div>
-                </div>
+                )}
 
                 <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-100/40 rounded-full blur-3xl -mr-48 -mt-48 pointer-events-none" />
                 <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-slate-100 rounded-full blur-3xl -ml-48 -mb-48 pointer-events-s-none" />

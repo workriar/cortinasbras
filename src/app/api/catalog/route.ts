@@ -191,7 +191,7 @@ export async function GET() {
 
     try {
         const pdfBuffer = await generatePdf(html);
-        return new NextResponse(pdfBuffer, {
+        return new NextResponse(new Uint8Array(pdfBuffer), {
             headers: {
                 'Content-Type': 'application/pdf',
                 'Content-Disposition': 'attachment; filename="catalogo-cortinas-bras.pdf"',
