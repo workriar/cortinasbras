@@ -12,9 +12,7 @@
 //   Instalada no Docker via: apt install fonts-liberation
 // ============================================================
 
-// PDFKit é CommonJS puro — usar require garante compatibilidade
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const PDFDocument = require('pdfkit') as typeof import('pdfkit');
+import PDFDocument from 'pdfkit';
 
 const FONT_REGULAR = 'Helvetica';
 const FONT_BOLD    = 'Helvetica-Bold';
