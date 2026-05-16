@@ -16,43 +16,8 @@
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const PDFDocument = require('pdfkit') as typeof import('pdfkit');
 
-import path from 'path';
-import fs   from 'fs';
-
-// ─── Resolução de fontes TTF (sem dependência de AFM) ────────────────────────
-
-/**
- * Procura a fonte Liberation Sans em locais conhecidos.
- * - Produção (Docker/Linux): /usr/share/fonts/truetype/liberation/
- * - Desenvolvimento local  : public/fonts/ (caso instalado manualmente)
- */
-function resolveFont(filename: string): string {
-    const candidates = [
-        // Docker / Linux (fonts-liberation via apt)
-        `/usr/share/fonts/truetype/liberation/${filename}`,
-        // Debian alternativo
-        `/usr/share/fonts/liberation/${filename}`,
-        // Desenvolvimento local Windows/Mac
-        path.join(process.cwd(), 'public', 'fonts', filename),
-    ];
-    for (const p of candidates) {
-        if (fs.existsSync(p)) return p;
-    }
-    // Fallback — será o erro original, mas agora com log útil
-    console.error(`[PDF] ❌ Fonte não encontrada: ${filename}. Candidatos: ${candidates.join(', ')}`);
-    // Retorna o nome built-in do PDFKit (vai falhar com AFM se não instalado,
-    // mas ao menos logamos o problema claramente)
-    return filename.replace('LiberationSans-Regular.ttf', 'Helvetica')
-                   .replace('LiberationSans-Bold.ttf',    'Helvetica-Bold');
-}
-
-// Resolvidos 1x na inicialização do módulo (sem overhead por requisição)
-const FONT_REGULAR = resolveFont('LiberationSans-Regular.ttf');
-const FONT_BOLD    = resolveFont('LiberationSans-Bold.ttf');
-
-if (process.env.NODE_ENV === 'development') {
-    console.log('[PDF] Fontes resolvidas:', { FONT_REGULAR, FONT_BOLD });
-}
+const FONT_REGULAR = 'Helvetica';
+const FONT_BOLD    = 'Helvetica-Bold';
 
 // ─── Helpers de stream ───────────────────────────────────────────────────────
 
