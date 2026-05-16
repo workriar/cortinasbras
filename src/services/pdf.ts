@@ -1,30 +1,83 @@
 // ============================================================
 // pdf.ts — Geração de PDF com PDFKit (Node.js puro)
-// Substitui Puppeteer/Chromium, que é instável em containers Docker.
-// PDFKit é uma dependência já declarada em package.json.
+//
+// ⚠️ SOLUÇÃO DEFINITIVA PARA O ERRO DE AFM:
+//   PDFKit usa __dirname para localizar arquivos .afm das fontes built-in
+//   (Helvetica, Times, etc). Quando o Next.js bunda o código servidor,
+//   __dirname aponta para .next/server/chunks/ onde os .afm NÃO existem.
+//
+//   SOLUÇÃO: usar Liberation Sans (TTF) via process.cwd() — um caminho
+//   absoluto que não depende de __dirname nem de bundling.
+//   Liberation Sans é metricamente idêntica à Helvetica (mesmas larguras).
+//   Instalada no Docker via: apt install fonts-liberation
 // ============================================================
 
-import PDFDocument from 'pdfkit';
+// PDFKit é CommonJS puro — usar require garante compatibilidade
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const PDFDocument = require('pdfkit') as typeof import('pdfkit');
+
+import path from 'path';
+import fs   from 'fs';
+
+// ─── Resolução de fontes TTF (sem dependência de AFM) ────────────────────────
+
+/**
+ * Procura a fonte Liberation Sans em locais conhecidos.
+ * - Produção (Docker/Linux): /usr/share/fonts/truetype/liberation/
+ * - Desenvolvimento local  : public/fonts/ (caso instalado manualmente)
+ */
+function resolveFont(filename: string): string {
+    const candidates = [
+        // Docker / Linux (fonts-liberation via apt)
+        `/usr/share/fonts/truetype/liberation/${filename}`,
+        // Debian alternativo
+        `/usr/share/fonts/liberation/${filename}`,
+        // Desenvolvimento local Windows/Mac
+        path.join(process.cwd(), 'public', 'fonts', filename),
+    ];
+    for (const p of candidates) {
+        if (fs.existsSync(p)) return p;
+    }
+    // Fallback — será o erro original, mas agora com log útil
+    console.error(`[PDF] ❌ Fonte não encontrada: ${filename}. Candidatos: ${candidates.join(', ')}`);
+    // Retorna o nome built-in do PDFKit (vai falhar com AFM se não instalado,
+    // mas ao menos logamos o problema claramente)
+    return filename.replace('LiberationSans-Regular.ttf', 'Helvetica')
+                   .replace('LiberationSans-Bold.ttf',    'Helvetica-Bold');
+}
+
+// Resolvidos 1x na inicialização do módulo (sem overhead por requisição)
+const FONT_REGULAR = resolveFont('LiberationSans-Regular.ttf');
+const FONT_BOLD    = resolveFont('LiberationSans-Bold.ttf');
+
+if (process.env.NODE_ENV === 'development') {
+    console.log('[PDF] Fontes resolvidas:', { FONT_REGULAR, FONT_BOLD });
+}
+
+// ─── Helpers de stream ───────────────────────────────────────────────────────
 
 /** Converte um stream de PDFDocument em um Buffer de forma confiável */
 function streamToBuffer(doc: InstanceType<typeof PDFDocument>): Promise<Buffer> {
     return new Promise((resolve, reject) => {
         const chunks: Buffer[] = [];
-        doc.on('data', (chunk: Buffer) => chunks.push(chunk));
-        doc.on('end', () => resolve(Buffer.concat(chunks)));
+        doc.on('data',  (chunk: Buffer) => chunks.push(chunk));
+        doc.on('end',   () => resolve(Buffer.concat(chunks)));
         doc.on('error', reject);
     });
 }
 
-// Paleta de cores da marca
+// ─── Paleta de cores da marca ─────────────────────────────────────────────────
+
 const BRAND = {
-    gold: '#D4A93E',
-    darkGold: '#8B5C2A',
-    dark: '#1a1a1a',
-    light: '#f8f5f1',
-    gray: '#666666',
+    gold:      '#D4A93E',
+    darkGold:  '#8B5C2A',
+    dark:      '#1a1a1a',
+    light:     '#f8f5f1',
+    gray:      '#666666',
     lightGray: '#dddddd',
 };
+
+// ─── Geração do catálogo PDF ──────────────────────────────────────────────────
 
 /**
  * Gera o PDF do catálogo completo de tecidos da Cortinas Brás.
@@ -37,77 +90,72 @@ export async function generatePdf(fabrics: Array<{
     exclusive?: boolean;
 }>): Promise<Buffer> {
     const doc = new PDFDocument({
-        size: 'A4',
+        size:   'A4',
         margin: 50,
         info: {
-            Title: 'Catálogo Exclusivo — Cortinas Brás',
-            Author: 'Cortinas Brás',
+            Title:   'Catálogo Exclusivo — Cortinas Brás',
+            Author:  'Cortinas Brás',
             Subject: 'Catálogo de Tecidos Premium',
         },
     });
 
     const bufferPromise = streamToBuffer(doc);
 
-    const W = doc.page.width;   // 595
-    const M = 50;               // margem
-    const CW = W - M * 2;       // largura útil
+    const W  = doc.page.width;  // 595
+    const M  = 50;              // margem
+    const CW = W - M * 2;      // largura útil
 
-    // ─── Capa ────────────────────────────────────────────────────────────────
+    // ─── Capa ─────────────────────────────────────────────────────────────────
     doc.rect(0, 0, W, doc.page.height).fill(BRAND.light);
-
-    // Faixa dourada superior
     doc.rect(0, 0, W, 8).fill(BRAND.gold);
 
-    // Título central
     const centerY = doc.page.height / 2 - 80;
     doc.fillColor(BRAND.darkGold)
         .fontSize(10)
-        .font('Helvetica-Bold')
+        .font(FONT_BOLD)
         .text('CORTINAS BRÁS', M, centerY, { align: 'center', width: CW, characterSpacing: 6 });
 
     doc.moveDown(0.5);
     doc.fillColor(BRAND.dark)
         .fontSize(32)
-        .font('Helvetica-Bold')
+        .font(FONT_BOLD)
         .text('Catálogo Exclusivo', M, doc.y, { align: 'center', width: CW });
 
     doc.moveDown(0.5);
     doc.fillColor(BRAND.gold)
         .fontSize(13)
-        .font('Helvetica')
+        .font(FONT_REGULAR)
         .text('A Arte da Alta Costura em Cortinas', M, doc.y, { align: 'center', width: CW });
 
-    // Linha decorativa
     const lineY = doc.y + 30;
     doc.moveTo(W / 2 - 40, lineY).lineTo(W / 2 + 40, lineY)
         .strokeColor(BRAND.gold).lineWidth(1.5).stroke();
 
     doc.fillColor(BRAND.darkGold)
         .fontSize(10)
-        .font('Helvetica')
+        .font(FONT_REGULAR)
         .text('São Paulo | 2026', M, lineY + 15, { align: 'center', width: CW });
 
-    // Faixa dourada inferior
     doc.rect(0, doc.page.height - 8, W, 8).fill(BRAND.gold);
 
-    // ─── Página 2: Sobre a Empresa ───────────────────────────────────────────
+    // ─── Página 2: Sobre a Empresa ────────────────────────────────────────────
     doc.addPage();
     _drawPageHeader(doc, 'Nossas Soluções', W, M, CW);
 
     const solutions = [
         {
             title: 'Cortinas Prontas',
-            desc: 'Modelos selecionados com dimensões padrão, unindo agilidade e a qualidade inquestionável de nossa fábrica. Elegância imediata para seu ambiente.',
+            desc:  'Modelos selecionados com dimensões padrão, unindo agilidade e a qualidade inquestionável de nossa fábrica. Elegância imediata para seu ambiente.',
             items: ['Entrega imediata', 'Curadoria de cores', 'Tamanhos padrão'],
         },
         {
             title: 'Cortinas Sob Medida',
-            desc: 'Nossa obra-prima. Projetos milimetricamente planejados para cada janela, utilizando os tecidos mais nobres do mundo.',
+            desc:  'Nossa obra-prima. Projetos milimetricamente planejados para cada janela, utilizando os tecidos mais nobres do mundo.',
             items: ['Projetos exclusivos', 'Tecidos premium', 'Instalação especializada'],
         },
         {
             title: 'Cama • Mesa • Banho',
-            desc: 'Enxovais de luxo que elevam a experiência do lar. Algodão egípcio e tramas nobres para máximo conforto e sofisticação.',
+            desc:  'Enxovais de luxo que elevam a experiência do lar. Algodão egípcio e tramas nobres para máximo conforto e sofisticação.',
             items: ['Fios Egípcios', 'Toque de Seda', 'Acabamento nobre'],
         },
     ];
@@ -116,27 +164,23 @@ export async function generatePdf(fabrics: Array<{
         _drawCard(doc, s.title, s.desc, s.items, M, CW);
         doc.moveDown(0.8);
     }
-
     _drawPageFooter(doc, W, M, CW);
 
-    // ─── Página 3+: Tecidos ──────────────────────────────────────────────────
+    // ─── Página 3+: Tecidos ───────────────────────────────────────────────────
     doc.addPage();
     _drawPageHeader(doc, 'Curadoria de Tecidos Premium', W, M, CW);
 
     for (const fabric of fabrics) {
-        // Nova página se não houver espaço suficiente
         if (doc.y > doc.page.height - 200) {
             doc.addPage();
             _drawPageHeader(doc, 'Curadoria de Tecidos Premium', W, M, CW);
         }
-
         _drawFabricCard(doc, fabric, M, CW);
         doc.moveDown(0.6);
     }
-
     _drawPageFooter(doc, W, M, CW);
 
-    // ─── Última página: Contato ──────────────────────────────────────────────
+    // ─── Última página: Contato ───────────────────────────────────────────────
     doc.addPage();
     doc.rect(0, 0, W, doc.page.height).fill(BRAND.dark);
     doc.rect(0, 0, W, 8).fill(BRAND.gold);
@@ -145,38 +189,35 @@ export async function generatePdf(fabrics: Array<{
 
     doc.fillColor(BRAND.gold)
         .fontSize(9)
-        .font('Helvetica-Bold')
+        .font(FONT_BOLD)
         .text('ENTRE EM CONTATO', M, ctY, { align: 'center', width: CW, characterSpacing: 5 });
 
     doc.moveDown(0.8);
     doc.fillColor('#ffffff')
         .fontSize(26)
-        .font('Helvetica-Bold')
+        .font(FONT_BOLD)
         .text('Fale com nossos\nEspecialistas', M, doc.y, { align: 'center', width: CW });
 
     doc.moveDown(1.2);
-
     const contacts = [
-        '📍  Av. Celso Garcia, 129 — Brás, São Paulo/SP',
-        '📞  (11) 99289-1070',
-        '🌐  www.cortinasbras.com.br',
+        '  Av. Celso Garcia, 129 — Brás, São Paulo/SP',
+        '  (11) 99289-1070',
+        '  www.cortinasbras.com.br',
     ];
-
     for (const c of contacts) {
         doc.fillColor(BRAND.gold)
             .fontSize(11)
-            .font('Helvetica')
+            .font(FONT_REGULAR)
             .text(c, M, doc.y, { align: 'center', width: CW });
         doc.moveDown(0.6);
     }
-
     doc.rect(0, doc.page.height - 8, W, 8).fill(BRAND.gold);
 
     doc.end();
     return bufferPromise;
 }
 
-// ─── Helpers internos ────────────────────────────────────────────────────────
+// ─── Helpers internos ─────────────────────────────────────────────────────────
 
 function _drawPageHeader(
     doc: InstanceType<typeof PDFDocument>,
@@ -187,10 +228,9 @@ function _drawPageHeader(
 ) {
     doc.fillColor(BRAND.dark)
         .fontSize(22)
-        .font('Helvetica-Bold')
+        .font(FONT_BOLD)
         .text(title, M, M, { align: 'center', width: CW });
 
-    // Linha dourada abaixo do título
     doc.moveTo(M + CW / 2 - 60, doc.y + 8)
         .lineTo(M + CW / 2 + 60, doc.y + 8)
         .strokeColor(BRAND.gold)
@@ -212,7 +252,7 @@ function _drawPageFooter(
 
     doc.fillColor(BRAND.gray)
         .fontSize(8)
-        .font('Helvetica')
+        .font(FONT_REGULAR)
         .text(
             'CORTINAS BRÁS  •  Fábrica & Showroom  •  Av. Celso Garcia, 129 – Brás, São Paulo/SP  •  www.cortinasbras.com.br',
             M,
@@ -230,32 +270,26 @@ function _drawCard(
     CW: number,
 ) {
     const startY = doc.y;
+    const cardH  = 120;
 
-    // Fundo do card
-    const cardH = 120;
     doc.roundedRect(M, startY, CW, cardH, 8)
         .fillAndStroke('#ffffff', BRAND.lightGray);
-
-    // Acento lateral dourado
     doc.rect(M, startY, 4, cardH).fill(BRAND.gold);
 
-    // Título
     doc.fillColor(BRAND.gold)
         .fontSize(13)
-        .font('Helvetica-Bold')
+        .font(FONT_BOLD)
         .text(title, M + 20, startY + 14, { width: CW - 30 });
 
-    // Descrição
     doc.fillColor(BRAND.gray)
         .fontSize(9)
-        .font('Helvetica')
+        .font(FONT_REGULAR)
         .text(desc, M + 20, doc.y + 4, { width: CW - 30 });
 
-    // Benefícios
     const benefitsY = startY + cardH - 22;
     doc.fillColor(BRAND.darkGold)
         .fontSize(8)
-        .font('Helvetica-Bold')
+        .font(FONT_BOLD)
         .text(items.map(i => `✓ ${i}`).join('   '), M + 20, benefitsY, { width: CW - 30 });
 
     doc.y = startY + cardH + 6;
@@ -268,61 +302,56 @@ function _drawFabricCard(
     CW: number,
 ) {
     const startY = doc.y;
-    const cardH = 110;
+    const cardH  = 110;
 
     doc.roundedRect(M, startY, CW, cardH, 8)
         .fillAndStroke('#ffffff', BRAND.lightGray);
-
-    // Acento lateral
     doc.rect(M, startY, 4, cardH).fill(BRAND.gold);
 
-    // Badge "Exclusivo"
     if (fabric.exclusive) {
         doc.roundedRect(M + CW - 72, startY + 10, 62, 16, 4).fill(BRAND.gold);
         doc.fillColor('#ffffff')
             .fontSize(7)
-            .font('Helvetica-Bold')
+            .font(FONT_BOLD)
             .text('EXCLUSIVO', M + CW - 69, startY + 14, { width: 56, align: 'center' });
     }
 
-    // Nome do tecido
     doc.fillColor(BRAND.dark)
         .fontSize(13)
-        .font('Helvetica-Bold')
+        .font(FONT_BOLD)
         .text(fabric.name, M + 20, startY + 12, { width: fabric.exclusive ? CW - 110 : CW - 30 });
 
-    // Descrição
     doc.fillColor(BRAND.gray)
         .fontSize(9)
-        .font('Helvetica')
+        .font(FONT_REGULAR)
         .text(fabric.description, M + 20, doc.y + 3, { width: CW - 30, lineGap: 1.5 });
 
-    // Cores
     const colorsY = startY + cardH - 36;
     doc.fillColor(BRAND.darkGold)
         .fontSize(7.5)
-        .font('Helvetica-Bold')
+        .font(FONT_BOLD)
         .text('CORES:', M + 20, colorsY);
 
     doc.fillColor(BRAND.gray)
         .fontSize(7.5)
-        .font('Helvetica')
+        .font(FONT_REGULAR)
         .text(fabric.colors.join(' • '), M + 58, colorsY, { width: CW - 80 });
 
-    // Benefícios
     const benefitsY = startY + cardH - 20;
     doc.fillColor(BRAND.darkGold)
         .fontSize(7.5)
-        .font('Helvetica-Bold')
+        .font(FONT_BOLD)
         .text('DIFERENCIAIS:', M + 20, benefitsY);
 
     doc.fillColor(BRAND.gray)
         .fontSize(7.5)
-        .font('Helvetica')
+        .font(FONT_REGULAR)
         .text(fabric.benefits.map(b => `✓ ${b}`).join('   '), M + 88, benefitsY, { width: CW - 110 });
 
     doc.y = startY + cardH + 8;
 }
+
+// ─── Geração do PDF de orçamento ─────────────────────────────────────────────
 
 /**
  * Gera o PDF de orçamento de um lead.
@@ -339,38 +368,36 @@ export async function generateOrcamentoPdf(lead: {
     observacoes?: string;
 }): Promise<Buffer> {
     const doc = new PDFDocument({
-        size: 'A4',
+        size:   'A4',
         margin: 50,
         info: {
-            Title: `Orçamento #${lead.id} — Cortinas Brás`,
+            Title:  `Orçamento #${lead.id} — Cortinas Brás`,
             Author: 'Cortinas Brás',
         },
     });
 
     const bufferPromise = streamToBuffer(doc);
 
-    const W = doc.page.width;
-    const M = 50;
+    const W  = doc.page.width;
+    const M  = 50;
     const CW = W - M * 2;
 
-    // Fundo
     doc.rect(0, 0, W, doc.page.height).fill(BRAND.light);
     doc.rect(0, 0, W, 8).fill(BRAND.gold);
 
-    // Cabeçalho
     doc.fillColor(BRAND.darkGold)
         .fontSize(9)
-        .font('Helvetica-Bold')
+        .font(FONT_BOLD)
         .text('CORTINAS BRÁS', M, 30, { align: 'center', width: CW, characterSpacing: 4 });
 
     doc.fillColor(BRAND.gold)
         .fontSize(24)
-        .font('Helvetica-Bold')
+        .font(FONT_BOLD)
         .text('Orçamento Exclusivo', M, 50, { align: 'center', width: CW });
 
     doc.fillColor(BRAND.gray)
         .fontSize(10)
-        .font('Helvetica')
+        .font(FONT_REGULAR)
         .text(
             `Proposta #${lead.id}  •  ${new Date().toLocaleDateString('pt-BR')}`,
             M,
@@ -378,48 +405,38 @@ export async function generateOrcamentoPdf(lead: {
             { align: 'center', width: CW },
         );
 
-    // Linha divisória
     doc.moveTo(M, doc.y + 14).lineTo(W - M, doc.y + 14)
         .strokeColor(BRAND.gold).lineWidth(1.5).stroke();
-
     doc.moveDown(2.5);
 
-    // ─── Dados do Cliente
     _sectionTitle(doc, 'DADOS DO CLIENTE', M, CW);
-
     const rows: [string, string][] = [
         ['Nome Completo', lead.nome],
-        ['WhatsApp', lead.telefone],
-        ['Localização', lead.cidade_bairro || 'Não informada'],
+        ['WhatsApp',      lead.telefone],
+        ['Localização',   lead.cidade_bairro || 'Não informada'],
     ];
     _infoGrid(doc, rows, M, CW);
 
     doc.moveDown(1.2);
-
-    // ─── Especificações do Projeto
     _sectionTitle(doc, 'ESPECIFICAÇÕES DO PROJETO', M, CW);
-
     const specs: [string, string][] = [
-        ['Largura do Vão', `${lead.largura_parede || 'A verificar'} m`],
-        ['Altura do Pé-direito', `${lead.altura_parede || 'A verificar'} m`],
-        ['Tecido Sugerido', lead.tecido || 'Sob Consultoria'],
+        ['Largura do Vão',          `${lead.largura_parede || 'A verificar'} m`],
+        ['Altura do Pé-direito',    `${lead.altura_parede  || 'A verificar'} m`],
+        ['Tecido Sugerido',         lead.tecido     || 'Sob Consultoria'],
         ['Instalação Especializada', lead.instalacao || 'Sim'],
     ];
     _infoGrid(doc, specs, M, CW);
 
-    // ─── Observações
     if (lead.observacoes) {
         doc.moveDown(1.2);
         _sectionTitle(doc, 'OBSERVAÇÕES ADICIONAIS', M, CW);
         doc.fillColor(BRAND.gray)
             .fontSize(10)
-            .font('Helvetica')
+            .font(FONT_REGULAR)
             .text(lead.observacoes, M, doc.y, { width: CW, lineGap: 3 });
     }
 
-    // Rodapé fixo
     _drawPageFooter(doc, W, M, CW);
-
     doc.rect(0, doc.page.height - 8, W, 8).fill(BRAND.gold);
 
     doc.end();
@@ -429,7 +446,7 @@ export async function generateOrcamentoPdf(lead: {
 // Alias de compatibilidade
 export const generatePremiumOrcamentoPdf = generateOrcamentoPdf;
 
-// ─── Helpers de seção ────────────────────────────────────────────────────────
+// ─── Helpers de seção ─────────────────────────────────────────────────────────
 
 function _sectionTitle(
     doc: InstanceType<typeof PDFDocument>,
@@ -439,12 +456,11 @@ function _sectionTitle(
 ) {
     doc.fillColor(BRAND.dark)
         .fontSize(9)
-        .font('Helvetica-Bold')
+        .font(FONT_BOLD)
         .text(title, M, doc.y, { width: CW, characterSpacing: 2 });
 
     doc.moveTo(M, doc.y + 3).lineTo(M + CW, doc.y + 3)
         .strokeColor(BRAND.lightGray).lineWidth(0.5).stroke();
-
     doc.moveDown(0.8);
 }
 
@@ -458,31 +474,28 @@ function _infoGrid(
 
     for (let i = 0; i < rows.length; i += 2) {
         const rowY = doc.y;
-        const left = rows[i];
+        const left  = rows[i];
         const right = rows[i + 1];
 
-        // Coluna esquerda
         doc.fillColor(BRAND.gray)
             .fontSize(8)
-            .font('Helvetica-Bold')
+            .font(FONT_BOLD)
             .text(left[0].toUpperCase(), M, rowY, { width: colW, characterSpacing: 1 });
         doc.fillColor(BRAND.dark)
             .fontSize(11)
-            .font('Helvetica')
+            .font(FONT_REGULAR)
             .text(left[1], M, doc.y + 1, { width: colW });
 
-        // Coluna direita (se existir)
         if (right) {
             doc.fillColor(BRAND.gray)
                 .fontSize(8)
-                .font('Helvetica-Bold')
+                .font(FONT_BOLD)
                 .text(right[0].toUpperCase(), M + colW, rowY, { width: colW, characterSpacing: 1 });
             doc.fillColor(BRAND.dark)
                 .fontSize(11)
-                .font('Helvetica')
+                .font(FONT_REGULAR)
                 .text(right[1], M + colW, rowY + 11, { width: colW });
         }
-
         doc.moveDown(0.9);
     }
 }

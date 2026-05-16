@@ -2,10 +2,11 @@
 # PDF gerado com PDFKit (Node.js puro) — sem Chromium/Puppeteer
 FROM node:20-slim AS base
 
-# Apenas dependências essenciais: OpenSSL (Prisma) + ca-certificates
+# Dependências essenciais: OpenSSL (Prisma) + fontes Liberation (PDFKit TTF, sem AFM)
 RUN apt-get update && apt-get install -y \
   openssl \
   ca-certificates \
+  fonts-liberation \
   && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -33,6 +34,12 @@ ARG CACHE_BUST=1
 
 # Build Next.js (gera .next/ com todos os assets estáticos)
 RUN npm run build
+
+# PDFKit resolve fontes .afm via __dirname do chunk bundlado.
+# Como o Next.js bunda o código em .next/server/chunks/, o PDFKit
+# vai procurar os dados lá. Copiamos explicitamente após o build.
+RUN mkdir -p .next/server/chunks/data && \
+    cp -r node_modules/pdfkit/js/data/. .next/server/chunks/data/
 
 # ─── Runner (produção) ───────────────────────────────────────────────────────
 FROM base AS runner
