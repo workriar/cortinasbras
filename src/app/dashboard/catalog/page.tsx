@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { 
     Plus, Pencil, Trash2, Package, X, Save, FileDown, 
     Search, Check, Eye, Grid, 
@@ -23,6 +24,7 @@ interface Fabric {
 type ViewMode = 'grid' | 'list' | 'focus';
 
 export default function CatalogPage() {
+    const router = useRouter();
     const [fabrics, setFabrics] = useState<Fabric[]>([]);
     const [selectedFabrics, setSelectedFabrics] = useState<number[]>([]);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -54,6 +56,14 @@ export default function CatalogPage() {
 
     useEffect(() => {
         fetchFabrics();
+        try {
+            const saved = localStorage.getItem("selected_fabrics");
+            if (saved) {
+                setSelectedFabrics(JSON.parse(saved));
+            }
+        } catch (e) {
+            console.error("Error loading selection:", e);
+        }
     }, []);
 
     async function fetchFabrics() {
@@ -135,9 +145,15 @@ export default function CatalogPage() {
     };
 
     const handleSelectFabric = (id: number) => {
-        setSelectedFabrics(prev => 
-            prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
-        );
+        setSelectedFabrics(prev => {
+            const updated = prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id];
+            try {
+                localStorage.setItem("selected_fabrics", JSON.stringify(updated));
+            } catch (e) {
+                console.error("Error saving selection:", e);
+            }
+            return updated;
+        });
     };
 
     const handleGeneratePdf = async () => {
@@ -162,8 +178,8 @@ export default function CatalogPage() {
             setPdfProgress(90);
             
             try {
-                // Link oficial de download do catálogo Puppeteer em Next.js
-                window.open('/api/catalog', '_blank');
+                // Link oficial de download do catálogo nativo ultra robusto passando IDs selecionados!
+                window.open(`/api/catalog?ids=${selectedFabrics.join(',')}`, '_blank');
                 setPdfState('success');
                 setPdfProgress(100);
             } catch {
@@ -336,7 +352,8 @@ export default function CatalogPage() {
                                     <img 
                                         src={fabric.placeholderImage} 
                                         alt={fabric.altText || fabric.name}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                                        onClick={() => router.push(`/dashboard/catalog/${fabric.id}`)}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out cursor-pointer"
                                     />
                                     
                                     {/* Glass Overlay Superior */}
@@ -366,6 +383,13 @@ export default function CatalogPage() {
                                     {/* Ações Rápidas (Editar/Remover) */}
                                     <div className="absolute bottom-4 right-4 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
                                         <button 
+                                            onClick={() => router.push(`/dashboard/catalog/${fabric.id}`)} 
+                                            className="p-2 bg-white/95 hover:bg-brand-900 dark:bg-baroque-surface/95 dark:hover:bg-baroque-gold text-stone-700 hover:text-white dark:text-baroque-gold dark:hover:text-baroque-bg rounded-lg shadow-lg border border-transparent dark:border-baroque-border transition-all duration-300"
+                                            title="Visualizar Tecido"
+                                        >
+                                            <Eye size={12} />
+                                        </button>
+                                        <button 
                                             onClick={() => openEditDrawer(fabric)} 
                                             className="p-2 bg-white/95 hover:bg-brand-900 dark:bg-baroque-surface/95 dark:hover:bg-baroque-gold text-stone-700 hover:text-white dark:text-baroque-gold dark:hover:text-baroque-bg rounded-lg shadow-lg border border-transparent dark:border-baroque-border transition-all duration-300"
                                             title="Editar Tecido"
@@ -386,7 +410,10 @@ export default function CatalogPage() {
                                 {viewMode !== 'focus' && (
                                     <div className="p-6 flex-1 flex flex-col justify-between bg-white dark:bg-baroque-surface">
                                         <div className="space-y-3">
-                                            <h3 className="text-xl font-bold font-serif text-brand-900 dark:text-baroque-text group-hover:text-brand-600 dark:group-hover:text-baroque-gold transition-colors leading-tight">
+                                            <h3 
+                                                onClick={() => router.push(`/dashboard/catalog/${fabric.id}`)}
+                                                className="text-xl font-bold font-serif text-brand-900 dark:text-baroque-text hover:text-brand-600 dark:hover:text-baroque-gold transition-colors leading-tight cursor-pointer"
+                                            >
                                                 {fabric.name}
                                             </h3>
                                             <p className="text-xs text-stone-400 dark:text-baroque-muted font-medium line-clamp-3 leading-relaxed">
@@ -399,9 +426,12 @@ export default function CatalogPage() {
                                                 <span className="text-[8px] font-black uppercase tracking-widest text-stone-400 dark:text-baroque-muted leading-none block">Cores</span>
                                                 <span className="text-xs font-semibold text-stone-600 dark:text-baroque-text line-clamp-1">{fabric.colors}</span>
                                             </div>
-                                            <span className="text-[10px] font-bold text-brand-600 dark:text-baroque-gold flex items-center gap-1">
+                                            <button 
+                                                onClick={() => router.push(`/dashboard/catalog/${fabric.id}`)}
+                                                className="text-[10px] font-bold text-brand-600 dark:text-baroque-gold flex items-center gap-1 hover:underline"
+                                            >
                                                 {fabric.exclusive ? 'Alta Curadoria' : 'Disponível'} <ChevronRight size={10} />
-                                            </span>
+                                            </button>
                                         </div>
                                     </div>
                                 )}
@@ -436,7 +466,14 @@ export default function CatalogPage() {
 
                         <div className="flex items-center gap-3 w-full md:w-auto">
                             <button
-                                onClick={() => setSelectedFabrics([])}
+                                onClick={() => {
+                                    setSelectedFabrics([]);
+                                    try {
+                                        localStorage.removeItem("selected_fabrics");
+                                    } catch (e) {
+                                        console.error("Error clearing selection:", e);
+                                    }
+                                }}
                                 className="px-4 py-3 rounded-xl text-stone-400 hover:text-white text-xs font-bold uppercase tracking-widest transition-all w-1/2 md:w-auto"
                             >
                                 Limpar
