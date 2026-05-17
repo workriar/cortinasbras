@@ -1,0 +1,21 @@
+[providers]
+node = true
+
+[variables]
+# Previne o servidor (VPS) de estourar a memória RAM e travar durante o build (OOM)
+NODE_OPTIONS = "--max-old-space-size=1536"
+
+# Limita o número de threads do Next.js para não usar 1400% de CPU
+NEXT_PRIVATE_MAX_WORKERS = "1"
+
+# Reduz overhead do Next.js
+NEXT_TELEMETRY_DISABLED = "1"
+
+[phases.install]
+cmds = ["npm ci"]
+
+[phases.build]
+cmds = ["npm run build"]
+
+[start]
+cmd = "npm run start"
