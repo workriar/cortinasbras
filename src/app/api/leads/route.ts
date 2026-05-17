@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { generateOrcamentoPdf } from "@/services/pdf";
 import { sendEmailWithPdf } from "@/services/email";
+import { sendLeadEventToMeta } from "@/services/meta-capi";
 import { z } from "zod";
 
 const leadSchema = z.object({
@@ -79,7 +80,7 @@ export async function POST(req: Request) {
             }
         });
 
-        // 4. Async Side Effects (PDF/Email/WhatsApp) -> Handle safely without blocking response if possible
+        // 4. Async Side Effects (PDF/Email/WhatsApp/Meta CAPI)
         const originHeader = req.headers.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || "https://cortinasbras.com.br";
         const siteUrl = originHeader.replace(/\/$/, "");
         const pdfUrl = `${siteUrl}/api/leads/${lead.id}/pdf`;
@@ -87,7 +88,24 @@ export async function POST(req: Request) {
         const message = `👋 Olá! Orçamento #${lead.id} recebido.\n\n*Cliente:* ${lead.name}\n*Medidas:* ${lead.width || '?'}m x ${lead.height || '?'}m\n*PDF:* ${pdfUrl}`;
         const whatsapp_url = `https://wa.me/5511992891070?text=${encodeURIComponent(message)}`;
 
-        // Generate PDF in background (or await but catch errors)
+        // 4a. Meta Conversions API — dispara evento "Lead" (não bloqueante)
+        sendLeadEventToMeta({
+            status:    lead.status,
+            email:     lead.email,
+            phone:     lead.phone,
+            name:      lead.name,
+            city:      lead.city,
+            clientIp:  req.headers.get('x-forwarded-for') ?? req.headers.get('x-real-ip'),
+            userAgent: req.headers.get('user-agent'),
+            fbc:       req.headers.get('cookie')?.match(/_fbc=([^;]+)/)?.[1] ?? null,
+            fbp:       req.headers.get('cookie')?.match(/_fbp=([^;]+)/)?.[1] ?? null,
+        }).catch((e: Error) => {
+            if (process.env.NODE_ENV === 'development') {
+                console.error('⚠️ [Meta CAPI] Falha ao enviar evento Lead:', e.message);
+            }
+        });
+
+        // 4b. Geração de PDF e envio de email
         try {
             const leadForPdf = { id: lead.id, nome: lead.name, telefone: lead.phone, cidade_bairro: lead.city ?? undefined, largura_parede: lead.width ?? undefined, altura_parede: lead.height ?? undefined, tecido: lead.fabric ?? undefined, instalacao: lead.installation ?? undefined, observacoes: lead.notes ?? undefined };
 
@@ -101,8 +119,7 @@ export async function POST(req: Request) {
                 });
             }
         } catch (error: any) {
-            // PDF generation might fail due to logo missing, path issues, or missing chromium
-            // BUT we still return SUCCESS because the Lead was saved.
+            // PDF generation might fail — não bloqueia o retorno do lead.
         }
 
         return NextResponse.json({

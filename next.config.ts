@@ -2,6 +2,14 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   compress: true,
+  // PDFKit é um módulo CommonJS nativo — não deve ser bundlado pelo webpack
+  serverExternalPackages: ['pdfkit'],
+  // Garante que os arquivos de dados do PDFKit (.afm, .icc) sejam
+  // incluídos no file-tracing do Next.js para as rotas que geram PDF.
+  outputFileTracingIncludes: {
+    '/api/catalog': ['./node_modules/pdfkit/js/data/**'],
+    '/api/leads': ['./node_modules/pdfkit/js/data/**'],
+  },
   images: {
     // Otimização ativa: Next.js converte automaticamente para WebP/AVIF
     // e redimensiona para o dispositivo (até 70% menos tamanho)

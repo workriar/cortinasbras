@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { sendLeadEventToMeta } from '@/services/meta-capi';
 
 export async function GET(
     request: Request,
@@ -32,23 +33,45 @@ export async function PUT(
     try {
         const body = await request.json();
 
+        // Busca o lead atual para detectar mudança de status
+        const currentLead = await prisma.lead.findUnique({
+            where: { id: parseInt(id) }
+        });
+
         if (!body.status && process.env.NODE_ENV === 'development') {
             console.warn(`[API] Tentativa de atualização sem status para lead ${id}`);
         }
 
-        // Mapeamento correto com Prisma
         const updatedLead = await prisma.lead.update({
             where: { id: parseInt(id) },
             data: {
-                name: body.name || undefined,
-                phone: body.phone || undefined,
-                email: body.email || undefined,
-                city: body.city || undefined,
+                name:   body.name   || undefined,
+                phone:  body.phone  || undefined,
+                email:  body.email  || undefined,
+                city:   body.city   || undefined,
                 source: body.source || undefined,
-                status: body.status || undefined, // Garante que status está sendo passado
-                notes: body.notes || undefined,
+                status: body.status || undefined,
+                notes:  body.notes  || undefined,
             }
         });
+
+        // Dispara evento Meta CAPI apenas se o status mudou
+        const statusChanged = body.status && currentLead?.status !== body.status;
+        if (statusChanged) {
+            sendLeadEventToMeta({
+                status:    updatedLead.status,
+                email:     updatedLead.email,
+                phone:     updatedLead.phone,
+                name:      updatedLead.name,
+                city:      updatedLead.city,
+                clientIp:  request.headers.get('x-forwarded-for') ?? request.headers.get('x-real-ip'),
+                userAgent: request.headers.get('user-agent'),
+            }).catch((e: Error) => {
+                if (process.env.NODE_ENV === 'development') {
+                    console.error(`⚠️ [Meta CAPI] Falha ao enviar evento status "${body.status}":`, e.message);
+                }
+            });
+        }
 
         return NextResponse.json(updatedLead);
     } catch (error: any) {

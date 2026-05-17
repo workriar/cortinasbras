@@ -13,9 +13,16 @@
 // ============================================================
 
 import PDFDocument from 'pdfkit';
+import path from 'path';
 
-const FONT_REGULAR = 'Helvetica';
-const FONT_BOLD    = 'Helvetica-Bold';
+const FONT_REGULAR = 'Roboto-Regular';
+const FONT_BOLD    = 'Roboto-Bold';
+
+// Função auxiliar para registrar fontes no documento PDF
+function _registerFonts(doc: InstanceType<typeof PDFDocument>) {
+    doc.registerFont(FONT_REGULAR, path.join(process.cwd(), 'public', 'fonts', 'Roboto-Regular.ttf'));
+    doc.registerFont(FONT_BOLD, path.join(process.cwd(), 'public', 'fonts', 'Roboto-Bold.ttf'));
+}
 
 // ─── Helpers de stream ───────────────────────────────────────────────────────
 
@@ -61,6 +68,8 @@ export async function generatePdf(fabrics: Array<{
             Subject: 'Catálogo de Tecidos Premium',
         },
     });
+
+    _registerFonts(doc);
 
     const bufferPromise = streamToBuffer(doc);
 
@@ -338,6 +347,8 @@ export async function generateOrcamentoPdf(lead: {
             Author: 'Cortinas Brás',
         },
     });
+
+    _registerFonts(doc);
 
     const bufferPromise = streamToBuffer(doc);
 
