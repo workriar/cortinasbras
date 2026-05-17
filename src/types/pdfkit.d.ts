@@ -40,6 +40,7 @@ declare module 'pdfkit' {
 
         // Texto
         font(src: string): this;
+        registerFont(name: string, src?: string | Uint8Array | ArrayBuffer | any, family?: string): this;
         fontSize(size: number): this;
         fillColor(color: string): this;
         text(text: string, x?: number, y?: number, options?: {
