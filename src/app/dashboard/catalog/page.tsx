@@ -124,31 +124,52 @@ export default function CatalogPage() {
                             layout
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all group"
+                            className="bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all group overflow-hidden flex flex-col h-full"
                         >
-                            <div className="flex justify-between items-start mb-4">
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-brand-50 rounded-lg text-brand-600">
-                                        <Package size={20} />
+                            <div className="h-64 w-full relative bg-slate-100 overflow-hidden">
+                                {fabric.placeholderImage ? (
+                                    <img 
+                                        src={fabric.placeholderImage} 
+                                        alt={fabric.altText || fabric.name} 
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center text-slate-300">
+                                        <Package size={64} className="opacity-50" />
                                     </div>
-                                    <div>
-                                        <h3 className="font-bold text-brand-900">{fabric.name}</h3>
-                                        <span className="text-[10px] font-bold uppercase text-slate-400 tracking-widest">{fabric.category}</span>
-                                    </div>
+                                )}
+                                
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+
+                                <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                                    <button onClick={() => openEditModal(fabric)} className="p-2 bg-white/90 backdrop-blur-md text-slate-700 hover:text-brand-600 transition-colors rounded-xl shadow-lg">
+                                        <Pencil size={18} />
+                                    </button>
+                                    <button onClick={() => handleDelete(fabric.id)} className="p-2 bg-white/90 backdrop-blur-md text-slate-700 hover:text-red-600 transition-colors rounded-xl shadow-lg">
+                                        <Trash2 size={18} />
+                                    </button>
                                 </div>
-                                <div className="flex gap-2">
-                                    <button onClick={() => openEditModal(fabric)} className="p-2 text-slate-400 hover:text-brand-600 transition-colors rounded-lg hover:bg-brand-50">
-                                        <Pencil size={16} />
-                                    </button>
-                                    <button onClick={() => handleDelete(fabric.id)} className="p-2 text-slate-400 hover:text-red-600 transition-colors rounded-lg hover:bg-red-50">
-                                        <Trash2 size={16} />
-                                    </button>
+                                <div className="absolute top-4 left-4 z-10">
+                                    <span className="px-4 py-1.5 bg-white/95 backdrop-blur-md rounded-full text-[10px] font-black uppercase text-brand-700 tracking-widest shadow-lg">
+                                        {fabric.category}
+                                    </span>
+                                </div>
+                                <div className="absolute bottom-4 left-4 z-10">
+                                    <h3 className="font-black text-white text-xl drop-shadow-md">{fabric.name}</h3>
                                 </div>
                             </div>
-                            <p className="text-sm text-slate-500 mb-4 line-clamp-2">{fabric.description}</p>
-                            <div className="flex items-center gap-2">
-                                <div className="w-2 h-2 rounded-full bg-brand-500" />
-                                <span className="text-xs font-medium text-slate-600">{fabric.exclusive ? 'Exclusivo' : 'Regular'}</span>
+                            
+                            <div className="p-6 flex-1 flex flex-col bg-white">
+                                <p className="text-sm text-slate-600 mb-4 line-clamp-3 leading-relaxed flex-1 font-medium">{fabric.description}</p>
+                                
+                                <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <div className={`w-2.5 h-2.5 rounded-full ${fabric.exclusive ? 'bg-amber-400' : 'bg-brand-500'} shadow-sm`} />
+                                        <span className="text-xs font-bold text-slate-600 uppercase tracking-wide">
+                                            {fabric.exclusive ? 'Exclusivo' : 'Regular'}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </motion.div>
                     ))}

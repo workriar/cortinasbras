@@ -126,7 +126,8 @@ export const fabrics: Fabric[] = [
         colors: ['Cor Exclusiva'],
         benefits: ['Exclusividade', 'Toque premium'],
         exclusive: true,
-        placeholderImage: '/images/tecidos/placeholder.png',
+        placeholderImage: '/images/tecidos/paraty_linho_1779016520515.png',
+        images: ['/images/tecidos/paraty_linho_1779016520515.png'],
     },
     {
         id: 'morea',
@@ -137,7 +138,8 @@ export const fabrics: Fabric[] = [
         colors: ['Cor Exclusiva'],
         benefits: ['Alta sofisticação', 'Acabamento de luxo'],
         exclusive: true,
-        placeholderImage: '/images/tecidos/placeholder.png',
+        placeholderImage: '/images/tecidos/morea_linho_1779016533576.png',
+        images: ['/images/tecidos/morea_linho_1779016533576.png'],
     },
     {
         id: 'linho-bora',
@@ -148,7 +150,8 @@ export const fabrics: Fabric[] = [
         colors: ['Cor Exclusiva'],
         benefits: ['Caimento fluido', 'Elegância'],
         exclusive: true,
-        placeholderImage: '/images/tecidos/placeholder.png',
+        placeholderImage: '/images/tecidos/linho_bora_1779016550009.png',
+        images: ['/images/tecidos/linho_bora_1779016550009.png'],
     },
     // Voil
     {
@@ -192,7 +195,8 @@ export const fabrics: Fabric[] = [
         altText: 'Tecido Voil Liso clássico e versátil - Cortinas Brás',
         colors: ['Branco', 'Off White'],
         benefits: ['Versatilidade', 'Estilo clássico'],
-        placeholderImage: '/images/tecidos/placeholder.png',
+        placeholderImage: '/images/tecidos/voil_liso_1779016562687.png',
+        images: ['/images/tecidos/voil_liso_1779016562687.png'],
     },
     // Blackout
     {
@@ -215,7 +219,8 @@ export const fabrics: Fabric[] = [
         altText: 'Tecido Oxford estruturado com excelente caimento - Cortinas Brás',
         colors: ['Branco', 'Off White'],
         benefits: ['Estrutura firme', 'Alta durabilidade'],
-        placeholderImage: '/images/tecidos/placeholder.png',
+        placeholderImage: '/images/tecidos/tecido_oxford_1779016578435.png',
+        images: ['/images/tecidos/tecido_oxford_1779016578435.png'],
     },
     // Forro
     {
