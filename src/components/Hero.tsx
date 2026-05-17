@@ -35,6 +35,41 @@ export default function Hero() {
         return () => clearInterval(timer);
     }, []);
 
+    const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+    const [pdfStatus, setPdfStatus] = useState("Baixar Catálogo");
+
+    const handleDownloadCatalog = async () => {
+        setIsGeneratingPdf(true);
+        setPdfStatus("Preparando fotos...");
+        
+        try {
+            setTimeout(() => setPdfStatus("Montando páginas..."), 2000);
+            
+            const response = await fetch('/api/catalog');
+            if (!response.ok) throw new Error('Erro ao gerar PDF');
+            
+            setPdfStatus("Catálogo pronto!");
+            
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'catalogo-exclusivo-cortinas-bras.pdf';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error(error);
+            setPdfStatus("Erro ao gerar PDF");
+        } finally {
+            setTimeout(() => {
+                setIsGeneratingPdf(false);
+                setPdfStatus("Baixar Catálogo");
+            }, 3000);
+        }
+    };
+
     return (
         <section id="inicio" className="relative min-h-screen flex items-center overflow-hidden pt-20">
             <div className="absolute inset-0 z-0">
@@ -126,15 +161,20 @@ export default function Hero() {
                         >
                             Solicitar Orçamento <ArrowRight size={18} />
                         </motion.a>
-                        <motion.a
-                            href="/api/catalog"
-                            target="_blank"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-8 py-4 rounded-2xl font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-white/20 transition-all"
+                        <motion.button
+                            onClick={handleDownloadCatalog}
+                            disabled={isGeneratingPdf}
+                            whileHover={{ scale: isGeneratingPdf ? 1 : 1.05 }}
+                            whileTap={{ scale: isGeneratingPdf ? 1 : 0.95 }}
+                            className={`${isGeneratingPdf ? 'bg-white/30 cursor-wait' : 'bg-white/10 hover:bg-white/20'} backdrop-blur-md text-white border border-white/20 px-8 py-4 rounded-2xl font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-3 transition-all`}
                         >
-                            <Sparkles size={18} /> Baixar Catálogo
-                        </motion.a>
+                            {isGeneratingPdf ? (
+                                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            ) : (
+                                <Sparkles size={18} />
+                            )}
+                            {pdfStatus}
+                        </motion.button>
                         <motion.a
                             href="https://wa.me/5511992891070"
                             target="_blank"

@@ -10,6 +10,14 @@ NEXT_PRIVATE_MAX_WORKERS = "1"
 # Reduz overhead do Next.js
 NEXT_TELEMETRY_DISABLED = "1"
 
+# Variáveis do Puppeteer
+PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true"
+PUPPETEER_EXECUTABLE_PATH = "/usr/bin/chromium"
+
+[phases.setup]
+nixPkgs = ["...", "chromium"]
+aptPkgs = ["fonts-liberation", "libxss1"]
+
 [phases.install]
 cmds = ["npm ci"]
 

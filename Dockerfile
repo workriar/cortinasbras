@@ -1,13 +1,19 @@
 # Dockerfile para Next.js - Cortinas Brás
-# PDF gerado com PDFKit (Node.js puro) — sem Chromium/Puppeteer
+# PDF gerado com Puppeteer (Chromium HTML -> PDF)
 FROM node:20-slim AS base
 
-# Dependências essenciais: OpenSSL (Prisma) + fontes Liberation (PDFKit TTF, sem AFM)
+# Dependências essenciais: OpenSSL (Prisma) + Chromium e dependências para Puppeteer
 RUN apt-get update && apt-get install -y \
   openssl \
   ca-certificates \
-  fonts-liberation \
+  chromium \
+  fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 \
+  --no-install-recommends \
   && rm -rf /var/lib/apt/lists/*
+
+# Informa ao Puppeteer para usar o Chromium instalado no sistema e não baixar um novo
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 WORKDIR /app
 

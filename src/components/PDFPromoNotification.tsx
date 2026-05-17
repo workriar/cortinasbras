@@ -6,6 +6,8 @@ import { FileText, Download, X } from "lucide-react";
 
 export default function PDFPromoNotification() {
     const [isVisible, setIsVisible] = useState(false);
+    const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+    const [pdfStatus, setPdfStatus] = useState("Baixar Agora");
 
     useEffect(() => {
         const hasSeen = localStorage.getItem("pdf_promo_seen");
@@ -29,6 +31,39 @@ export default function PDFPromoNotification() {
     const closeNotification = () => {
         setIsVisible(false);
         localStorage.setItem("pdf_promo_seen", "true");
+    };
+
+    const handleDownloadCatalog = async () => {
+        setIsGeneratingPdf(true);
+        setPdfStatus("Preparando fotos...");
+        
+        try {
+            setTimeout(() => setPdfStatus("Montando páginas..."), 2000);
+            
+            const response = await fetch('/api/catalog');
+            if (!response.ok) throw new Error('Erro ao gerar PDF');
+            
+            setPdfStatus("Catálogo pronto!");
+            
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'catalogo-exclusivo-cortinas-bras.pdf';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error(error);
+            setPdfStatus("Erro ao gerar PDF");
+        } finally {
+            setTimeout(() => {
+                setIsGeneratingPdf(false);
+                setPdfStatus("Baixar Agora");
+                closeNotification();
+            }, 3000);
+        }
     };
 
     return (
@@ -61,13 +96,18 @@ export default function PDFPromoNotification() {
                                     <p className="text-slate-500 text-sm leading-relaxed mb-4">
                                         Descubra nossa coleção completa de tecidos premium e modelos de luxo.
                                     </p>
-                                    <a
-                                        href="/api/catalog"
-                                        target="_blank"
-                                        className="inline-flex items-center gap-2 px-5 py-3 bg-brand-600 text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-brand-700 transition-all shadow-lg shadow-brand-500/20 active:scale-95"
+                                    <button
+                                        onClick={handleDownloadCatalog}
+                                        disabled={isGeneratingPdf}
+                                        className={`inline-flex items-center gap-2 px-5 py-3 ${isGeneratingPdf ? 'bg-brand-400 cursor-wait' : 'bg-brand-600 hover:bg-brand-700'} text-white rounded-xl font-bold text-xs uppercase tracking-widest transition-all shadow-lg shadow-brand-500/20 active:scale-95`}
                                     >
-                                        <Download size={14} /> Baixar Agora
-                                    </a>
+                                        {isGeneratingPdf ? (
+                                            <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                        ) : (
+                                            <Download size={14} />
+                                        )}
+                                        {pdfStatus}
+                                    </button>
                                 </div>
                             </div>
                         </div>
