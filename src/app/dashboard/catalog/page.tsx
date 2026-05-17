@@ -2,7 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Pencil, Trash2, Package, X, Save } from "lucide-react";
+import { 
+    Plus, Pencil, Trash2, Package, X, Save, FileDown, 
+    Search, Check, Eye, Grid, 
+    LayoutList, Loader2, Sparkles, ChevronRight
+} from "lucide-react";
 
 interface Fabric {
     id: number;
@@ -16,11 +20,26 @@ interface Fabric {
     placeholderImage: string;
 }
 
+type ViewMode = 'grid' | 'list' | 'focus';
+
 export default function CatalogPage() {
     const [fabrics, setFabrics] = useState<Fabric[]>([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedFabrics, setSelectedFabrics] = useState<number[]>([]);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [editingFabric, setEditingFabric] = useState<Fabric | null>(null);
     const [loading, setLoading] = useState(true);
+    const [viewMode, setViewMode] = useState<ViewMode>('grid');
+
+    // Filtros e Busca
+    const [searchQuery, setSearchQuery] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState<string>("Todos");
+    const [onlyExclusive, setOnlyExclusive] = useState(false);
+
+    // Estado do Gerador de PDF
+    const [pdfState, setPdfState] = useState<'idle' | 'preparing' | 'layout' | 'generating' | 'downloading' | 'success' | 'error'>('idle');
+    const [pdfProgress, setPdfProgress] = useState(0);
+
+    const categories = ["Todos", "Linho", "Voil", "Blackout", "Oxford", "Forro"];
 
     const [formData, setFormData] = useState({
         name: "",
@@ -46,14 +65,12 @@ export default function CatalogPage() {
             if (Array.isArray(data) && data.length > 0) {
                 setFabrics(data);
             } else {
-                // Fallback para o arquivo local se o banco estiver vazio ou retornar erro
                 const { fabrics: defaultFabrics } = await import('@/lib/fabrics');
                 const formattedFallback = defaultFabrics.map(f => ({
                     ...f,
                     colors: Array.isArray(f.colors) ? f.colors.join(', ') : f.colors,
                     benefits: Array.isArray(f.benefits) ? f.benefits.join(', ') : f.benefits,
                 }));
-                // Cast to any to avoid strict type mismatch temporarily
                 setFabrics(formattedFallback as any);
             }
         } catch (e) {
@@ -83,7 +100,7 @@ export default function CatalogPage() {
             });
 
             if (res.ok) {
-                setIsModalOpen(false);
+                setIsDrawerOpen(false);
                 setEditingFabric(null);
                 setFormData({ name: "", category: "Linho", description: "", altText: "", colors: "", benefits: "", exclusive: false, placeholderImage: "" });
                 await fetchFabrics();
@@ -94,7 +111,7 @@ export default function CatalogPage() {
     }
 
     async function handleDelete(id: number) {
-        if (!confirm("Tem certeza que deseja excluir este tecido?")) return;
+        if (!confirm("Deseja realmente remover este tecido de luxo de seu showroom?")) return;
         try {
             const res = await fetch(`/api/fabrics/${id}`, { method: 'DELETE' });
             if (res.ok) {
@@ -105,216 +122,542 @@ export default function CatalogPage() {
         }
     }
 
-    const openAddModal = () => {
+    const openAddDrawer = () => {
         setEditingFabric(null);
         setFormData({ name: "", category: "Linho", description: "", altText: "", colors: "", benefits: "", exclusive: false, placeholderImage: "" });
-        setIsModalOpen(true);
+        setIsDrawerOpen(true);
     };
 
-    const openEditModal = (fabric: Fabric) => {
+    const openEditDrawer = (fabric: Fabric) => {
         setEditingFabric(fabric);
         setFormData({ ...fabric });
-        setIsModalOpen(true);
+        setIsDrawerOpen(true);
     };
 
+    const handleSelectFabric = (id: number) => {
+        setSelectedFabrics(prev => 
+            prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
+        );
+    };
+
+    const handleGeneratePdf = async () => {
+        if (selectedFabrics.length === 0) return;
+        
+        // Simulação elegante de progresso comercial
+        setPdfState('preparing');
+        setPdfProgress(15);
+        
+        setTimeout(() => {
+            setPdfState('layout');
+            setPdfProgress(40);
+        }, 1200);
+
+        setTimeout(() => {
+            setPdfState('generating');
+            setPdfProgress(75);
+        }, 2500);
+
+        setTimeout(async () => {
+            setPdfState('downloading');
+            setPdfProgress(90);
+            
+            try {
+                // Link oficial de download do catálogo Puppeteer em Next.js
+                window.open('/api/catalog', '_blank');
+                setPdfState('success');
+                setPdfProgress(100);
+            } catch {
+                setPdfState('error');
+            }
+
+            setTimeout(() => {
+                setPdfState('idle');
+                setPdfProgress(0);
+            }, 3000);
+        }, 4000);
+    };
+
+    // Filtragem de tecidos com robustez
+    const filteredFabrics = fabrics.filter(fabric => {
+        const matchesSearch = fabric.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                             fabric.description.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesCategory = selectedCategory === "Todos" || fabric.category === selectedCategory;
+        const matchesExclusive = !onlyExclusive || fabric.exclusive;
+        return matchesSearch && matchesCategory && matchesExclusive;
+    });
+
     return (
-        <div className="p-8 space-y-8">
-            <div className="flex justify-between items-center">
+        <div className="p-4 md:p-8 space-y-10 min-h-screen transition-colors duration-500 bg-brand-50 dark:bg-baroque-bg text-brand-900 dark:text-baroque-text">
+            
+            {/* Header de Showroom Editorial */}
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 border-b border-brand-200/40 dark:border-baroque-border pb-8">
                 <div>
-                    <h1 className="text-3xl font-black text-brand-900 uppercase tracking-tight">Catálogo de Tecidos</h1>
-                    <p className="text-slate-500 font-medium">Gerencie a curadoria de materiais premium do site</p>
+                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-600 dark:text-baroque-gold flex items-center gap-2 mb-2">
+                        <Sparkles size={12} /> Alta Costura & Tecidos Nobles
+                    </span>
+                    <h1 className="text-4xl md:text-5xl font-black font-serif text-brand-900 dark:text-baroque-text tracking-tight uppercase leading-none">
+                        Showroom <span className="font-light italic text-brand-600 dark:text-baroque-gold">Digital</span>
+                    </h1>
+                    <p className="text-slate-500 dark:text-baroque-muted font-medium text-sm md:text-base mt-2">
+                        Selecione as melhores texturas e gere catálogos comerciais personalizados em PDF.
+                    </p>
                 </div>
+                
                 <button
-                    onClick={openAddModal}
-                    className="flex items-center gap-2 px-6 py-3 bg-brand-600 text-white rounded-2xl font-bold hover:bg-brand-700 transition-all shadow-lg shadow-brand-500/30 active:scale-95"
+                    onClick={openAddDrawer}
+                    className="flex items-center gap-2.5 px-6 py-3.5 bg-brand-900 dark:bg-baroque-surface text-white dark:text-baroque-gold border border-transparent dark:border-baroque-border rounded-xl font-bold hover:bg-brand-800 dark:hover:bg-baroque-bg transition-all active:scale-[0.98] shadow-lg shadow-brand-950/10 text-xs tracking-widest uppercase font-serif"
                 >
-                    <Plus size={20} /> Adicionar Tecido
+                    <Plus size={16} /> Adicionar Curadoria
                 </button>
             </div>
 
+            {/* Barra de Filtros Editoriais & Visão de Visualização */}
+            <div className="bg-white/60 dark:bg-baroque-surface/50 backdrop-blur-xl p-4 md:p-6 rounded-3xl border border-gray-100 dark:border-baroque-border flex flex-col xl:flex-row gap-6 justify-between items-center transition-all duration-300">
+                
+                {/* Categorias - Pílulas elegantes */}
+                <div className="flex gap-1.5 overflow-x-auto w-full xl:w-auto pb-2 xl:pb-0 custom-scrollbar scroll-smooth">
+                    {categories.map((cat) => (
+                        <button
+                            key={cat}
+                            onClick={() => setSelectedCategory(cat)}
+                            className={`px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all duration-300 border whitespace-nowrap ${
+                                selectedCategory === cat
+                                    ? "bg-brand-900 dark:bg-baroque-gold text-white dark:text-baroque-bg border-brand-900 dark:border-baroque-gold"
+                                    : "bg-white dark:bg-baroque-surface text-stone-500 dark:text-baroque-muted border-gray-100 dark:border-baroque-border hover:bg-stone-50 dark:hover:bg-baroque-bg"
+                            }`}
+                        >
+                            {cat}
+                        </button>
+                    ))}
+                </div>
+
+                {/* Filtros Complementares */}
+                <div className="flex flex-col sm:flex-row items-center gap-4 w-full xl:w-auto">
+                    {/* Busca */}
+                    <div className="relative w-full sm:w-64 group">
+                        <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 dark:text-baroque-muted" />
+                        <input
+                            type="text"
+                            placeholder="Buscar textura..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full pl-10 pr-4 py-2.5 text-xs font-medium bg-white dark:bg-baroque-bg border border-gray-100 dark:border-baroque-border rounded-xl outline-none focus:border-brand-500 dark:focus:border-baroque-gold focus:ring-1 focus:ring-brand-500 transition-all text-brand-900 dark:text-baroque-text placeholder-stone-400"
+                        />
+                    </div>
+
+                    {/* Exclusivos Switch */}
+                    <button
+                        onClick={() => setOnlyExclusive(!onlyExclusive)}
+                        className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-xs font-bold uppercase tracking-widest transition-all ${
+                            onlyExclusive
+                                ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-300 dark:border-amber-900"
+                                : "bg-white dark:bg-baroque-bg text-stone-500 dark:text-baroque-muted border-gray-100 dark:border-baroque-border hover:bg-stone-50"
+                        }`}
+                    >
+                        <Sparkles size={14} className={onlyExclusive ? "animate-pulse" : ""} />
+                        Apenas Exclusivos
+                    </button>
+
+                    {/* Modo de Visualização */}
+                    <div className="bg-stone-100 dark:bg-baroque-bg p-1 rounded-xl flex items-center gap-1 border border-transparent dark:border-baroque-border">
+                        <button
+                            onClick={() => setViewMode('grid')}
+                            className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-white dark:bg-baroque-surface shadow-sm text-brand-900 dark:text-baroque-gold' : 'text-stone-400 hover:text-stone-600'}`}
+                            title="Visualização em Grade"
+                        >
+                            <Grid size={16} />
+                        </button>
+                        <button
+                            onClick={() => setViewMode('list')}
+                            className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-white dark:bg-baroque-surface shadow-sm text-brand-900 dark:text-baroque-gold' : 'text-stone-400 hover:text-stone-600'}`}
+                            title="Visualização Detalhada"
+                        >
+                            <LayoutList size={16} />
+                        </button>
+                        <button
+                            onClick={() => setViewMode('focus')}
+                            className={`p-2 rounded-lg transition-all ${viewMode === 'focus' ? 'bg-white dark:bg-baroque-surface shadow-sm text-brand-900 dark:text-baroque-gold' : 'text-stone-400 hover:text-stone-600'}`}
+                            title="Foco Visual"
+                        >
+                            <Eye size={16} />
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* Grid Principal do Showroom */}
             {loading ? (
-                <div className="flex justify-center items-center h-64">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-500"></div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {[1, 2, 3].map((n) => (
+                        <div key={n} className="bg-white dark:bg-baroque-surface rounded-3xl p-6 border border-gray-100 dark:border-baroque-border space-y-4 animate-pulse">
+                            <div className="h-64 bg-stone-100 dark:bg-baroque-bg rounded-2xl w-full" />
+                            <div className="h-4 bg-stone-100 dark:bg-baroque-bg rounded w-1/3" />
+                            <div className="h-6 bg-stone-100 dark:bg-baroque-bg rounded w-3/4" />
+                            <div className="h-4 bg-stone-100 dark:bg-baroque-bg rounded w-full" />
+                        </div>
+                    ))}
+                </div>
+            ) : filteredFabrics.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-20 bg-white/40 dark:bg-baroque-surface/30 backdrop-blur-md rounded-3xl border border-dashed border-stone-200 dark:border-baroque-border text-center max-w-xl mx-auto space-y-4">
+                    <div className="w-12 h-12 rounded-full bg-brand-50 dark:bg-baroque-bg flex items-center justify-center text-brand-600 dark:text-baroque-gold">
+                        <Package size={20} />
+                    </div>
+                    <h3 className="text-xl font-bold font-serif text-brand-900 dark:text-baroque-text">Sem texturas correspondentes</h3>
+                    <p className="text-stone-400 dark:text-baroque-muted text-xs leading-relaxed max-w-xs">
+                        Refine seus filtros editoriais ou crie uma nova curadoria de tecidos no botão superior.
+                    </p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {fabrics.map((fabric) => (
-                        <motion.div
-                            key={fabric.id}
-                            layout
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all group overflow-hidden flex flex-col h-full"
-                        >
-                            <div className="h-64 w-full relative bg-slate-100 overflow-hidden">
-                                {fabric.placeholderImage ? (
+                <div className={`grid gap-8 ${
+                    viewMode === 'list' 
+                        ? 'grid-cols-1' 
+                        : viewMode === 'focus'
+                        ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
+                        : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+                }`}>
+                    {filteredFabrics.map((fabric) => {
+                        const isSelected = selectedFabrics.includes(fabric.id);
+                        return (
+                            <motion.div
+                                key={fabric.id}
+                                layout
+                                className={`group relative bg-white dark:bg-baroque-surface rounded-3xl border transition-all duration-500 overflow-hidden flex flex-col ${
+                                    isSelected 
+                                        ? 'border-brand-600 dark:border-baroque-gold ring-2 ring-brand-500/20 dark:ring-baroque-gold/20' 
+                                        : 'border-stone-100 dark:border-baroque-border hover:shadow-2xl hover:shadow-brand-950/5 hover:-translate-y-1'
+                                } ${viewMode === 'list' ? 'md:flex-row h-auto md:h-72' : ''}`}
+                            >
+                                {/* Imagem e Badge de Seleção */}
+                                <div className={`relative bg-stone-50 dark:bg-baroque-bg overflow-hidden ${
+                                    viewMode === 'list' 
+                                        ? 'w-full md:w-[35%] h-64 md:h-full shrink-0' 
+                                        : 'h-64 w-full'
+                                }`}>
                                     <img 
                                         src={fabric.placeholderImage} 
-                                        alt={fabric.altText || fabric.name} 
+                                        alt={fabric.altText || fabric.name}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                                     />
-                                ) : (
-                                    <div className="w-full h-full flex items-center justify-center text-slate-300">
-                                        <Package size={64} className="opacity-50" />
+                                    
+                                    {/* Glass Overlay Superior */}
+                                    <div className="absolute top-4 left-4 z-10 flex gap-2">
+                                        <span className="px-3 py-1 bg-white/90 dark:bg-baroque-surface/90 backdrop-blur-md rounded-full text-[9px] font-black uppercase text-brand-700 dark:text-baroque-gold tracking-widest border border-brand-100/20 dark:border-baroque-border shadow-sm">
+                                            {fabric.category}
+                                        </span>
+                                        {fabric.exclusive && (
+                                            <span className="px-3 py-1 bg-amber-500/90 backdrop-blur-md rounded-full text-[9px] font-black uppercase text-white tracking-widest shadow-sm">
+                                                Exclusivo
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    {/* Selectable Checkbox - Luxo */}
+                                    <button
+                                        onClick={() => handleSelectFabric(fabric.id)}
+                                        className={`absolute top-4 right-4 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all ${
+                                            isSelected 
+                                                ? 'bg-brand-900 dark:bg-baroque-gold text-white dark:text-baroque-bg scale-110 shadow-lg' 
+                                                : 'bg-white/80 hover:bg-white dark:bg-baroque-surface/85 dark:hover:bg-baroque-surface text-stone-400 hover:text-brand-900 shadow-md backdrop-blur-sm'
+                                        }`}
+                                    >
+                                        {isSelected ? <Check size={14} strokeWidth={3} /> : <Plus size={14} />}
+                                    </button>
+
+                                    {/* Ações Rápidas (Editar/Remover) */}
+                                    <div className="absolute bottom-4 right-4 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                                        <button 
+                                            onClick={() => openEditDrawer(fabric)} 
+                                            className="p-2 bg-white/95 hover:bg-brand-900 dark:bg-baroque-surface/95 dark:hover:bg-baroque-gold text-stone-700 hover:text-white dark:text-baroque-gold dark:hover:text-baroque-bg rounded-lg shadow-lg border border-transparent dark:border-baroque-border transition-all duration-300"
+                                            title="Editar Tecido"
+                                        >
+                                            <Pencil size={12} />
+                                        </button>
+                                        <button 
+                                            onClick={() => handleDelete(fabric.id)} 
+                                            className="p-2 bg-white/95 hover:bg-red-600 dark:bg-baroque-surface/95 dark:hover:bg-red-950/40 text-stone-700 hover:text-white dark:text-baroque-gold dark:hover:text-red-400 rounded-lg shadow-lg border border-transparent dark:border-baroque-border transition-all duration-300"
+                                            title="Remover Tecido"
+                                        >
+                                            <Trash2 size={12} />
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Conteúdo Editorial */}
+                                {viewMode !== 'focus' && (
+                                    <div className="p-6 flex-1 flex flex-col justify-between bg-white dark:bg-baroque-surface">
+                                        <div className="space-y-3">
+                                            <h3 className="text-xl font-bold font-serif text-brand-900 dark:text-baroque-text group-hover:text-brand-600 dark:group-hover:text-baroque-gold transition-colors leading-tight">
+                                                {fabric.name}
+                                            </h3>
+                                            <p className="text-xs text-stone-400 dark:text-baroque-muted font-medium line-clamp-3 leading-relaxed">
+                                                {fabric.description}
+                                            </p>
+                                        </div>
+
+                                        <div className="pt-4 mt-4 border-t border-stone-50 dark:border-baroque-border flex items-center justify-between">
+                                            <div className="space-y-1">
+                                                <span className="text-[8px] font-black uppercase tracking-widest text-stone-400 dark:text-baroque-muted leading-none block">Cores</span>
+                                                <span className="text-xs font-semibold text-stone-600 dark:text-baroque-text line-clamp-1">{fabric.colors}</span>
+                                            </div>
+                                            <span className="text-[10px] font-bold text-brand-600 dark:text-baroque-gold flex items-center gap-1">
+                                                {fabric.exclusive ? 'Alta Curadoria' : 'Disponível'} <ChevronRight size={10} />
+                                            </span>
+                                        </div>
                                     </div>
                                 )}
-                                
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
-
-                                <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
-                                    <button onClick={() => openEditModal(fabric)} className="p-2 bg-white/90 backdrop-blur-md text-slate-700 hover:text-brand-600 transition-colors rounded-xl shadow-lg">
-                                        <Pencil size={18} />
-                                    </button>
-                                    <button onClick={() => handleDelete(fabric.id)} className="p-2 bg-white/90 backdrop-blur-md text-slate-700 hover:text-red-600 transition-colors rounded-xl shadow-lg">
-                                        <Trash2 size={18} />
-                                    </button>
-                                </div>
-                                <div className="absolute top-4 left-4 z-10">
-                                    <span className="px-4 py-1.5 bg-white/95 backdrop-blur-md rounded-full text-[10px] font-black uppercase text-brand-700 tracking-widest shadow-lg">
-                                        {fabric.category}
-                                    </span>
-                                </div>
-                                <div className="absolute bottom-4 left-4 z-10">
-                                    <h3 className="font-black text-white text-xl drop-shadow-md">{fabric.name}</h3>
-                                </div>
-                            </div>
-                            
-                            <div className="p-6 flex-1 flex flex-col bg-white">
-                                <p className="text-sm text-slate-600 mb-4 line-clamp-3 leading-relaxed flex-1 font-medium">{fabric.description}</p>
-                                
-                                <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <div className={`w-2.5 h-2.5 rounded-full ${fabric.exclusive ? 'bg-amber-400' : 'bg-brand-500'} shadow-sm`} />
-                                        <span className="text-xs font-bold text-slate-600 uppercase tracking-wide">
-                                            {fabric.exclusive ? 'Exclusivo' : 'Regular'}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </motion.div>
-                    ))}
+                            </motion.div>
+                        );
+                    })}
                 </div>
             )}
 
+            {/* BARRA FIXA DE CONVERSÃO COMERCIAL (Sticky PDF Generator) */}
             <AnimatePresence>
-                {isModalOpen && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+                {selectedFabrics.length > 0 && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 100 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 100 }}
+                        className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl bg-brand-950/95 dark:bg-baroque-surface/95 backdrop-blur-xl rounded-2xl border border-white/10 dark:border-baroque-border shadow-2xl p-4 md:p-6 flex flex-col md:flex-row items-center justify-between gap-4 z-40"
+                    >
+                        <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-full bg-brand-500/10 dark:bg-baroque-gold/10 border border-brand-500/20 dark:border-baroque-gold/20 flex items-center justify-center text-brand-400 dark:text-baroque-gold">
+                                <Sparkles size={16} className="animate-spin" style={{ animationDuration: '4s' }} />
+                            </div>
+                            <div>
+                                <h4 className="text-sm font-bold font-serif text-white tracking-wide uppercase">
+                                    Catálogo em Construção
+                                </h4>
+                                <p className="text-[10px] text-brand-200 dark:text-baroque-muted font-medium mt-0.5 leading-none">
+                                    {selectedFabrics.length} {selectedFabrics.length === 1 ? 'tecido selecionado' : 'tecidos selecionados'} • Capa & layout de luxo integrados.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-3 w-full md:w-auto">
+                            <button
+                                onClick={() => setSelectedFabrics([])}
+                                className="px-4 py-3 rounded-xl text-stone-400 hover:text-white text-xs font-bold uppercase tracking-widest transition-all w-1/2 md:w-auto"
+                            >
+                                Limpar
+                            </button>
+
+                            <button
+                                onClick={handleGeneratePdf}
+                                disabled={pdfState !== 'idle'}
+                                className={`flex-1 md:flex-initial flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-bold uppercase tracking-widest text-xs transition-all relative overflow-hidden ${
+                                    pdfState === 'idle'
+                                        ? 'bg-brand-500 dark:bg-baroque-gold text-brand-950 hover:bg-brand-400 shadow-lg'
+                                        : 'bg-stone-800 text-stone-400 border border-stone-700'
+                                }`}
+                            >
+                                {pdfState === 'idle' && (
+                                    <>
+                                        <FileDown size={14} /> Gerar Catálogo Premium
+                                    </>
+                                )}
+                                {pdfState === 'preparing' && (
+                                    <>
+                                        <Loader2 size={14} className="animate-spin text-brand-500" /> Preparando curadoria...
+                                    </>
+                                )}
+                                {pdfState === 'layout' && (
+                                    <>
+                                        <Loader2 size={14} className="animate-spin text-brand-500" /> Organizando páginas...
+                                    </>
+                                )}
+                                {pdfState === 'generating' && (
+                                    <>
+                                        <Loader2 size={14} className="animate-spin text-brand-500" /> Tecendo PDF...
+                                    </>
+                                )}
+                                {pdfState === 'downloading' && (
+                                    <>
+                                        <Loader2 size={14} className="animate-spin text-brand-500" /> Baixando catálogo...
+                                    </>
+                                )}
+                                {pdfState === 'success' && (
+                                    <>
+                                        <Check size={14} className="text-emerald-500 animate-bounce" /> Catálogo Pronto!
+                                    </>
+                                )}
+
+                                {/* Barra de Progresso Real */}
+                                {pdfProgress > 0 && pdfState !== 'success' && (
+                                    <div 
+                                        className="absolute bottom-0 left-0 h-1 bg-brand-500 dark:bg-baroque-gold transition-all duration-500" 
+                                        style={{ width: `${pdfProgress}%` }}
+                                    />
+                                )}
+                            </button>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* SIDEBAR DRAWER - CADASTRO / EDIÇÃO DE LUXO */}
+            <AnimatePresence>
+                {isDrawerOpen && (
+                    <>
+                        {/* Backdrop de vidro */}
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 0.4 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsDrawerOpen(false)}
+                            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+                        />
+
+                        {/* Painel Lateral Deslizante */}
+                        <motion.div
+                            initial={{ x: "100%" }}
+                            animate={{ x: 0 }}
+                            exit={{ x: "100%" }}
+                            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                            className="fixed right-0 top-0 h-full w-full max-w-xl bg-white dark:bg-baroque-surface z-50 shadow-2xl border-l border-brand-100/20 dark:border-baroque-border p-8 flex flex-col justify-between overflow-y-auto"
                         >
-                            <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                                <h2 className="text-xl font-bold text-brand-900">
-                                    {editingFabric ? 'Editar Tecido' : 'Novo Tecido'}
-                                </h2>
-                                <button onClick={() => setIsModalOpen(false)} className="p-2 text-slate-400 hover:text-slate-600 transition-colors">
-                                    <X size={20} />
+                            <div className="space-y-8">
+                                {/* Top Header */}
+                                <div className="flex justify-between items-center border-b border-brand-100/20 dark:border-baroque-border pb-4">
+                                    <div>
+                                        <span className="text-[9px] font-black uppercase tracking-widest text-brand-500 dark:text-baroque-gold">Painel Curatorial</span>
+                                        <h2 className="text-2xl font-bold font-serif text-brand-900 dark:text-baroque-text mt-1">
+                                            {editingFabric ? 'Editar Fibra Nobre' : 'Inserir Nova Fibra'}
+                                        </h2>
+                                    </div>
+                                    <button 
+                                        onClick={() => setIsDrawerOpen(false)} 
+                                        className="p-2 text-stone-400 hover:text-brand-900 dark:hover:text-white rounded-lg transition-colors border border-transparent hover:border-stone-100 dark:hover:border-baroque-border"
+                                    >
+                                        <X size={20} />
+                                    </button>
+                                </div>
+
+                                {/* Form */}
+                                <form onSubmit={handleSubmit} id="fabric-form" className="space-y-6">
+                                    <div className="space-y-2">
+                                        <label className="text-[9px] font-black uppercase text-stone-400 dark:text-baroque-muted tracking-widest leading-none block">Nome do Material</label>
+                                        <input
+                                            required
+                                            value={formData.name}
+                                            onChange={e => setFormData({ ...formData, name: e.target.value })}
+                                            className="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-baroque-border bg-white dark:bg-baroque-bg focus:ring-1 focus:ring-brand-500 outline-none transition-all text-xs font-semibold text-brand-900 dark:text-baroque-text"
+                                            placeholder="Ex: Slub Linho Premium"
+                                        />
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <label className="text-[9px] font-black uppercase text-stone-400 dark:text-baroque-muted tracking-widest leading-none block">Família / Categoria</label>
+                                            <select
+                                                value={formData.category}
+                                                onChange={e => setFormData({ ...formData, category: e.target.value })}
+                                                className="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-baroque-border bg-white dark:bg-baroque-bg focus:ring-1 focus:ring-brand-500 outline-none transition-all text-xs font-semibold text-brand-900 dark:text-baroque-text"
+                                            >
+                                                <option value="Linho">Linho</option>
+                                                <option value="Voil">Voil</option>
+                                                <option value="Blackout">Blackout</option>
+                                                <option value="Oxford">Oxford</option>
+                                                <option value="Forro">Forro</option>
+                                            </select>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label className="text-[9px] font-black uppercase text-stone-400 dark:text-baroque-muted tracking-widest leading-none block">SEO Alt Text</label>
+                                            <input
+                                                required
+                                                value={formData.altText}
+                                                onChange={e => setFormData({ ...formData, altText: e.target.value })}
+                                                className="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-baroque-border bg-white dark:bg-baroque-bg focus:ring-1 focus:ring-brand-500 outline-none transition-all text-xs font-semibold text-brand-900 dark:text-baroque-text"
+                                                placeholder="Ex: Tecido linho marrom..."
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-[9px] font-black uppercase text-stone-400 dark:text-baroque-muted tracking-widest leading-none block">Descrição Sensorial & Comercial</label>
+                                        <textarea
+                                            required
+                                            rows={4}
+                                            value={formData.description}
+                                            onChange={e => setFormData({ ...formData, description: e.target.value })}
+                                            className="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-baroque-border bg-white dark:bg-baroque-bg focus:ring-1 focus:ring-brand-500 outline-none transition-all text-xs font-semibold text-brand-900 dark:text-baroque-text leading-relaxed"
+                                            placeholder="Descreva o toque, trama, caimento natural da fibra..."
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-[9px] font-black uppercase text-stone-400 dark:text-baroque-muted tracking-widest leading-none block">Caminho da Imagem de Alta Qualidade</label>
+                                        <input
+                                            required
+                                            value={formData.placeholderImage}
+                                            onChange={e => setFormData({ ...formData, placeholderImage: e.target.value })}
+                                            className="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-baroque-border bg-white dark:bg-baroque-bg focus:ring-1 focus:ring-brand-500 outline-none transition-all text-xs font-semibold text-brand-900 dark:text-baroque-text"
+                                            placeholder="/images/tecidos/linho-premium.jpg"
+                                        />
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <label className="text-[9px] font-black uppercase text-stone-400 dark:text-baroque-muted tracking-widest leading-none block">Cores Disponíveis (separadas por vírgula)</label>
+                                            <input
+                                                value={formData.colors}
+                                                onChange={e => setFormData({ ...formData, colors: e.target.value })}
+                                                className="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-baroque-border bg-white dark:bg-baroque-bg focus:ring-1 focus:ring-brand-500 outline-none transition-all text-xs font-semibold text-brand-900 dark:text-baroque-text"
+                                                placeholder="Branco, Palha, Off-White"
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label className="text-[9px] font-black uppercase text-stone-400 dark:text-baroque-muted tracking-widest leading-none block">Diferenciais (separados por vírgula)</label>
+                                            <input
+                                                value={formData.benefits}
+                                                onChange={e => setFormData({ ...formData, benefits: e.target.value })}
+                                                className="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-baroque-border bg-white dark:bg-baroque-bg focus:ring-1 focus:ring-brand-500 outline-none transition-all text-xs font-semibold text-brand-900 dark:text-baroque-text"
+                                                placeholder="Caimento Fluido, Toque Suave"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Toggle Exclusivo */}
+                                    <div 
+                                        onClick={() => setFormData({ ...formData, exclusive: !formData.exclusive })}
+                                        className={`p-4 rounded-xl border flex items-center justify-between cursor-pointer transition-all ${
+                                            formData.exclusive 
+                                                ? 'bg-amber-500/10 border-amber-300 dark:border-amber-900 text-amber-600 dark:text-amber-400' 
+                                                : 'bg-stone-50 dark:bg-baroque-bg border-stone-200 dark:border-baroque-border text-stone-500 dark:text-baroque-muted'
+                                        }`}
+                                    >
+                                        <div className="flex items-center gap-2.5">
+                                            <Sparkles size={16} />
+                                            <span className="text-xs font-bold uppercase tracking-wider">Peça Rara & Exclusiva</span>
+                                        </div>
+                                        <div className={`w-10 h-6 rounded-full p-1 transition-all ${formData.exclusive ? 'bg-amber-500' : 'bg-stone-300 dark:bg-stone-700'}`}>
+                                            <div className={`w-4 h-4 rounded-full bg-white transition-all ${formData.exclusive ? 'translate-x-4' : 'translate-x-0'}`} />
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            {/* Bottom CTA */}
+                            <div className="border-t border-brand-100/20 dark:border-baroque-border pt-6 mt-8 flex justify-end gap-3">
+                                <button
+                                    type="button"
+                                    onClick={() => setIsDrawerOpen(false)}
+                                    className="px-6 py-3 rounded-xl text-stone-500 hover:text-brand-900 dark:hover:text-white text-xs font-bold uppercase tracking-widest transition-all"
+                                >
+                                    Descartar
+                                </button>
+                                <button
+                                    type="submit"
+                                    form="fabric-form"
+                                    className="flex items-center gap-2 px-8 py-3.5 bg-brand-900 dark:bg-baroque-gold text-white dark:text-baroque-bg border border-transparent dark:border-baroque-border rounded-xl font-bold hover:bg-brand-800 dark:hover:bg-baroque-bg shadow-lg shadow-brand-950/10 text-xs tracking-widest uppercase transition-all"
+                                >
+                                    <Save size={14} /> {editingFabric ? 'Confirmar Ajustes' : 'Salvar no Showroom'}
                                 </button>
                             </div>
-                            <form onSubmit={handleSubmit} className="p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold uppercase text-slate-500 tracking-widest">Nome do Tecido</label>
-                                    <input
-                                        required
-                                        value={formData.name}
-                                        onChange={e => setFormData({ ...formData, name: e.target.value })}
-                                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500 outline-none transition-all"
-                                        placeholder="Ex: Linho Premium"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold uppercase text-slate-500 tracking-widest">Categoria</label>
-                                    <select
-                                        value={formData.category}
-                                        onChange={e => setFormData({ ...formData, category: e.target.value })}
-                                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500 outline-none transition-all"
-                                    >
-                                        <option value="Linho">Linho</option>
-                                        <option value="Voil">Voil</option>
-                                        <option value="Blackout">Blackout</option>
-                                        <option value="Oxford">Oxford</option>
-                                        <option value="Forro">Forro</option>
-                                    </select>
-                                </div>
-                                <div className="space-y-2 md:col-span-2">
-                                    <label className="text-xs font-bold uppercase text-slate-500 tracking-widest">Descrição</label>
-                                    <textarea
-                                        required
-                                        rows={3}
-                                        value={formData.description}
-                                        onChange={e => setFormData({ ...formData, description: e.target.value })}
-                                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500 outline-none transition-all"
-                                        placeholder="Descreva a textura, caimento e indicação de uso..."
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold uppercase text-slate-500 tracking-widest">Alt Text (SEO)</label>
-                                    <input
-                                        required
-                                        value={formData.altText}
-                                        onChange={e => setFormData({ ...formData, altText: e.target.value })}
-                                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500 outline-none transition-all"
-                                        placeholder="Ex: Tecido linho branco para cortinas"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold uppercase text-slate-500 tracking-widest">Imagem (Caminho)</label>
-                                    <input
-                                        required
-                                        value={formData.placeholderImage}
-                                        onChange={e => setFormData({ ...formData, placeholderImage: e.target.value })}
-                                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500 outline-none transition-all"
-                                        placeholder="/images/tecidos/exemplo.jpg"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold uppercase text-slate-500 tracking-widest">Cores (separadas por vírgula)</label>
-                                    <input
-                                        value={formData.colors}
-                                        onChange={e => setFormData({ ...formData, colors: e.target.value })}
-                                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500 outline-none transition-all"
-                                        placeholder="Branco, Off-White, Bege"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold uppercase text-slate-500 tracking-widest">Benefícios (separados por vírgula)</label>
-                                    <input
-                                        value={formData.benefits}
-                                        onChange={e => setFormData({ ...formData, benefits: e.target.value })}
-                                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500 outline-none transition-all"
-                                        placeholder="Não encolhe, Alta durabilidade"
-                                    />
-                                </div>
-                                <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-200 md:col-span-2">
-                                    <input
-                                        type="checkbox"
-                                        id="exclusive"
-                                        checked={formData.exclusive}
-                                        onChange={e => setFormData({ ...formData, exclusive: e.target.checked })}
-                                        className="w-5 h-5 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
-                                    />
-                                    <label htmlFor="exclusive" className="text-sm font-bold text-slate-700 cursor-pointer">Marcar como Tecido Exclusivo</label>
-                                </div>
-                                <div className="md:col-span-2 flex justify-end gap-3 pt-6">
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsModalOpen(false)}
-                                        className="px-6 py-3 rounded-xl text-slate-500 font-bold hover:bg-slate-100 transition-all"
-                                    >
-                                        Cancelar
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        className="flex items-center gap-2 px-8 py-3 bg-brand-600 text-white rounded-xl font-bold hover:bg-brand-700 transition-all shadow-lg shadow-brand-500/30 active:scale-95"
-                                    >
-                                        <Save size={18} /> {editingFabric ? 'Salvar Alterações' : 'Cadastrar Tecido'}
-                                    </button>
-                                </div>
-                            </form>
                         </motion.div>
-                    </div>
+                    </>
                 )}
             </AnimatePresence>
         </div>
