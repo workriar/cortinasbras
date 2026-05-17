@@ -12,7 +12,8 @@ import {
     Settings,
     LogOut,
     ChevronLeft,
-    KanbanSquare
+    KanbanSquare,
+    BookOpen
 } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 
@@ -25,6 +26,12 @@ export default function Sidebar() {
             name: 'Dashboard',
             icon: <LayoutDashboard size={22} strokeWidth={1.5} />,
             path: '/dashboard',
+        },
+        {
+            name: 'Catálogo',
+            icon: <BookOpen size={22} strokeWidth={1.5} />,
+            path: '/dashboard/catalog',
+            badge: 'Novo',
         },
         {
             name: 'CRM',

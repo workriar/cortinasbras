@@ -21,16 +21,23 @@ export default function FabricCatalog() {
             const res = await fetch('/api/fabrics');
             const data = await res.json();
 
-            // Format the data from DB (comma-separated strings to arrays)
-            const formatted = data.map((f: any) => ({
-                ...f,
-                colors: f.colors ? f.colors.split(',') : [],
-                benefits: f.benefits ? f.benefits.split(',') : []
-            }));
-
-            setFabrics(formatted);
+            if (data && data.length > 0) {
+                // Formata os dados do banco
+                const formatted = data.map((f: any) => ({
+                    ...f,
+                    colors: f.colors ? f.colors.split(',') : [],
+                    benefits: f.benefits ? f.benefits.split(',') : []
+                }));
+                setFabrics(formatted);
+            } else {
+                // Fallback para o arquivo local se o banco estiver vazio
+                const { fabrics: defaultFabrics } = await import('@/lib/fabrics');
+                setFabrics(defaultFabrics);
+            }
         } catch (e) {
-            console.error('Failed to fetch fabrics:', e);
+            console.error('Failed to fetch fabrics, using fallback:', e);
+            const { fabrics: defaultFabrics } = await import('@/lib/fabrics');
+            setFabrics(defaultFabrics);
         } finally {
             setLoading(false);
         }

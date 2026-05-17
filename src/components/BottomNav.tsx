@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Users, PieChart, Settings, Plus } from 'lucide-react';
+import { LayoutDashboard, Users, PieChart, Settings, Plus, BookOpen } from 'lucide-react';
 
 export default function BottomNav() {
     const pathname = usePathname();
@@ -41,13 +41,13 @@ export default function BottomNav() {
             </div>
 
             <Link
-                href="/dashboard/reports"
+                href="/dashboard/catalog"
                 scroll={false}
-                className={`flex flex-col items-center gap-1 transition-colors ${isActive('/dashboard/reports') ? 'text-brand-600' : 'hover:text-stone-800'
+                className={`flex flex-col items-center gap-1 transition-colors ${isActive('/dashboard/catalog') ? 'text-brand-600' : 'hover:text-stone-800'
                     }`}
             >
-                <PieChart size={22} strokeWidth={isActive('/dashboard/reports') ? 2.5 : 2} />
-                <span>Relat.</span>
+                <BookOpen size={22} strokeWidth={isActive('/dashboard/catalog') ? 2.5 : 2} />
+                <span>Catálogo</span>
             </Link>
 
             <Link
