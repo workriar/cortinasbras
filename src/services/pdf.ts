@@ -14,6 +14,7 @@
 
 import PDFDocument from 'pdfkit';
 import path from 'path';
+import fs from 'fs';
 
 const FONT_REGULAR = 'Roboto-Regular';
 const FONT_BOLD    = 'Roboto-Bold';
@@ -58,6 +59,7 @@ export async function generatePdf(fabrics: Array<{
     colors: string[];
     benefits: string[];
     exclusive?: boolean;
+    placeholderImage?: string;
 }>): Promise<Buffer> {
     const doc = new PDFDocument({
         size:   'A4',
@@ -191,6 +193,51 @@ export async function generatePdf(fabrics: Array<{
 
 // ─── Helpers internos ─────────────────────────────────────────────────────────
 
+function _resolveImage(imagePath: string | undefined): string | null {
+    if (!imagePath) return null;
+    
+    try {
+        if (path.isAbsolute(imagePath) && fs.existsSync(imagePath)) {
+            return imagePath;
+        }
+
+        const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
+        const fullPath = path.join(process.cwd(), 'public', cleanPath);
+        
+        if (fs.existsSync(fullPath)) {
+            return fullPath;
+        }
+    } catch (e) {
+        console.warn("[PDF RESOLVER] Falha ao localizar imagem no disco:", imagePath, e);
+    }
+    return null;
+}
+
+function _drawPlaceholder(
+    doc: InstanceType<typeof PDFDocument>,
+    x: number,
+    y: number,
+    w: number,
+    h: number
+) {
+    doc.roundedRect(x, y, w, h, 6).fill('#f7f7f5');
+    
+    doc.roundedRect(x + 3, y + 3, w - 6, h - 6, 4)
+        .strokeColor(BRAND.gold)
+        .lineWidth(0.5)
+        .stroke();
+    
+    doc.fillColor(BRAND.darkGold)
+        .fontSize(8)
+        .font(FONT_BOLD)
+        .text('CORTINAS BRÁS', x + 2, y + h / 2 - 12, { width: w - 4, align: 'center', characterSpacing: 1 });
+        
+    doc.fillColor(BRAND.gray)
+        .fontSize(6)
+        .font(FONT_REGULAR)
+        .text('Amostra de Fibra', x + 2, y + h / 2 + 4, { width: w - 4, align: 'center' });
+}
+
 function _drawPageHeader(
     doc: InstanceType<typeof PDFDocument>,
     title: string,
@@ -269,56 +316,86 @@ function _drawCard(
 
 function _drawFabricCard(
     doc: InstanceType<typeof PDFDocument>,
-    fabric: { name: string; description: string; colors: string[]; benefits: string[]; exclusive?: boolean },
+    fabric: { name: string; description: string; colors: string[]; benefits: string[]; exclusive?: boolean; placeholderImage?: string },
     M: number,
     CW: number,
 ) {
     const startY = doc.y;
-    const cardH  = 110;
+    const cardH  = 130; 
+    const imgSize = 100;
 
     doc.roundedRect(M, startY, CW, cardH, 8)
         .fillAndStroke('#ffffff', BRAND.lightGray);
     doc.rect(M, startY, 4, cardH).fill(BRAND.gold);
 
+    // Coluna esquerda: Foto do Tecido
+    const imgX = M + 15;
+    const imgY = startY + 15;
+
+    // Borda decorativa tipo museu ao redor do container
+    doc.roundedRect(imgX - 1, imgY - 1, imgSize + 2, imgSize + 2, 6)
+        .strokeColor(BRAND.lightGray)
+        .lineWidth(0.5)
+        .stroke();
+
+    try {
+        const resolvedPath = _resolveImage(fabric.placeholderImage);
+        if (resolvedPath) {
+            doc.save();
+            doc.roundedRect(imgX, imgY, imgSize, imgSize, 5).clip();
+            doc.image(resolvedPath, imgX, imgY, { width: imgSize, height: imgSize });
+            doc.restore();
+        } else {
+            _drawPlaceholder(doc, imgX, imgY, imgSize, imgSize);
+        }
+    } catch (e) {
+        console.warn("[PDF] Falha ao renderizar foto do tecido no PDF, usando placeholder:", e);
+        _drawPlaceholder(doc, imgX, imgY, imgSize, imgSize);
+    }
+
+    // Coluna direita: Conteúdo editorial
+    const textX = M + 130;
+    const textW = CW - 145;
+
     if (fabric.exclusive) {
-        doc.roundedRect(M + CW - 72, startY + 10, 62, 16, 4).fill(BRAND.gold);
+        doc.roundedRect(M + CW - 72, startY + 12, 62, 14, 3).fill(BRAND.gold);
         doc.fillColor('#ffffff')
-            .fontSize(7)
+            .fontSize(6)
             .font(FONT_BOLD)
-            .text('EXCLUSIVO', M + CW - 69, startY + 14, { width: 56, align: 'center' });
+            .text('EXCLUSIVO', M + CW - 69, startY + 16, { width: 56, align: 'center' });
     }
 
     doc.fillColor(BRAND.dark)
-        .fontSize(13)
+        .fontSize(12)
         .font(FONT_BOLD)
-        .text(fabric.name, M + 20, startY + 12, { width: fabric.exclusive ? CW - 110 : CW - 30 });
+        .text(fabric.name, textX, startY + 12, { width: fabric.exclusive ? textW - 75 : textW });
 
     doc.fillColor(BRAND.gray)
-        .fontSize(9)
+        .fontSize(8.5)
         .font(FONT_REGULAR)
-        .text(fabric.description, M + 20, doc.y + 3, { width: CW - 30, lineGap: 1.5 });
+        .text(fabric.description, textX, doc.y + 4, { width: textW, lineGap: 1.2 });
 
-    const colorsY = startY + cardH - 36;
+    const colorsY = startY + cardH - 32;
     doc.fillColor(BRAND.darkGold)
         .fontSize(7.5)
         .font(FONT_BOLD)
-        .text('CORES:', M + 20, colorsY);
+        .text('CORES:', textX, colorsY);
 
     doc.fillColor(BRAND.gray)
         .fontSize(7.5)
         .font(FONT_REGULAR)
-        .text(fabric.colors.join(' • '), M + 58, colorsY, { width: CW - 80 });
+        .text(fabric.colors.join('  •  '), textX + 38, colorsY, { width: textW - 40 });
 
-    const benefitsY = startY + cardH - 20;
+    const benefitsY = startY + cardH - 18;
     doc.fillColor(BRAND.darkGold)
         .fontSize(7.5)
         .font(FONT_BOLD)
-        .text('DIFERENCIAIS:', M + 20, benefitsY);
+        .text('ATRIBUTOS:', textX, benefitsY);
 
     doc.fillColor(BRAND.gray)
         .fontSize(7.5)
         .font(FONT_REGULAR)
-        .text(fabric.benefits.map(b => `✓ ${b}`).join('   '), M + 88, benefitsY, { width: CW - 110 });
+        .text(fabric.benefits.map(b => `✓ ${b}`).join('   '), textX + 58, benefitsY, { width: textW - 60 });
 
     doc.y = startY + cardH + 8;
 }

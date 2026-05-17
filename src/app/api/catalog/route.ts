@@ -79,7 +79,8 @@ export async function GET(req: Request) {
                 description: fabric.description,
                 colors: colorsArray.length > 0 ? colorsArray : ['Várias Cores'],
                 benefits: benefitsArray.length > 0 ? benefitsArray : ['Alta Qualidade'],
-                exclusive: fabric.exclusive || false
+                exclusive: fabric.exclusive || false,
+                placeholderImage: fabric.placeholderImage || ""
             };
         });
 
