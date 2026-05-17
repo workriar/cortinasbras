@@ -1,9 +1,10 @@
 'use client';
 import { useSession, signOut } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
+import { useTheme } from 'next-themes';
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
-import { Search, Bell, Plus, Settings, LogOut, ChevronDown, Users as UsersIcon } from 'lucide-react';
+import { Search, Bell, Plus, Settings, LogOut, ChevronDown, Users as UsersIcon, Moon, Sun } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Navbar() {
@@ -11,9 +12,16 @@ export default function Navbar() {
     const pathname = usePathname();
     const [showProfile, setShowProfile] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
+    
+    const { theme, setTheme } = useTheme();
+    const [mounted, setMounted] = useState(false);
 
     const notifRef = useRef<HTMLDivElement>(null);
     const profileRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     // Fechar ao clicar fora
     useEffect(() => {
@@ -30,7 +38,7 @@ export default function Navbar() {
     }, []);
 
     return (
-        <nav className="sticky top-0 z-30 bg-white/70 backdrop-blur-md border-b border-gray-100 shadow-sm">
+        <nav className="sticky top-0 z-30 bg-white/70 dark:bg-baroque-surface/80 backdrop-blur-md border-b border-gray-100 dark:border-baroque-border shadow-sm transition-colors duration-500">
             <div className="px-6 py-3">
                 <div className="flex items-center justify-between">
                     {/* Brand Logo */}
@@ -42,16 +50,16 @@ export default function Navbar() {
                                     alt="Cortinas Brás"
                                     width={192}
                                     height={48}
-                                    className="h-full w-auto object-contain"
+                                    className="h-full w-auto object-contain brightness-0 dark:brightness-200 dark:sepia dark:hue-rotate-[10deg] dark:saturate-[2] transition-all"
                                     priority
                                 />
                             </div>
                         </Link>
 
                         {/* Breadcrumbs - Desktop Only */}
-                        <div className="hidden lg:flex items-center text-sm text-gray-500 font-medium">
-                            <div className="h-6 w-px bg-gray-200 mx-2"></div>
-                            <span className="text-gray-900">
+                        <div className="hidden lg:flex items-center text-sm text-gray-500 dark:text-baroque-muted font-medium transition-colors">
+                            <div className="h-6 w-px bg-gray-200 dark:bg-baroque-border mx-2"></div>
+                            <span className="text-gray-900 dark:text-baroque-gold">
                                 {(() => {
                                     // Simple manual mapping for now
                                     if (pathname === '/dashboard') return 'Visão Geral';
@@ -61,6 +69,7 @@ export default function Navbar() {
                                     if (pathname?.startsWith('/dashboard/reports')) return 'Relatórios';
                                     if (pathname?.startsWith('/dashboard/users')) return 'Usuários';
                                     if (pathname?.startsWith('/dashboard/settings')) return 'Configurações';
+                                    if (pathname?.startsWith('/dashboard/catalog')) return 'Catálogo';
                                     return 'Painel';
                                 })()}
                             </span>
@@ -71,25 +80,36 @@ export default function Navbar() {
                     <div className="flex-1 max-w-xl hidden md:block">
                         <div className="relative group">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <Search size={18} className="text-gray-300 group-focus-within:text-gray-400 transition-colors" />
+                                <Search size={18} className="text-gray-300 dark:text-baroque-muted group-focus-within:text-brand-500 dark:group-focus-within:text-baroque-gold transition-colors" />
                             </div>
                             <input
                                 type="search"
                                 placeholder="Pesquisar..."
-                                className="block w-full pl-10 pr-3 py-2 border border-gray-100 rounded-lg leading-5 bg-stone-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-1 focus:ring-stone-200 focus:border-stone-200 transition-all sm:text-sm"
+                                className="block w-full pl-10 pr-3 py-2 border border-gray-100 dark:border-baroque-border rounded-lg leading-5 bg-stone-50 dark:bg-baroque-bg placeholder-gray-400 dark:placeholder-baroque-muted focus:outline-none focus:bg-white dark:focus:bg-baroque-surface focus:ring-1 focus:ring-brand-200 dark:focus:ring-baroque-gold focus:border-brand-200 dark:focus:border-baroque-gold transition-all sm:text-sm text-brand-900 dark:text-baroque-text"
                             />
                         </div>
                     </div>
 
                     {/* Right Section */}
                     <div className="flex items-center gap-2 md:gap-3 ml-auto md:ml-6">
+                        
+                        {/* Theme Toggle */}
+                        {mounted && (
+                            <button 
+                                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                                className="p-2 text-gray-400 hover:text-brand-600 dark:text-baroque-muted dark:hover:text-baroque-gold hover:bg-gray-50 dark:hover:bg-baroque-bg rounded-full transition-all"
+                            >
+                                {theme === 'dark' ? <Sun size={20} strokeWidth={1.5} /> : <Moon size={20} strokeWidth={1.5} />}
+                            </button>
+                        )}
+
                         {/* Quick Actions (Hidden Mobile) */}
-                        <button className="hidden md:block p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-full transition-all">
+                        <button className="hidden md:block p-2 text-gray-400 hover:text-brand-600 dark:text-baroque-muted dark:hover:text-baroque-gold hover:bg-gray-50 dark:hover:bg-baroque-bg rounded-full transition-all">
                             <Plus size={20} strokeWidth={1.5} />
                         </button>
 
                         {/* Search Icon (Visible Mobile) */}
-                        <button className="md:hidden p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-full transition-all">
+                        <button className="md:hidden p-2 text-gray-400 hover:text-brand-600 dark:text-baroque-muted dark:hover:text-baroque-gold hover:bg-gray-50 dark:hover:bg-baroque-bg rounded-full transition-all">
                             <Search size={20} strokeWidth={1.5} />
                         </button>
 
@@ -97,32 +117,32 @@ export default function Navbar() {
                         <div className="relative" ref={notifRef}>
                             <button
                                 onClick={() => setShowNotifications(!showNotifications)}
-                                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-full transition-all relative"
+                                className="p-2 text-gray-400 hover:text-brand-600 dark:text-baroque-muted dark:hover:text-baroque-gold hover:bg-gray-50 dark:hover:bg-baroque-bg rounded-full transition-all relative"
                             >
                                 <Bell size={20} strokeWidth={1.5} />
                                 <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-red-500 rounded-full"></span>
                             </button>
 
                             {showNotifications && (
-                                <div className="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-2xl border border-gray-100 py-2 ring-1 ring-black/5 animate-in fade-in slide-in-from-top-2 z-50">
-                                    <div className="px-4 py-3 border-b border-gray-100 flex justify-between items-center">
-                                        <h3 className="font-semibold text-sm text-gray-800 uppercase tracking-tight">Notificações</h3>
-                                        <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">2 NOVAS</span>
+                                <div className="absolute right-0 mt-3 w-80 bg-white dark:bg-baroque-surface rounded-xl shadow-2xl border border-gray-100 dark:border-baroque-border py-2 ring-1 ring-black/5 animate-in fade-in slide-in-from-top-2 z-50">
+                                    <div className="px-4 py-3 border-b border-gray-100 dark:border-baroque-border flex justify-between items-center">
+                                        <h3 className="font-semibold text-sm text-gray-800 dark:text-baroque-text uppercase tracking-tight">Notificações</h3>
+                                        <span className="text-[10px] bg-gray-100 dark:bg-baroque-bg text-gray-500 dark:text-baroque-gold px-1.5 py-0.5 rounded">2 NOVAS</span>
                                     </div>
                                     <div className="max-h-80 overflow-y-auto">
                                         <Link
                                             href="/dashboard/crm?status=NEW"
                                             scroll={false}
                                             onClick={() => setShowNotifications(false)}
-                                            className="block px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors"
+                                            className="block px-4 py-3 hover:bg-gray-50 dark:hover:bg-baroque-bg cursor-pointer transition-colors"
                                         >
-                                            <p className="text-sm text-gray-700 font-medium">Novos leads chegaram!</p>
-                                            <p className="text-xs text-gray-500 mt-0.5">Clique para ver os novos orçamentos.</p>
-                                            <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">Recente</p>
+                                            <p className="text-sm text-gray-700 dark:text-baroque-text font-medium">Novos leads chegaram!</p>
+                                            <p className="text-xs text-gray-500 dark:text-baroque-muted mt-0.5">Clique para ver os novos orçamentos.</p>
+                                            <p className="text-[10px] text-brand-500 dark:text-baroque-gold mt-1 uppercase tracking-wider">Recente</p>
                                         </Link>
                                     </div>
-                                    <div className="px-4 py-2 border-t border-gray-100 text-center">
-                                        <button className="text-xs text-gray-500 hover:text-gray-800 font-medium transition-colors">
+                                    <div className="px-4 py-2 border-t border-gray-100 dark:border-baroque-border text-center">
+                                        <button className="text-xs text-gray-500 dark:text-baroque-muted hover:text-brand-700 dark:hover:text-baroque-gold font-medium transition-colors">
                                             LIMPAR TUDO
                                         </button>
                                     </div>
@@ -134,32 +154,32 @@ export default function Navbar() {
                         <div className="relative" ref={profileRef}>
                             <button
                                 onClick={() => setShowProfile(!showProfile)}
-                                className="flex items-center gap-2 p-1 md:p-1.5 hover:bg-gray-50 rounded-lg transition-all border border-transparent hover:border-gray-100"
+                                className="flex items-center gap-2 p-1 md:p-1.5 hover:bg-gray-50 dark:hover:bg-baroque-surface rounded-lg transition-all border border-transparent hover:border-gray-100 dark:hover:border-baroque-border"
                             >
-                                <div className="w-8 h-8 bg-stone-100 border border-stone-200 rounded-full flex items-center justify-center text-stone-600 font-medium text-xs">
+                                <div className="w-8 h-8 bg-brand-50 dark:bg-baroque-bg border border-brand-100 dark:border-baroque-border rounded-full flex items-center justify-center text-brand-700 dark:text-baroque-gold font-medium text-xs">
                                     {session?.user?.name?.charAt(0).toUpperCase() || 'A'}
                                 </div>
                                 <div className="hidden md:block text-left pr-1">
-                                    <p className="text-xs font-semibold text-gray-800 leading-none mb-0.5">{session?.user?.name || 'Vendedor'}</p>
-                                    <p className="text-[10px] text-gray-400 uppercase tracking-wider leading-none">Acesso Sistema</p>
+                                    <p className="text-xs font-semibold text-gray-800 dark:text-baroque-text leading-none mb-0.5">{session?.user?.name || 'Vendedor'}</p>
+                                    <p className="text-[10px] text-gray-400 dark:text-baroque-muted uppercase tracking-wider leading-none">Acesso Sistema</p>
                                 </div>
-                                <ChevronDown size={14} className={`text-gray-300 transition-transform ${showProfile ? 'rotate-180' : ''}`} />
+                                <ChevronDown size={14} className={`text-gray-300 dark:text-baroque-muted transition-transform ${showProfile ? 'rotate-180' : ''}`} />
                             </button>
 
                             {showProfile && (
-                                <div className="absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-2xl border border-gray-100 py-1 ring-1 ring-black/5 animate-in fade-in slide-in-from-top-2 z-50">
-                                    <div className="md:hidden px-4 py-3 border-b border-stone-100">
-                                        <p className="text-xs font-semibold text-gray-800">{session?.user?.name || 'Vendedor'}</p>
-                                        <p className="text-[10px] text-gray-400">{session?.user?.email}</p>
+                                <div className="absolute right-0 mt-3 w-56 bg-white dark:bg-baroque-surface rounded-xl shadow-2xl border border-gray-100 dark:border-baroque-border py-1 ring-1 ring-black/5 animate-in fade-in slide-in-from-top-2 z-50">
+                                    <div className="md:hidden px-4 py-3 border-b border-gray-100 dark:border-baroque-border">
+                                        <p className="text-xs font-semibold text-gray-800 dark:text-baroque-text">{session?.user?.name || 'Vendedor'}</p>
+                                        <p className="text-[10px] text-gray-400 dark:text-baroque-muted">{session?.user?.email}</p>
                                     </div>
 
                                     <Link
                                         href="/dashboard/users"
                                         scroll={false}
                                         onClick={() => setShowProfile(false)}
-                                        className="flex items-center gap-2 px-4 py-2.5 text-xs text-gray-600 hover:bg-gray-50 transition-colors"
+                                        className="flex items-center gap-2 px-4 py-2.5 text-xs text-gray-600 dark:text-baroque-text hover:bg-gray-50 dark:hover:bg-baroque-bg transition-colors"
                                     >
-                                        <UsersIcon size={14} />
+                                        <UsersIcon size={14} className="text-gray-400 dark:text-baroque-gold" />
                                         Gerenciar Usuários
                                     </Link>
 
@@ -167,16 +187,16 @@ export default function Navbar() {
                                         href="/dashboard/settings"
                                         scroll={false}
                                         onClick={() => setShowProfile(false)}
-                                        className="flex items-center gap-2 px-4 py-2.5 text-xs text-gray-600 hover:bg-gray-50 transition-colors"
+                                        className="flex items-center gap-2 px-4 py-2.5 text-xs text-gray-600 dark:text-baroque-text hover:bg-gray-50 dark:hover:bg-baroque-bg transition-colors"
                                     >
-                                        <Settings size={14} />
+                                        <Settings size={14} className="text-gray-400 dark:text-baroque-gold" />
                                         Preferências
                                     </Link>
 
-                                    <div className="h-px bg-gray-100 my-1 mx-2" />
+                                    <div className="h-px bg-gray-100 dark:bg-baroque-border my-1 mx-2" />
                                     <button
                                         onClick={() => signOut({ callbackUrl: '/login' })}
-                                        className="flex w-full items-center gap-2 px-4 py-2.5 text-xs text-red-500 hover:bg-red-50 transition-colors"
+                                        className="flex w-full items-center gap-2 px-4 py-2.5 text-xs text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
                                     >
                                         <LogOut size={14} />
                                         Finalizar Sessão

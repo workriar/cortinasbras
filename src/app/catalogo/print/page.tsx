@@ -4,7 +4,7 @@ import Image from 'next/image';
 export const dynamic = 'force-dynamic';
 
 export default async function CatalogoPrintPage() {
-    let dbFabrics = [];
+    let dbFabrics: any[] = [];
     try {
         dbFabrics = await prisma.fabric.findMany({
             orderBy: { category: 'asc' }
@@ -143,7 +143,7 @@ export default async function CatalogoPrintPage() {
                                                 <div>
                                                     <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Diferenciais</p>
                                                     <div className="flex flex-wrap gap-x-4 gap-y-1">
-                                                        {fabric.benefits.split(',').map((b, i) => (
+                                                        {fabric.benefits.split(',').map((b: string, i: number) => (
                                                             <span key={i} className="text-xs font-medium text-slate-700">✓ {b.trim()}</span>
                                                         ))}
                                                     </div>

@@ -72,69 +72,69 @@ export default function DashboardHome() {
         <div className="space-y-8">
             {/* Header */}
             <div>
-                <h1 className="text-2xl font-black text-brand-700 tracking-tight uppercase">Dashboard</h1>
-                <p className="text-brand-900/60 text-sm mt-1">Bem-vindo, <span className="text-brand-900 font-bold">{session?.user?.name || session?.user?.email}</span>. Aqui está o resumo operacional.</p>
+                <h1 className="text-2xl font-black text-brand-700 dark:text-baroque-gold tracking-tight uppercase">Dashboard</h1>
+                <p className="text-brand-900/60 dark:text-baroque-muted text-sm mt-1">Bem-vindo, <span className="text-brand-900 dark:text-baroque-text font-bold">{session?.user?.name || session?.user?.email}</span>. Aqui está o resumo operacional.</p>
             </div>
 
             {/* Stats Cards - Refined and Subtle */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                <div className="bg-white p-5 rounded-2xl border border-brand-100 shadow-sm hover:shadow-md transition-all">
+                <div className="bg-white dark:bg-baroque-surface p-5 rounded-2xl border border-gray-100 dark:border-baroque-border shadow-sm hover:shadow-md transition-all">
                     <div className="flex items-start justify-between">
-                        <div className="w-10 h-10 bg-brand-50 rounded-xl flex items-center justify-center text-brand-700 border border-brand-100">
+                        <div className="w-10 h-10 bg-stone-50 dark:bg-baroque-bg rounded-xl flex items-center justify-center text-stone-500 dark:text-baroque-gold border border-stone-100 dark:border-baroque-border">
                             <Users size={20} strokeWidth={1.5} />
                         </div>
                     </div>
                     <div className="mt-4">
-                        <p className="text-[10px] font-black text-brand-700/60 uppercase tracking-widest leading-none">Total de Leads</p>
-                        <p className="text-2xl font-black text-brand-700 mt-1.5">{stats.total}</p>
+                        <p className="text-[10px] font-black text-stone-400 dark:text-baroque-muted uppercase tracking-widest leading-none">Total de Leads</p>
+                        <p className="text-2xl font-black text-gray-800 dark:text-baroque-text mt-1.5">{stats.total}</p>
                     </div>
                 </div>
 
-                <div className="bg-white p-5 rounded-2xl border border-brand-100 shadow-sm hover:shadow-md transition-all">
+                <div className="bg-white dark:bg-baroque-surface p-5 rounded-2xl border border-gray-100 dark:border-baroque-border shadow-sm hover:shadow-md transition-all">
                     <div className="flex items-start justify-between">
-                        <div className="w-10 h-10 bg-brand-50 rounded-xl flex items-center justify-center text-brand-500 border border-brand-100">
+                        <div className="w-10 h-10 bg-stone-50 dark:bg-baroque-bg rounded-xl flex items-center justify-center text-stone-500 dark:text-baroque-gold border border-stone-100 dark:border-baroque-border">
                             <UserPlus size={20} strokeWidth={1.5} />
                         </div>
                     </div>
                     <div className="mt-4">
-                        <p className="text-[10px] font-black text-brand-700/60 uppercase tracking-widest leading-none">Novos</p>
-                        <p className="text-2xl font-black text-brand-700 mt-1.5">{stats.new}</p>
+                        <p className="text-[10px] font-black text-stone-400 dark:text-baroque-muted uppercase tracking-widest leading-none">Novos</p>
+                        <p className="text-2xl font-black text-gray-800 dark:text-baroque-text mt-1.5">{stats.new}</p>
                     </div>
                 </div>
 
-                <div className="bg-white p-5 rounded-2xl border border-brand-100 shadow-sm hover:shadow-md transition-all">
+                <div className="bg-white dark:bg-baroque-surface p-5 rounded-2xl border border-gray-100 dark:border-baroque-border shadow-sm hover:shadow-md transition-all">
                     <div className="flex items-start justify-between">
-                        <div className="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center text-amber-600 border border-amber-100/50">
+                        <div className="w-10 h-10 bg-stone-50 dark:bg-baroque-bg rounded-xl flex items-center justify-center text-stone-500 dark:text-baroque-gold border border-stone-100 dark:border-baroque-border">
                             <PhoneCall size={20} strokeWidth={1.5} />
                         </div>
                     </div>
                     <div className="mt-4">
-                        <p className="text-[10px] font-black text-brand-700/60 uppercase tracking-widest leading-none">Em Contato</p>
-                        <p className="text-2xl font-black text-brand-700 mt-1.5">{stats.contacted}</p>
+                        <p className="text-[10px] font-black text-stone-400 dark:text-baroque-muted uppercase tracking-widest leading-none">Em Contato</p>
+                        <p className="text-2xl font-black text-gray-800 dark:text-baroque-text mt-1.5">{stats.contacted}</p>
                     </div>
                 </div>
 
-                <div className="bg-white p-5 rounded-2xl border border-brand-100 shadow-sm hover:shadow-md transition-all">
+                <div className="bg-white dark:bg-baroque-surface p-5 rounded-2xl border border-gray-100 dark:border-baroque-border shadow-sm hover:shadow-md transition-all">
                     <div className="flex items-start justify-between">
-                        <div className="w-10 h-10 bg-brand-50 rounded-xl flex items-center justify-center text-brand-600 border border-brand-100">
+                        <div className="w-10 h-10 bg-stone-50 dark:bg-baroque-bg rounded-xl flex items-center justify-center text-stone-500 dark:text-baroque-gold border border-stone-100 dark:border-baroque-border">
                             <FileText size={20} strokeWidth={1.5} />
                         </div>
                     </div>
                     <div className="mt-4">
-                        <p className="text-[10px] font-black text-brand-700/60 uppercase tracking-widest leading-none">Propostas</p>
-                        <p className="text-2xl font-black text-brand-700 mt-1.5">{stats.proposal}</p>
+                        <p className="text-[10px] font-black text-stone-400 dark:text-baroque-muted uppercase tracking-widest leading-none">Propostas</p>
+                        <p className="text-2xl font-black text-gray-800 dark:text-baroque-text mt-1.5">{stats.proposal}</p>
                     </div>
                 </div>
 
-                <div className="bg-white p-5 rounded-2xl border border-brand-100 shadow-sm hover:shadow-md transition-all">
+                <div className="bg-white dark:bg-baroque-surface p-5 rounded-2xl border border-gray-100 dark:border-baroque-border shadow-sm hover:shadow-md transition-all">
                     <div className="flex items-start justify-between">
-                        <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 border border-emerald-100/50">
+                        <div className="w-10 h-10 bg-stone-50 dark:bg-baroque-bg rounded-xl flex items-center justify-center text-stone-500 dark:text-baroque-gold border border-stone-100 dark:border-baroque-border">
                             <CheckCircle2 size={20} strokeWidth={1.5} />
                         </div>
                     </div>
                     <div className="mt-4">
-                        <p className="text-[10px] font-black text-brand-700/60 uppercase tracking-widest leading-none">Fechados</p>
-                        <p className="text-2xl font-black text-brand-700 mt-1.5">{stats.won}</p>
+                        <p className="text-[10px] font-black text-stone-400 dark:text-baroque-muted uppercase tracking-widest leading-none">Fechados</p>
+                        <p className="text-2xl font-black text-gray-800 dark:text-baroque-text mt-1.5">{stats.won}</p>
                     </div>
                 </div>
             </div>
@@ -146,34 +146,34 @@ export default function DashboardHome() {
             </div>
 
             {/* Recent Leads */}
-            <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+            <div className="bg-white dark:bg-baroque-surface p-6 rounded-2xl border border-gray-100 dark:border-baroque-border shadow-sm transition-colors">
                 <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-base font-bold text-gray-800 uppercase tracking-widest">Leads Recentes</h2>
-                    <Link href="/dashboard/crm" scroll={false} className="group flex items-center gap-1.5 text-[10px] font-bold text-stone-500 hover:text-stone-800 uppercase tracking-widest transition-colors">
+                    <h2 className="text-base font-bold text-gray-800 dark:text-baroque-text uppercase tracking-widest">Leads Recentes</h2>
+                    <Link href="/dashboard/crm" scroll={false} className="group flex items-center gap-1.5 text-[10px] font-bold text-stone-500 dark:text-baroque-muted hover:text-stone-800 dark:hover:text-baroque-gold uppercase tracking-widest transition-colors">
                         Ver tudo
                         <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
                     </Link>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {leads.length === 0 ? (
-                        <div className="col-span-full py-12 text-center border-2 border-dashed border-gray-50 rounded-xl">
-                            <p className="text-xs font-bold text-gray-300 uppercase tracking-widest">Nenhum registro recente</p>
+                        <div className="col-span-full py-12 text-center border-2 border-dashed border-gray-50 dark:border-baroque-border rounded-xl">
+                            <p className="text-xs font-bold text-gray-300 dark:text-baroque-muted uppercase tracking-widest">Nenhum registro recente</p>
                         </div>
                     ) : (
                         leads.map((lead) => (
-                            <div key={lead.id} className="bg-gray-50/50 p-4 rounded-xl border border-gray-100 hover:border-gray-200 transition-colors">
+                            <div key={lead.id} className="bg-gray-50/50 dark:bg-baroque-bg p-4 rounded-xl border border-gray-100 dark:border-baroque-border hover:border-gray-200 dark:hover:border-baroque-gold/50 transition-colors">
                                 <div className="flex items-center gap-3 mb-3">
-                                    <div className="w-8 h-8 bg-white rounded-full border border-gray-100 flex items-center justify-center text-[10px] font-bold text-gray-600 uppercase">
+                                    <div className="w-8 h-8 bg-white dark:bg-baroque-surface rounded-full border border-gray-100 dark:border-baroque-border flex items-center justify-center text-[10px] font-bold text-gray-600 dark:text-baroque-gold uppercase">
                                         {lead.name.charAt(0)}
                                     </div>
                                     <div>
-                                        <p className="text-xs font-bold text-gray-800 uppercase tracking-tight leading-none mb-1">{lead.name}</p>
-                                        <p className="text-[10px] text-gray-400 leading-none">{lead.phone}</p>
+                                        <p className="text-xs font-bold text-gray-800 dark:text-baroque-text uppercase tracking-tight leading-none mb-1">{lead.name}</p>
+                                        <p className="text-[10px] text-gray-400 dark:text-baroque-muted leading-none">{lead.phone}</p>
                                     </div>
                                 </div>
-                                <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-                                    <span className="text-[9px] font-bold text-stone-400 uppercase tracking-widest">{lead.status}</span>
-                                    <span className="text-[9px] text-gray-300 uppercase tracking-widest">
+                                <div className="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-baroque-border">
+                                    <span className="text-[9px] font-bold text-stone-400 dark:text-baroque-muted uppercase tracking-widest">{lead.status}</span>
+                                    <span className="text-[9px] text-gray-300 dark:text-baroque-muted uppercase tracking-widest">
                                         {new Date(lead.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}
                                     </span>
                                 </div>

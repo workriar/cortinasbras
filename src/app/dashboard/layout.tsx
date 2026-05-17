@@ -9,7 +9,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
     const { isExpanded } = useSidebar();
 
     return (
-        <div className="flex min-h-screen bg-stone-50">
+        <div className="flex min-h-screen bg-brand-50 dark:bg-baroque-bg transition-colors duration-500">
             {/* Sidebar - Desktop Only */}
             <div className="hidden md:block">
                 <Sidebar />

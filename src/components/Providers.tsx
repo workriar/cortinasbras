@@ -1,7 +1,12 @@
 'use client';
 
-// Providers para o site público — sem SessionProvider do NextAuth
-// (O SessionProvider fica apenas no layout do dashboard/admin)
+import { ThemeProvider } from 'next-themes';
+
+// Providers para o site público e painel
 export function Providers({ children }: { children: React.ReactNode }) {
-    return <>{children}</>;
+    return (
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {children}
+        </ThemeProvider>
+    );
 }
