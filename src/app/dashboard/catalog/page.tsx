@@ -42,9 +42,29 @@ export default function CatalogPage() {
         try {
             const res = await fetch('/api/fabrics');
             const data = await res.json();
-            setFabrics(data);
+            
+            if (Array.isArray(data) && data.length > 0) {
+                setFabrics(data);
+            } else {
+                // Fallback para o arquivo local se o banco estiver vazio ou retornar erro
+                const { fabrics: defaultFabrics } = await import('@/lib/fabrics');
+                const formattedFallback = defaultFabrics.map(f => ({
+                    ...f,
+                    colors: Array.isArray(f.colors) ? f.colors.join(', ') : f.colors,
+                    benefits: Array.isArray(f.benefits) ? f.benefits.join(', ') : f.benefits,
+                }));
+                // Cast to any to avoid strict type mismatch temporarily
+                setFabrics(formattedFallback as any);
+            }
         } catch (e) {
-            console.error("Error fetching fabrics:", e);
+            console.error("Error fetching fabrics, using fallback:", e);
+            const { fabrics: defaultFabrics } = await import('@/lib/fabrics');
+            const formattedFallback = defaultFabrics.map(f => ({
+                ...f,
+                colors: Array.isArray(f.colors) ? f.colors.join(', ') : f.colors,
+                benefits: Array.isArray(f.benefits) ? f.benefits.join(', ') : f.benefits,
+            }));
+            setFabrics(formattedFallback as any);
         } finally {
             setLoading(false);
         }

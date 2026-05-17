@@ -4,9 +4,27 @@ import Image from 'next/image';
 export const dynamic = 'force-dynamic';
 
 export default async function CatalogoPrintPage() {
-    const fabrics = await prisma.fabric.findMany({
-        orderBy: { category: 'asc' }
-    });
+    let dbFabrics = [];
+    try {
+        dbFabrics = await prisma.fabric.findMany({
+            orderBy: { category: 'asc' }
+        });
+    } catch (e) {
+        console.warn("Prisma error in PDF generation, using fallback:", e);
+    }
+    
+    let fabrics = dbFabrics;
+    if (!fabrics || fabrics.length === 0) {
+        const { fabrics: localFabrics } = await import('@/lib/fabrics');
+        // Transform the colors/benefits from arrays to comma separated strings if needed by the layout,
+        // Wait, the local fabrics already have colors/benefits as arrays! But the DB returns strings.
+        // Let's adapt localFabrics to match the DB shape if they are arrays.
+        fabrics = localFabrics.map((f: any) => ({
+            ...f,
+            colors: Array.isArray(f.colors) ? f.colors.join(',') : f.colors,
+            benefits: Array.isArray(f.benefits) ? f.benefits.join(',') : f.benefits,
+        })) as any;
+    }
 
     const categories = Array.from(new Set(fabrics.map(f => f.category)));
 
