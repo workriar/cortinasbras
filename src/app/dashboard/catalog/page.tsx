@@ -19,6 +19,7 @@ interface Fabric {
     benefits: string;
     exclusive: boolean;
     placeholderImage: string;
+    videoUrl?: string;
 }
 
 type ViewMode = 'grid' | 'list' | 'focus';
@@ -41,6 +42,44 @@ export default function CatalogPage() {
     const [pdfState, setPdfState] = useState<'idle' | 'preparing' | 'layout' | 'generating' | 'downloading' | 'success' | 'error'>('idle');
     const [pdfProgress, setPdfProgress] = useState(0);
 
+    const [uploadingImage, setUploadingImage] = useState(false);
+    const [uploadingVideo, setUploadingVideo] = useState(false);
+
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'image' | 'video') => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        if (type === 'image') setUploadingImage(true);
+        else setUploadingVideo(true);
+
+        try {
+            const data = new FormData();
+            data.append('file', file);
+
+            const res = await fetch('/api/upload', {
+                method: 'POST',
+                body: data,
+            });
+
+            if (res.ok) {
+                const result = await res.json();
+                if (type === 'image') {
+                    setFormData(prev => ({ ...prev, placeholderImage: result.url }));
+                } else {
+                    setFormData(prev => ({ ...prev, videoUrl: result.url }));
+                }
+            } else {
+                alert('Erro ao enviar arquivo para o servidor.');
+            }
+        } catch (err) {
+            console.error('Error uploading:', err);
+            alert('Falha crítica na conexão ao fazer upload.');
+        } finally {
+            if (type === 'image') setUploadingImage(false);
+            else setUploadingVideo(false);
+        }
+    };
+
     const categories = ["Todos", "Linho", "Voil", "Blackout", "Oxford", "Forro"];
 
     const [formData, setFormData] = useState({
@@ -52,6 +91,7 @@ export default function CatalogPage() {
         benefits: "",
         exclusive: false,
         placeholderImage: "",
+        videoUrl: "",
     });
 
     useEffect(() => {
@@ -112,7 +152,7 @@ export default function CatalogPage() {
             if (res.ok) {
                 setIsDrawerOpen(false);
                 setEditingFabric(null);
-                setFormData({ name: "", category: "Linho", description: "", altText: "", colors: "", benefits: "", exclusive: false, placeholderImage: "" });
+                setFormData({ name: "", category: "Linho", description: "", altText: "", colors: "", benefits: "", exclusive: false, placeholderImage: "", videoUrl: "" });
                 await fetchFabrics();
             }
         } catch (e) {
@@ -134,13 +174,23 @@ export default function CatalogPage() {
 
     const openAddDrawer = () => {
         setEditingFabric(null);
-        setFormData({ name: "", category: "Linho", description: "", altText: "", colors: "", benefits: "", exclusive: false, placeholderImage: "" });
+        setFormData({ name: "", category: "Linho", description: "", altText: "", colors: "", benefits: "", exclusive: false, placeholderImage: "", videoUrl: "" });
         setIsDrawerOpen(true);
     };
 
     const openEditDrawer = (fabric: Fabric) => {
         setEditingFabric(fabric);
-        setFormData({ ...fabric });
+        setFormData({
+            name: fabric.name,
+            category: fabric.category,
+            description: fabric.description,
+            altText: fabric.altText || "",
+            colors: fabric.colors || "",
+            benefits: fabric.benefits || "",
+            exclusive: fabric.exclusive || false,
+            placeholderImage: fabric.placeholderImage || "",
+            videoUrl: fabric.videoUrl || "",
+        });
         setIsDrawerOpen(true);
     };
 
@@ -157,8 +207,6 @@ export default function CatalogPage() {
     };
 
     const handleGeneratePdf = async () => {
-        if (selectedFabrics.length === 0) return;
-        
         // Simulação elegante de progresso comercial
         setPdfState('preparing');
         setPdfProgress(15);
@@ -178,8 +226,8 @@ export default function CatalogPage() {
             setPdfProgress(90);
             
             try {
-                // Link oficial de download do catálogo nativo ultra robusto passando IDs selecionados!
-                window.open(`/api/catalog?ids=${selectedFabrics.join(',')}`, '_blank');
+                // Link de download do catálogo completo de tecidos nativo (PDFKit)
+                window.open('/api/catalog', '_blank');
                 setPdfState('success');
                 setPdfProgress(100);
             } catch {
@@ -209,22 +257,40 @@ export default function CatalogPage() {
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 border-b border-brand-200/40 dark:border-baroque-border pb-8">
                 <div>
                     <span className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-600 dark:text-baroque-gold flex items-center gap-2 mb-2">
-                        <Sparkles size={12} /> Alta Costura & Tecidos Nobles
+                        <Sparkles size={12} /> Alta Costura & Tecidos Nobres
                     </span>
                     <h1 className="text-4xl md:text-5xl font-black font-serif text-brand-900 dark:text-baroque-text tracking-tight uppercase leading-none">
                         Showroom <span className="font-light italic text-brand-600 dark:text-baroque-gold">Digital</span>
                     </h1>
                     <p className="text-slate-500 dark:text-baroque-muted font-medium text-sm md:text-base mt-2">
-                        Selecione as melhores texturas e gere catálogos comerciais personalizados em PDF.
+                        Gerencie texturas nobres e exporte o catálogo de produtos de alta gama em PDF.
                     </p>
                 </div>
                 
-                <button
-                    onClick={openAddDrawer}
-                    className="flex items-center gap-2.5 px-6 py-3.5 bg-brand-900 dark:bg-baroque-surface text-white dark:text-baroque-gold border border-transparent dark:border-baroque-border rounded-xl font-bold hover:bg-brand-800 dark:hover:bg-baroque-bg transition-all active:scale-[0.98] shadow-lg shadow-brand-950/10 text-xs tracking-widest uppercase font-serif"
-                >
-                    <Plus size={16} /> Adicionar Curadoria
-                </button>
+                <div className="flex flex-wrap items-center gap-3">
+                    <button
+                        onClick={handleGeneratePdf}
+                        disabled={pdfState !== 'idle'}
+                        className="flex items-center gap-2.5 px-6 py-3.5 bg-brand-500 dark:bg-baroque-gold text-brand-950 border border-transparent rounded-xl font-bold hover:bg-brand-400 dark:hover:bg-baroque-gold/90 transition-all active:scale-[0.98] shadow-lg shadow-brand-950/10 text-xs tracking-widest uppercase font-serif disabled:opacity-50"
+                    >
+                        {pdfState === 'idle' ? (
+                            <>
+                                <FileDown size={16} /> Gerar Catálogo PDF
+                            </>
+                        ) : (
+                            <>
+                                <Loader2 size={16} className="animate-spin" /> {pdfProgress}%
+                            </>
+                        )}
+                    </button>
+
+                    <button
+                        onClick={openAddDrawer}
+                        className="flex items-center gap-2.5 px-6 py-3.5 bg-brand-900 dark:bg-baroque-surface text-white dark:text-baroque-gold border border-transparent dark:border-baroque-border rounded-xl font-bold hover:bg-brand-800 dark:hover:bg-baroque-bg transition-all active:scale-[0.98] shadow-lg shadow-brand-950/10 text-xs tracking-widest uppercase font-serif"
+                    >
+                        <Plus size={16} /> Inserir Novo Tecido
+                    </button>
+                </div>
             </div>
 
             {/* Barra de Filtros Editoriais & Visão de Visualização */}
@@ -623,15 +689,93 @@ export default function CatalogPage() {
                                         />
                                     </div>
 
+                                    {/* Uploader de Imagem Premium */}
                                     <div className="space-y-2">
-                                        <label className="text-[9px] font-black uppercase text-stone-400 dark:text-baroque-muted tracking-widest leading-none block">Caminho da Imagem de Alta Qualidade</label>
-                                        <input
-                                            required
-                                            value={formData.placeholderImage}
-                                            onChange={e => setFormData({ ...formData, placeholderImage: e.target.value })}
-                                            className="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-baroque-border bg-white dark:bg-baroque-bg focus:ring-1 focus:ring-brand-500 outline-none transition-all text-xs font-semibold text-brand-900 dark:text-baroque-text"
-                                            placeholder="/images/tecidos/linho-premium.jpg"
-                                        />
+                                        <label className="text-[9px] font-black uppercase text-stone-400 dark:text-baroque-muted tracking-widest leading-none block">Imagem da Fibra Nobre (Showroom & PDF)</label>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div className="border-2 border-dashed border-stone-200 dark:border-baroque-border rounded-xl p-4 flex flex-col items-center justify-center bg-stone-50/50 dark:bg-baroque-bg/50 relative overflow-hidden transition-all hover:border-brand-500 dark:hover:border-baroque-gold">
+                                                {formData.placeholderImage ? (
+                                                    <div className="w-full h-24 relative rounded-lg overflow-hidden group">
+                                                        <img src={formData.placeholderImage} alt="Preview" className="w-full h-full object-cover" />
+                                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                            <span className="text-[8px] font-bold text-white uppercase tracking-wider">Alterar</span>
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    <div className="flex flex-col items-center py-2 text-stone-400 dark:text-baroque-muted">
+                                                        <ImageIcon size={20} className="mb-1" />
+                                                        <span className="text-[9px] font-bold uppercase tracking-wider">Carregar Foto HD</span>
+                                                    </div>
+                                                )}
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    onChange={e => handleFileUpload(e, 'image')}
+                                                    className="absolute inset-0 opacity-0 cursor-pointer"
+                                                    disabled={uploadingImage}
+                                                />
+                                                {uploadingImage && (
+                                                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center">
+                                                        <Loader2 size={16} className="animate-spin text-white" />
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <div className="space-y-2 flex flex-col justify-center">
+                                                <input
+                                                    required
+                                                    value={formData.placeholderImage}
+                                                    onChange={e => setFormData({ ...formData, placeholderImage: e.target.value })}
+                                                    className="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-baroque-border bg-white dark:bg-baroque-bg focus:ring-1 focus:ring-brand-500 outline-none transition-all text-xs font-semibold text-brand-900 dark:text-baroque-text"
+                                                    placeholder="URL ou Caminho da Imagem"
+                                                />
+                                                <span className="text-[8px] font-medium text-stone-400 block">Arraste a foto acima ou digite/cole o caminho estático.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Uploader de Vídeo Premium */}
+                                    <div className="space-y-2">
+                                        <label className="text-[9px] font-black uppercase text-stone-400 dark:text-baroque-muted tracking-widest leading-none block">Vídeo de Caimento Real (Loop Showroom)</label>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div className="border-2 border-dashed border-stone-200 dark:border-baroque-border rounded-xl p-4 flex flex-col items-center justify-center bg-stone-50/50 dark:bg-baroque-bg/50 relative overflow-hidden transition-all hover:border-brand-500 dark:hover:border-baroque-gold">
+                                                {formData.videoUrl ? (
+                                                    <div className="w-full h-24 relative rounded-lg overflow-hidden group">
+                                                        <video src={formData.videoUrl} loop muted autoPlay className="w-full h-full object-cover" />
+                                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                            <span className="text-[8px] font-bold text-white uppercase tracking-wider">Alterar</span>
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    <div className="flex flex-col items-center py-2 text-stone-400 dark:text-baroque-muted">
+                                                        <Video size={20} className="mb-1" />
+                                                        <span className="text-[9px] font-bold uppercase tracking-wider">Carregar Vídeo Showroom</span>
+                                                    </div>
+                                                )}
+                                                <input
+                                                    type="file"
+                                                    accept="video/*"
+                                                    onChange={e => handleFileUpload(e, 'video')}
+                                                    className="absolute inset-0 opacity-0 cursor-pointer"
+                                                    disabled={uploadingVideo}
+                                                />
+                                                {uploadingVideo && (
+                                                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center">
+                                                        <Loader2 size={16} className="animate-spin text-white" />
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <div className="space-y-2 flex flex-col justify-center">
+                                                <input
+                                                    value={formData.videoUrl}
+                                                    onChange={e => setFormData({ ...formData, videoUrl: e.target.value })}
+                                                    className="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-baroque-border bg-white dark:bg-baroque-bg focus:ring-1 focus:ring-brand-500 outline-none transition-all text-xs font-semibold text-brand-900 dark:text-baroque-text"
+                                                    placeholder="URL ou Caminho do Vídeo"
+                                                />
+                                                <span className="text-[8px] font-medium text-stone-400 block">Envie o arquivo MP4/WebM do caimento ou cole um link externo.</span>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-4">

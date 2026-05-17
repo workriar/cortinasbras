@@ -65,6 +65,7 @@ model Fabric {
   benefits        String
   exclusive       Boolean  @default(false)
   placeholderImage String
+  videoUrl        String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }

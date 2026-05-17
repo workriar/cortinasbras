@@ -21,9 +21,9 @@ export async function PUT(req: Request, { params }: RouteContext) {
     try {
         const { id } = await params;
         const body = await req.json();
-        const { name, category, description, altText, colors, benefits, exclusive, placeholderImage } = body;
+        const { name, category, description, altText, colors, benefits, exclusive, placeholderImage, videoUrl } = body;
 
-        const fabric = await prisma.fabric.update({
+        const fabric = await (prisma.fabric as any).update({
             where: { id: parseInt(id) },
             data: {
                 name,
@@ -34,6 +34,7 @@ export async function PUT(req: Request, { params }: RouteContext) {
                 benefits: Array.isArray(benefits) ? benefits.join(',') : benefits,
                 exclusive: Boolean(exclusive),
                 placeholderImage,
+                videoUrl: videoUrl !== undefined ? videoUrl : "",
             }
         });
 

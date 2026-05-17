@@ -18,6 +18,7 @@ interface Fabric {
     benefits: string;
     exclusive: boolean;
     placeholderImage: string;
+    videoUrl?: string;
 }
 
 export default function FabricDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -81,6 +82,7 @@ export default function FabricDetailPage({ params }: { params: Promise<{ id: str
                 benefits: Array.isArray(found.benefits) ? found.benefits.join(', ') : String(found.benefits),
                 exclusive: found.exclusive || false,
                 placeholderImage: found.placeholderImage,
+                videoUrl: "",
             });
         }
     }
@@ -195,8 +197,9 @@ export default function FabricDetailPage({ params }: { params: Promise<{ id: str
                                         playsInline
                                         onClick={() => setIsPlaying(!isPlaying)}
                                         className="w-full h-full object-cover cursor-pointer"
+                                        key={fabric.videoUrl || "default"}
                                     >
-                                        <source src="https://assets.mixkit.co/videos/preview/mixkit-womans-hands-choosing-fabrics-in-a-store-41584-large.mp4" type="video/mp4" />
+                                        <source src={fabric.videoUrl || "https://assets.mixkit.co/videos/preview/mixkit-womans-hands-choosing-fabrics-in-a-store-41584-large.mp4"} type="video/mp4" />
                                     </video>
                                 </motion.div>
                             )}

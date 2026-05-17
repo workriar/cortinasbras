@@ -15,9 +15,9 @@ export async function GET() {
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { name, category, description, altText, colors, benefits, exclusive, placeholderImage } = body;
+        const { name, category, description, altText, colors, benefits, exclusive, placeholderImage, videoUrl } = body;
 
-        const fabric = await prisma.fabric.create({
+        const fabric = await (prisma.fabric as any).create({
             data: {
                 name,
                 category,
@@ -27,6 +27,7 @@ export async function POST(req: Request) {
                 benefits: Array.isArray(benefits) ? benefits.join(',') : benefits,
                 exclusive: Boolean(exclusive),
                 placeholderImage,
+                videoUrl: videoUrl || "",
             }
         });
 
