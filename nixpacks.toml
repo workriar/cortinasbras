@@ -3,6 +3,7 @@ providers = ["node"]
 [variables]
 # Previne o servidor (VPS) de estourar a memoria RAM e travar durante o build (OOM)
 NODE_OPTIONS = "--max-old-space-size=1536"
+NIXPACKS_NODE_VERSION = "20"
 
 # Limita o numero de threads do Next.js para nao usar 1400% de CPU
 NEXT_PRIVATE_MAX_WORKERS = "1"

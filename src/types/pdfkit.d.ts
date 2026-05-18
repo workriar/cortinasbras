@@ -72,6 +72,7 @@ declare module 'pdfkit' {
         lineWidth(w: number): this;
         dash(length: number, options?: { space?: number; phase?: number }): this;
         undash(): this;
+        clip(rule?: 'evenodd' | 'nonzero'): this;
 
         // Imagens
         image(src: string | Buffer, x?: number, y?: number, options?: {
