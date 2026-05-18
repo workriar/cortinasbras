@@ -84,6 +84,7 @@ temp/
 
 # PDFs generated
 *.pdf
+!public/*.pdf
 !public/static/*.pdf
 
 # Misc

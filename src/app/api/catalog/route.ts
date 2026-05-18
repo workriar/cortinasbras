@@ -1,12 +1,32 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { generatePdf } from '@/services/pdf';
+import { promises as fs } from 'fs';
+import path from 'path';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function GET(req: Request) {
     try {
+        // 1. Verificar se existe um PDF pré-pronto na pasta public
+        try {
+            const staticPdfPath = path.join(process.cwd(), 'public', 'catalogo.pdf');
+            const fileBuffer = await fs.readFile(staticPdfPath);
+            console.log("[PDF API] Servindo PDF estático pré-existente (catalogo.pdf).");
+            return new NextResponse(new Uint8Array(fileBuffer), {
+                status: 200,
+                headers: {
+                    'Content-Type': 'application/pdf',
+                    'Content-Disposition': 'attachment; filename="catalogo-exclusivo-cortinas-bras.pdf"',
+                    'Cache-Control': 'no-store, no-cache, must-revalidate',
+                },
+            });
+        } catch (staticError) {
+            // Se o arquivo não existir, apenas continua para a geração dinâmica
+            console.log("[PDF API] Nenhum PDF estático encontrado em public/catalogo.pdf. Prosseguindo com geração dinâmica.");
+        }
+
         const url = new URL(req.url);
         const idsParam = url.searchParams.get('ids');
         
