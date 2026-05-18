@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { 
     Plus, Pencil, Trash2, Package, X, Save, FileDown, 
     Search, Check, Eye, Grid, 
-    LayoutList, Loader2, Sparkles, ChevronRight
+    LayoutList, Loader2, Sparkles, ChevronRight,
+    ImageIcon, Video
 } from "lucide-react";
 
 interface Fabric {
