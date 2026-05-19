@@ -34,6 +34,9 @@ export default function CatalogPage() {
     const [loading, setLoading] = useState(true);
     const [viewMode, setViewMode] = useState<ViewMode>('grid');
 
+    const [isSaving, setIsSaving] = useState(false);
+    const [saveError, setSaveError] = useState<string | null>(null);
+
     // Filtros e Busca
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCategory, setSelectedCategory] = useState<string>("Todos");
@@ -140,6 +143,8 @@ export default function CatalogPage() {
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
+        setIsSaving(true);
+        setSaveError(null);
         try {
             const method = editingFabric ? 'PUT' : 'POST';
             const url = editingFabric ? `/api/fabrics/${editingFabric.id}` : '/api/fabrics';
@@ -155,9 +160,15 @@ export default function CatalogPage() {
                 setEditingFabric(null);
                 setFormData({ name: "", category: "Linho", description: "", altText: "", colors: "", benefits: "", exclusive: false, placeholderImage: "", videoUrl: "" });
                 await fetchFabrics();
+            } else {
+                const errData = await res.json();
+                setSaveError(errData.error || 'Erro ao salvar o tecido no showroom.');
             }
-        } catch (e) {
+        } catch (e: any) {
             console.error("Error saving fabric:", e);
+            setSaveError('Erro na conexão com o servidor. Verifique se o banco de dados está online.');
+        } finally {
+            setIsSaving(false);
         }
     }
 
@@ -175,12 +186,14 @@ export default function CatalogPage() {
 
     const openAddDrawer = () => {
         setEditingFabric(null);
+        setSaveError(null);
         setFormData({ name: "", category: "Linho", description: "", altText: "", colors: "", benefits: "", exclusive: false, placeholderImage: "", videoUrl: "" });
         setIsDrawerOpen(true);
     };
 
     const openEditDrawer = (fabric: Fabric) => {
         setEditingFabric(fabric);
+        setSaveError(null);
         setFormData({
             name: fabric.name,
             category: fabric.category,
@@ -639,6 +652,11 @@ export default function CatalogPage() {
 
                                 {/* Form */}
                                 <form onSubmit={handleSubmit} id="fabric-form" className="space-y-6">
+                                    {saveError && (
+                                        <div className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 text-xs font-bold uppercase tracking-wider px-4 py-3 rounded-xl text-center">
+                                            {saveError}
+                                        </div>
+                                    )}
                                     <div className="space-y-2">
                                         <label className="text-[9px] font-black uppercase text-stone-400 dark:text-baroque-muted tracking-widest leading-none block">Nome do Material</label>
                                         <input
@@ -833,9 +851,18 @@ export default function CatalogPage() {
                                 <button
                                     type="submit"
                                     form="fabric-form"
-                                    className="flex items-center gap-2 px-8 py-3.5 bg-brand-900 dark:bg-baroque-gold text-white dark:text-baroque-bg border border-transparent dark:border-baroque-border rounded-xl font-bold hover:bg-brand-800 dark:hover:bg-baroque-bg shadow-lg shadow-brand-950/10 text-xs tracking-widest uppercase transition-all"
+                                    disabled={isSaving}
+                                    className="flex items-center gap-2 px-8 py-3.5 bg-brand-900 dark:bg-baroque-gold text-white dark:text-baroque-bg border border-transparent dark:border-baroque-border rounded-xl font-bold hover:bg-brand-800 dark:hover:bg-baroque-bg shadow-lg shadow-brand-950/10 text-xs tracking-widest uppercase transition-all disabled:opacity-50 disabled:cursor-wait"
                                 >
-                                    <Save size={14} /> {editingFabric ? 'Confirmar Ajustes' : 'Salvar no Showroom'}
+                                    {isSaving ? (
+                                        <>
+                                            <Loader2 size={14} className="animate-spin" /> Salvando...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Save size={14} /> {editingFabric ? 'Confirmar Ajustes' : 'Salvar no Showroom'}
+                                        </>
+                                    )}
                                 </button>
                             </div>
                         </motion.div>

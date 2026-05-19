@@ -2,13 +2,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, Check, Sparkles, ExternalLink } from 'lucide-react';
+import { MessageCircle, Check, Sparkles, ExternalLink, Search } from 'lucide-react';
 
 export default function FabricCatalog() {
     const [fabrics, setFabrics] = useState<any[]>([]);
     const [activeCategory, setActiveCategory] = useState<string>('Linho');
     const [mounted, setMounted] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [onlyExclusive, setOnlyExclusive] = useState(false);
+
     const categories = ['Linho', 'Voil', 'Blackout', 'Oxford', 'Forro'];
 
     useEffect(() => {
@@ -43,12 +46,19 @@ export default function FabricCatalog() {
         }
     }
 
-    const filteredFabrics = fabrics.filter(f => f.category === activeCategory);
+    const filteredFabrics = fabrics.filter(f => {
+        const matchesCategory = f.category === activeCategory;
+        const matchesSearch = f.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                             f.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                             (f.colors && f.colors.some((color: string) => color.toLowerCase().includes(searchQuery.toLowerCase())));
+        const matchesExclusive = !onlyExclusive || f.exclusive;
+        return matchesCategory && matchesSearch && matchesExclusive;
+    });
 
     if (!mounted) return null;
 
     return (
-        <section id="catalogo" className="py-24 bg-slate-50 relative overflow-hidden">
+        <section id="catalogo" className="py-24 bg-[#F8F5F1] relative overflow-hidden">
             <div className="container mx-auto px-6 relative z-10">
                 <div className="text-center max-w-3xl mx-auto mb-20">
                     <motion.div
@@ -65,9 +75,9 @@ export default function FabricCatalog() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-4xl md:text-5xl font-extrabold text-brand-800 mb-6 tracking-tight"
+                        className="text-4xl md:text-5xl font-extrabold text-brand-800 mb-6 tracking-tight font-serif"
                     >
-                        Catálogo de Tecidos <span className="text-brand-500">Premium</span>
+                        Catálogo de Tecidos <span className="text-brand-500 font-light italic">Premium</span>
                     </motion.h2>
 
                     <motion.p
@@ -82,20 +92,50 @@ export default function FabricCatalog() {
                     </motion.p>
                 </div>
 
-                <div className="flex flex-wrap justify-center gap-3 mb-16">
-                    {categories.map((cat) => (
+                {/* Filtros e Busca de Luxo */}
+                <div className="flex flex-col xl:flex-row gap-6 justify-between items-center mb-16 bg-white/60 backdrop-blur-md p-6 rounded-3xl border border-brand-100/30">
+                    <div className="flex flex-wrap gap-2.5 w-full xl:w-auto">
+                        {categories.map((cat) => (
+                            <button
+                                key={cat}
+                                onClick={() => setActiveCategory(cat)}
+                                className={`px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all duration-300 ${
+                                    activeCategory === cat
+                                    ? 'bg-brand-600 text-white shadow-xl shadow-brand-500/30 scale-105'
+                                    : 'bg-white text-slate-500 hover:text-brand-600 hover:bg-brand-50 border border-slate-200'
+                                }`}
+                            >
+                                {cat}
+                            </button>
+                        ))}
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-4 w-full xl:w-auto shrink-0">
+                        {/* Search Input */}
+                        <div className="relative group w-full sm:w-64">
+                            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-500 transition-colors" />
+                            <input
+                                type="text"
+                                placeholder="Buscar cor ou trama..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="w-full pl-10 pr-4 py-2.5 text-xs font-bold bg-white border border-slate-200 rounded-full outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/5 transition-all text-slate-700 placeholder-slate-400"
+                            />
+                        </div>
+
+                        {/* Exclusives Pill */}
                         <button
-                            key={cat}
-                            onClick={() => setActiveCategory(cat)}
-                            className={`px-8 py-3 rounded-full font-bold transition-all duration-500 ease-out ${
-                                activeCategory === cat
-                                ? 'bg-brand-600 text-white shadow-xl shadow-brand-500/40 scale-110'
-                                : 'bg-white text-slate-500 hover:text-brand-600 hover:bg-brand-50 border border-slate-200'
+                            onClick={() => setOnlyExclusive(!onlyExclusive)}
+                            className={`flex items-center justify-center gap-2 px-6 py-2.5 rounded-full border text-xs font-black uppercase tracking-widest transition-all ${
+                                onlyExclusive
+                                    ? 'bg-brand-100 text-brand-600 border-brand-300 shadow-md'
+                                    : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50'
                             }`}
                         >
-                            {cat}
+                            <Sparkles size={14} className={onlyExclusive ? 'animate-pulse text-brand-500' : ''} />
+                            <span>Exclusivos</span>
                         </button>
-                    ))}
+                    </div>
                 </div>
 
                 {loading ? (
@@ -108,81 +148,89 @@ export default function FabricCatalog() {
                         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
                     >
                         <AnimatePresence mode='popLayout'>
-                            {filteredFabrics.map((fabric) => (
-                                <motion.div
-                                    key={fabric.id}
-                                    layout
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, scale: 0.9 }}
-                                    transition={{ duration: 0.4 }}
-                                    className="group bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col"
-                                >
-                                    <div className="relative aspect-[4/5] overflow-hidden">
-                                        <img
-                                            src={fabric.placeholderImage}
-                                            alt={fabric.altText}
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+                            {filteredFabrics.length === 0 ? (
+                                <div className="col-span-full flex flex-col items-center justify-center py-20 text-center text-slate-450">
+                                    <Sparkles size={48} className="mb-4 text-brand-300 animate-pulse" />
+                                    <h3 className="text-xl font-bold font-serif text-brand-800 mb-2">Nenhum tecido encontrado</h3>
+                                    <p className="text-sm max-w-md">Não encontramos nenhum material com esses termos. Experimente alterar os filtros ou a pesquisa.</p>
+                                </div>
+                            ) : (
+                                filteredFabrics.map((fabric) => (
+                                    <motion.div
+                                        key={fabric.id}
+                                        layout
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, scale: 0.9 }}
+                                        transition={{ duration: 0.4 }}
+                                        className="group bg-white/80 backdrop-blur-md rounded-3xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col"
+                                    >
+                                        <div className="relative aspect-[4/5] overflow-hidden">
+                                            <img
+                                                src={fabric.placeholderImage}
+                                                alt={fabric.altText}
+                                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
 
-                                        {fabric.exclusive && (
-                                            <div className="absolute top-4 right-4">
-                                                <span className="text-[10px] font-black uppercase bg-brand-500 text-white px-3 py-1 rounded-full shadow-lg">
-                                                    Exclusivo
-                                                </span>
-                                            </div>
-                                        )}
-                                    </div>
+                                            {fabric.exclusive && (
+                                                <div className="absolute top-4 right-4">
+                                                    <span className="text-[10px] font-black uppercase bg-brand-500 text-white px-3 py-1 rounded-full shadow-lg">
+                                                        Exclusivo
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </div>
 
-                                    <div className="p-8 flex flex-col flex-grow">
-                                        <h3 className="text-2xl font-bold text-brand-800 mb-3 group-hover:text-brand-600 transition-colors">
-                                            {fabric.name}
-                                        </h3>
+                                        <div className="p-8 flex flex-col flex-grow">
+                                            <h3 className="text-2xl font-bold text-brand-800 mb-3 group-hover:text-brand-600 transition-colors">
+                                                {fabric.name}
+                                            </h3>
 
-                                        <p className="text-slate-500 text-sm mb-6 leading-relaxed line-clamp-3">
-                                            {fabric.description}
-                                        </p>
+                                            <p className="text-slate-500 text-sm mb-6 leading-relaxed line-clamp-3">
+                                                {fabric.description}
+                                            </p>
 
-                                        <div className="space-y-6 mb-8">
-                                            <div>
-                                                <span className="text-[10px] font-bold text-slate-400 uppercase block mb-3 tracking-widest">Cores Disponíveis</span>
-                                                <div className="flex flex-wrap gap-2">
-                                                    {fabric.colors.map((color: string) => (
-                                                        <span key={color} className="text-xs font-semibold bg-slate-100 text-slate-600 px-3 py-1 rounded-md border border-slate-200">
-                                                            {color}
-                                                        </span>
-                                                    ))}
+                                            <div className="space-y-6 mb-8">
+                                                <div>
+                                                    <span className="text-[10px] font-bold text-slate-400 uppercase block mb-3 tracking-widest">Cores Disponíveis</span>
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {fabric.colors.map((color: string) => (
+                                                            <span key={color} className="text-xs font-semibold bg-slate-100 text-slate-600 px-3 py-1 rounded-md border border-slate-200">
+                                                                {color.trim()}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <span className="text-[10px] font-bold text-slate-400 uppercase block mb-3 tracking-widest">Diferenciais</span>
+                                                    <ul className="grid grid-cols-1 gap-2">
+                                                        {fabric.benefits.map((benefit: string, idx: number) => (
+                                                            <li key={idx} className="flex items-center gap-2 text-xs font-medium text-slate-600">
+                                                                <Check size={14} className="text-brand-500" /> {benefit.trim()}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
                                                 </div>
                                             </div>
 
-                                            <div>
-                                                <span className="text-[10px] font-bold text-slate-400 uppercase block mb-3 tracking-widest">Diferenciais</span>
-                                                <ul className="grid grid-cols-1 gap-2">
-                                                    {fabric.benefits.map((benefit: string, idx: number) => (
-                                                        <li key={idx} className="flex items-center gap-2 text-xs font-medium text-slate-600">
-                                                            <Check size={14} className="text-brand-500" /> {benefit}
-                                                        </li>
-                                                    ))}
-                                                </ul>
+                                            <div className="mt-auto">
+                                                <a
+                                                    href={`https://wa.me/5511992891070?text=Olá! Gostaria de mais informações sobre o tecido ${fabric.name}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="flex items-center justify-center gap-3 w-full py-4 bg-brand-600 text-white rounded-2xl font-bold hover:bg-brand-700 transition-all shadow-lg shadow-brand-500/20 active:scale-95 group/btn"
+                                                >
+                                                    <MessageCircle size={20} />
+                                                    <span>Solicitar Amostra</span>
+                                                    <ExternalLink size={16} className="opacity-50 group-hover/btn:translate-x-1 transition-transform" />
+                                                </a>
                                             </div>
                                         </div>
-
-                                        <div className="mt-auto">
-                                            <a
-                                                href={`https://wa.me/5511992891070?text=Olá! Gostaria de mais informações sobre o tecido ${fabric.name}`}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="flex items-center justify-center gap-3 w-full py-4 bg-brand-600 text-white rounded-2xl font-bold hover:bg-brand-700 transition-all shadow-lg shadow-brand-500/20 active:scale-95 group/btn"
-                                            >
-                                                <MessageCircle size={20} />
-                                                <span>Solicitar Amostra</span>
-                                                <ExternalLink size={16} className="opacity-50 group-hover/btn:translate-x-1 transition-transform" />
-                                            </a>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            ))}
+                                    </motion.div>
+                                ))
+                            )}
                         </AnimatePresence>
                     </motion.div>
                 )}

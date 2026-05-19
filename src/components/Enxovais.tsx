@@ -34,18 +34,21 @@ export default function Enxovais() {
                         {
                             icon: Bed,
                             title: "Jogos de Cama Premium",
+                            image: "/images/cama_egipcia_luxo.png",
                             description: "Lençóis com fios egípcios de altíssima contagem, garantindo uma maciez extraordinária e frescor incomparável para noites de sono perfeitas.",
                             features: ["Algodão Egípcio Autêntico", "Toque de Seda Natural", "Durabilidade de Alta Performance"]
                         },
                         {
                             icon: Sparkles,
                             title: "Toalhas de Banho Nobres",
+                            image: "/images/toalhas_banho_spa.png",
                             description: "Toalhas com altíssima gramatura e absorção superior, proporcionando um toque aveludado que transforma seu banho em um ritual de spa.",
                             features: ["Ultra Absorção", "Toque Aveludado", "Secagem Inteligente e Rápida"]
                         },
                         {
                             icon: Heart,
                             title: "Mesa Posta Sofisticada",
+                            image: "/images/mesa_posta_luxo.png",
                             description: "Toalhas de mesa e guardanapos em tramas nobres que elevam a elegância de suas refeições, transformando cada encontro em um evento especial.",
                             features: ["Design Exclusivo de Luxo", "Tecidos de Alta Nobreza", "Acabamento Artesanal Impecável"]
                         }
@@ -57,36 +60,46 @@ export default function Enxovais() {
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.1 }}
                             whileHover={{ y: -10 }}
-                            className="bg-white p-8 rounded-3xl border border-brand-100 group transition-all hover:shadow-2xl hover:shadow-brand-500/10"
+                            className="bg-white rounded-3xl border border-brand-100 group transition-all hover:shadow-2xl hover:shadow-brand-500/10 overflow-hidden flex flex-col"
                         >
-                            <div className="w-16 h-16 bg-brand-500 rounded-2xl flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-brand-500/20">
-                                <item.icon size={32} />
+                            <div className="relative aspect-[16/10] overflow-hidden">
+                                <img
+                                    src={item.image}
+                                    alt={item.title}
+                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60" />
+                                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md p-2 rounded-xl text-brand-600 shadow-lg">
+                                    <item.icon size={24} />
+                                </div>
                             </div>
 
-                            <h3 className="text-2xl font-bold text-brand-700 mb-4">{item.title}</h3>
-                            <p className="text-brand-700/70 mb-6 min-h-[80px]">
-                                {item.description}
-                            </p>
+                            <div className="p-8 flex flex-col flex-grow">
+                                <h3 className="text-2xl font-bold text-brand-700 mb-4">{item.title}</h3>
+                                <p className="text-brand-700/70 mb-6 min-h-[80px] text-sm leading-relaxed">
+                                    {item.description}
+                                </p>
 
-                            <ul className="space-y-2 mb-6">
-                                {item.features.map((feature, idx) => (
-                                    <li key={idx} className="flex items-center gap-2 text-sm font-medium text-brand-700">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-brand-500" />
-                                        {feature}
-                                    </li>
-                                ))}
-                            </ul>
+                                <ul className="space-y-2 mb-6">
+                                    {item.features.map((feature, idx) => (
+                                        <li key={idx} className="flex items-center gap-2 text-sm font-medium text-brand-700">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-brand-500" />
+                                            {feature}
+                                        </li>
+                                    ))}
+                                </ul>
 
-                            <motion.a
-                                href="https://wa.me/5511992891070"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                whileHover={{ gap: "12px" }}
-                                className="flex items-center gap-2 font-bold text-brand-500 py-2 group/link"
-                            >
-                                Consultar Disponibilidade
-                                <div className="h-0.5 w-8 bg-brand-500 rounded-full transition-all group-hover/link:w-12" />
-                            </motion.a>
+                                <motion.a
+                                    href="https://wa.me/5511992891070"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    whileHover={{ gap: "12px" }}
+                                    className="flex items-center gap-2 font-bold text-brand-500 py-2 group/link mt-auto"
+                                >
+                                    Consultar Disponibilidade
+                                    <div className="h-0.5 w-8 bg-brand-500 rounded-full transition-all group-hover/link:w-12" />
+                                </motion.a>
+                            </div>
                         </motion.div>
                     ))}
                 </div>

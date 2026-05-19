@@ -17,7 +17,7 @@ export async function POST(req: Request) {
         const body = await req.json();
         const { name, category, description, altText, colors, benefits, exclusive, placeholderImage, videoUrl } = body;
 
-        const fabric = await (prisma.fabric as any).create({
+        const fabric = await prisma.fabric.create({
             data: {
                 name,
                 category,

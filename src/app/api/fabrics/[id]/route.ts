@@ -23,7 +23,7 @@ export async function PUT(req: Request, { params }: RouteContext) {
         const body = await req.json();
         const { name, category, description, altText, colors, benefits, exclusive, placeholderImage, videoUrl } = body;
 
-        const fabric = await (prisma.fabric as any).update({
+        const fabric = await prisma.fabric.update({
             where: { id: parseInt(id) },
             data: {
                 name,
